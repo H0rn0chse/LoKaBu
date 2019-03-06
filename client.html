@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<!--<link rel="stylesheet" href="/jquery-ui.css">-->
+	<style>
+		* {box-sizing: border-box}
+
+		html {height: 0;}
+
+		body{
+			font-family: "Lato", sans-serif;
+			display: flex;
+			flex-flow: column nowrap;
+			min-height: 100vh;
+			margin: 0;
+		}
+
+		body > * {
+			width: 100%;
+		}
+
+		#wrapper {
+			display: flex;
+			flex-flow: row nowrap;
+			flex: 1;
+		}
+
+		.flexLine {
+			flex-basis: 100%;
+		}
+
+		.flexLineContainer {
+			flex-flow: row wrap;
+			align-content: flex-start;
+			display: flex;
+		}
+
+		.tabContent {
+			padding: 0px 12px;
+			border: 1px solid #ccc;
+			width: 70%;
+			border-left: none;	
+		}
+		
+
+		.tab {
+			flex-flow: column nowrap;
+			border: 1px solid #ccc;
+			background-color: #f1f1f1;
+			width: 150px;
+		}
+
+		.tab button {
+			display: block;
+			background-color: inherit;
+			color: black;
+			padding: 22px 16px;
+			width: 100%;
+			border: none;
+			outline: none;
+			text-align: left;
+			cursor: pointer;
+			transition: 0.3s;
+			font-size: 17px;
+		}
+
+		.tab button:hover {
+			background-color: #ddd;
+		}
+
+		.tab button.active {
+			background-color: #ccc;
+		}
+
+		.button, .buttonSmall {
+			background-color: #ccc;
+			display: inline-block;
+			margin: 10px;
+			padding: 10px;
+			border-radius:20px;
+			transition: 0.3s;
+		}
+
+		.buttonSmall {
+			margin: 5px;
+			padding: 0;
+			width: 1.4em;
+			height: 1.4em;
+			text-align: center;
+		}
+
+		.button:hover {
+			background-color: #aaa;
+			cursor: pointer;
+		}
+
+		.currency{
+			position: relative
+		}
+
+		.currency input {
+			padding-right:2em;
+     		text-align:end;
+     		word-break: break-word;
+     		display: inline;
+		}
+
+		.currency:before {
+			position: absolute;
+		    top: 0;
+		    content:"€";
+		    right: 1em;
+		}
+
+		
+	</style>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<!--<script src="/jquery-3.3.1.min.js"></script>
+	<script src="/jquery-ui.js"></script>-->
+	<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+	<script>
+		var signalHandler;
+		var database;
+		var html;
+		var settings;
+		var channel2;
+
+		$(document).ready(async function(){
+			// Get the element with id="defaultOpen" and click on it
+			document.getElementById("defaultOpen").click();
+			html = {};
+			html.New = $("#New").prop("outerHTML");
+			html.Edit = $("#Edit").prop("outerHTML");
+			html.History = $("#History").prop("outerHTML");
+			html.Analysis = $("#Analysis").prop("outerHTML");
+			html.Settings = $("#Settings").prop("outerHTML");
+
+			( function( factory ) {
+				if ( typeof define === "function" && define.amd ) {
+
+					// AMD. Register as an anonymous module.
+					define( [ "../widgets/datepicker" ], factory );
+				} else {
+
+					// Browser globals
+					factory( jQuery.datepicker );
+				}
+			}( function( datepicker ) {
+
+			datepicker.regional.de = {
+				closeText: "Schließen",
+				prevText: "&#x3C;Zurück",
+				nextText: "Vor&#x3E;",
+				currentText: "Heute",
+				monthNames: [ "Januar","Februar","März","April","Mai","Juni",
+				"Juli","August","September","Oktober","November","Dezember" ],
+				monthNamesShort: [ "Jan","Feb","Mär","Apr","Mai","Jun",
+				"Jul","Aug","Sep","Okt","Nov","Dez" ],
+				dayNames: [ "Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag" ],
+				dayNamesShort: [ "So","Mo","Di","Mi","Do","Fr","Sa" ],
+				dayNamesMin: [ "So","Mo","Di","Mi","Do","Fr","Sa" ],
+				weekHeader: "KW",
+				dateFormat: "mm/dd/yy",
+				firstDay: 1,
+				isRTL: false,
+				showMonthAfterYear: false,
+				yearSuffix: "" };
+			datepicker.setDefaults( datepicker.regional.de );
+
+			return datepicker.regional.de;
+
+			} ) );
+
+			new QWebChannel(qt.webChannelTransport, async function (channel) {
+				channel2 = channel;
+				database = await channel.objects.database;
+				settings = database.settings;
+				settings.lineCount = database.lineCount
+				console.log(database)
+				fillData();
+				initFormat();
+				
+				database.changed.connect(function(e){
+					console.log("es ändert sich was")
+				});
+			});
+		});
+
+		function switchTab(evt, tabName){
+			var i, tabContent, tabLinks;
+			tabContent = document.getElementsByClassName("tabContent");
+			for (i = 0; i < tabContent.length; i++) {
+				tabContent[i].style.display = "none";
+			}
+			tabLinks = document.getElementsByClassName("tabLinks");
+			for (i = 0; i < tabLinks.length; i++) {
+				tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+			}
+			document.getElementById(tabName).style.display = "inherit";
+			evt.currentTarget.className += " active";
+		}
+
+		function isEquivalent(a, b) {
+			// Create arrays of property names
+			var aProps = Object.getOwnPropertyNames(a);
+			var bProps = Object.getOwnPropertyNames(b);
+
+			// If number of properties is different,
+			// objects are not equivalent
+			if (aProps.length != bProps.length) {
+				console.log("ney")
+				return false;
+			}
+
+			for (var i = 0; i < aProps.length; i++) {
+				var propName = aProps[i];
+
+				// If values of same property are not equal,
+				// objects are not equivalent
+				if (a[propName] !== b[propName]) {
+					console.log("ney2", propName)
+					return false;
+				}
+			}
+
+			// If we made it this far, objects
+			// are considered equivalent
+			return true;
+		}
+
+		function FormatDate(dateInt){
+			var date = new Date(dateInt*1000);
+
+			var day = date.getDate();
+			var month = date.getMonth()+1;
+			var year = date.getFullYear();
+
+			var str = "";
+			str += "0".repeat((2-month.toString().length))+month.toString();
+			str += "/";
+			str += "0".repeat((2-day.toString().length))+day.toString();
+			str += "/";
+			str += year;
+
+			return str;
+		}
+
+		function initFormat(){
+			//remove format event listener
+			$("*").off(".format");
+
+			//=  Date  =====================================================================
+			elems = $("[name=Date]");
+			$.each(elems, function(i, elem){
+				$(elem).datepicker();
+			});
+
+			//=  #New_Lines Value  ================================================================
+			elems = $("#New_Lines [name=Value]");
+			$.each(elems, function(i, elem){
+				$(elem).on("focusout.format", function(){
+					var val = $(elem).val();
+					
+					elems = $("#New_Lines [name=Value]");
+					$("#New_Result").text(0.0);
+					$.each(elems, function(i, elem){
+
+						if(evalValueInput($(elem).val()).isNaN){
+							$(elem).css("background-color", "orangered");
+						}else{
+							$(elem).css("background-color", "");
+						}
+
+						var val = parseFloat($("#New_Result").text())+evalValueInput($(elem).val()).val
+						var val = Math.trunc(parseFloat(val)*100)/100;
+						$("#New_Result").text(val);
+					});
+				});
+			});
+
+			//=  #New_Lines Value  ================================================================
+			elems = $("#Edit_Lines [name=Value]");
+			$.each(elems, function(i, elem){
+				$(elem).on("focusout.format", function(){
+					var val = $(elem).val();
+					
+					elems = $("#Edit_Lines [name=Value]");
+					$("#Edit_Result").text(0.0);
+					$.each(elems, function(i, elem){
+
+						if(evalValueInput($(elem).val()).isNaN){
+							$(elem).css("background-color", "orangered");
+						}else{
+							$(elem).css("background-color", "");
+						}
+
+						var val = parseFloat($("#Edit_Result").text())+evalValueInput($(elem).val()).val
+						var val = Math.trunc(parseFloat(val)*100)/100;
+						$("#Edit_Result").text(val);
+					});
+				});
+			});
+		}
+
+		function evalValueInput(val){
+			var obj = {};
+
+			val = val.replace(/,/g,".");
+			val = val.replace(/[^-()\d/*+.]/g, "");
+
+			obj.val = parseFloat(eval(val));
+			obj.isNaN = false;
+
+			if(isNaN(obj.val)){
+				obj.val = 0;
+				obj.isNaN = true;
+			}
+			return obj;
+		}
+
+		function fillData(list = ["New", "History", "Analysis", "Settings"]){
+			list.forEach(function(entry){
+				//=  New Tab  ===================================================================
+				if(entry == "New"){
+					fillDropdown("#New_Account", database.accounts);
+					fillDropdown("#New .BillingAccount", database.persons)
+					$("#New .BillingAccount").val(settings.defaultBillingAccount);
+					fillDropdown("#New .Typ", database.types);
+					$("#New .Typ").val(settings.defaultTyp)
+				}
+
+				//=  Edit Tab  ===================================================================
+				if(entry == "Edit"){
+					var receiptId = $("#Edit [name=ID]").val();
+					var receipt = database.receipts.find(x => x.id === parseInt(receiptId));
+					$("#Edit").replaceWith(html.Edit);
+					fillDropdown("#Edit_Account", database.accounts);
+					
+
+					$("#Edit [name=ID]").val(receiptId);
+					$("#Edit_Account").val(receipt.account);
+					$("#Edit [name=Date]").val(FormatDate(receipt.date));
+
+					$("#Edit_Lines").empty();
+					receipt.lines.forEach(function(item){
+						addLine("Edit_Lines");
+						$("#Edit [name=Value]:last").val(parseFloat(item.value)/100);
+						$("#Edit .Typ:last").val(item.typ);
+						$("#Edit .BillingAccount:last").val(item.billing);
+					});
+				}
+
+				//=  History Tab  ================================================================
+				if(entry == "History"){
+					$("#History_Receipts").empty();
+					//database.receipts.forEach(function(item){
+					database.receipts.sort((a,b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0)); 
+					for(var i=database.receipts.length - 1; i >= 0; i--){
+						var item = database.receipts[i];
+						var newLine = $($.parseHTML(html.History)).find("#History_Receipts").children().last();
+						$("#History_Receipts").append(newLine);
+
+						$(newLine).find("[name=ID]").val(item.id);
+						$(newLine).find("[name=Date]").val(FormatDate(item.date));
+						$(newLine).find("[name=Account]").val(database.accounts.find(x => x.id === parseInt(item.account)).displayName);
+						var sum = 0;
+						item.lines.forEach(function(i){
+							sum += i.value;
+						});
+						$(newLine).find("[name=Value]").val(parseFloat(sum)/100);
+					}
+				}
+
+				//=  Analysis Tab  ================================================================
+				if(entry == "Analysis"){
+				}
+
+				//=  Settings Tab  ================================================================
+				if(entry == "Settings"){
+					fillDropdown("#Settings .BillingAccount", database.persons);
+					$("#Settings .BillingAccount").val(settings.defaultBillingAccount);
+					fillDropdown("#Settings .Typ", database.types);
+					$("#Settings .Typ").val(settings.defaultTyp);
+
+					$("#Settings_Persons").empty();
+					database.persons.forEach(function(item){
+						var newLine = $($.parseHTML(html.Settings)).find("#Settings_Persons").children().last();
+						$("#Settings_Persons").append(newLine);
+
+						$(newLine).find("[name=ID]").val(item.id);
+						$(newLine).find("[name=DisplayName]").val(item.displayName);
+					});
+					$("#Settings_Accounts").empty();
+					database.accounts.forEach(function(item){
+						var newLine = $($.parseHTML(html.Settings)).find("#Settings_Accounts").children().last();
+						$("#Settings_Accounts").append(newLine);
+
+						$(newLine).find("[name=ID]").val(item.id);
+						$(newLine).find("[name=DisplayName]").val(item.displayName);
+						$(newLine).find("[name=Owner]").val(item.owner);
+					});
+					$("#Settings_Types").empty();
+					database.types.forEach(function(item){
+						var newLine = $($.parseHTML(html.Settings)).find("#Settings_Types").children().last();
+						$("#Settings_Types").append(newLine);
+
+						$(newLine).find("[name=ID]").val(item.id);
+						$(newLine).find("[name=DisplayName]").val(item.displayName);
+					});
+				}
+			})
+		}
+
+		function fillDropdown(selector, list){
+			var elems = $(selector);
+			$.each(elems, function(i, elem){
+				$(elem).empty();
+				$.each(list, function(key, val) {
+					$(elem).append("<option value=\"" + val.id + "\">" + val.displayName + "</option>");
+				});
+			});
+		}
+
+		function addLine(elemId){
+			var parent = $("#"+elemId).parent().closest("div").first().prop("id");
+			var newElem = $($.parseHTML(html[parent])).find("#"+elemId).children().last();
+			var lastElem = $("#"+elemId).children().last()
+			//newElem.insert(lastElem);
+			$("#"+elemId).append(newElem);
+
+			fillDropdown("#"+elemId+" .BillingAccount:last", database.persons);
+			fillDropdown("#"+elemId+" .Typ:last", database.types);
+			
+
+			//empty inputs
+			$("#"+elemId).children().last().find(":input").val("");
+			//select dropdown option
+			$("#"+elemId+" .BillingAccount:last").val(settings.defaultBillingAccount);
+			$("#"+elemId+" .Typ:last").val(settings.defaultTyp);
+
+			initFormat();
+		}
+
+		function removeLine(elem){
+			var parent = $(elem).parent()
+
+			if(parent.parent().children().length > 1){
+				parent.remove();
+			}
+		}
+
+		function resetHTML(elemId){
+			if (elemId in html){
+				$("#"+elemId).replaceWith(html[elemId]);
+				fillData([elemId]);
+				initFormat();
+			}else{
+				$("#"+elemId).empty();
+			}
+		}
+
+		function saveSettings(){
+			var validate = true;
+			var persons = []
+			$.each($("#Settings_Persons").children(),function(i, elem){
+				var person = {};
+				person.id = parseInt($(elem).find("[name=ID]").val());
+				person.displayName = $(elem).find("[name=DisplayName]").val();
+				persons.push(person);
+			});
+
+			var accounts = []
+			$.each($("#Settings_Accounts").children(),function(i, elem){
+				var account = {};
+				account.id = parseInt($(elem).find("[name=ID]").val());
+				account.displayName = $(elem).find("[name=DisplayName]").val();
+				account.owner = parseInt($(elem).find("[name=Owner]").val());
+				accounts.push(account);
+			});
+
+			var types = []
+			$.each($("#Settings_Types").children(),function(i, elem){
+				var typ = {};
+				typ.id = parseInt($(elem).find("[name=ID]").val());
+				typ.displayName = $(elem).find("[name=DisplayName]").val();
+				types.push(typ);
+			});
+
+			validate = uniqueAttribute(persons, "id") ? validate : false;
+			validate = uniqueAttribute(persons, "displayName") ? validate : false;
+
+			validate = uniqueAttribute(accounts, "id") ? validate : false;
+			validate = uniqueAttribute(accounts, "displayName") ? validate : false;
+
+			validate = uniqueAttribute(types, "id") ? validate : false;
+			validate = uniqueAttribute(types, "displayName") ? validate : false;
+			
+			//all owner in persons?
+			accounts.forEach(function(item){
+				validate = (typeof persons.find(x => x.id === parseInt(item.owner)) === "undefined") ? false : validate;
+			});
+
+			if(validate){
+				if(confirm("Abschicken?")){
+					settings.defaultBillingAccount = $("#Settings .BillingAccount").val();
+					settings.defaultTyp = $("#Settings .Typ").val();
+					database.settings_set({
+						"defaultBillingAccount": settings.defaultBillingAccount,
+						"defaultTyp": settings.defaultTyp
+					});
+					
+					if(persons.length > database.persons.length){
+						database.persons.push(persons.slice(-1).pop())
+						database.persons_add(persons.slice(-1).pop());
+					}
+					database.persons.forEach(function(persond, i){
+						person = persons.find(x => x.id == persond.id);
+						if(!isEquivalent(persond, person)){
+							database.persons_update(person);
+							database.persons[i] = person;
+						}
+					});
+					
+					if(accounts.length > database.accounts.length){
+						database.accounts.push(accounts.slice(-1).pop())
+						database.accounts_add(accounts.slice(-1).pop());
+					}
+					database.accounts.forEach(function(accountd, i){
+						account = accounts.find(x => x.id == accountd.id);
+						if(!isEquivalent(accountd, account)){
+							database.accounts_update(account);
+							database.accounts[i] = account;
+						}
+					});
+
+					if(types.length > database.types.length){
+						database.types.push(types.slice(-1).pop())
+						database.types_add(types.slice(-1).pop());
+					}
+					database.types.forEach(function(typd, i){
+						typ = types.find(x => x.id == typd.id);
+						if(!isEquivalent(typd, typ)){
+							database.types_update(typ);
+							database.types[i] = typ;
+						}
+					});
+					
+					fillData();
+					initFormat();
+				}	
+			}else{
+				alert("Eingabefehler")
+			}
+		}
+
+		function addReceipt(){
+			var receipt = {};
+
+			var validate = true
+
+			receipt.id = database.receipts.length+1;
+			receipt.date = Math.round(new Date($("#New [name=Date]").first().val()).getTime()/1000);
+			receipt.account = parseInt($("#New_Account").val());
+			receipt.lines = [];
+			var lineCount = settings.lineCount;
+
+			$.each($("#New_Lines").children(), function(i, elem){
+				var line = {};
+
+				lineCount += 1;
+				line.id = lineCount;
+				line.billing = parseInt($(elem).find(".BillingAccount").val());
+				line.typ = parseInt($(elem).find(".Typ").val());
+				line.value = parseInt(evalValueInput($(elem).find("[name=Value]").val()).val*100);
+
+				receipt.lines.push(line);
+			});
+
+			//=  Validation  ==================================================================
+			validate = (receipt.date == "" || isNaN(parseInt(receipt.date)) ? false : validate);
+			validate = (receipt.account == "" ? false : validate);
+			validate = (receipt.lines.length == 0 ? false : validate);
+			receipt.lines.forEach(function(line){
+				validate = (line.billing == "" ? false : validate);
+				validate = (line.typ == "" ? false : validate);
+				validate = (line.value == "" ? false : validate);
+			})
+
+			if(validate){
+				if(confirm("Abschicken?")){
+					settings.lineCount += receipt.lines.length;
+					database.receipts.push(receipt);
+					database.receipts_add(receipt);
+
+					$("#New").replaceWith(html.New);
+					fillData(["New", "History"]);
+					initFormat();
+				}
+			}else{
+				alert("Eingabefehler")
+			}
+		}
+
+		function removeReceipt(){
+			var receiptId = $("#Edit [name=ID]").val();
+
+			if(confirm("Abschicken?")){		
+				var receipt = database.receipts.splice(database.receipts.findIndex(x => x.id === parseInt(receiptId)))[0];
+				database.receipts_delete(receipt);
+
+				fillData(["History"]);
+				switchTab(event, "History");
+			}
+		}
+
+		function editReceipt(elem){
+			var receiptId = $(elem).parent().find("[name=ID]").val();
+			$("#Edit [name=ID]").val(receiptId);
+			fillData(["Edit"]);
+			initFormat();
+			$("#Edit [name=Value]:last").trigger("focusout");
+			switchTab(event, "Edit");
+		}
+
+		function updateReceipt(){
+			var receiptId = parseInt($("#Edit [name=ID]").val());
+			var receiptIndex = database.receipts.findIndex(x => x.id === parseInt(receiptId)); 
+			var receipt = {}
+
+			var validate = true
+
+			receipt.id = receiptId;
+			receipt.date = Math.round(new Date($("#Edit [name=Date]").first().val()).getTime()/1000);
+			receipt.account = parseInt($("#Edit_Account").val());
+			receipt.lines = [];
+
+			$.each($("#Edit_Lines").children(), function(i, elem){
+				var line = {};
+
+				line.billing = parseInt($(elem).find(".BillingAccount").val());
+				line.typ = parseInt($(elem).find(".Typ").val());
+				line.value = parseInt(evalValueInput($(elem).find("[name=Value]").val()).val*100);
+
+				receipt.lines.push(line);
+			});
+
+			//=  Validation  ==================================================================
+			validate = (receipt.date == "" ? false : validate);
+			validate = (receipt.account == "" ? false : validate);
+			validate = (receipt.lines.length == 0 ? false : validate);
+			receipt.lines.forEach(function(line){
+				validate = (line.billing == "" ? false : validate);
+				validate = (line.typ == "" ? false : validate);
+				validate = (line.value == "" ? false : validate);
+			})
+
+			if(validate){
+				if(confirm("Abschicken?")){
+					database.receipts[receiptIndex] = receipt;
+					database.receipts_update(receipt)
+					
+					fillData(["History"]);
+					initFormat();
+					switchTab(event, "History");
+				}
+			}else{
+				alert("Eingabefehler")
+			}
+		}
+
+		function addPerson(){
+			var newElem = $($.parseHTML(html.Settings)).find("#Settings_Persons").children().last();
+			
+			$("#Settings_Persons").append(newElem);
+			$("#Settings_Persons [name=ID]:last").val(database.persons.length+1);
+			$("#Settings_Persons [name=DisplayName]:last").val("NewPerson");
+		}
+
+		function addAccount(){
+			var newElem = $($.parseHTML(html.Settings)).find("#Settings_Accounts").children().last();
+			
+			$("#Settings_Accounts").append(newElem);
+			$("#Settings_Accounts [name=ID]:last").val(database.accounts.length+1);
+			$("#Settings_Accounts [name=DisplayName]:last").val("NewAccount");
+			$("#Settings_Accounts [name=Owner]:last").val(1);
+		}
+
+		function addTyp(){
+			var newElem = $($.parseHTML(html.Settings)).find("#Settings_Types").children().last();
+			
+			$("#Settings_Types").append(newElem);
+			$("#Settings_Types [name=ID]:last").val(database.types.length+1);
+			$("#Settings_Types [name=DisplayName]:last").val("NewTyp");
+		}
+
+		function uniqueAttribute(arr, field){
+			var unique = true
+			var dict = {};
+			arr.forEach(function(item){
+				if(dict.hasOwnProperty(item[field])){
+					unique = false;
+				}else{
+					dict[item[field]] = 1;
+				}
+			});
+			return unique;
+		}
+
+	</script>
+</head>
+<body>
+<h2>Kassenbuch - Ultimate Edition</h2>
+<div id="wrapper">
+	<div class="tab">
+		<button class="tabLinks" onclick="switchTab(event, 'New')" id="defaultOpen">Neu</button>
+		<button class="tabLinks" onclick="switchTab(event, 'History')">Verlauf</button>
+		<button class="tabLinks" onclick="switchTab(event, 'Analysis')">Auswertung</button>
+		<button class="tabLinks" onclick="switchTab(event, 'Settings')">Einstellung</button>
+	</div>
+
+	<div id="New" class="tabContent flexLineContainer">
+		<span class="flexLine">
+			<h3>Neuen Beleg anlegen</h3>
+		</span>
+		<span class="flexLine">
+			Datum: <input type="text" name="Date">
+			&nbsp;Konto: <select id="New_Account"></select>
+		</span>
+		<div id="New_Lines" class="flexLineContainer flexLine">
+			<span class="flexLine">
+				<select class="BillingAccount"></select>
+				<select class="Typ"></select>
+				<span class="currency"><input type="text" name="Value"></span>
+				<div class="buttonSmall" onclick="removeLine(this)">-</div>
+			</span>
+		</div>
+		<span class="flexLine">
+			<div class="button" onclick="addLine('New_Lines')">+</div>
+		</span>
+		<span class="flexLine">
+			&nbsp;
+		</span>
+		<span class="flexLine">
+			Result: <span id="New_Result">0</span>€
+		</span>
+		<span class="flexLine">
+			&nbsp;
+		</span>
+		<span class="flexLine">
+			<div class="button" onclick="resetHTML('New')">Reset</div>
+			<div class="button" onclick="addReceipt()">Hinzufügen</div>
+		</span>
+	</div>
+
+	<div id="Edit" class="tabContent flexLineContainer" style="display: none;">
+		<span class="flexLine"><h3>Beleg bearbeiten</h3></span>
+		<span class="flexLine">
+			Beleg-ID: <input type="text" name="ID" disabled>
+			Datum: <input type="text" name="Date">
+			&nbsp;Konto: <select id="Edit_Account"></select>
+		</span>
+		<span id="Edit_Lines" class="flexLineContainer flexLine">
+			<span class="flexLine">
+				<select class="BillingAccount"></select>
+				<select class="Typ"></select>
+				<span class="currency"><input type="text" name="Value"></span>
+				<div class="buttonSmall" onclick="removeLine(this)">-</div>
+			</span>
+		</span>
+		<span class="flexLine">
+			<div class="button" onclick="addLine('Edit_Lines')">+</div>
+		</span>
+		<span class="flexLine">
+			&nbsp;
+		</span>
+		<span class="flexLine">
+			Result: <span id="Edit_Result">0</span>€
+		</span>
+		<span class="flexLine">
+			&nbsp;
+		</span>
+		<span class="flexLine">
+			<div class="button" onclick="switchTab(event, 'History')">Abbrechen</div>
+			<div class="button" onclick="removeReceipt()">Löschen</div>
+			<div class="button" onclick="updateReceipt()">Aktualisieren</div>
+		</span>
+	</div>
+
+	<div id="History" class="tabContent flexLineContainer" style="display: none;">
+		<span class="flexLine"><h3>Verlauf</h3></span>
+		<div id="History_Receipts" class="flexLineContainer flexLine">
+			<span class="flexLine">
+				<input type="text" name="ID" disabled>
+				<input type="text" name="Date" disabled>
+				<input type="text" name="Account" disabled>
+				<input type="text" name="Value" disabled>
+				<div class="button" onclick="editReceipt(this)">Editieren</div>
+			</span>
+		</div>
+	</div>
+
+	<div id="Analysis" class="tabContent flexLineContainer" style="display: none;">
+		<span class="flexLine"><h3>Auswertung</h3></span>
+		<p>Hier ist noch nichts zu sehen.</p>
+	</div>
+
+	<div id="Settings" class="tabContent flexLineContainer" style="display: none;">
+		<span class="flexLine">
+			<h3>Einstellungen</h3>
+		</span>
+		<span class="flexLine">
+			<h4>Standardwerte</h4>
+		</span>
+		<span class=flexLine>
+			Abrechnungsperson: <select class="BillingAccount"></select>
+		</span>
+		<span class=flexLine>
+			Abrechnungstyp: <select class="Typ"></select>
+		</span>
+		<span class="flexLine">
+			&nbsp;
+		</span>
+		<span class="flexLine">
+			<h4>Listen</h4>
+		</span>
+		<span class="flexLine">
+			<h5>Personen</h5>
+		</span>
+		<div id="Settings_Persons"  class="flexLineContainer flexLine">
+			<span class="flexLine">
+				<input type="text" name="ID" disabled>
+				<input type="text" name="DisplayName">
+			</span>
+		</div>
+		<span class="flexLine">
+			<div class="button" onclick="addPerson()">+</div>
+		</span>
+		<span class="flexLine">
+			<h5>Konten</h5>
+		</span>
+		<span id="Settings_Accounts"  class="flexLineContainer flexLine">
+			<span class="flexLine">
+				<input type="text" name="ID" disabled>
+				<input type="text" name="DisplayName">
+				<input type="text" name="Owner">
+			</span>
+		</span>
+		<span class="flexLine">
+				<div class="button" onclick="addAccount()">+</div>
+			</span>
+		<span class="flexLine">
+			<h5>Typen</h5>
+		</span>
+		<div id="Settings_Types"  class="flexLineContainer flexLine">
+			<span class="flexLine">
+				<input type="text" name="ID" disabled>
+				<input type="text" name="DisplayName">
+			</span>
+		</div>
+		<span class="flexLine">
+			<div class="button" onclick="addTyp()">+</div>
+		</span>
+		<span class="flexLine">
+			&nbsp;
+		</span>
+		<span class="flexLine">
+			<div class="button" onclick="saveSettings()">Speichern</div>
+		</span>
+	</div>
+</div>
+</body>
+</html> 
