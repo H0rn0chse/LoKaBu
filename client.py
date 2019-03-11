@@ -2,9 +2,8 @@
 
 import sys
 import sqlite3
-from time import sleep
 
-from schema import Schema, And, Use, Optional, SchemaError
+from schema import Schema, Use, SchemaError
 
 from PyQt5.QtCore import QObject, QVariant, QUrl, pyqtProperty, pyqtSignal, pyqtSlot
 from PyQt5.QtWebChannel import QWebChannel
@@ -17,6 +16,8 @@ APP = QApplication(sys.argv)
 CONN = sqlite3.connect("database.sql")
 CURSOR = CONN.cursor()
 
+RAW_HTML = '''
+'''
 
 class Database(QObject):
 	def __init__(self):
@@ -234,22 +235,27 @@ receiptSchema = Schema({
 	}]
 })
 
-FILE = open("client.html", "r", encoding='utf-8')
-RAW_HTML = FILE.read()
+if len(RAW_HTML) <= 16:
+	FILE = open("client.html", "r", encoding='utf-8')
+	RAW_HTML = FILE.read()
+else:
+	FILE = None
 
 VIEW = QWebEngineView()
 VIEW_INSPECTOR = QWebEngineView()
 CHANNEL = QWebChannel()
-db = Database()
+DB = Database()
 
-CHANNEL.registerObject('database', db)
+CHANNEL.registerObject('database', DB)
 VIEW.page().setWebChannel(CHANNEL)
 VIEW_INSPECTOR.page().setInspectedPage(VIEW.page())
 
 VIEW.setHtml(RAW_HTML, QUrl("file://"))
 VIEW.setWindowTitle('Kassenbuch - Ultimate Edition')
 
-#VIEW_INSPECTOR.show()
+
+if FILE is not None:
+	VIEW_INSPECTOR.show()
 VIEW.show()
 
 sys.exit(APP.exec_())
