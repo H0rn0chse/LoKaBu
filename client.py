@@ -74,6 +74,7 @@ class Database(QObject):
 			obj["id"] = i[0]
 			obj["date"] = i[1]
 			obj["account"] = i[2]
+			obj["comment"] = i[3]
 			obj["lines"] = []
 			res2 = CURSOR.execute("SELECT * FROM Lines WHERE Receipt = "+str(obj["id"]))
 			for j in res2:
@@ -165,7 +166,7 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def receipts_add(self, obj):
 		if checkSchema(receiptSchema, obj):
-			CURSOR.execute("INSERT INTO Receipts (ID, Date, Account) VALUES(" + str(obj["id"]) + "," + str(obj["date"]) + "," + str(obj["account"]) + ")")
+			CURSOR.execute("INSERT INTO Receipts (ID, Date, Account, Comment) VALUES(" + str(obj["id"]) + "," + str(obj["date"]) + "," + str(obj["account"]) + ",'" + str(obj["comment"]) + "')")
 			for line in obj["lines"]:
 				CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
 			self._receipts.append(obj)
@@ -174,7 +175,7 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def receipts_update(self, obj):
 		if checkSchema(receiptSchema, obj):
-			CURSOR.execute("UPDATE Receipts SET Date=" + str(obj["date"]) + ", Acount=" + str(obj["account"]) + " WHERE ID=" + str(obj["id"]))
+			CURSOR.execute("UPDATE Receipts SET Date=" + str(obj["date"]) + ", Acount=" + str(obj["account"]) + ", Comment='" + str(obj["comment"]) + "' WHERE ID=" + str(obj["id"]))
 			CURSOR.execute("DELETE FROM Lines WHERE Receipt=" + obj["id"])
 			for line in obj["lines"]:
 				CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
@@ -223,6 +224,7 @@ receiptSchema = Schema({
 	'id': Use(int),
 	'date': Use(int),
 	'account': Use(int),
+	'comment': Use(str),
 	'lines': [{
 		'id': Use(int),
 		'value': Use(int),

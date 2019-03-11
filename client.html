@@ -343,6 +343,7 @@
 					$("#Edit [name=ID]").val(receiptId);
 					$("#Edit_Account").val(receipt.account);
 					$("#Edit [name=Date]").val(FormatDate(receipt.date));
+					$("#Edit_Comment").val(receipt.comment);
 
 					$("#Edit_Lines").empty();
 					receipt.lines.forEach(function(item){
@@ -564,6 +565,7 @@
 			receipt.id = database.receipts.length+1;
 			receipt.date = Math.round(new Date($("#New [name=Date]").first().val()).getTime()/1000);
 			receipt.account = parseInt($("#New_Account").val());
+			receipt.comment = $("#New_Comment").val()
 			receipt.lines = [];
 			var lineCount = settings.lineCount;
 
@@ -635,6 +637,7 @@
 			receipt.id = receiptId;
 			receipt.date = Math.round(new Date($("#Edit [name=Date]").first().val()).getTime()/1000);
 			receipt.account = parseInt($("#Edit_Account").val());
+			receipt.comment = $("#Edit_Comment").val()
 			receipt.lines = [];
 
 			$.each($("#Edit_Lines").children(), function(i, elem){
@@ -741,6 +744,9 @@
 			<div class="button" onclick="addLine('New_Lines')">+</div>
 		</span>
 		<span class="flexLine">
+			<textarea id="New_Comment"></textarea>
+		</span>
+		<span class="flexLine">
 			&nbsp;
 		</span>
 		<span class="flexLine">
@@ -772,6 +778,9 @@
 		</span>
 		<span class="flexLine">
 			<div class="button" onclick="addLine('Edit_Lines')">+</div>
+		</span>
+		<span class="flexLine">
+			<textarea id="Edit_Comment"></textarea>
 		</span>
 		<span class="flexLine">
 			&nbsp;
