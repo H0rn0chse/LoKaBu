@@ -513,37 +513,34 @@
 						"defaultTyp": settings.defaultTyp
 					});
 					
-					if(persons.length > database.persons.length){
-						database.persons.push(persons.slice(-1).pop())
-						database.persons_add(persons.slice(-1).pop());
-					}
-					database.persons.forEach(function(persond, i){
-						person = persons.find(x => x.id == persond.id);
-						if(!isEquivalent(persond, person)){
+					persons.forEach(function(person, i){
+						persond = database.persons.find(x => x.id == person.id);
+						if(typeof persond === "undefined"){
+							database.persons.push(person)
+							database.persons_add(person);
+						}else if(!isEquivalent(persond, person)){
 							database.persons_update(person);
 							database.persons[i] = person;
 						}
 					});
-					
-					if(accounts.length > database.accounts.length){
-						database.accounts.push(accounts.slice(-1).pop())
-						database.accounts_add(accounts.slice(-1).pop());
-					}
-					database.accounts.forEach(function(accountd, i){
-						account = accounts.find(x => x.id == accountd.id);
-						if(!isEquivalent(accountd, account)){
+
+					accounts.forEach(function(account, i){
+						accountd = database.accounts.find(x => x.id == account.id);
+						if(typeof accountd === "undefined"){
+							database.accounts.push(account)
+							database.accounts_add(account);
+						}else if(!isEquivalent(accountd, account)){
 							database.accounts_update(account);
 							database.accounts[i] = account;
 						}
 					});
 
-					if(types.length > database.types.length){
-						database.types.push(types.slice(-1).pop())
-						database.types_add(types.slice(-1).pop());
-					}
-					database.types.forEach(function(typd, i){
-						typ = types.find(x => x.id == typd.id);
-						if(!isEquivalent(typd, typ)){
+					types.forEach(function(typ, i){
+						typd = database.types.find(x => x.id == typ.id);
+						if(typeof typd === "undefined"){
+							database.types.push(typ)
+							database.types_add(typ);
+						}else if(!isEquivalent(typd, typ)){
 							database.types_update(typ);
 							database.types[i] = typ;
 						}
@@ -678,7 +675,7 @@
 			var newElem = $($.parseHTML(html.Settings)).find("#Settings_Persons").children().last();
 			
 			$("#Settings_Persons").append(newElem);
-			$("#Settings_Persons [name=ID]:last").val(database.persons.length+1);
+			$("#Settings_Persons [name=ID]:last").val($("#Settings_Persons").children().length);
 			$("#Settings_Persons [name=DisplayName]:last").val("NewPerson");
 		}
 
@@ -686,7 +683,7 @@
 			var newElem = $($.parseHTML(html.Settings)).find("#Settings_Accounts").children().last();
 			
 			$("#Settings_Accounts").append(newElem);
-			$("#Settings_Accounts [name=ID]:last").val(database.accounts.length+1);
+			$("#Settings_Accounts [name=ID]:last").val($("#Settings_Accounts").children().length);
 			$("#Settings_Accounts [name=DisplayName]:last").val("NewAccount");
 			$("#Settings_Accounts [name=Owner]:last").val(1);
 		}
@@ -695,7 +692,7 @@
 			var newElem = $($.parseHTML(html.Settings)).find("#Settings_Types").children().last();
 			
 			$("#Settings_Types").append(newElem);
-			$("#Settings_Types [name=ID]:last").val(database.types.length+1);
+			$("#Settings_Types [name=ID]:last").val($("#Settings_Types").children().length);
 			$("#Settings_Types [name=DisplayName]:last").val("NewTyp");
 		}
 
