@@ -420,8 +420,11 @@
 			$.each(elems, function(i, elem){
 				$(elem).empty();
 				$.each(list, function(key, val) {
-					$(elem).append("<option value=\"" + val.id + "\">" + val.displayName + "</option>");
+					$(elem).append("<option value='" + val.id + "'>" + val.displayName + "</option>");
 				});
+				$(elem).html($(elem).find("option").sort(function (a, b) {
+					return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+				}))
 			});
 		}
 
