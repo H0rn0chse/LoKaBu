@@ -31,6 +31,7 @@ class Database(QObject):
 		
 		CURSOR.execute("SELECT ID FROM Lines WHERE ID = (SELECT max(ID) FROM Lines)")
 		res = CURSOR.fetchall()
+		self._lineCount = 0
 		for i in res:
 			self._lineCount = int(i[0])
 
