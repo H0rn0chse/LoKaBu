@@ -87,21 +87,25 @@ class Database(QObject):
 	def __str__(self):
 		return str(self.__class__) + ": " + str(self.__dict__)
 
-	changed = pyqtSignal()
+	changed = pyqtSignal(QVariant)
 
 	@pyqtProperty(bool, notify=changed)
 	def databaseStatus(self):
 		return int(self._databaseStatus)
 
-	@pyqtProperty(QVariant, notify=changed)
+	@pyqtProperty(QVariant, constant=True) #notify=changed)
 	def settings(self):
 		return QVariant(self._settings)
 	@pyqtSlot(QVariant)
 	def settings_set(self, obj):
 		if checkSchema(settingsSchema, obj):
-			CURSOR.execute("UPDATE Settings SET Person=" + str(obj["defaultBillingAccount"]) + ", Typ=" + str(obj["defaultTyp"]))
-			self._settings = obj
-			CONN.commit()
+			try:
+				CURSOR.execute("UPDATE Settings SET Person=" + str(obj["defaultBillingAccount"]) + ", Typ=" + str(obj["defaultTyp"]))
+				CONN.commit()
+				#self._settings = obj
+				self._databaseStatus = True
+			except sqlite3.Error as er:
+				print("")
 
 	@pyqtProperty(QVariant, notify=changed)
 	def types(self):
@@ -109,10 +113,12 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def types_add(self, obj):
 		if checkSchema(typSchema, obj):
-			CURSOR.execute("INSERT INTO Types (ID, DisplayName) VALUES(" + str(obj["id"]) + ",'" + obj["displayName"] + "')")
-			self._types.append(obj)
-			CONN.commit()
+			try:
+				CURSOR.execute("INSERT INTO Types (ID, DisplayName) VALUES(" + str(obj["id"]) + ",'" + obj["displayName"] + "')")
+				CONN.commit()
+				self._types.append(obj)
 				self._databaseStatus = True
+			except sqlite3.Error as er:
 				self._databaseStatus = False
 		else:
 			self._databaseStatus = False
@@ -120,10 +126,14 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def types_update(self, obj):
 		if checkSchema(typSchema, obj):
-			CURSOR.execute("UPDATE Types SET DisplayName='" + str(obj["displayName"]) + "' WHERE ID=" + str(obj["id"]))
-			[x for x in self._types if x["id"] == obj["id"]][0] = obj
-			CONN.commit()
+			try:
+				CURSOR.execute("UPDATE Types SET DisplayName='" + str(obj["displayName"]) + "' WHERE ID=" + str(obj["id"]))
+				CONN.commit()
+				for key, value in enumerate(self._types):
+					if value["id"] == obj["id"]:
+						self._types[key] = obj
 				self._databaseStatus = True
+			except sqlite3.Error as er:
 				self._databaseStatus = False
 		else:
 			self._databaseStatus = False
@@ -135,10 +145,12 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def persons_add(self, obj):
 		if checkSchema(personSchema, obj):
-			CURSOR.execute("INSERT INTO Persons (ID, DisplayName) VALUES(" + str(obj["id"]) + ",'" + str(obj["displayName"]) + "')")
-			self._persons.append(obj)
-			CONN.commit()
+			try:
+				CURSOR.execute("INSERT INTO Persons (ID, DisplayName) VALUES(" + str(obj["id"]) + ",'" + str(obj["displayName"]) + "')")
+				CONN.commit()
+				self._persons.append(obj)
 				self._databaseStatus = True
+			except sqlite3.Error as er:
 				self._databaseStatus = False
 		else:
 			self._databaseStatus = False
@@ -146,10 +158,14 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def persons_update(self, obj):
 		if checkSchema(personSchema, obj):
-			CURSOR.execute("UPDATE Persons SET DisplayName='" + str(obj["displayName"]) + "' WHERE ID=" + str(obj["id"]))
-			[x for x in self._persons if x["id"] == obj["id"]][0] = obj
-			CONN.commit()
+			try:
+				CURSOR.execute("UPDATE Persons SET DisplayName='" + str(obj["displayName"]) + "' WHERE ID=" + str(obj["id"]))
+				CONN.commit()
+				for key, value in enumerate(self._persons):
+					if value["id"] == obj["id"]:
+						self._persons[key] = obj
 				self._databaseStatus = True
+			except sqlite3.Error as er:
 				self._databaseStatus = False
 		else:
 			self._databaseStatus = False
@@ -161,10 +177,12 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def accounts_add(self, obj):
 		if checkSchema(accountSchema, obj):
-			CURSOR.execute("INSERT INTO Accounts (ID, DisplayName, Owner) VALUES(" + str(obj["id"]) + ",'" + str(obj["displayName"]) + "'," + str(obj["owner"]) + ")")
-			self._accounts.append(obj)
-			CONN.commit()
+			try:
+				CURSOR.execute("INSERT INTO Accounts (ID, DisplayName, Owner) VALUES(" + str(obj["id"]) + ",'" + str(obj["displayName"]) + "'," + str(obj["owner"]) + ")")
+				CONN.commit()
+				self._accounts.append(obj)
 				self._databaseStatus = True
+			except sqlite3.Error as er:
 				self._databaseStatus = False
 		else:
 			self._databaseStatus = False
@@ -172,10 +190,14 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def accounts_update(self, obj):
 		if checkSchema(accountSchema, obj):
-			CURSOR.execute("UPDATE Accounts SET DisplayName='" + str(obj["displayName"]) + "', Owner=" + str(obj["owner"]) + " WHERE ID=" + str(obj["id"]))
-			[x for x in self._accounts if x["id"] == obj["id"]][0] = obj
-			CONN.commit()
+			try:
+				CURSOR.execute("UPDATE Accounts SET DisplayName='" + str(obj["displayName"]) + "', Owner=" + str(obj["owner"]) + " WHERE ID=" + str(obj["id"]))
+				CONN.commit()
+				for key, value in enumerate(self._accounts):
+					if value["id"] == obj["id"]:
+						self._accounts[key] = obj
 				self._databaseStatus = True
+			except sqlite3.Error as er:
 				self._databaseStatus = False
 		else:
 			self._databaseStatus = False
@@ -187,12 +209,14 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def receipts_add(self, obj):
 		if checkSchema(receiptSchema, obj):
-			CURSOR.execute("INSERT INTO Receipts (ID, Date, Account, Comment) VALUES(" + str(obj["id"]) + "," + str(obj["date"]) + "," + str(obj["account"]) + ",'" + str(obj["comment"]) + "')")
-			for line in obj["lines"]:
-				CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
-			self._receipts.append(obj)
-			CONN.commit()
+			try:
+				CURSOR.execute("INSERT INTO Receipts (ID, Date, Account, Comment) VALUES(" + str(obj["id"]) + "," + str(obj["date"]) + "," + str(obj["account"]) + ",'" + str(obj["comment"]) + "')")
+				for line in obj["lines"]:
+					CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
+				CONN.commit()
+				self._receipts.append(obj)
 				self._databaseStatus = True
+			except sqlite3.Error as er:
 				self._databaseStatus = False
 		else:
 			self._databaseStatus = False
@@ -200,13 +224,17 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def receipts_update(self, obj):
 		if checkSchema(receiptSchema, obj):
-			CURSOR.execute("UPDATE Receipts SET Date=" + str(obj["date"]) + ", Acount=" + str(obj["account"]) + ", Comment='" + str(obj["comment"]) + "' WHERE ID=" + str(obj["id"]))
-			CURSOR.execute("DELETE FROM Lines WHERE Receipt=" + obj["id"])
-			for line in obj["lines"]:
-				CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
-			[x for x in self._receipts if x["id"] == obj["id"]][0] = obj
-			CONN.commit()
+			try:
+				CURSOR.execute("UPDATE Receipts SET Date=" + str(obj["date"]) + ", Account=" + str(obj["account"]) + ", Comment='" + str(obj["comment"]) + "' WHERE ID=" + str(obj["id"]))
+				CURSOR.execute("DELETE FROM Lines WHERE Receipt=" + str(obj["id"]))
+				for line in obj["lines"]:
+					CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
+				CONN.commit()
+				for key, value in enumerate(self._receipts):
+					if value["id"] == obj["id"]:
+						self._receipts[key] = obj
 				self._databaseStatus = True
+			except sqlite3.Error as er:
 				self._databaseStatus = False
 		else:
 			self._databaseStatus = False
@@ -214,11 +242,16 @@ class Database(QObject):
 	@pyqtSlot(QVariant)
 	def receipts_delete(self, obj):
 		if checkSchema(receiptSchema, obj):
-			CURSOR.execute("DELETE FROM Lines WHERE Receipt=" + str(obj["id"]))
-			CURSOR.execute("DELETE FROM Receipts WHERE ID=" + str(obj["id"]))
-			self._receipts = filter(lambda x: x.id != obj["id"], self._receipts)
-			CONN.commit()
+			try:
+				CURSOR.execute("DELETE FROM Lines WHERE Receipt=" + str(obj["id"]))
+				CURSOR.execute("DELETE FROM Receipts WHERE ID=" + str(obj["id"]))
+				CONN.commit()
+				for key, value in enumerate(self._receipts):
+					if value["id"] == obj["id"]:
+						del self._receipts[key]
+
 				self._databaseStatus = True
+			except sqlite3.Error as er:
 				self._databaseStatus = False
 		else:
 			self._databaseStatus = False
