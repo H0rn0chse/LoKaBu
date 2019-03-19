@@ -198,7 +198,7 @@
 			});
 		});
 
-		function switchTab(evt, tabName){
+		function switchTab(element, tabName){
 			var i, tabContent, tabLinks;
 			tabContent = document.getElementsByClassName("tabContent");
 			for (i = 0; i < tabContent.length; i++) {
@@ -209,7 +209,7 @@
 				tabLinks[i].className = tabLinks[i].className.replace(" active", "");
 			}
 			document.getElementById(tabName).style.display = "inherit";
-			evt.currentTarget.className += " active";
+			$(element).addClass("active")
 		}
 
 		function isEquivalent(a, b) {
@@ -630,6 +630,7 @@
 
 				fillData(["History"]);
 				switchTab(event, "History");
+						switchTab('button:contains("Verlauf")', "History");
 			}
 		}
 
@@ -639,7 +640,7 @@
 			fillData(["Edit"]);
 			initFormat();
 			$("#Edit [name=Value]:last").trigger("focusout");
-			switchTab(event, "Edit");
+			switchTab('', "Edit");
 		}
 
 		function updateReceipt(){
@@ -761,10 +762,10 @@
 <h2>Kassenbuch - Ultimate Edition</h2>
 <div id="wrapper">
 	<div class="tab">
-		<button class="tabLinks" onclick="switchTab(event, 'New')" id="defaultOpen">Neu</button>
-		<button class="tabLinks" onclick="switchTab(event, 'History')">Verlauf</button>
-		<button class="tabLinks" onclick="switchTab(event, 'Analysis')">Auswertung</button>
-		<button class="tabLinks" onclick="switchTab(event, 'Settings')">Einstellung</button>
+		<button class="tabLinks" onclick="switchTab(this, 'New')" id="defaultOpen">Neu</button>
+		<button class="tabLinks" onclick="switchTab(this, 'History')">Verlauf</button>
+		<button class="tabLinks" onclick="switchTab(this, 'Analysis')">Auswertung</button>
+		<button class="tabLinks" onclick="switchTab(this, 'Settings')">Einstellung</button>
 	</div>
 
 	<div id="New" class="tabContent flexLineContainer">
@@ -835,7 +836,7 @@
 			&nbsp;
 		</span>
 		<span class="flexLine">
-			<div class="button" onclick="switchTab(event, 'History')">Abbrechen</div>
+			<div class="button" onclick="switchTab('button:contains(&quot;Verlauf&quot;)', 'History')">Abbrechen</div>
 			<div class="button" onclick="removeReceipt()">Löschen</div>
 			<div class="button" onclick="updateReceipt()">Aktualisieren</div>
 		</span>
