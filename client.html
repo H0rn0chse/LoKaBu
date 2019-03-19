@@ -188,7 +188,6 @@
 				channel2 = channel;
 				database = await channel.objects.database;
 				settings = database.settings;
-				settings.lineCount = database.lineCount
 				console.log(database)
 				fillData();
 				initFormat();
@@ -581,18 +580,16 @@
 
 			var validate = true
 
-			receipt.id = database.receipts.length+1;
+			receipt.id = nextUniqueId(database.receipts, "id");
 			receipt.date = Math.round(new Date($("#New [name=Date]").first().val()).getTime()/1000);
 			receipt.account = parseInt($("#New_Account").val());
 			receipt.comment = $("#New_Comment").val()
 			receipt.lines = [];
-			var lineCount = settings.lineCount;
 
 			$.each($("#New_Lines").children(), function(i, elem){
 				var line = {};
 
-				lineCount += 1;
-				line.id = lineCount;
+				line.id = nextLineId();
 				line.billing = parseInt($(elem).find(".BillingAccount").val());
 				line.typ = parseInt($(elem).find(".Typ").val());
 				line.value = parseInt(evalValueInput($(elem).find("[name=Value]").val()).val2);
@@ -612,7 +609,6 @@
 
 			if(validate){
 				if(confirm("Abschicken?")){
-					settings.lineCount += receipt.lines.length;
 					database.receipts.push(receipt);
 					database.receipts_add(receipt);
 
@@ -662,6 +658,7 @@
 			$.each($("#Edit_Lines").children(), function(i, elem){
 				var line = {};
 
+				line.id = nextLineId(receiptId);
 				line.billing = parseInt($(elem).find(".BillingAccount").val());
 				line.typ = parseInt($(elem).find(".Typ").val());
 				line.value = parseInt(evalValueInput($(elem).find("[name=Value]").val()).val2);
@@ -718,6 +715,18 @@
 			$("#Settings_Types [name=DisplayName]:last").val("NewTyp");
 		}
 
+		function nextLineId(id=0){
+			var arr = [];
+			database.receipts.forEach(function(receipt){
+				if(receipt.id != id){
+					receipt.lines.forEach(function(line){
+						arr.push({"id":line.id});
+					});
+				}
+			});
+			return nextUniqueId(arr, "id");
+		}
+
 		function uniqueAttribute(arr, field){
 			var unique = true
 			var dict = {};
@@ -729,6 +738,21 @@
 				}
 			});
 			return unique;
+		}
+
+		function nextUniqueId(obj, id){
+			next = 1;
+			arr = []
+			obj.forEach(function(elem){
+				arr.push(parseInt(elem[id]));
+			});
+			arr.sort(function(a,b) {
+				return a - b;
+			});
+			while(arr.includes(next)){
+				next = next + 1;
+			}
+			return next;
 		}
 
 	</script>

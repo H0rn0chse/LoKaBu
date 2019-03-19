@@ -30,11 +30,6 @@ class Database(QObject):
 			self._settings["defaultBillingAccount"] = i[0]
 			self._settings["defaultTyp"] = i[1]
 		
-		CURSOR.execute("SELECT ID FROM Lines WHERE ID = (SELECT max(ID) FROM Lines)")
-		res = CURSOR.fetchall()
-		self._lineCount = 0
-		for i in res:
-			self._lineCount = int(i[0])
 
 		#list of payment types
 		self._types = []
@@ -93,9 +88,6 @@ class Database(QObject):
 
 	changed = pyqtSignal()
 
-	@pyqtProperty(int, constant=True)
-	def lineCount(self):
-		return int(self._lineCount)
 
 	@pyqtProperty(QVariant, notify=changed)
 	def settings(self):
