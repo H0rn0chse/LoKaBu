@@ -136,9 +136,9 @@
 		var database;
 		var html;
 		var settings;
-		var channel2;
+		var channel;
 
-		$(document).ready(async function(){
+		$(document).ready(function(){
 			// Get the element with id="defaultOpen" and click on it
 			document.getElementById("defaultOpen").click();
 			html = {};
@@ -184,17 +184,16 @@
 
 			} ) );
 
-			new QWebChannel(qt.webChannelTransport, async function (channel) {
-				channel2 = channel;
-				database = await channel.objects.database;
+			channel = new QWebChannel(qt.webChannelTransport, async function (_channel) {
+				database = await _channel.objects.database;
 				settings = database.settings;
 				console.log(database)
 				fillData();
 				initFormat();
 				
-				database.changed.connect(function(e){
-					console.log("es ändert sich was")
-				});
+				/*database.changed.connect(function(obj){
+					console.log(obj);
+				});*/
 			});
 		});
 
@@ -220,7 +219,6 @@
 			// If number of properties is different,
 			// objects are not equivalent
 			if (aProps.length != bProps.length) {
-				console.log("ney")
 				return false;
 			}
 
@@ -230,7 +228,6 @@
 				// If values of same property are not equal,
 				// objects are not equivalent
 				if (a[propName] !== b[propName]) {
-					console.log("ney2", propName)
 					return false;
 				}
 			}
@@ -316,6 +313,11 @@
 					res = Math.trunc(parseFloat((res*100).toFixed(2)))/100
 					$("#Edit_Result").text(res);
 				});
+				$(elem).on('keypress.format',function(e) {
+					if(e.which == 13) {
+						addLine('Edit_Lines');
+					}
+				});
 			});
 		}
 
@@ -334,7 +336,6 @@
 				obj.val2 = 0;
 				obj.isNaN = true;
 			}
-			console.log(obj);
 			return obj;
 		}
 
@@ -374,7 +375,6 @@
 				//=  History Tab  ================================================================
 				if(entry == "History"){
 					$("#History_Receipts").empty();
-					//database.receipts.forEach(function(item){
 					database.receipts.sort((a,b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0)); 
 					for(var i=database.receipts.length - 1; i >= 0; i--){
 						var item = database.receipts[i];
