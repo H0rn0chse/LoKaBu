@@ -272,33 +272,33 @@
 			elems = $("#New_Lines [name=Value]");
 			$.each(elems, function(i, elem){
 				$(elem).on("focusout.format", function(){
-					var val = $(elem).val();
 					
 					elems = $("#New_Lines [name=Value]");
 					$("#New_Result").text(0.0);
+					var res = 0;
 					$.each(elems, function(i, elem){
-
+						
 						if(evalValueInput($(elem).val()).isNaN){
 							$(elem).css("background-color", "orangered");
 						}else{
 							$(elem).css("background-color", "");
 						}
 
-						var val = parseFloat($("#New_Result").text())+evalValueInput($(elem).val()).val
-						var val = Math.trunc(parseFloat(val)*100)/100;
-						$("#New_Result").text(val);
+						res = res + evalValueInput($(elem).val()).val
 					});
+					res = Math.trunc(parseFloat((res*100).toFixed(2)))/100
+					$("#New_Result").text(res);
 				});
 			});
 
-			//=  #New_Lines Value  ================================================================
+			//=  #Edit_Lines Value  ================================================================
 			elems = $("#Edit_Lines [name=Value]");
 			$.each(elems, function(i, elem){
 				$(elem).on("focusout.format", function(){
-					var val = $(elem).val();
 					
 					elems = $("#Edit_Lines [name=Value]");
 					$("#Edit_Result").text(0.0);
+					var res = 0;
 					$.each(elems, function(i, elem){
 
 						if(evalValueInput($(elem).val()).isNaN){
@@ -307,10 +307,10 @@
 							$(elem).css("background-color", "");
 						}
 
-						var val = parseFloat($("#Edit_Result").text())+evalValueInput($(elem).val()).val
-						var val = Math.trunc(parseFloat(val)*100)/100;
-						$("#Edit_Result").text(val);
+						res = res + evalValueInput($(elem).val()).val
 					});
+					res = Math.trunc(parseFloat((res*100).toFixed(2)))/100
+					$("#Edit_Result").text(res);
 				});
 			});
 		}
@@ -321,13 +321,16 @@
 			val = val.replace(/,/g,".");
 			val = val.replace(/[^-()\d/*+.]/g, "");
 
-			obj.val = parseFloat(eval(val));
+			obj.val2 = parseInt(Math.trunc(parseFloat((parseFloat(eval(val))*100).toFixed(2))));
+			obj.val = obj.val2/100;
 			obj.isNaN = false;
 
 			if(isNaN(obj.val)){
 				obj.val = 0;
+				obj.val2 = 0;
 				obj.isNaN = true;
 			}
+			console.log(obj);
 			return obj;
 		}
 
@@ -586,7 +589,7 @@
 				line.id = lineCount;
 				line.billing = parseInt($(elem).find(".BillingAccount").val());
 				line.typ = parseInt($(elem).find(".Typ").val());
-				line.value = parseInt(evalValueInput($(elem).find("[name=Value]").val()).val*100);
+				line.value = parseInt(evalValueInput($(elem).find("[name=Value]").val()).val2);
 
 				receipt.lines.push(line);
 			});
@@ -655,7 +658,7 @@
 
 				line.billing = parseInt($(elem).find(".BillingAccount").val());
 				line.typ = parseInt($(elem).find(".Typ").val());
-				line.value = parseInt(evalValueInput($(elem).find("[name=Value]").val()).val*100);
+				line.value = parseInt(evalValueInput($(elem).find("[name=Value]").val()).val2);
 
 				receipt.lines.push(line);
 			});
