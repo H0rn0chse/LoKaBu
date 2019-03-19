@@ -537,33 +537,87 @@
 					persons.forEach(function(person, i){
 						persond = database.persons.find(x => x.id == person.id);
 						if(typeof persond === "undefined"){
-							database.persons.push(person)
 							database.persons_add(person);
+							database.changed.connect(function(){
+								if(database.databaseStatus){
+									//database.persons.push(obj);
+									fillData();
+									initFormat();
+								}else{
+									alert("Datenbank Fehler");
+								}
+								database.changed.disconnect(this);
+							});
 						}else if(!isEquivalent(persond, person)){
 							database.persons_update(person);
-							database.persons[i] = person;
+							database.changed.connect(function(){
+								if(database.databaseStatus){
+									//database.persons[i] = person;
+									fillData();
+									initFormat();
+								}else{
+									alert("Datenbank Fehler");
+								}
+								database.changed.disconnect(this);
+							});
 						}
 					});
 
 					accounts.forEach(function(account, i){
 						accountd = database.accounts.find(x => x.id == account.id);
 						if(typeof accountd === "undefined"){
-							database.accounts.push(account)
 							database.accounts_add(account);
+							database.changed.connect(function(){
+								if(database.databaseStatus){
+									//database.accounts.push(account);
+									fillData();
+									initFormat();
+								}else{
+									alert("Datenbank Fehler");
+								}
+								database.changed.disconnect(this);
+							});
 						}else if(!isEquivalent(accountd, account)){
 							database.accounts_update(account);
-							database.accounts[i] = account;
+							database.changed.connect(function(){
+								if(database.databaseStatus){
+									//database.accounts[i] = account;
+									fillData();
+									initFormat();
+								}else{
+									alert("Datenbank Fehler");
+								}
+								database.changed.disconnect(this);
+							});
 						}
 					});
 
 					types.forEach(function(typ, i){
 						typd = database.types.find(x => x.id == typ.id);
 						if(typeof typd === "undefined"){
-							database.types.push(typ)
 							database.types_add(typ);
+							database.changed.connect(function(){
+								if(database.databaseStatus){
+									//database.types.push(typ);
+									fillData();
+									initFormat();
+								}else{
+									alert("Datenbank Fehler");
+								}
+								database.changed.disconnect(this);
+							});
 						}else if(!isEquivalent(typd, typ)){
 							database.types_update(typ);
-							database.types[i] = typ;
+							database.changed.connect(function(){
+								if(database.databaseStatus){
+									//database.types[i] = typ;
+									fillData();
+									initFormat();
+								}else{
+									alert("Datenbank Fehler");
+								}
+								database.changed.disconnect(this);
+							});
 						}
 					});
 					
@@ -609,12 +663,19 @@
 
 			if(validate){
 				if(confirm("Abschicken?")){
-					database.receipts.push(receipt);
 					database.receipts_add(receipt);
-
-					$("#New").replaceWith(html.New);
-					fillData(["New", "History"]);
-					initFormat();
+					database.changed.connect(function(){
+						if(database.databaseStatus){
+							//database.receipts.push(receipt);
+						
+							$("#New").replaceWith(html.New);
+							fillData(["New", "History"]);
+							initFormat();
+						}else{
+							alert("Datenbank Fehler");
+						}
+						database.changed.disconnect(this);
+					});
 				}
 			}else{
 				alert("Eingabefehler")
@@ -627,10 +688,15 @@
 			if(confirm("Abschicken?")){		
 				var receipt = database.receipts.splice(database.receipts.findIndex(x => x.id === parseInt(receiptId)))[0];
 				database.receipts_delete(receipt);
-
-				fillData(["History"]);
-				switchTab(event, "History");
+				database.changed.connect(function(){
+					if(database.databaseStatus){
+						fillData(["History"]);
 						switchTab('button:contains("Verlauf")', "History");
+					}else{
+						alert("Datenbank Fehler");
+					}
+					database.changed.disconnect(this);
+				});
 			}
 		}
 
@@ -679,12 +745,18 @@
 
 			if(validate){
 				if(confirm("Abschicken?")){
-					database.receipts[receiptIndex] = receipt;
-					database.receipts_update(receipt)
-					
-					fillData(["History"]);
-					initFormat();
-					switchTab(event, "History");
+					database.receipts_update(receipt);
+					database.changed.connect(function(){
+						if(database.databaseStatus){
+							//database.receipts[receiptIndex] = receipt;
+							fillData(["History"]);
+							initFormat();
+							switchTab('button:contains("Verlauf")', "History");
+						}else{
+							alert("Datenbank Fehler");
+						}
+						database.changed.disconnect(this);
+					});
 				}
 			}else{
 				alert("Eingabefehler")

@@ -30,6 +30,7 @@ class Database(QObject):
 			self._settings["defaultBillingAccount"] = i[0]
 			self._settings["defaultTyp"] = i[1]
 		
+		self._databaseStatus = True
 
 		#list of payment types
 		self._types = []
@@ -88,6 +89,9 @@ class Database(QObject):
 
 	changed = pyqtSignal()
 
+	@pyqtProperty(bool, notify=changed)
+	def databaseStatus(self):
+		return int(self._databaseStatus)
 
 	@pyqtProperty(QVariant, notify=changed)
 	def settings(self):
@@ -98,7 +102,6 @@ class Database(QObject):
 			CURSOR.execute("UPDATE Settings SET Person=" + str(obj["defaultBillingAccount"]) + ", Typ=" + str(obj["defaultTyp"]))
 			self._settings = obj
 			CONN.commit()
-			self.changed.emit()
 
 	@pyqtProperty(QVariant, notify=changed)
 	def types(self):
@@ -109,14 +112,22 @@ class Database(QObject):
 			CURSOR.execute("INSERT INTO Types (ID, DisplayName) VALUES(" + str(obj["id"]) + ",'" + obj["displayName"] + "')")
 			self._types.append(obj)
 			CONN.commit()
-			self.changed.emit()
+				self._databaseStatus = True
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._types)
 	@pyqtSlot(QVariant)
 	def types_update(self, obj):
 		if checkSchema(typSchema, obj):
 			CURSOR.execute("UPDATE Types SET DisplayName='" + str(obj["displayName"]) + "' WHERE ID=" + str(obj["id"]))
 			[x for x in self._types if x["id"] == obj["id"]][0] = obj
 			CONN.commit()
-			self.changed.emit()
+				self._databaseStatus = True
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._types)
 
 	@pyqtProperty(QVariant, notify=changed)
 	def persons(self):
@@ -127,14 +138,22 @@ class Database(QObject):
 			CURSOR.execute("INSERT INTO Persons (ID, DisplayName) VALUES(" + str(obj["id"]) + ",'" + str(obj["displayName"]) + "')")
 			self._persons.append(obj)
 			CONN.commit()
-			self.changed.emit()
+				self._databaseStatus = True
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._persons)
 	@pyqtSlot(QVariant)
 	def persons_update(self, obj):
 		if checkSchema(personSchema, obj):
 			CURSOR.execute("UPDATE Persons SET DisplayName='" + str(obj["displayName"]) + "' WHERE ID=" + str(obj["id"]))
 			[x for x in self._persons if x["id"] == obj["id"]][0] = obj
 			CONN.commit()
-			self.changed.emit()
+				self._databaseStatus = True
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._persons)
 
 	@pyqtProperty(QVariant, notify=changed)
 	def accounts(self):
@@ -145,14 +164,22 @@ class Database(QObject):
 			CURSOR.execute("INSERT INTO Accounts (ID, DisplayName, Owner) VALUES(" + str(obj["id"]) + ",'" + str(obj["displayName"]) + "'," + str(obj["owner"]) + ")")
 			self._accounts.append(obj)
 			CONN.commit()
-			self.changed.emit()
+				self._databaseStatus = True
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._accounts)
 	@pyqtSlot(QVariant)
 	def accounts_update(self, obj):
 		if checkSchema(accountSchema, obj):
 			CURSOR.execute("UPDATE Accounts SET DisplayName='" + str(obj["displayName"]) + "', Owner=" + str(obj["owner"]) + " WHERE ID=" + str(obj["id"]))
 			[x for x in self._accounts if x["id"] == obj["id"]][0] = obj
 			CONN.commit()
-			self.changed.emit()
+				self._databaseStatus = True
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._accounts)
 
 	@pyqtProperty(QVariant, notify=changed)
 	def receipts(self):
@@ -165,7 +192,11 @@ class Database(QObject):
 				CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
 			self._receipts.append(obj)
 			CONN.commit()
-			self.changed.emit()
+				self._databaseStatus = True
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._receipts)
 	@pyqtSlot(QVariant)
 	def receipts_update(self, obj):
 		if checkSchema(receiptSchema, obj):
@@ -175,7 +206,11 @@ class Database(QObject):
 				CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
 			[x for x in self._receipts if x["id"] == obj["id"]][0] = obj
 			CONN.commit()
-			self.changed.emit()
+				self._databaseStatus = True
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._receipts)
 	@pyqtSlot(QVariant)
 	def receipts_delete(self, obj):
 		if checkSchema(receiptSchema, obj):
@@ -183,7 +218,11 @@ class Database(QObject):
 			CURSOR.execute("DELETE FROM Receipts WHERE ID=" + str(obj["id"]))
 			self._receipts = filter(lambda x: x.id != obj["id"], self._receipts)
 			CONN.commit()
-			self.changed.emit()
+				self._databaseStatus = True
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._receipts)
 
 def checkSchema(conf_schema, conf):
 	print(conf)
