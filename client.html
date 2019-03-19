@@ -275,7 +275,7 @@
 					
 					elems = $("#New_Lines [name=Value]");
 					$("#New_Result").text(0.0);
-					var res = 0;
+					let res = 0;
 					$.each(elems, function(i, elem){
 						
 						if(evalValueInput($(elem).val()).isNaN){
@@ -289,6 +289,11 @@
 					res = Math.trunc(parseFloat((res*100).toFixed(2)))/100
 					$("#New_Result").text(res);
 				});
+				$(elem).on('keypress.format',function(e) {
+					if(e.which == 13) {
+						addLine('New_Lines');
+					}
+				});
 			});
 
 			//=  #Edit_Lines Value  ================================================================
@@ -298,7 +303,7 @@
 					
 					elems = $("#Edit_Lines [name=Value]");
 					$("#Edit_Result").text(0.0);
-					var res = 0;
+					let res = 0;
 					$.each(elems, function(i, elem){
 
 						if(evalValueInput($(elem).val()).isNaN){
@@ -457,7 +462,8 @@
 			//select dropdown option
 			$("#"+elemId+" .BillingAccount:last").val(settings.defaultBillingAccount);
 			$("#"+elemId+" .Typ:last").val(settings.defaultTyp);
-
+			$("#"+elemId).children().last().find(":input").focus();
+			
 			initFormat();
 		}
 
