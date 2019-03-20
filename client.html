@@ -667,6 +667,7 @@
 					database.changed.connect(function(){
 						if(database.databaseStatus){
 							//database.receipts.push(receipt);
+							reservedLineId = [];
 						
 							$("#New").replaceWith(html.New);
 							fillData(["New", "History"]);
@@ -749,6 +750,8 @@
 					database.changed.connect(function(){
 						if(database.databaseStatus){
 							//database.receipts[receiptIndex] = receipt;
+							reservedLineId = [];
+							
 							fillData(["History"]);
 							initFormat();
 							switchTab('button:contains("Verlauf")', "History");
@@ -788,6 +791,7 @@
 			$("#Settings_Types [name=DisplayName]:last").val("NewTyp");
 		}
 
+		var reservedLineId = [];
 		function nextLineId(id=0){
 			var arr = [];
 			database.receipts.forEach(function(receipt){
@@ -797,7 +801,10 @@
 					});
 				}
 			});
-			return nextUniqueId(arr, "id");
+			
+			id = nextUniqueId(arr, "id", reservedLineId);
+			reservedLineId.push(id);
+			return id;
 		}
 
 		function uniqueAttribute(arr, field){
@@ -813,7 +820,7 @@
 			return unique;
 		}
 
-		function nextUniqueId(obj, id){
+		function nextUniqueId(obj, id, reserved=[]){
 			next = 1;
 			arr = []
 			obj.forEach(function(elem){
@@ -822,7 +829,7 @@
 			arr.sort(function(a,b) {
 				return a - b;
 			});
-			while(arr.includes(next)){
+			while(arr.includes(next) || reserved.includes(next)){
 				next = next + 1;
 			}
 			return next;
