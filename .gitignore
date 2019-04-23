@@ -1,6 +1,4 @@
 .vscode/
 build/
 __pycache__/
-Kassenbuch.py
 dist/
-Kassenbuch.spec

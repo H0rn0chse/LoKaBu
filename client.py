@@ -1,14 +1,12 @@
 #! python3.7
 
 import sys
+import os
 import sqlite3
 
-from schema import Schema, Use, SchemaError
-
-from PyQt5.QtCore import QObject, QVariant, QUrl, pyqtProperty, pyqtSignal, pyqtSlot
-from PyQt5.QtWebChannel import QWebChannel
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QApplication
+#local files
+sys.path.append("modules")
+from database import *
 
 sys.argv.append("--disable-web-security")
 APP = QApplication(sys.argv)
@@ -16,299 +14,27 @@ APP = QApplication(sys.argv)
 CONN = sqlite3.connect("database.sql")
 CURSOR = CONN.cursor()
 
-RAW_HTML = '''
-'''
+def getPath(filename):
+	if hasattr(sys, '_MEIPASS'):
+		# PyInstaller >= 1.6
+		os.chdir(sys._MEIPASS)
+		filename = os.path.join(sys._MEIPASS, filename)
+	elif '_MEIPASS2' in os.environ:
+		# PyInstaller < 1.6 (tested on 1.5 only)
+		os.chdir(os.environ['_MEIPASS2'])
+		filename = os.path.join(os.environ['_MEIPASS2'], filename)
+	else:
+		os.chdir(os.path.dirname(sys.argv[0]))
+		filename = os.path.join(os.path.dirname(sys.argv[0]), filename)
+	return filename
 
-class Database(QObject):
-	def __init__(self):
-		QObject.__init__(self)
-
-		CURSOR.execute("SELECT * FROM Settings")
-		res = CURSOR.fetchall()
-		for i in res:
-			self._settings = {}
-			self._settings["defaultBillingAccount"] = i[0]
-			self._settings["defaultTyp"] = i[1]
-		
-		self._databaseStatus = True
-
-		#list of payment types
-		self._types = []
-		CURSOR.execute("SELECT * FROM Types")
-		res = CURSOR.fetchall()
-		for i in res:
-			obj = {}
-			obj["id"] = i[0]
-			obj["displayName"] = i[1]
-			self._types.append(obj)
-
-		#list of Persons
-		self._persons = []
-		CURSOR.execute("SELECT * FROM Persons")
-		res = CURSOR.fetchall()
-		for i in res:
-			obj = {}
-			obj["id"] = i[0]
-			obj["displayName"] = i[1]
-			self._persons.append(obj)
-
-		#list of accounts
-		self._accounts = []
-		CURSOR.execute("SELECT * FROM Accounts")
-		res = CURSOR.fetchall()
-		for i in res:
-			obj = {}
-			obj["id"] = i[0]
-			obj["displayName"] = i[1]
-			obj["owner"] = i[2]
-			self._accounts.append(obj)
-
-		#aggregated cost items
-		self._receipts = []
-		CURSOR.execute("SELECT * FROM Receipts")
-		res = CURSOR.fetchall()
-		for i in res:
-			obj = {}
-			obj["id"] = i[0]
-			obj["date"] = i[1]
-			obj["account"] = i[2]
-			obj["comment"] = i[3]
-			obj["lines"] = []
-			res2 = CURSOR.execute("SELECT * FROM Lines WHERE Receipt = "+str(obj["id"]))
-			for j in res2:
-				obj2 = {}
-				obj2["id"] = j[0]
-				obj2["value"] = j[2]
-				obj2["billing"] = j[3]
-				obj2["typ"] = j[4]
-				obj["lines"].append(obj2)
-			self._receipts.append(obj)
-
-	def __str__(self):
-		return str(self.__class__) + ": " + str(self.__dict__)
-
-	changed = pyqtSignal(QVariant)
-
-	@pyqtProperty(bool, notify=changed)
-	def databaseStatus(self):
-		return int(self._databaseStatus)
-
-	@pyqtProperty(QVariant, constant=True) #notify=changed)
-	def settings(self):
-		return QVariant(self._settings)
-	@pyqtSlot(QVariant)
-	def settings_set(self, obj):
-		if checkSchema(settingsSchema, obj):
-			try:
-				CURSOR.execute("UPDATE Settings SET Person=" + str(obj["defaultBillingAccount"]) + ", Typ=" + str(obj["defaultTyp"]))
-				CONN.commit()
-				#self._settings = obj
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				print("")
-
-	@pyqtProperty(QVariant, notify=changed)
-	def types(self):
-		return QVariant(self._types)
-	@pyqtSlot(QVariant)
-	def types_add(self, obj):
-		if checkSchema(typSchema, obj):
-			try:
-				CURSOR.execute("INSERT INTO Types (ID, DisplayName) VALUES(" + str(obj["id"]) + ",'" + obj["displayName"] + "')")
-				CONN.commit()
-				self._types.append(obj)
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				self._databaseStatus = False
-		else:
-			self._databaseStatus = False
-		self.changed.emit(self._types)
-	@pyqtSlot(QVariant)
-	def types_update(self, obj):
-		if checkSchema(typSchema, obj):
-			try:
-				CURSOR.execute("UPDATE Types SET DisplayName='" + str(obj["displayName"]) + "' WHERE ID=" + str(obj["id"]))
-				CONN.commit()
-				for key, value in enumerate(self._types):
-					if value["id"] == obj["id"]:
-						self._types[key] = obj
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				self._databaseStatus = False
-		else:
-			self._databaseStatus = False
-		self.changed.emit(self._types)
-
-	@pyqtProperty(QVariant, notify=changed)
-	def persons(self):
-		return QVariant(self._persons)
-	@pyqtSlot(QVariant)
-	def persons_add(self, obj):
-		if checkSchema(personSchema, obj):
-			try:
-				CURSOR.execute("INSERT INTO Persons (ID, DisplayName) VALUES(" + str(obj["id"]) + ",'" + str(obj["displayName"]) + "')")
-				CONN.commit()
-				self._persons.append(obj)
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				self._databaseStatus = False
-		else:
-			self._databaseStatus = False
-		self.changed.emit(self._persons)
-	@pyqtSlot(QVariant)
-	def persons_update(self, obj):
-		if checkSchema(personSchema, obj):
-			try:
-				CURSOR.execute("UPDATE Persons SET DisplayName='" + str(obj["displayName"]) + "' WHERE ID=" + str(obj["id"]))
-				CONN.commit()
-				for key, value in enumerate(self._persons):
-					if value["id"] == obj["id"]:
-						self._persons[key] = obj
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				self._databaseStatus = False
-		else:
-			self._databaseStatus = False
-		self.changed.emit(self._persons)
-
-	@pyqtProperty(QVariant, notify=changed)
-	def accounts(self):
-		return QVariant(self._accounts)
-	@pyqtSlot(QVariant)
-	def accounts_add(self, obj):
-		if checkSchema(accountSchema, obj):
-			try:
-				CURSOR.execute("INSERT INTO Accounts (ID, DisplayName, Owner) VALUES(" + str(obj["id"]) + ",'" + str(obj["displayName"]) + "'," + str(obj["owner"]) + ")")
-				CONN.commit()
-				self._accounts.append(obj)
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				self._databaseStatus = False
-		else:
-			self._databaseStatus = False
-		self.changed.emit(self._accounts)
-	@pyqtSlot(QVariant)
-	def accounts_update(self, obj):
-		if checkSchema(accountSchema, obj):
-			try:
-				CURSOR.execute("UPDATE Accounts SET DisplayName='" + str(obj["displayName"]) + "', Owner=" + str(obj["owner"]) + " WHERE ID=" + str(obj["id"]))
-				CONN.commit()
-				for key, value in enumerate(self._accounts):
-					if value["id"] == obj["id"]:
-						self._accounts[key] = obj
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				self._databaseStatus = False
-		else:
-			self._databaseStatus = False
-		self.changed.emit(self._accounts)
-
-	@pyqtProperty(QVariant, notify=changed)
-	def receipts(self):
-		return QVariant(self._receipts)
-	@pyqtSlot(QVariant)
-	def receipts_add(self, obj):
-		if checkSchema(receiptSchema, obj):
-			try:
-				CURSOR.execute("INSERT INTO Receipts (ID, Date, Account, Comment) VALUES(" + str(obj["id"]) + "," + str(obj["date"]) + "," + str(obj["account"]) + ",'" + str(obj["comment"]) + "')")
-				for line in obj["lines"]:
-					CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
-				CONN.commit()
-				self._receipts.append(obj)
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				self._databaseStatus = False
-		else:
-			self._databaseStatus = False
-		self.changed.emit(self._receipts)
-	@pyqtSlot(QVariant)
-	def receipts_update(self, obj):
-		if checkSchema(receiptSchema, obj):
-			try:
-				CURSOR.execute("UPDATE Receipts SET Date=" + str(obj["date"]) + ", Account=" + str(obj["account"]) + ", Comment='" + str(obj["comment"]) + "' WHERE ID=" + str(obj["id"]))
-				CURSOR.execute("DELETE FROM Lines WHERE Receipt=" + str(obj["id"]))
-				for line in obj["lines"]:
-					CURSOR.execute("INSERT INTO Lines (ID, Receipt, Value, Billing, Typ) VALUES(" + str(line["id"]) + "," + str(obj["id"]) + "," + str(line["value"]) + "," + str(line["billing"]) + "," + str(line["typ"]) + ")")
-				CONN.commit()
-				for key, value in enumerate(self._receipts):
-					if value["id"] == obj["id"]:
-						self._receipts[key] = obj
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				self._databaseStatus = False
-		else:
-			self._databaseStatus = False
-		self.changed.emit(self._receipts)
-	@pyqtSlot(QVariant)
-	def receipts_delete(self, obj):
-		if checkSchema(receiptSchema, obj):
-			try:
-				CURSOR.execute("DELETE FROM Lines WHERE Receipt=" + str(obj["id"]))
-				CURSOR.execute("DELETE FROM Receipts WHERE ID=" + str(obj["id"]))
-				CONN.commit()
-				for key, value in enumerate(self._receipts):
-					if value["id"] == obj["id"]:
-						del self._receipts[key]
-
-				self._databaseStatus = True
-			except sqlite3.Error as er:
-				self._databaseStatus = False
-		else:
-			self._databaseStatus = False
-		self.changed.emit(self._receipts)
-
-def checkSchema(conf_schema, conf):
-	print(conf)
-	try:
-		conf_schema.validate(conf)
-		return True
-	except SchemaError:
-		return False
-
-settingsSchema = Schema({
-	'defaultBillingAccount': Use(int),
-	'defaultTyp': Use(int)
-})
-
-typSchema = Schema({
-	'id': Use(int),
-	'displayName': str
-})
-
-personSchema = Schema({
-	'id': Use(int),
-	'displayName': str
-})
-
-accountSchema = Schema({
-	'id': Use(int),
-	'displayName': str,
-	'owner': Use(int)
-})
-
-receiptSchema = Schema({
-	'id': Use(int),
-	'date': Use(int),
-	'account': Use(int),
-	'comment': Use(str),
-	'lines': [{
-		'id': Use(int),
-		'value': Use(int),
-		'billing': Use(int),
-		'typ': Use(int)
-	}]
-})
-
-if len(RAW_HTML) <= 16:
-	FILE = open("client.html", "r", encoding='utf-8')
-	RAW_HTML = FILE.read()
-else:
-	FILE = None
+FILE = open(getPath("client.html"), "r", encoding='utf-8')
+RAW_HTML = FILE.read()
 
 VIEW = QWebEngineView()
 VIEW_INSPECTOR = QWebEngineView()
 CHANNEL = QWebChannel()
-DB = Database()
+DB = Database(CURSOR, CONN)
 
 CHANNEL.registerObject('database', DB)
 VIEW.page().setWebChannel(CHANNEL)
@@ -317,9 +43,7 @@ VIEW_INSPECTOR.page().setInspectedPage(VIEW.page())
 VIEW.setHtml(RAW_HTML, QUrl("file://"))
 VIEW.setWindowTitle('Kassenbuch - Ultimate Edition')
 
-
-if FILE is not None:
-	VIEW_INSPECTOR.show()
+VIEW_INSPECTOR.show()
 VIEW.show()
 
 sys.exit(APP.exec_())
