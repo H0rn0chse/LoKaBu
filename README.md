@@ -1,4 +1,4 @@
-Available Languages: [Deutsch](../blob/master/README_DE.md), [English](../blob/master/README.md)
+Available Languages: [Deutsch](../master/README_DE.md), [English](../master/README.md)
 # LoKaBu
 This project realizes a cash book for the ordinary household. The core idea of the project is to be able to set up and transport a cash book without any installation, dependencies and setup.
 
