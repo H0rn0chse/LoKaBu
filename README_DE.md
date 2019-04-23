@@ -1,4 +1,4 @@
-Available Languages: [Deutsch](../blob/master/README_DE.md), [English](../blob/master/README.md)
+Available Languages: [Deutsch](../master/README_DE.md), [English](../master/README.md)
 # LoKaBu
 Dieses Projekt realisiert ein Kassenbuch für den normalen Haushalt. Dabei ist die Kernidee des Projektes, ein Kassenbuch ohne Installation, Abhängigkeiten und Setup einrichten und transportieren zu können.
 
