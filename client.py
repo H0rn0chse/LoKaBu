@@ -7,12 +7,11 @@ import sqlite3
 #local files
 sys.path.append("modules")
 from database import *
+from shutil import copy2
+from time import time
 
 sys.argv.append("--disable-web-security")
 APP = QApplication(sys.argv)
-
-CONN = sqlite3.connect("database.sql")
-CURSOR = CONN.cursor()
 
 def getPath(filename):
 	if hasattr(sys, '_MEIPASS'):
@@ -27,6 +26,29 @@ def getPath(filename):
 		os.chdir(os.path.dirname(sys.argv[0]))
 		filename = os.path.join(os.path.dirname(sys.argv[0]), filename)
 	return filename
+
+#file does exist
+if os.path.isfile(Database.fileName):
+	CONN = sqlite3.connect(Database.fileName)
+	CURSOR = CONN.cursor()
+
+	#file has false version
+	if not Database.checkVersion(CURSOR):
+		CURSOR.close()
+		CONN.close()
+
+		os.rename(Database.fileName, str(int(time()))+"_" + Database.fileName)
+		copy2(getPath(Database.baseFile), Database.fileName)
+
+		CONN = sqlite3.connect(Database.fileName)
+		CURSOR = CONN.cursor()
+
+#there is no file
+else:
+	copy2(getPath(Database.baseFile), Database.fileName)
+
+	CONN = sqlite3.connect(Database.fileName)
+	CURSOR = CONN.cursor()
 
 FILE = open(getPath("client.html"), "r", encoding='utf-8')
 RAW_HTML = FILE.read()

@@ -11,6 +11,10 @@ sys.path.append("modules")
 from schemes import *
 
 class Database(QObject):
+	version = "1.0"
+	fileName = "database.sqlite3"
+	baseFile = "base_database.sqlite3"
+
 	def __init__(self, CURSOR, CONN):
 		QObject.__init__(self)
 		self.cursor = CURSOR
@@ -292,3 +296,16 @@ class Database(QObject):
 		else:
 			self._databaseStatus = False
 		self.changed.emit(self._receipts)
+
+	def checkVersion(cursor):
+		try:
+			cursor.execute("SELECT Version FROM Settings")
+			version = cursor.fetchone()[0]
+			if version == Database.version:
+				return True
+			else:
+				return False
+
+		except sqlite3.Error as er:
+			return False
+		
