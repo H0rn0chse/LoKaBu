@@ -1,4 +1,5 @@
 import sys
+import os
 import sqlite3
 
 from PyQt5.QtCore import QObject, QVariant, QUrl, pyqtProperty, pyqtSignal, pyqtSlot
@@ -7,7 +8,6 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication
 
 #local files
-sys.path.append("modules")
 from schemes import *
 
 class Database(QObject):
@@ -113,7 +113,10 @@ class Database(QObject):
 				self._settings = obj
 				self._databaseStatus = True
 			except sqlite3.Error as er:
-				print("")
+				self._databaseStatus = False
+		else:
+			self._databaseStatus = False
+		self.changed.emit(self._settings)
 
 	@pyqtProperty(QVariant, notify=changed)
 	def types(self):

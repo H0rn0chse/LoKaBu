@@ -6,11 +6,12 @@ added_files = [
          ( 'client.html', '.' ),
          ( 'client.js', '.' ),
          ( 'client.css', '.' ),
+         ( 'base_database.sqlite3', '.' ),
          ( 'modules', 'modules' )
          ]
 
 
-a = Analysis(['client.py'],
+a = Analysis(['client.py', 'modules\database.py', 'modules\schemes.py'],
              binaries=[],
              datas=added_files,
              hiddenimports=[],
@@ -35,4 +36,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=False )
+          console=True )
