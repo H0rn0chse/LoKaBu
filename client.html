@@ -16,27 +16,24 @@
 	<!--LocalFile--><script src="/client.js"></script>
 	<!--LocalFile--><script src="/modules/connector.js"></script>
 	<!--LocalFile--><script src="/modules/diagrams.js"></script>
-	<script>
-				
-		$(document).ready(function(){
-			initGlobals();
-		});
-
-		window.onresize = function(){
-			redrawSvg();
-		};
-	</script>
+	<!--LocalFile--><script src="/GUI/EventHandler.js"></script>
+	<!--LocalFile--><script src="/GUI/Helper.js"></script>
+	<!--LocalFile--><script src="/GUI/New.js"></script>
+	<!--LocalFile--><script src="/GUI/Edit.js"></script>
+	<!--LocalFile--><script src="/GUI/History.js"></script>
+	<!--LocalFile--><script src="/GUI/Analysis.js"></script>
+	<!--LocalFile--><script src="/GUI/Settings.js"></script>
 </head>
 <body>
 <h2>Kassenbuch - Ultimate Edition</h2>
 <div id="wrapper">
 	<div class="tab">
-		<button class="tabLinks" onclick="switchTab(this, 'New')" id="defaultOpen">Neu</button>
-		<button class="tabLinks" onclick="switchTab(this, 'History')">Verlauf</button>
-		<button class="tabLinks" onclick="switchTab(this, 'Analysis')">Auswertung</button>
-		<button class="tabLinks" onclick="switchTab(this, 'Settings')">Einstellung</button>
+		<button class="tabLinks toNew" id="defaultOpen">Neu</button>
+		<button class="tabLinks toHistory">Verlauf</button>
+		<button class="tabLinks toAnalysis">Auswertung</button>
+		<button class="tabLinks toSettings">Einstellung</button>
 	</div>
-
+<!--==========================================New=====================================================-->
 	<div id="New" class="tabContent flexLineContainer">
 		<span class="flexLine">
 			<h3>Neuen Beleg anlegen</h3>
@@ -53,11 +50,11 @@
 				<select class="BillingAccount"></select>
 				<select class="Typ"></select>
 				<span class="currency"><input type="text" name="Value"></span>
-				<div class="buttonSmall" onclick="removeLine(this)">-</div>
+				<div class="buttonSmall removeLine">-</div>
 			</span>
 		</div>
 		<span class="flexLine">
-			<div class="button" onclick="addLine('New_Lines')">+</div>
+			<div class="button addLine">+</div>
 		</span>
 		<span class="flexLine">
 			<textarea id="New_Comment"></textarea>
@@ -72,11 +69,11 @@
 			&nbsp;
 		</span>
 		<span class="flexLine">
-			<div class="button" onclick="resetHTML('New')">Reset</div>
-			<div class="button" onclick="addReceipt()">Hinzufügen</div>
+			<div class="button resetHtml">Reset</div>
+			<div class="button addReceipt">Hinzufügen</div>
 		</span>
 	</div>
-
+<!--==========================================Edit====================================================-->
 	<div id="Edit" class="tabContent flexLineContainer" style="display: none;">
 		<span class="flexLine"><h3>Beleg bearbeiten</h3></span>
 		<span class="flexLine">
@@ -92,11 +89,11 @@
 				<select class="BillingAccount"></select>
 				<select class="Typ"></select>
 				<span class="currency"><input type="text" name="Value"></span>
-				<div class="buttonSmall" onclick="removeLine(this)">-</div>
+				<div class="buttonSmall removeLine">-</div>
 			</span>
 		</span>
 		<span class="flexLine">
-			<div class="button" onclick="addLine('Edit_Lines')">+</div>
+			<div class="button addLine">+</div>
 		</span>
 		<span class="flexLine">
 			<textarea id="Edit_Comment"></textarea>
@@ -111,12 +108,12 @@
 			&nbsp;
 		</span>
 		<span class="flexLine">
-			<div class="button" onclick="switchTab('button:contains(&quot;Verlauf&quot;)', 'History')">Abbrechen</div>
-			<div class="button" onclick="removeReceipt()">Löschen</div>
-			<div class="button" onclick="updateReceipt()">Aktualisieren</div>
+			<div class="button cancelEdit">Abbrechen</div>
+			<div class="button removeReceipt">Löschen</div>
+			<div class="button updateReceipt">Aktualisieren</div>
 		</span>
 	</div>
-
+<!--==========================================History=================================================-->
 	<div id="History" class="tabContent flexLineContainer" style="display: none;">
 		<span class="flexLine"><h3>Verlauf</h3></span>
 		<div id="History_Receipts" class="flexLineContainer flexLine">
@@ -125,11 +122,11 @@
 				<input type="text" name="Date" disabled>
 				<input type="text" name="Account" disabled>
 				<input type="text" name="Value" disabled>
-				<div class="button" onclick="editReceipt(this)">Editieren</div>
+				<div class="button editReceipt">Editieren</div>
 			</span>
 		</div>
 	</div>
-
+<!--==========================================Analysis================================================-->
 	<div id="Analysis" class="tabContent flexLineContainer" style="display: none;">
 		<span class="flexLine"><h3>Auswertung</h3></span>
 		<span class="flexLine" id="Analysis_Result">Ergebnis</span>
@@ -139,7 +136,7 @@
 			</svg>
 		</span>
 	</div>
-
+<!--==========================================Settings================================================-->
 	<div id="Settings" class="tabContent flexLineContainer" style="display: none;">
 		<span class="flexLine">
 			<h3>Einstellungen</h3>
@@ -169,7 +166,7 @@
 			</span>
 		</div>
 		<span class="flexLine">
-			<div class="button" onclick="addPerson()">+</div>
+			<div class="button addLine">+</div>
 		</span>
 		<span class="flexLine">
 			<h5>Konten</h5>
@@ -182,7 +179,7 @@
 			</span>
 		</span>
 		<span class="flexLine">
-				<div class="button" onclick="addAccount()">+</div>
+				<div class="button addLine">+</div>
 			</span>
 		<span class="flexLine">
 			<h5>Typen</h5>
@@ -194,7 +191,7 @@
 			</span>
 		</div>
 		<span class="flexLine">
-			<div class="button" onclick="addTyp()">+</div>
+			<div class="button addLine">+</div>
 		</span>
 		<span class="flexLine">
 			<h5>Läden</h5>
@@ -206,13 +203,13 @@
 			</span>
 		</div>
 		<span class="flexLine">
-			<div class="button" onclick="addStore()">+</div>
+			<div class="button addLine">+</div>
 		</span>
 		<span class="flexLine">
 			&nbsp;
 		</span>
 		<span class="flexLine">
-			<div class="button" onclick="saveSettings()">Speichern</div>
+			<div class="button saveSettings">Speichern</div>
 		</span>
 	</div>
 </div>

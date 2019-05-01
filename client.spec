@@ -7,7 +7,8 @@ added_files = [
          ( 'client.js', '.' ),
          ( 'client.css', '.' ),
          ( 'base_database.sqlite3', '.' ),
-         ( 'modules', 'modules' )
+         ( 'modules', 'modules' ),
+		 ( 'GUI', 'GUI' )
          ]
 
 
@@ -36,4 +37,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=True )
+          console=False )
