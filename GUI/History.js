@@ -17,11 +17,37 @@ GUI.History.resetTab = function(){
 
 /**
  * Builds Tab with data
+ * @param {string} sort
+ * @param {boolean} asc
  */
-GUI.History.build = function(){
+GUI.History.build = function(sort = "date", asc = true){
 	$("#History_Receipts").empty();
 
-	database.receipts.sort((a,b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0)); 
+	console.log(sort)
+	
+	//sort
+	if(sort == "account"){
+		accountName = function(a){
+			return database.accounts.find(x => x.id === parseInt(a.account)).displayName;
+		}
+		database.receipts.sort((a,b) => (accountName(a) > accountName(b) ? 1 : -1));
+	}else if(sort == "value"){
+		sumValues = function(a){
+			var sum = 0;
+			a.lines.forEach(function(i){
+				sum += i.value;
+			});
+			return sum;
+		}
+		database.receipts.sort((a,b) => sumValues(a) - sumValues(b));
+	}else if(sort == "id"){
+		database.receipts.sort((a,b) => (a.id - b.id));
+	}else if(sort == "date"){
+		database.receipts.sort((a,b) => (a.date - b.date));
+	}
+	if(asc){
+		database.receipts.reverse()
+	}
 
 	for(var i=database.receipts.length - 1; i >= 0; i--){
 		var item = database.receipts[i];
@@ -72,6 +98,22 @@ GUI.History.eventHandler = function(type, event){
 				GUI.Edit.build($(event.target).parent().find("[name=ID]").val());
 				switchTab('', "Edit");
 
+			}else if($(event.target).hasClass("sortID")){
+				GUI.History.build("id", $(event.target).hasClass("asc"));
+				$(event.target).toggleClass("asc");
+				$(event.target).toggleClass("desc");
+			}else if($(event.target).hasClass("sortDate")){
+				GUI.History.build("date", $(event.target).hasClass("asc"));
+				$(event.target).toggleClass("asc");
+				$(event.target).toggleClass("desc");
+			}else if($(event.target).hasClass("sortAccount")){
+				GUI.History.build("account", $(event.target).hasClass("asc"));
+				$(event.target).toggleClass("asc");
+				$(event.target).toggleClass("desc");
+			}else if($(event.target).hasClass("sortValue")){
+				GUI.History.build("value", $(event.target).hasClass("asc"));
+				$(event.target).toggleClass("asc");
+				$(event.target).toggleClass("desc");
 			}
 			break;
 	}
