@@ -22,15 +22,18 @@ GUI.Settings.isObjectRegistered = function(objectType){
 	arr = ["types", "persons", "accounts", "stores"];
 	return arr.includes(objectType);
 };
+
 /**
  * Resets Tab to default
  */
 GUI.Settings.resetTab = function(){
+	var displayStatus = $("#Settings").css("display");
 	$("#Settings").replaceWith(GUI.Settings.html);
 	$("#Settings_Persons").empty();
 	$("#Settings_Accounts").empty();
 	$("#Settings_Types").empty();
 	$("#Settings_Stores").empty();
+	$("#Settings").css("display", displayStatus);
 };
 
 /**

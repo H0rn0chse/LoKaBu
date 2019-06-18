@@ -22,11 +22,14 @@ GUI.New.isObjectRegistered = function(objectType){
 	arr = ["types", "persons", "accounts", "stores"];
 	return arr.includes(objectType);
 };
+
 /**
  * Resets Tab to default
  */
 GUI.New.resetTab = function(){
+	var displayStatus = $("#New").css("display");
 	$("#New").replaceWith(GUI.New.html);
+	$("#New").css("display", displayStatus);
 };
 
 /**

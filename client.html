@@ -117,11 +117,12 @@
 <!--==========================================History=================================================-->
 	<div id="History" class="tabContent flexLineContainer" style="display: none;">
 		<span class="flexLine"><h3>Verlauf</h3></span>
-		<span class="flexLine">
-			<div class="button sortID asc">ID</div>
-			<div class="button sortDate asc">Datum</div>
-			<div class="button sortAccount asc">Konto</div>
-			<div class="button sortValue asc">Wert</div>
+		<div id="History_Filter" class="flexLine"></div>
+		<span id="History_Sort" class="flexLine">
+			<div class="button sortID">ID</div>
+			<div class="button sortDate">Datum</div>
+			<div class="button sortAccount">Konto</div>
+			<div class="button sortValue">Wert</div>
 		</span>
 		<div id="History_Receipts" class="flexLineContainer flexLine">
 			<span class="flexLine">
@@ -132,11 +133,26 @@
 				<div class="button editReceipt">Editieren</div>
 			</span>
 		</div>
+		<div id="History_Page" class="flexLine">
+			<button>&lt;</button>
+			<span>0 / 0</span>
+			<button>&gt;</button>
+		</div>
 	</div>
 <!--==========================================Analysis================================================-->
 	<div id="Analysis" class="tabContent flexLineContainer" style="display: none;">
 		<span class="flexLine"><h3>Auswertung</h3></span>
 		<span class="flexLine" id="Analysis_Result">Ergebnis</span>
+		<span id="Analysis_Filter" class="flexLine">
+		</span>
+		<span id="Analysis_Sort" class="flexLine">
+			<span>Gruppe:</span>
+			<select id="Analysis_Group"></select>
+			<span>x-Achse:</span>
+			<select id="Analysis_xAxis"></select>
+			<span>y-Achse:</span>
+			<select id="Analysis_yAxis"></select>
+		</span>
 		<span class="flexLine">
 			<svg id="Analysis_svg">
 

@@ -52,11 +52,16 @@ GUI.History.isObjectRegistered = function(objectType){
 	arr = ["types", "persons", "accounts", "stores", "receiptList"];
 	return arr.includes(objectType) && GUI.History.Temp.isWaiting;
 };
+
 /**
  * Resets Tab to default
  */
 GUI.History.resetTab = function(){
+	var displayStatus = $("#History").css("display");
 	$("#History").replaceWith(GUI.History.html);
+	$("#History_Receipts").empty();
+	GUI.History.Temp.filterInstance.buildFilter();
+	$("#History").css("display", displayStatus);
 };
 
 /**
@@ -64,51 +69,55 @@ GUI.History.resetTab = function(){
  * @param {string} sort
  * @param {boolean} asc
  */
-GUI.History.build = function(sort = "date", asc = true){
-	$("#History_Receipts").empty();
+GUI.History.build = function(){
 
-	console.log(sort)
+	if(GUI.History.Temp.initFilter){
+		GUI.History.Temp.initFilter = false;
+		let defaultFilter = [{
+			"name": "ReceiptID",
+			"valConjunction": "greater",
+			"varConjunction": "",
+			"value": "0"
+		}];
+
+		let parent = function(){return document.getElementById("History_Filter");};
+		let submitFilter = GUI.History.Temp.requestData.bind(GUI.History.Temp);
+
+		GUI.History.Temp.filterInstance = new Filter(parent , submitFilter, database.ReceiptList_filterTypes, defaultFilter);
+		GUI.History.Temp.filterInstance.buildFilter();
+	}
 	
-	//sort
-	if(sort == "account"){
-		accountName = function(a){
-			return database.accounts.find(x => x.id === parseInt(a.account)).displayName;
+	if(!GUI.History.Temp.isWaiting){
+		GUI.History.Temp.isWaiting = true;
+
+		GUI.History.Temp.filterInstance.applyFilter();
+	}else{
+		GUI.History.Temp.isWaiting = false;
+
+		//Order Highlight
+		let orderList = {};
+		orderList["ReceiptID"] = "sortID";
+		orderList["ReceiptDate"] = "sortDate";
+		orderList["ReceiptAccount"] = "sortAccount";
+		orderList["ReceiptValue"] = "sortValue";
+		$("#History_Sort .button." + orderList[GUI.History.Temp.sortField]).addClass(GUI.History.Temp.sortDirection.toLowerCase());
+
+		for(var i= 0; i < database.receiptList.length; i++){
+			var elem = GUI.History.addLine("#History_Receipts");
+			var item = database.receiptList[i];
+			$(elem).find("[name=ID]").val(item.ReceiptID);
+			$(elem).find("[name=Date]").val(FormatDate(item.ReceiptDate));
+			$(elem).find("[name=Account]").val(item.ReceiptAccount);
+			$(elem).find("[name=Value]").val(item.ReceiptValue/100);
 		}
-		database.receipts.sort((a,b) => (accountName(a) > accountName(b) ? 1 : -1));
-	}else if(sort == "value"){
-		sumValues = function(a){
-			var sum = 0;
-			a.lines.forEach(function(i){
-				sum += i.value;
-			});
-			return sum;
+		let pageText = "";
+		if(database.receiptList.length > 0){
+			pageText = (GUI.History.Temp.page + 1) + " / " + database.receiptList[0].PageCount;
+		}else{
+			pageText = "0 / 0"
 		}
-		database.receipts.sort((a,b) => sumValues(a) - sumValues(b));
-	}else if(sort == "id"){
-		database.receipts.sort((a,b) => (a.id - b.id));
-	}else if(sort == "date"){
-		database.receipts.sort((a,b) => (a.date - b.date));
-	}
-	if(asc){
-		database.receipts.reverse()
-	}
 
-	for(var i=database.receipts.length - 1; i >= 0; i--){
-		var item = database.receipts[i];
-		var newLine = $($.parseHTML(GUI.History.html)).find("#History_Receipts").children().last();
-
-		$("#History_Receipts").append(newLine);
-
-		$(newLine).find("[name=ID]").val(item.id);
-		$(newLine).find("[name=Date]").val(FormatDate(item.date));
-		$(newLine).find("[name=Account]").val(database.accounts.find(x => x.id === parseInt(item.account)).displayName);
-
-		var sum = 0;
-		item.lines.forEach(function(i){
-			sum += i.value;
-		});
-
-		$(newLine).find("[name=Value]").val(parseFloat(sum)/100);
+		$("#History_Page span").text(pageText)
 	}
 };
 
@@ -118,7 +127,15 @@ GUI.History.build = function(sort = "date", asc = true){
  * @returns {{}} new line object
  */
 GUI.History.addLine = function(list){
+	var elem = $($.parseHTML(GUI.History.html)).find(list).children().last();
+	$(list).append(elem);
 
+	switch(list){
+		case "#History_Receipts":		
+			break;
+	}
+
+	return elem;
 };
 
 /**
@@ -139,25 +156,81 @@ GUI.History.eventHandler = function(type, event){
 		case "click":
 			//editReceipt
 			if($(event.target).hasClass("editReceipt")){
-				GUI.Edit.build($(event.target).parent().find("[name=ID]").val());
+				database.receiptDetail_filter($(event.target).parent().find("[name=ID]").val());
 				switchTab('', "Edit");
-
+			
+			//sortID button
 			}else if($(event.target).hasClass("sortID")){
-				GUI.History.build("id", $(event.target).hasClass("asc"));
-				$(event.target).toggleClass("asc");
-				$(event.target).toggleClass("desc");
+				if(GUI.History.Temp.sortDirection == "ASC" && GUI.History.Temp.sortField == "ReceiptID"){
+					GUI.History.Temp.sortDirection = "DESC";
+				}else{
+					GUI.History.Temp.sortDirection = "ASC";
+					GUI.History.Temp.sortField = "ReceiptID";
+				}
+
+				GUI.History.build();
+			
+			//sortDate button
 			}else if($(event.target).hasClass("sortDate")){
-				GUI.History.build("date", $(event.target).hasClass("asc"));
-				$(event.target).toggleClass("asc");
-				$(event.target).toggleClass("desc");
+				if(GUI.History.Temp.sortDirection == "ASC" && GUI.History.Temp.sortField == "ReceiptDate"){
+					GUI.History.Temp.sortDirection = "DESC";
+				}else{
+					GUI.History.Temp.sortDirection = "ASC";
+					GUI.History.Temp.sortField = "ReceiptDate";
+				}
+
+				GUI.History.build();
+			
+			//sortAccount button
 			}else if($(event.target).hasClass("sortAccount")){
-				GUI.History.build("account", $(event.target).hasClass("asc"));
-				$(event.target).toggleClass("asc");
-				$(event.target).toggleClass("desc");
+				if(GUI.History.Temp.sortDirection == "ASC" && GUI.History.Temp.sortField == "ReceiptAccount"){
+					GUI.History.Temp.sortDirection = "DESC";
+				}else{
+					GUI.History.Temp.sortDirection = "ASC";
+					GUI.History.Temp.sortField = "ReceiptAccount";
+				}
+
+				GUI.History.build();
+
+			//sortValue button
 			}else if($(event.target).hasClass("sortValue")){
-				GUI.History.build("value", $(event.target).hasClass("asc"));
-				$(event.target).toggleClass("asc");
-				$(event.target).toggleClass("desc");
+				if(GUI.History.Temp.sortDirection == "ASC" && GUI.History.Temp.sortField == "ReceiptValue"){
+					GUI.History.Temp.sortDirection = "DESC";
+				}else{
+					GUI.History.Temp.sortDirection = "ASC";
+					GUI.History.Temp.sortField = "ReceiptValue";
+				}
+
+				GUI.History.build();
+
+			//removeLine
+			}else if($(event.target).hasClass("removeLine")){
+				if($(event.target).closest(".flexLine").siblings().length > 0){
+					$(event.target).closest(".flexLine").remove()
+				}
+
+			//addLine
+			}else if($(event.target).hasClass("addLine")){
+				GUI.History.addLine("#" + $(GUI.Helper.getContainer(event.target)).prop("id"));
+				GUI.History.build();
+
+			//pageButton
+			}else if($(event.target).is("#History_Page button")){
+				switch(event.target.innerText){
+					case ">":
+						let pageCount = database.receiptList.length > 0 ? database.receiptList[0].PageCount : 0;
+						
+						if(pageCount > GUI.History.Temp.page + 1){
+							GUI.History.Temp.page += 1;
+						}
+						break;
+					case "<":
+						if(GUI.History.Temp.page > 0){
+							GUI.History.Temp.page -= 1;
+						}
+						break;
+				}
+				GUI.History.Temp.requestData(GUI.History.Temp.filterInstance.getFilterList(), false);
 			}
 			break;
 	}
