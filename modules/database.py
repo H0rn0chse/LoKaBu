@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QApplication
 from schemes import *
 
 class Database(QObject):
-	version = "1.0"
+	version = "1.1"
 	fileName = "database.sqlite3"
 	baseFile = "base_database.sqlite3"
 
