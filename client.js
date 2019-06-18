@@ -5,6 +5,11 @@
 var database = {};
 
 /**
+ * Test object for multi language support
+ */
+var Lang = {};
+
+/**
  * GUI object
  */
 var GUI = {};
@@ -26,6 +31,10 @@ $(document).ready(function(){
 
 	$(window).keypress(function(event){
 		GUI.EventHandler.onkeypress(event);
+	});
+
+	$(window).change(function(event){
+		GUI.EventHandler.onchange(event);
 	});
 
 	$(window).click(function(event){
@@ -58,18 +67,18 @@ $(document).ready(function(){
         database = new connector(_channel.objects.database);
 		console.log(database)
 
-        database.base.changed.connect(function(){
+        database.base.changed.connect(function(objectType){
             if(database.databaseStatus){		
-				GUI.Helper.UpdateAll();
+				GUI.EventHandler.ondatabasechange(objectType);
             }else{
                 alert("Datenbank Fehler");
             }
-        });
+		});
+		
+		GUI.Helper.UpdateAll();
 
 		// Get the element with id="defaultOpen" and click on it
 		document.getElementById("defaultOpen").click();
-
-		GUI.Helper.UpdateAll();
     });
 });
 
@@ -118,6 +127,7 @@ function initDatePicker(){
  * @param {string} tabName name of tab which should be activated
  */
 function switchTab(element, tabName){
+	
 	/**
 	 * iterator
 	 * @type {number}
@@ -140,8 +150,11 @@ function switchTab(element, tabName){
 	for (i = 0; i < tabLinks.length; i++) {
 		tabLinks[i].className = tabLinks[i].className.replace(" active", "");
 	}
+
 	document.getElementById(tabName).style.display = "inherit";
-	$(element).addClass("active")
+	if(element != ""){
+		$(element).addClass("active");
+	}
 }
 
 /**
@@ -184,43 +197,4 @@ function FormatDate(dateInt){
 	str += year;
 
 	return str;
-}
-
-/**
- * Calculates the difference between account 1 and account 2 (contributed to account 0)
- */
-function calcDiff(){
-	var a1 = {}; //Julia
-	a1.id = 1;
-	a1.list = [1,2];
-	a1.sum = 0;
-	var a2 = {}; //Aaron
-	a2.id = 2;
-	a2.list = [3,4];
-	a2.sum = 0;
-	var g = {};
-	g.id = 3;
-	g.list = [5];
-
-	database.receipts.forEach(function(receipt, i){
-		var a;
-		if(a1.list.includes(receipt.account)){
-			a = a1;
-		}else if(a2.list.includes(receipt.account)){
-			a = a2;
-		}else{
-			return;
-		}
-
-		receipt.lines.forEach(function(line, i){
-			if(g.id === line.billing){
-				a.sum += line.value;	
-			}else if(a1.id === line.billing && a1.id !== a.id){
-				a.sum += line.value;
-			}else if(a2.id === line.billing && a2.id !== a.id){
-				a.sum += line.value;
-			}
-		});
-	});
-	return a1.sum - a2.sum;
 }

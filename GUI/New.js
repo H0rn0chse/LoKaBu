@@ -9,10 +9,27 @@ GUI.New = {};
 GUI.New.html = "";
 
 /**
+ * Tab specific variables
+ */
+GUI.New.Temp = {
+};
+
+/**
+ * Returns a boolean whether this objectType is used in this tab
+ * @returns {bool}
+ */
+GUI.New.isObjectRegistered = function(objectType){
+	arr = ["types", "persons", "accounts", "stores"];
+	return arr.includes(objectType);
+};
+
+/**
  * Resets Tab to default
  */
 GUI.New.resetTab = function(){
+	var displayStatus = $("#New").css("display");
 	$("#New").replaceWith(GUI.New.html);
+	$("#New").css("display", displayStatus);
 };
 
 /**
@@ -63,8 +80,8 @@ GUI.New.addLine = function(list){
 GUI.New.read = function(){
 	var obj = {};
 	var receipt = {};
-
-	receipt.id = GUI.Helper.nextUniqueId(database.receipts, "id");
+	
+	receipt.id = GUI.Helper.nextUniqueId(database.databaseInfo.ReceiptIdList, "");
 	receipt.date = Math.round(new Date($("#New [name=Date]").first().val()).getTime()/1000);
 	receipt.account = parseInt($("#New_Account").val());
 	receipt.store = parseInt($("#New_Store").val());
@@ -101,7 +118,7 @@ GUI.New.eventHandler = function(type, event){
 
 					if(database.validate("Receipt", obj)){
 						if(confirm("Abschicken?")){							
-							database.receipts_add(obj);
+							database.receiptDetail_add(obj);
 							GUI.New.build();
 						}
 					}else{

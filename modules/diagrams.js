@@ -28,7 +28,7 @@ function drawLineGraph(id, data, svgWidth){
 			{name:string, values:[number,...]},
 			...
 		],
-		x: [string,...]
+		xLabels: [string,...]
 	};*/
 	//validate data
 	if(data.hasOwnProperty("series") && data.hasOwnProperty("xLabels")){

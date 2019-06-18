@@ -3,6 +3,16 @@
  */
 GUI.EventHandler = {};
 
+GUI.EventHandler.ondatabasechange = function(objectType){
+	GUI.Helper.getTabList().forEach(function(tab){
+		if(tab != "EventHandler" && tab != "Helper"){
+			if(GUI[tab].isObjectRegistered(objectType)){
+				GUI[tab].build();
+			}
+		}
+	});
+}
+
 /**
  * Focusout Event
  * @param {{}} event event object
@@ -41,6 +51,20 @@ GUI.EventHandler.onclick = function(event){
 
 		if(typeof tab !== "undefined"){
 			GUI[tab].eventHandler("click", event);
+		}
+	}
+};
+
+/**
+ * Change Event
+ * @param {{}} event event object
+ */
+GUI.EventHandler.onchange = function(event){
+	if(event.target !== window){
+		tab = GUI.Helper.getTab(event.target)
+
+		if(typeof tab !== "undefined"){
+			GUI[tab].eventHandler("change", event);
 		}
 	}
 };

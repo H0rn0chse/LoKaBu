@@ -12,7 +12,7 @@ added_files = [
          ]
 
 
-a = Analysis(['client.py', 'modules\database.py', 'modules\schemes.py'],
+a = Analysis(['client.py', 'modules\database.py', 'modules\sqlFilterStatement.py'],
              binaries=[],
              datas=added_files,
              hiddenimports=[],
@@ -37,4 +37,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=False )
+          console=True )

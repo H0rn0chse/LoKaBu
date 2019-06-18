@@ -121,3 +121,15 @@ input[name=Account]:disabled, input[name=Date]:disabled {
 svg{
 	position: relative;
 }
+
+#History_Sort .button.asc, #History_Sort .button.desc{
+	background-color: gray;
+}
+
+#History_Sort .button.asc::after{
+	content: "↑";
+}
+
+#History_Sort .button.desc::after{
+	content: "↓";
+}

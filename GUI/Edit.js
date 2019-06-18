@@ -9,40 +9,56 @@ GUI.Edit = {};
 GUI.Edit.html = "";
 
 /**
+ * Tab specific variables
+ */
+GUI.Edit.Temp = {
+};
+
+/**
+ * Returns a boolean whether this objectType is used in this tab
+ * @returns {Boolean}
+ */
+GUI.Edit.isObjectRegistered = function(objectType){
+	arr = ["types", "persons", "accounts", "stores", "receiptDetail"];	
+	return arr.includes(objectType);
+};
+
+/**
  * Resets Tab to default
  */
 GUI.Edit.resetTab = function(){
+	var displayStatus = $("#Edit").css("display");
 	$("#Edit").replaceWith(GUI.Edit.html);
 	$("#Edit_Lines").empty();
+	$("#Edit").css("display", displayStatus);
 };
 
 /**
  * Builds Tab with data
- * @param {number} receiptId
  */
-GUI.Edit.build = function(receiptId = 0){
-	if(receiptId > 0){
-		GUI.Edit.resetTab();
+GUI.Edit.build = function(){
+	GUI.Edit.resetTab();
+
+	var receipt = database.receiptDetail;
+
+	//Receipt
+	GUI.Helper.fillDropdown("#Edit_Account", database.accounts);
+	GUI.Helper.fillDropdown("#Edit_Store", database.stores);	
+	$("#Edit [name=ID]").val(receipt.id);
+	$("#Edit_Account").val(receipt.account);
+	$("#Edit_Store").val(receipt.store);
+	$("#Edit [name=Date]").val(FormatDate(receipt.date));
+	$("#Edit_Comment").val(receipt.comment);
+
+	//ReceiptLines
+	receipt.lines.forEach(function(item){
+		GUI.Edit.addLine("#Edit_Lines")
+		$("#Edit [name=Value]:last").val(parseFloat(item.value)/100);
+		$("#Edit .Typ:last").val(item.typ);
+		$("#Edit .BillingAccount:last").val(item.billing);
+	});
 	
-		var receipt = database.receipts.filter(x => x.id == receiptId)[0];
-
-		//Receipt
-		GUI.Helper.fillDropdown("#Edit_Account", database.accounts);
-		GUI.Helper.fillDropdown("#Edit_Store", database.stores);	
-		$("#Edit [name=ID]").val(receiptId);
-		$("#Edit_Account").val(receipt.account);
-		$("#Edit_Store").val(receipt.store);
-		$("#Edit [name=Date]").val(FormatDate(receipt.date));
-		$("#Edit_Comment").val(receipt.comment);
-
-		//ReceiptLines
-		receipt.lines.forEach(function(item){
-			GUI.Edit.addLine("#Edit_Lines")
-			$("#Edit [name=Value]:last").val(parseFloat(item.value)/100);
-			$("#Edit .Typ:last").val(item.typ);
-			$("#Edit .BillingAccount:last").val(item.billing);
-		});
-	}
+	$("#Edit_Store").focus()
 };
 
 /**
@@ -117,14 +133,14 @@ GUI.Edit.eventHandler = function(type, event){
 					
 					if(database.validate("Receipt", obj)){
 						if(confirm("Abschicken?")){
-							database.receipts_update(obj);
+							database.receiptDetail_update(obj);
 						}
 					}
 
 			//removeReceipt
 			}else if($(event.target).hasClass("removeReceipt")){
 				if(confirm("Abschicken?")){
-					database.receipts_delete(GUI.Edit.read().receipt);
+					database.receiptDetail_delete(GUI.Edit.read().receipt);
 					switchTab('button:contains("Verlauf")', "History");
 				}
 			
@@ -137,7 +153,6 @@ GUI.Edit.eventHandler = function(type, event){
 			//addLine
 			}else if($(event.target).hasClass("addLine")){
 				GUI.Edit.addLine("#" + $(GUI.Helper.getContainer(event.target)).prop("id"));
-
 			}
 			break;
 			
