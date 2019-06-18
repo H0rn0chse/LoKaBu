@@ -5,6 +5,11 @@
 var database = {};
 
 /**
+ * Test object for multi language support
+ */
+var Lang = {};
+
+/**
  * GUI object
  */
 var GUI = {};
