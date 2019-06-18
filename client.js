@@ -28,6 +28,10 @@ $(document).ready(function(){
 		GUI.EventHandler.onkeypress(event);
 	});
 
+	$(window).change(function(event){
+		GUI.EventHandler.onchange(event);
+	});
+
 	$(window).click(function(event){
 		//click on tabLinks
 		if(event.target.matches(".tabLinks")){

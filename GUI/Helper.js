@@ -57,6 +57,14 @@ GUI.Helper.getTab = function(elem){
 }
 
 /**
+ * Returns list tab names
+ * @returns {string[]} list of tab names
+ */
+GUI.Helper.getTabList = function(){
+	return ["New", "Edit", "History", "Settings", "Analysis"];
+}
+
+/**
  * Fills dropdown with list
  * @param {{}|string} elem selector of element or element object
  * @param {object} list

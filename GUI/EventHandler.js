@@ -55,6 +55,20 @@ GUI.EventHandler.onclick = function(event){
 };
 
 /**
+ * Change Event
+ * @param {{}} event event object
+ */
+GUI.EventHandler.onchange = function(event){
+	if(event.target !== window){
+		tab = GUI.Helper.getTab(event.target)
+
+		if(typeof tab !== "undefined"){
+			GUI[tab].eventHandler("change", event);
+		}
+	}
+};
+
+/**
  * Resize Event
  * @param {{}} event event object
  */
