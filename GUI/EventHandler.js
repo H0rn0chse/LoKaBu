@@ -12,6 +12,7 @@ GUI.EventHandler.ondatabasechange = function(objectType){
 		}
 	});
 }
+
 /**
  * Focusout Event
  * @param {{}} event event object

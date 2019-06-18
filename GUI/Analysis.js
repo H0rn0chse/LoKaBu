@@ -150,7 +150,7 @@ GUI.Analysis.build = function(){
  * @returns {{}} new line object
  */
 GUI.Analysis.addLine = function(list){
-
+	return {};
 };
 
 /**
@@ -158,7 +158,7 @@ GUI.Analysis.addLine = function(list){
  * @returns {{}}
  */
 GUI.Analysis.read = function(){
-	return{};
+	return {};
 };
 
 /**

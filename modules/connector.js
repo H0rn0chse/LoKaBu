@@ -353,118 +353,90 @@ class connector {
 	}
 
 	/**
-	 * Transforms data to make it visualizable
-	 * @param {string} xAxis 
-	 * @param {string} yAxis 
-	 * @param {string} groupBy 
-	 * @param {{typ:string, value:string}[]} filter 
+	 * Returns the supported Types for receiptAnalysis
+	 * @returns {typeItem[]}
 	 */
-	transformData(xAxis, yAxis, groupBy, filter){
-		var startDateStamp = 0;
-		var endDateStamp = 9999999999;
+	get ReceiptAnalysis_filterTypes(){
+		var typeList = [{
+			"name":"sortDate",
+			"valType":"date",
+			"varType":"value"
+		},{
+			"name":"yID",
+			"valType":"number",
+			"varType":"value"
+		},{
+			"name":"yValue",
+			"valType":"number",
+			"varType":"value"
+		},{
+			"name":"xTime",
+			"valType":"text",
+			"varType":"value"
+		},{
+			"name":"xAccount",
+			"valType":"text",
+			"varType":"value"
+		},{
+			"name":"xStore",
+			"valType":"text",
+			"varType":"value"
+		},{
+			"name":"xTyp",
+			"valType":"text",
+			"varType":"value"
+		},{
+			"name":"xBilling",
+			"valType":"text",
+			"varType":"value"
+		}]
 
-		var persons = [];
-		var accounts = [];
-		var stores = [];
-		var types = [];
+		return typeList;
+	}
 
-		filter.forEach(function(item, index){
-			switch(item.typ){
-				case "startDate":
-					startDateStamp = item.value;
-					break;
-				case "endDate":
-					endDateStamp = item.value;
-					break;
-				case "person":
-					persons.push(item.value)
-					break;
-				case "account":
-					accounts.push(item.value)
-					break;
-				case "store":
-					stores.push(item.value)
-					break;
-				case "typ":
-					types.push(item.value)
-					break;
-			}
-		});
+	/**
+	 * Returns the supported Types for receiptList
+	 * @returns {typeItem[]}
+	 */
+	get ReceiptList_filterTypes(){
+		var typeList = [{
+			"name":"ReceiptID",
+			"valType":"number",
+			"varType":"value"
+		},{
+			"name":"ReceiptDate",
+			"valType":"date",
+			"varType":"value"
+		},{
+			"name":"ReceiptAccount",
+			"valType":"text",
+			"varType":"value"
+		},{
+			"name":"ReceiptStore",
+			"valType":"text",
+			"varType":"value"
+		},{
+			"name":"ReceiptComment",
+			"valType":"text",
+			"varType":"value"
+		},{
+			"name":"ReceiptValue",
+			"valType":"number",
+			"varType":"value"
+		},{
+			"name":"LineTypes",
+			"valType":"text",
+			"varType":"list"
+		},{
+			"name":"LinePersons",
+			"valType":"text",
+			"varType":"list"
+		},{
+			"name":"LineValues",
+			"valType":"number",
+			"varType":"list"
+		}]
 
-		var startDate = new Date(startDateStamp*1000);
-		var endDate = new Date(endDateStamp*1000);
-
-		var data = {
-			series: [],
-			xLabels: []
-		};
-
-		var dataObject = [];
-		database.receipts.forEach(function(receipt){
-			if(receipt.date <= startDateStamp || receipt.date > endDateStamp){
-				return;
-			}
-			if(!stores.includes(receipt.store) && stores.length !== 0){
-				return;
-			}
-			receipt.lines.forEach(function(line){
-				if((persons.includes(line.billing) || accounts.includes(receipt.account)) || (persons.length === 0 && accounts.length === 0))
-				{
-					if(types.includes(line.typ) || types.length === 0){
-						let d = new Date(receipt.date*1000)
-						let str = d.getFullYear() + "-" + ("0" + (d.getMonth()+1)).slice(-2);
-						let lineObj = {
-							time: str,
-							person: database.persons.find(x => x.id === line.billing).displayName,
-							account: database.accounts.find(x => x.id === receipt.account).displayName,
-							store: database.stores.find(x => x.id === receipt.store).displayName,
-							typ: database.types.find(x => x.id === line.typ).displayName,
-							value: line.value/100,
-							receipt: receipt.id
-						};
-					dataObject.push(lineObj);
-					}
-				}
-			});
-		});
-
-		switch(yAxis){
-			case "lineValue":
-				dataObject.forEach(function(item, i){
-					delete dataObject[i].receipt;
-				})
-				break;
-			case "receiptCount":
-				var receiptList = [];
-				for (let i = dataObject.length - 1; i >= 0; i -= 1) {
-					let item = dataObject[i];
-					if(receiptList.includes(item.receipt)){
-						dataObject.splice(i, 1);
-					}else{
-						receiptList.push(item.receipt);
-						delete dataObject[i].receipt;
-						dataObject[i].value = 1;
-					}
-				}
-				break;
-		}
-		data.xLabels = [...new Set(dataObject.map(item => item[xAxis]))];
-
-		var groupByList = [...new Set(dataObject.map(item => item[groupBy]))];
-		groupByList.forEach(function(item){
-			let obj = {
-				name: item,
-				values: new Array(data.xLabels.length).fill(0)
-			}
-			data.series.push(obj);
-		});
-
-		dataObject.forEach(function(item){
-			let i = data.series.findIndex(obj => obj.name === item[groupBy])
-			let j = data.xLabels.indexOf(item[xAxis])
-			data.series[i].values[j] += item.value;
-		});
-
-		return data;
+		return typeList;
 	}
 }

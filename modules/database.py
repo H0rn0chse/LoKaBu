@@ -9,7 +9,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication
 
 #local files
-from schemes import *
+from sqlFilterStatement import *
 
 class Database(QObject):
 	version = "1.1"

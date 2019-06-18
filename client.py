@@ -22,7 +22,7 @@ APP = QApplication(sys.argv)
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable) + '\\'
-elif __file__:
+else: #__file__:
     application_path = os.path.dirname(__file__) + '\\'
 
 def getPath(filename):
@@ -42,7 +42,10 @@ def getPath(filename):
 #file does exist
 if os.path.isfile(Database.fileName):
 	CONN = sqlite3.connect(application_path + Database.fileName)
+	CONN.row_factory = sqlite3.Row
 	CURSOR = CONN.cursor()
+
+	
 
 	#file has false version
 	if not Database.checkVersion(CURSOR):
@@ -60,6 +63,7 @@ else:
 	copy2(getPath(Database.baseFile), application_path + Database.fileName)
 
 	CONN = sqlite3.connect(application_path + Database.fileName)
+	CONN.row_factory = sqlite3.Row
 	CURSOR = CONN.cursor()
 
 FILE = open(getPath("client.html"), "r", encoding='utf-8')
@@ -78,6 +82,7 @@ VIEW.setHtml(RAW_HTML, QUrl("file://"))
 VIEW.setWindowTitle('Kassenbuch - Ultimate Edition')
 
 VIEW_INSPECTOR.show()
+VIEW.resize(958, 1008)
 VIEW.show()
 
 sys.exit(APP.exec_())

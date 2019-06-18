@@ -133,14 +133,14 @@ GUI.Edit.eventHandler = function(type, event){
 					
 					if(database.validate("Receipt", obj)){
 						if(confirm("Abschicken?")){
-							database.receipts_update(obj);
+							database.receiptDetail_update(obj);
 						}
 					}
 
 			//removeReceipt
 			}else if($(event.target).hasClass("removeReceipt")){
 				if(confirm("Abschicken?")){
-					database.receipts_delete(GUI.Edit.read().receipt);
+					database.receiptDetail_delete(GUI.Edit.read().receipt);
 					switchTab('button:contains("Verlauf")', "History");
 				}
 			
@@ -153,7 +153,6 @@ GUI.Edit.eventHandler = function(type, event){
 			//addLine
 			}else if($(event.target).hasClass("addLine")){
 				GUI.Edit.addLine("#" + $(GUI.Helper.getContainer(event.target)).prop("id"));
-
 			}
 			break;
 			

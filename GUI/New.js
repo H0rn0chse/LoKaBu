@@ -80,8 +80,8 @@ GUI.New.addLine = function(list){
 GUI.New.read = function(){
 	var obj = {};
 	var receipt = {};
-
-	receipt.id = GUI.Helper.nextUniqueId(database.receipts, "id");
+	
+	receipt.id = GUI.Helper.nextUniqueId(database.databaseInfo.ReceiptIdList, "");
 	receipt.date = Math.round(new Date($("#New [name=Date]").first().val()).getTime()/1000);
 	receipt.account = parseInt($("#New_Account").val());
 	receipt.store = parseInt($("#New_Store").val());
@@ -118,7 +118,7 @@ GUI.New.eventHandler = function(type, event){
 
 					if(database.validate("Receipt", obj)){
 						if(confirm("Abschicken?")){							
-							database.receipts_add(obj);
+							database.receiptDetail_add(obj);
 							GUI.New.build();
 						}
 					}else{

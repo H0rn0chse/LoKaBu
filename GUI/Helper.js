@@ -118,22 +118,14 @@ GUI.Helper.reservedLineId = [];
  * @returns {number}
  */
 GUI.Helper.nextLineId = function(id=0){
-	var arr = [];
-		database.receipts.forEach(function(receipt){
-			if(receipt.id != id){
-				receipt.lines.forEach(function(line){
-					arr.push({"id":line.id});
-				});
-			}
-		});
-	
-		id = GUI.Helper.nextUniqueId(arr, "id", GUI.Helper.reservedLineId);
-		GUI.Helper.reservedLineId.push(id);
-		return id;
-	}
+	var arr = database.databaseInfo.LineIdList;
+	id = GUI.Helper.nextUniqueId(arr, "", GUI.Helper.reservedLineId);
+	GUI.Helper.reservedLineId.push(id);
+	return id;
+}
 
 /**
- * Returns the next available id for receipt lines
+ * Returns the next available id for an specific array
  * @param {{id:number}[]} obj
  * @param {string} id Id of the unique id
  * @param {number[]} reserved Array of reserved ids
@@ -141,10 +133,16 @@ GUI.Helper.nextLineId = function(id=0){
  */
 GUI.Helper.nextUniqueId = function(obj, id, reserved=[]){
 	next = 1;
-	arr = []
-	obj.forEach(function(elem){
-		arr.push(parseInt(elem[id]));
-	});
+
+	if(id == ""){
+		var arr = obj;
+	}else{
+		arr = [];
+		obj.forEach(function(elem){
+			arr.push(parseInt(elem[id]));
+		});
+	}
+	
 	arr.sort(function(a,b) {
 		return a - b;
 	});
