@@ -9,6 +9,14 @@ GUI.Analysis = {};
 GUI.Analysis.html = "";
 
 /**
+ * Returns a boolean whether this objectType is used in this tab
+ * @returns {bool}
+ */
+GUI.Analysis.isObjectRegistered = function(objectType){
+	arr = ["types", "persons", "accounts", "stores", "receiptAnalysis"];
+	return arr.includes(objectType);
+};
+/**
  * Resets Tab to default
  */
 GUI.Analysis.resetTab = function(){

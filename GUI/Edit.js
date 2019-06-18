@@ -9,6 +9,14 @@ GUI.Edit = {};
 GUI.Edit.html = "";
 
 /**
+ * Returns a boolean whether this objectType is used in this tab
+ * @returns {Boolean}
+ */
+GUI.Edit.isObjectRegistered = function(objectType){
+	arr = ["types", "persons", "accounts", "stores", "receiptDetail"];	
+	return arr.includes(objectType);
+};
+/**
  * Resets Tab to default
  */
 GUI.Edit.resetTab = function(){

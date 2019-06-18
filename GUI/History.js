@@ -9,6 +9,14 @@ GUI.History = {};
 GUI.History.html = "";
 
 /**
+ * Returns a boolean whether this objectType is used in this tab
+ * @returns {bool}
+ */
+GUI.History.isObjectRegistered = function(objectType){
+	arr = ["types", "persons", "accounts", "stores", "receiptList"];
+	return arr.includes(objectType) && GUI.History.Temp.isWaiting;
+};
+/**
  * Resets Tab to default
  */
 GUI.History.resetTab = function(){

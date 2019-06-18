@@ -3,6 +3,15 @@
  */
 GUI.EventHandler = {};
 
+GUI.EventHandler.ondatabasechange = function(objectType){
+	GUI.Helper.getTabList().forEach(function(tab){
+		if(tab != "EventHandler" && tab != "Helper"){
+			if(GUI[tab].isObjectRegistered(objectType)){
+				GUI[tab].build();
+			}
+		}
+	});
+}
 /**
  * Focusout Event
  * @param {{}} event event object

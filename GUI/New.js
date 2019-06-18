@@ -9,6 +9,14 @@ GUI.New = {};
 GUI.New.html = "";
 
 /**
+ * Returns a boolean whether this objectType is used in this tab
+ * @returns {bool}
+ */
+GUI.New.isObjectRegistered = function(objectType){
+	arr = ["types", "persons", "accounts", "stores"];
+	return arr.includes(objectType);
+};
+/**
  * Resets Tab to default
  */
 GUI.New.resetTab = function(){

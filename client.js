@@ -58,18 +58,18 @@ $(document).ready(function(){
         database = new connector(_channel.objects.database);
 		console.log(database)
 
-        database.base.changed.connect(function(){
+        database.base.changed.connect(function(objectType){
             if(database.databaseStatus){		
-				GUI.Helper.UpdateAll();
+				GUI.EventHandler.ondatabasechange(objectType);
             }else{
                 alert("Datenbank Fehler");
             }
-        });
+		});
+		
+		GUI.Helper.UpdateAll();
 
 		// Get the element with id="defaultOpen" and click on it
 		document.getElementById("defaultOpen").click();
-
-		GUI.Helper.UpdateAll();
     });
 });
 
