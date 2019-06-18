@@ -19,7 +19,18 @@ class connector {
 	 * @return {account[]}
 	 */
 	get accounts() {
-		return this._base.accounts;
+		var arr = []
+
+		this._base.accounts.forEach(function(item){
+			var obj = {};
+			obj.id = item.ID;
+			obj.displayName = item.DisplayName;
+			obj.owner = item.Owner;
+
+			arr.push(obj);
+		})
+
+		return arr;
 	}
 	
 	/**
@@ -27,6 +38,15 @@ class connector {
 	 */
 	get databaseStatus() {
 		return this._base.databaseStatus;
+	}
+
+	get databaseInfo() {
+		var obj = {}
+		obj.ReceiptCount = this._base.databaseInfo.ReceiptCount;
+		obj.LineIdList = JSON.parse(this._base.databaseInfo.LineIdList);
+		obj.ReceiptIdList = JSON.parse(this._base.databaseInfo.ReceiptIdList);
+
+		return obj;
 	}
 	
 	/**
@@ -38,7 +58,17 @@ class connector {
 	 * @return {person[]}
 	 */
 	get persons() {
-		return this._base.persons;
+		var arr = []
+
+		this._base.persons.forEach(function(item){
+			var obj = {};
+			obj.id = item.ID;
+			obj.displayName = item.DisplayName;
+
+			arr.push(obj);
+		})
+
+		return arr;
 	}
 	
 	/**
@@ -63,6 +93,47 @@ class connector {
 	get receipts() {
 		return this._base.receipts;
 	}
+
+	get receiptList() {
+		return this._base.receiptList;
+	}
+
+	get receiptDetail() {
+		var receipt = {}
+		var obj = this._base.receiptDetail;
+
+		if(obj.length > 0){
+			receipt.id = obj[0].ReceiptID;
+			receipt.date = obj[0].ReceiptDate;
+			receipt.account = obj[0].ReceiptAccount;
+			receipt.store = obj[0].ReceiptStore;
+			receipt.comment = obj[0].ReceiptComment;
+			receipt.lines = [];
+
+			obj.forEach(function(val){
+				var line = {};
+				line.id = val.LineID;
+				line.value = val.LineValue;
+				line.billing = val.LineBilling;
+				line.typ = val.LineType;
+	
+				receipt.lines.push(line);
+			});
+		}else{
+			receipt.id = "";
+			receipt.date = "";
+			receipt.account = "";
+			receipt.store = "";
+			receipt.comment = "";
+			receipt.lines = [];
+		}
+
+		return receipt;
+	}
+
+	get receiptAnalysis() {
+		return this._base.receiptAnalysis;
+	}
 	
 	/**
 	 * @typedef {object} settings
@@ -70,10 +141,14 @@ class connector {
 	 * @property {number} defaultTyp
 	 */
 	/**
-	 * @return {settings}
 	 */
 	get settings() {
-		return this._base.settings;
+		var obj = {}
+
+		obj.defaultBillingAccount = this._base.settings.Person;
+		obj.defaultTyp = this._base.settings.Typ;
+
+		return obj;
 	}
 	
 	/**
@@ -85,7 +160,17 @@ class connector {
 	 * @return {store[]}
 	 */
 	get stores() {
-		return this._base.stores;
+		var arr = []
+
+		this._base.stores.forEach(function(item){
+			var obj = {};
+			obj.id = item.ID;
+			obj.displayName = item.DisplayName;
+
+			arr.push(obj);
+		})
+
+		return arr;
 	}
 	
 	/**
@@ -97,91 +182,128 @@ class connector {
 	 * @return {typ[]}
 	 */
 	get types() {
-		return this._base.types;
+		var arr = []
+
+		this._base.types.forEach(function(item){
+			var obj = {};
+			obj.id = item.ID;
+			obj.displayName = item.DisplayName;
+
+			arr.push(obj);
+		})
+
+		return arr;
 	}
 	
 	/**
 	 * @param {account} account 
 	 */
 	accounts_add(account){
-		this._base.accounts_add(account);
+		this._base.submit_data("accounts", "add", account);
 	}
 
 	/**
 	 * @param {account} account 
 	 */
 	accounts_update(account){
-		this._base.accounts_update(account);
+		this._base.submit_data("accounts", "update", account);
 	}
 
 	/**
 	 * @param {person} person 
 	 */
 	persons_add(person){
-		this._base.persons_add(person);
+		this._base.submit_data("persons", "add", person);
 	}
 
 	/**
 	 * @param {person} person 
 	 */
 	persons_update(person){
-		this._base.persons_update(person);
+		this._base.submit_data("persons", "update", person);
+	}
+	/**
+	 * Triggers the update of receiptList based on the filter
+	 * @param {filterItem[]} filterList 
+	 * @param {String} order 
+	 * @param {Number} page 
+	 */
+	receiptList_filter(filterList, order, page){
+		this._base.update_data("receiptList", "", filterList, order, page);
+	}
+
+	/**
+	 * Triggers the update of receiptDetail based on the id
+	 * @param {Number} id 
+	 */
+	receiptDetail_filter(id){
+		this._base.update_data("receiptDetail", "", [("ReceiptID="+id)], "", "0");
 	}
 
 	/**
 	 * @param {receipt} receipt 
 	 */
-	receipts_add(receipt){
-		this._base.receipts_add(receipt);
+	receiptDetail_add(receipt){
+		this._base.submit_data("receiptDetail", "add", receipt);
 	}
 
 	/**
 	 * @param {receipt} receipt 
 	 */
-	receipts_delete(receipt){
-		this._base.receipts_delete(receipt);
+	receiptDetail_delete(receipt){
+		this._base.submit_data("receiptDetail", "delete", receipt);
 	}
 
 	/**
 	 * @param {receipt} receipt 
 	 */
-	receipts_update(receipt){
-		this._base.receipts_update(receipt);
+	receiptDetail_update(receipt){
+		this._base.submit_data("receiptDetail", "update", receipt);
+	}
+
+	/**
+	 * Triggers the update of receiptDetail based on the id
+	 * @param {filterItem[]} filterList 
+	 * @param {String} group 
+	 * @param {String} order 
+	 */
+	receiptAnalysis_filter(filterList, group, order){
+		this._base.update_data("receiptAnalysis", group, filterList, order, "");
 	}
 
 	/**
 	 * @param {settings} settings 
 	 */
 	settings_set(settings){
-		this._base.settings_set(settings);
+		this._base.submit_data("settings", "set", settings);
 	}
 
 	/**
 	 * @param {store} store 
 	 */
 	stores_add(store){
-		this._base.stores_add(store);
+		this._base.submit_data("stores", "add", store);
 	}
 
 	/**
 	 * @param {store} store 
 	 */
 	stores_update(store){
-		this._base.stores_update(store);
+		this._base.submit_data("stores", "update", store);
 	}
 
 	/**
 	 * @param {typ} type 
 	 */
 	types_add(type){
-		this._base.types_add(type);
+		this._base.submit_data("types", "add", type);
 	}
 	
 	/**
 	 * @param {typ} type 
 	 */
 	types_update(type){
-		this._base.types_update(type);
+		this._base.submit_data("types", "update", type);
 	}
 
 	/**
