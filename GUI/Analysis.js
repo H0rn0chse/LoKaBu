@@ -9,6 +9,44 @@ GUI.Analysis = {};
 GUI.Analysis.html = "";
 
 /**
+ * @typedef {Object} AnalysisTemp
+ * @property {Boolean} isWaiting
+ * @property {Boolean} initFilter
+ * @property {String} sortField
+ * @property {String} sortDirection
+ * @property {String} groupField
+ * @property {String} xField
+ * @property {String} yField
+ * @property {Filter} filterInstance
+ * @property {Function} requestData
+ */
+
+/**
+ * Tab specific variables
+ */
+GUI.Analysis.Temp = {
+	isWaiting: false,
+	initFilter: true,
+	sortField: "sortDate",
+	sortDirection: "ASC",
+	groupField: "xTyp",
+	xField: "xTime",
+	yField: "ySum",
+	filterInstance : {},
+	requestData: function(filterList){
+		this.isWaiting = true;
+		GUI.Analysis.resetTab()
+
+		this.sortField = this.xField == "xTime" ? "sortDate" : this.xField
+
+		let order = "ORDER BY " + this.sortField + " " + this.sortDirection;
+		let group = this.groupField == "None" ? this.xField : this.xField + "," + this.groupField;
+
+		database.receiptAnalysis_filter(filterList, group, order);
+	}
+};
+
+/**
  * Returns a boolean whether this objectType is used in this tab
  * @returns {bool}
  */

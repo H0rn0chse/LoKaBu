@@ -9,6 +9,42 @@ GUI.History = {};
 GUI.History.html = "";
 
 /**
+ * @typedef {Object} HistoryTemp
+ * @property {Boolean} isWaiting
+ * @property {Boolean} initFilter
+ * @property {String} sortField
+ * @property {String} sortDirection
+ * @property {Number} page
+ * @property {Filter} filterInstance
+ * @property {Function} requestData
+ */
+
+/**
+ * Tab specific variables
+ * @type {HistoryTemp}
+ */
+GUI.History.Temp = {
+	isWaiting: false,
+	initFilter: true,
+	sortField: "ReceiptID",
+	sortDirection: "ASC",
+	page: 0,
+	filterInstance: {},
+	requestData: function(filterList, resetPage=true){
+		this.isWaiting = true;
+		GUI.History.resetTab()
+
+		let order = "ORDER BY " + this.sortField + " " + this.sortDirection;
+
+		if(resetPage){
+			this.page = 0
+		}
+
+		database.receiptList_filter(filterList, order, this.page);
+	}
+};
+
+/**
  * Returns a boolean whether this objectType is used in this tab
  * @returns {bool}
  */

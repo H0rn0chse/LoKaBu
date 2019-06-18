@@ -9,6 +9,12 @@ GUI.Settings = {};
 GUI.Settings.html = "";
 
 /**
+ * Tab specific variables
+ */
+GUI.Settings.Temp = {
+};
+
+/**
  * Returns a boolean whether this objectType is used in this tab
  * @returns {bool}
  */

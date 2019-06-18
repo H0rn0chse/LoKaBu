@@ -9,6 +9,12 @@ GUI.Edit = {};
 GUI.Edit.html = "";
 
 /**
+ * Tab specific variables
+ */
+GUI.Edit.Temp = {
+};
+
+/**
  * Returns a boolean whether this objectType is used in this tab
  * @returns {Boolean}
  */

@@ -9,6 +9,12 @@ GUI.New = {};
 GUI.New.html = "";
 
 /**
+ * Tab specific variables
+ */
+GUI.New.Temp = {
+};
+
+/**
  * Returns a boolean whether this objectType is used in this tab
  * @returns {bool}
  */
