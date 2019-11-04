@@ -19,6 +19,9 @@ In addition to simply storing receipts, you can define additional properties for
   *	Sum (user-defined Text / Formula)
 ## Usage on Windows
 Prerequisites: Installation of the project dependencies
+This project runs currently on:
+   * Python 3.7.2
+   * Qt 5.12.1
 
 The project can be packed into a single executable file on Windows using the build.bat file.
 
