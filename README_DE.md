@@ -19,7 +19,10 @@ Neben der bloßen Ablage von Belegen, lassen sich weitere Eigenschaften bzgl. de
   *	Betrag (Freitext/ Formel)
 ## Nutzung auf Windows
 Voraussetzungen: Installation der Projekt Abhängigkeiten
-
+Dieses Projekt läuft derzeit auf:
+   * Python 3.7.2
+   * Qt 5.12.1
+   
 Das Projekt kann unter Windows mit der Datei build.bat in eine einzige ausführbare Datei gepackt werden.
 
 Alternativ mit dem Befehl:
