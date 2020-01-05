@@ -1,0 +1,22 @@
+{
+  "name": "lokabu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/H0rn0chse/LoKaBu.git"
+  },
+  "author": {
+    "name": "H0rn0chse",
+    "email": "h0rn0chse@gmx.de"
+  },
+  "license": "GPL-3.0",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^7.1.7"
+  }
+}
