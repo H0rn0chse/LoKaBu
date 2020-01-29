@@ -1,28 +1,29 @@
-document.body.addEventListener('click', (event) => {
-	if (event.target.dataset.section) {
-		navigateToSection(event.target.dataset.section)
+document.body.addEventListener('click', (oEvent) => {
+	if (oEvent.target.dataset.section) {
+		navigateToSection(oEvent.target.dataset.section)
 	}
 })
 
 function hideAllSectionsAndDeselectButtons () {
-	const sections = document.querySelectorAll('.section.is-shown')
-	Array.prototype.forEach.call(sections, (section) => {
-		section.classList.remove('is-shown')
+	const aSections = document.querySelectorAll('.section.is-shown')
+	aSections.forEach((oSection) => {
+		oSection.classList.remove('is-shown')
 	})
   
-	const buttons = document.querySelectorAll('.nav-item.is-selected')
-	Array.prototype.forEach.call(buttons, (button) => {
-		button.classList.remove('is-selected')
+	const aButtons = document.querySelectorAll('.nav-item.is-selected')
+	aButtons.forEach((oButton) => {
+		oButton.classList.remove('is-selected')
 	})
 }
 
-function navigateToSection (section) {
-	const sectionId = "section-" + section
-	if (!document.querySelectorAll("#" + sectionId + ".is-shown").length) {
-		hideAllSectionsAndDeselectButtons()
+function navigateToSection (sSection) {
+	const sSectionId = "section-" + sSection
+	const oSectionController = window[sSection + "Section"];
 
-		document.getElementById(sectionId).classList.add('is-shown')
-		window[section + "Section"].init();
+	if (!document.querySelectorAll("#" + sSectionId + ".is-shown").length) {
+		hideAllSectionsAndDeselectButtons()
+		document.getElementById(sSectionId).classList.add('is-shown')
+		oSectionController.init();
 	}
 }
 

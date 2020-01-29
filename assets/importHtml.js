@@ -2,10 +2,10 @@
 
 const fs = require('fs').promises
 
-const importHtml = (href) => {
+const importHtml = (sPath) => {
 	
-	return fs.readFile(href, 'utf-8').then(function (data) {
-		document.getElementById('content').innerHTML += data
+	return fs.readFile(sPath, 'utf-8').then(function (sData) {
+		document.getElementById('content').innerHTML += sData
 	})
 }
 
