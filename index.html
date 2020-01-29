@@ -10,15 +10,46 @@
 				background-color: white;
 			}
 		</style>
+
+		<link rel="stylesheet" href="assets/css/section.css">
 	</head>
 	<body>
-		<h1>Electrton Test</h1>
-		We are using node
-		<script>document.write(process.versions.node)</script>,
-		Chrome
-		<script>document.write(process.versions.chrome)</script>,
-		and Electron
-		<script>document.write(process.versions.electron)</script>.
-		<br>
+		<nav class="nav">
+			<div class="nav-item nav-header">
+				<p>Header</p>
+			</div>
+			<div class="nav-item">
+				<p class="nav-link" data-section="new">New</p>
+			</div>
+			<div class="nav-item">
+				<p class="nav-link" data-section="edit">Edit</p>
+			</div>
+			<div class="nav-item">
+				<p class="nav-link" data-section="history">History</p>
+			</div>
+			<div class="nav-item">
+				<p class="nav-link" data-section="analysis">Analysis</p>
+			</div>
+			<div class="nav-item">
+				<p class="nav-link" data-section="settings">Settings</p>
+			</div>
+		</nav>
+
+		<div id="content">
+		</div>
+
+		<script type="text/javascript">
+			const { importHtml } = require('./assets/importHtml')
+			Promise.all([
+				importHtml('./sections/new/new.html'),
+				importHtml('./sections/edit/edit.html'),
+				importHtml('./sections/history/history.html'),
+				importHtml('./sections/analysis/analysis.html'),
+				importHtml('./sections/settings/settings.html')
+			]).then(function () {
+				require('./assets/loadRendererScripts')
+				require('./assets/navigation')
+			});
+		</script>
 	</body>
 </html>

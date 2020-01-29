@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, nativeTheme } = require('electron')
 
 let win
 
@@ -35,3 +35,5 @@ app.on('activate', () => {
 		createWindow()
 	}
 })
+
+nativeTheme.themeSource = 'light'

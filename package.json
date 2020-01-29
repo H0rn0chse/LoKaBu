@@ -15,7 +15,9 @@
     "email": "h0rn0chse@gmx.de"
   },
   "license": "GPL-3.0",
-  "dependencies": {},
+  "dependencies": {
+    "glob": "^7.1.6"
+  },
   "devDependencies": {
     "electron": "^7.1.7"
   }
