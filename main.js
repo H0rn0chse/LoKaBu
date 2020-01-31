@@ -1,39 +1,38 @@
-const { app, BrowserWindow, nativeTheme } = require('electron')
+const { app, BrowserWindow, nativeTheme } = require('electron');
 
-let win
+let win;
 
 function createWindow () {
-	  win = new BrowserWindow({
-		  show: false,
-		  webPreferences: {
-			nodeIntegration: true
-		  }
-	});
-	win.maximize();
-	win.show();
+    win = new BrowserWindow({
+        show: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+    win.maximize();
+    win.show();
 
-  
-  	win.loadFile('index.html')
+    win.loadFile('index.html');
 
-  	win.webContents.openDevTools()
+    win.webContents.openDevTools();
 
-  	win.on('closed', () => {
-    	win = null
-  	})
+    win.on('closed', () => {
+        win = null;
+    });
 }
 
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') {
-		app.quit()
-	}
-})
+    if (process.platform !== 'darwin') {
+        app.quit();
+    };
+});
 
 app.on('activate', () => {
-	if (win === null) {
-		createWindow()
-	}
-})
+    if (win === null) {
+        createWindow();
+    }
+});
 
-nativeTheme.themeSource = 'light'
+nativeTheme.themeSource = 'light';

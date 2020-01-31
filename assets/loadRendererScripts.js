@@ -1,7 +1,7 @@
-const glob = require('glob')
+const glob = require('glob');
 
-var aFiles = glob.sync("renderer-process/**/*.js")
+var aFiles = glob.sync("renderer-process/**/*.js");
 
 aFiles.forEach((sPath) => {
-	require("./../" + sPath);
+    require("./../" + sPath);
 });

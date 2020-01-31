@@ -1,5 +1,5 @@
 window.newSection = {
-	init: function () {
-		console.log("new")
-	}
-}
+    init: function () {
+        console.log("new");
+    }
+};

@@ -1,0 +1,31 @@
+
+name: Test
+on: 
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+      
+    strategy:
+      matrix:
+        os: [windows-latest]
+    
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      
+      - name: Install dependencies
+        run: npm install
+          
+      - name: Start tests
+        run: npm test
+      
+      - name: Static code checks
+      run: npm eslint

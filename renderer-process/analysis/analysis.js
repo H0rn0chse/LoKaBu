@@ -1,5 +1,5 @@
 window.analysisSection = {
-	init: function () {
-		console.log("analysis")
-	}
-}
+    init: function () {
+        console.log("analysis");
+    }
+};
