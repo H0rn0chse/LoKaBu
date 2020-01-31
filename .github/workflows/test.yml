@@ -3,7 +3,7 @@ name: Test
 on: 
   push:
     branches:
-      - master
+      - electronTransformation
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -28,4 +28,4 @@ jobs:
         run: npm test
       
       - name: Static code checks
-      run: npm eslint
+        run: npm eslint
