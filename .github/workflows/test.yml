@@ -3,7 +3,7 @@ name: Test
 on: 
   push:
     branches:
-      - feature/electronTransformation 
+      - feature/electronTransformation
 jobs:
   test_on_win:
     runs-on: windows-latest
@@ -11,7 +11,7 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v1
         with:
-          ref: 'electronTransformation'
+          ref: 'feature/electronTransformation'
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
