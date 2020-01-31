@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - master
+      - electronTransformation
 
 jobs:
   build_on_win:
@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
+        with:
+          ref: 'electronTransformation'
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1

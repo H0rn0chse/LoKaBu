@@ -3,18 +3,15 @@ name: Test
 on: 
   push:
     branches:
-      - master
+      - electronTransformation
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-      
-    strategy:
-      matrix:
-        os: [windows-latest]
-    
+  test_on_win:
+    runs-on: windows-latest
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
+        with:
+          ref: 'electronTransformation'
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
@@ -28,4 +25,4 @@ jobs:
         run: npm test
       
       - name: Static code checks
-      run: npm eslint
+        run: npm eslint
