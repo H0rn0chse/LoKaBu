@@ -5,13 +5,8 @@ on:
     branches:
       - electronTransformation
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-      
-    strategy:
-      matrix:
-        os: [windows-latest]
-    
+  test_on_win:
+    runs-on: windows-latest
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
