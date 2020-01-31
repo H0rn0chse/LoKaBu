@@ -9,7 +9,7 @@
     "buildLocal": "electron-builder --windows",
     "release": "electron-builder --windows --publish always",
 	"test": "qunit \"test/**/*qunit.js\"",
-	"eslint": "eslint \"*.js\""
+	"eslint": "eslint \"**/*.js\""
   },
   "repository": {
     "type": "git",
