@@ -1,5 +1,7 @@
 Available Languages: [Deutsch](../master/README_DE.md), [English](../master/README.md)
-# LoKaBu
+# LoKaBu [![Latest Release](https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg)](https://github.com/H0rn0chse/LoKaBu/releases/latest) [![GitHub Actions status](https://github.com/H0rn0chse/LoKaBu/workflows/Release/badge.svg)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ARelease) [![GitHub Actions status](https://github.com/H0rn0chse/LoKaBu/workflows/Test/badge.svg)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ATest)
+Latest Release: [Installer.exe](https://github.com/H0rn0chse/LoKaBu/releases/latest/download/lokabu-Installer.exe) - [Changelog](https://github.com/H0rn0chse/LoKaBu/releases/latest)
+
 This project realizes a cash book for the ordinary household. The core idea of the project is to be able to set up and transport a cash book without any installation, dependencies and setup.
 
 It is based on a SQLite database, which is read and written through a python container. The interface is built dynamically with HTML and JavaScript interacting with the python container.
