@@ -46,6 +46,8 @@ function createWindow () {
         }
     });
 
+    ipcMain.on("log", (oEvent, sMessage) => {
+        oMainWindow.webContents.send("log", sMessage);
     });
 }
 
