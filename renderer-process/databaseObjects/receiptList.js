@@ -1,10 +1,12 @@
 function ReceiptList () {
     let aReceiptList;
     let fnRefreshCallback;
+    let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptList");
     window.ipcRenderer.on("read-receiptList", (oEvent, oResult) => {
         aReceiptList = oResult;
+        bRequestPending = false;
         if (fnRefreshCallback) {
             fnRefreshCallback();
             fnRefreshCallback = null;
@@ -19,7 +21,10 @@ function ReceiptList () {
         },
         refresh: function (fnCallback) {
             fnRefreshCallback = fnCallback;
-            window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptList");
+            if (!bRequestPending) {
+                bRequestPending = true;
+                window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptList");
+            }
         },
         add: function (oReceipt) {
             window.ipcRenderer.sendTo(window.iDatabaseId, "write-receiptList", oReceipt);

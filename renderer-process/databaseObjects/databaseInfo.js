@@ -1,11 +1,12 @@
-
 function DatabaseInfo () {
     let oDataBaseInfo;
     let fnRefreshCallback;
+    let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-databaseInfo");
     window.ipcRenderer.on("read-databaseInfo", (oEvent, oResult) => {
         oDataBaseInfo = oResult;
+        bRequestPending = false;
         if (fnRefreshCallback) {
             fnRefreshCallback();
             fnRefreshCallback = null;
@@ -20,7 +21,10 @@ function DatabaseInfo () {
         },
         refresh: function (fnCallback) {
             fnRefreshCallback = fnCallback;
-            window.ipcRenderer.sendTo(window.iDatabaseId, "read-databaseInfo");
+            if (!bRequestPending) {
+                bRequestPending = true;
+                window.ipcRenderer.sendTo(window.iDatabaseId, "read-databaseInfo");
+            }
         }
     };
 };

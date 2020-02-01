@@ -1,10 +1,12 @@
 function Settings () {
     let oSettings;
     let fnRefreshCallback;
+    let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-settings");
     window.ipcRenderer.on("read-settings", (oEvent, oResult) => {
         oSettings = oResult;
+        bRequestPending = false;
         if (fnRefreshCallback) {
             fnRefreshCallback();
             fnRefreshCallback = null;
@@ -19,7 +21,10 @@ function Settings () {
         },
         refresh: function (fnCallback) {
             fnRefreshCallback = fnCallback;
-            window.ipcRenderer.sendTo(window.iDatabaseId, "read-settings");
+            if (!bRequestPending) {
+                bRequestPending = true;
+                window.ipcRenderer.sendTo(window.iDatabaseId, "read-settings");
+            }
         }
     };
 };

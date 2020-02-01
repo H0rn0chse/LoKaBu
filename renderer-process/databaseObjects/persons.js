@@ -1,10 +1,12 @@
 function Persons () {
     let aPersons;
     let fnRefreshCallback;
+    let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-persons");
     window.ipcRenderer.on("read-persons", (oEvent, oResult) => {
         aPersons = oResult;
+        bRequestPending = false;
         if (fnRefreshCallback) {
             fnRefreshCallback();
             fnRefreshCallback = null;
@@ -19,7 +21,10 @@ function Persons () {
         },
         refresh: function (fnCallback) {
             fnRefreshCallback = fnCallback;
-            window.ipcRenderer.sendTo(window.iDatabaseId, "read-persons");
+            if (!bRequestPending) {
+                bRequestPending = true;
+                window.ipcRenderer.sendTo(window.iDatabaseId, "read-persons");
+            }
         },
         add: function (oPerson) {
             window.ipcRenderer.sendTo(window.iDatabaseId, "write-persons", oPerson);

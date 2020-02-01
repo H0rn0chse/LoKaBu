@@ -2,10 +2,12 @@
 function ReceiptAnalysis () {
     let oReceiptAnalysis;
     let fnRefreshCallback;
+    let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptAnalysis");
     window.ipcRenderer.on("read-receiptAnalysis", (oEvent, oResult) => {
         oReceiptAnalysis = oResult;
+        bRequestPending = false;
         if (fnRefreshCallback) {
             fnRefreshCallback();
             fnRefreshCallback = null;
@@ -17,7 +19,10 @@ function ReceiptAnalysis () {
         },
         refresh: function (fnCallback) {
             fnRefreshCallback = fnCallback;
-            window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptAnalysis");
+            if (!bRequestPending) {
+                bRequestPending = true;
+                window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptAnalysis");
+            }
         }
     };
 };

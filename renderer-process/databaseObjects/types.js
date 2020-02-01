@@ -1,10 +1,12 @@
 function Types () {
     let aTypes;
     let fnRefreshCallback;
+    let bRequestPending = false;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-types");
     window.ipcRenderer.on("read-types", (oEvent, oResult) => {
         aTypes = oResult;
+        bRequestPending = false;
         if (fnRefreshCallback) {
             fnRefreshCallback();
             fnRefreshCallback = null;
@@ -19,7 +21,10 @@ function Types () {
         },
         refresh: function (fnCallback) {
             fnRefreshCallback = fnCallback;
-            window.ipcRenderer.sendTo(window.iDatabaseId, "read-types");
+            if (!bRequestPending) {
+                bRequestPending = true;
+                window.ipcRenderer.sendTo(window.iDatabaseId, "read-types");
+            }
         },
         add: function (oType) {
             window.ipcRenderer.sendTo(window.iDatabaseId, "write-types", oType);
