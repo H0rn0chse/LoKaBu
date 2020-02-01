@@ -3,12 +3,16 @@
 	background: #4B77BE;
 }
 
-.nav-item {
-	cursor: pointer;
+.nav-item{
 	padding:0.5em 1em;
 	color: white;
+	cursor: default;
 }
 
-.nav-item.is-shown, .nav-item:hover {
+.nav-item:not(.nav-header) {
+	cursor: pointer;
+}
+
+.nav-item.is-shown, .nav-item:hover:not(.nav-header) {
 	background: #1F4788;
 }
