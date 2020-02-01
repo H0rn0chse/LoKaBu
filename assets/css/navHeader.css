@@ -1,0 +1,14 @@
+.nav {
+	display: flex;
+	background: #4B77BE;
+}
+
+.nav-item {
+	cursor: pointer;
+	padding:0.5em 1em;
+	color: white;
+}
+
+.nav-item.is-shown, .nav-item:hover {
+	background: #1F4788;
+}
