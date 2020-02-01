@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+		<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+	</head>
+	<body>
+		<script type="text/javascript">
+			const { ipcRenderer } = require ('electron');
+			window.ipcRenderer = ipcRenderer;
+			ipcRenderer.once("rendererChannel", (oEvent, sMessage) => {
+				window.iRendererId = sMessage;
+			})
+			ipcRenderer.send("windowLoaded");
+			require("./assets/databaseCommunication");
+		</script>
+	</body>
+</html>

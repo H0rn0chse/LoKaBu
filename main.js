@@ -1,23 +1,51 @@
-const { app, BrowserWindow, nativeTheme } = require('electron');
+const { app, BrowserWindow, nativeTheme, ipcMain } = require('electron');
 
-let win;
+let oMainWindow;
+let oDatabaseWindow;
+let iWindowsLoading = 2;
 
 function createWindow () {
-    win = new BrowserWindow({
+    oMainWindow = new BrowserWindow({
         show: false,
         webPreferences: {
             nodeIntegration: true
         }
     });
-    win.maximize();
-    win.show();
+    oMainWindow.maximize();
+    oMainWindow.show();
 
-    win.loadFile('index.html');
+    oMainWindow.loadFile('index.html');
 
-    win.webContents.openDevTools();
+    oMainWindow.webContents.openDevTools();
 
-    win.on('closed', () => {
-        win = null;
+    oDatabaseWindow = new BrowserWindow({
+        show: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+    // oDatabaseWindow.show();
+    oDatabaseWindow.loadFile('database.html');
+
+    oMainWindow.on('closed', () => {
+        oMainWindow = null;
+        oDatabaseWindow.close();
+    });
+
+    oDatabaseWindow.on('closed', () => {
+        oDatabaseWindow = null;
+    });
+
+    ipcMain.on("windowLoaded", (oEvent, sMessage) => {
+        if (iWindowsLoading > 1) {
+            iWindowsLoading--;
+        } else {
+            oMainWindow.webContents.send("log", oMainWindow.webContents.id + "/" + oDatabaseWindow.webContents.id);
+            oMainWindow.webContents.send("databaseChannel", oDatabaseWindow.webContents.id);
+            oDatabaseWindow.webContents.send("rendererChannel", oMainWindow.webContents.id);
+        }
+    });
+
     });
 }
 
@@ -30,7 +58,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-    if (win === null) {
+    if (oMainWindow === null) {
         createWindow();
     }
 });

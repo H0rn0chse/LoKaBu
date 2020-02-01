@@ -41,6 +41,13 @@
 		</div>
 
 		<script type="text/javascript">
+			const { ipcRenderer } = require ('electron');
+			window.ipcRenderer = ipcRenderer;
+			ipcRenderer.once("databaseChannel", (oEvent, sMessage) => {
+				window.iDatabaseId = sMessage
+			});
+			ipcRenderer.send("windowLoaded");
+
 			const { importHtml } = require('./assets/importHtml')
 			Promise.all([
 				importHtml('./sections/new/new.html'),
