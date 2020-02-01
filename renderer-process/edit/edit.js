@@ -1,5 +1,5 @@
 window.editSection = {
     init: function () {
-        console.log("edit");
+        console.log("Section edit was initialized");
     }
 };

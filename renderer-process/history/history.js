@@ -1,5 +1,5 @@
 window.historySection = {
     init: function () {
-        console.log("history");
+        console.log("Section history was initialized");
     }
 };

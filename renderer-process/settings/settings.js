@@ -1,5 +1,5 @@
 window.settingsSection = {
     init: function () {
-        console.log("settings");
+        console.log("Section settings was initialized");
     }
 };

@@ -1,5 +1,5 @@
 window.analysisSection = {
     init: function () {
-        console.log("analysis");
+        console.log("Section analysis was initialized");
     }
 };
