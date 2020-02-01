@@ -13,7 +13,9 @@
 				window.iRendererId = sMessage;
 			})
 			ipcRenderer.send("windowLoaded");
-			require("./assets/databaseCommunication");
+
+			const load = require('./assets/load');
+			load.workerScripts("database");
 		</script>
 	</body>
 </html>
