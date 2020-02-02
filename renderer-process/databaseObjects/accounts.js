@@ -1,16 +1,17 @@
 function Accounts () {
     let aAccounts;
-    let fnRefreshCallback;
+    const aRefreshCallbacks = [];
     let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-accounts");
     window.ipcRenderer.on("read-accounts", (oEvent, oResult) => {
         aAccounts = oResult;
+
+        aRefreshCallbacks.forEach(function (fnCallback) {
+            fnCallback();
+        });
+        aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
         bRequestPending = false;
-        if (fnRefreshCallback) {
-            fnRefreshCallback();
-            fnRefreshCallback = null;
-        }
     });
     return {
         get: function () {
@@ -20,7 +21,7 @@ function Accounts () {
             window.ipcRenderer.sendTo(window.iDatabaseId, "write-accounts", aAccounts);
         },
         refresh: function (fnCallback) {
-            fnRefreshCallback = fnCallback;
+            aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
                 window.ipcRenderer.sendTo(window.iDatabaseId, "read-accounts");

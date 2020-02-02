@@ -1,16 +1,17 @@
 function Stores () {
     let aStores;
-    let fnRefreshCallback;
+    const aRefreshCallbacks = [];
     let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-stores");
     window.ipcRenderer.on("read-stores", (oEvent, oResult) => {
         aStores = oResult;
+
+        aRefreshCallbacks.forEach(function (fnCallback) {
+            fnCallback();
+        });
+        aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
         bRequestPending = false;
-        if (fnRefreshCallback) {
-            fnRefreshCallback();
-            fnRefreshCallback = null;
-        }
     });
     return {
         get: function () {
@@ -20,7 +21,7 @@ function Stores () {
             window.ipcRenderer.sendTo(window.iDatabaseId, "write-stores", aStores);
         },
         refresh: function (fnCallback) {
-            fnRefreshCallback = fnCallback;
+            aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
                 window.ipcRenderer.sendTo(window.iDatabaseId, "read-stores");

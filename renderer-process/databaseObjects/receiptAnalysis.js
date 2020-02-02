@@ -1,24 +1,25 @@
 
 function ReceiptAnalysis () {
     let oReceiptAnalysis;
-    let fnRefreshCallback;
+    const aRefreshCallbacks = [];
     let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptAnalysis");
     window.ipcRenderer.on("read-receiptAnalysis", (oEvent, oResult) => {
         oReceiptAnalysis = oResult;
+
+        aRefreshCallbacks.forEach(function (fnCallback) {
+            fnCallback();
+        });
+        aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
         bRequestPending = false;
-        if (fnRefreshCallback) {
-            fnRefreshCallback();
-            fnRefreshCallback = null;
-        }
     });
     return {
         get: function () {
             return oReceiptAnalysis;
         },
         refresh: function (fnCallback) {
-            fnRefreshCallback = fnCallback;
+            aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
                 window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptAnalysis");

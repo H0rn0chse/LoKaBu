@@ -1,16 +1,17 @@
 function Settings () {
     let oSettings;
-    let fnRefreshCallback;
+    const aRefreshCallbacks = [];
     let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-settings");
     window.ipcRenderer.on("read-settings", (oEvent, oResult) => {
         oSettings = oResult;
+
+        aRefreshCallbacks.forEach(function (fnCallback) {
+            fnCallback();
+        });
+        aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
         bRequestPending = false;
-        if (fnRefreshCallback) {
-            fnRefreshCallback();
-            fnRefreshCallback = null;
-        }
     });
     return {
         get: function () {
@@ -20,11 +21,14 @@ function Settings () {
             window.ipcRenderer.sendTo(window.iDatabaseId, "write-settings", oSettings);
         },
         refresh: function (fnCallback) {
-            fnRefreshCallback = fnCallback;
+            aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
                 window.ipcRenderer.sendTo(window.iDatabaseId, "read-settings");
             }
+        },
+        getProperty: function (sPropertyName) {
+            return oSettings[sPropertyName];
         }
     };
 };
