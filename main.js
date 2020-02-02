@@ -15,7 +15,6 @@ function createWindow () {
     oMainWindow.show();
 
     oMainWindow.loadFile('index.html');
-
     oMainWindow.webContents.openDevTools();
 
     oDatabaseWindow = new BrowserWindow({

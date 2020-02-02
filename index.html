@@ -21,19 +21,19 @@
 				<p>Header</p>
 			</div>
 			<div class="nav-item">
-				<p class="nav-link" data-section="new">New</p>
+				<p class="nav-link" data-section="new" data-lang="section.title.new"></p>
 			</div>
 			<div class="nav-item">
-				<p class="nav-link" data-section="edit">Edit</p>
+				<p class="nav-link" data-section="edit" data-lang="section.title.edit"></p>
 			</div>
 			<div class="nav-item">
-				<p class="nav-link" data-section="history">History</p>
+				<p class="nav-link" data-section="history" data-lang="section.title.history"></p>
 			</div>
 			<div class="nav-item">
-				<p class="nav-link" data-section="analysis">Analysis</p>
+				<p class="nav-link" data-section="analysis" data-lang="section.title.analysis"></p>
 			</div>
 			<div class="nav-item">
-				<p class="nav-link" data-section="settings">Settings</p>
+				<p class="nav-link" data-section="settings" data-lang="section.title.settings"></p>
 			</div>
 		</nav>
 
@@ -41,7 +41,7 @@
 		</div>
 
 		<script type="text/javascript">
-			const { ipcRenderer } = require ('electron');
+			const { ipcRenderer } = require('electron');
 			window.ipcRenderer = ipcRenderer;
 			ipcRenderer.once("databaseChannel", (oEvent, sMessage) => {
 				window.iDatabaseId = sMessage;
@@ -49,6 +49,7 @@
 			ipcRenderer.send("windowLoaded");
 
 			const load = require('./assets/load');
+
 			Promise.all([
 				load.html('./sections/new/new.html'),
 				load.html('./sections/edit/edit.html'),
@@ -58,6 +59,8 @@
 			]).then(function () {
 				load.rendererScripts();
 				require('./assets/navigation');
+				const i18nHelper = require("./renderer-process/i18n/helper");
+				i18nHelper.applyToAll();
 			});
 		</script>
 	</body>
