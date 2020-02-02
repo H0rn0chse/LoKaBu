@@ -25,5 +25,10 @@ module.exports = {
 
             return oI18nItem[sLangCode] ? oI18nItem[sLangCode] : sScriptCode;
         });
+    },
+    getLanguages: function () {
+        return Object.keys(oI18n.get()[0]).filter((sKey) => {
+            return sKey !== "scriptCode";
+        }).sort();
     }
 };

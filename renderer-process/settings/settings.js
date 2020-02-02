@@ -1,12 +1,14 @@
 const DatabaseWaiter = require("../../assets/databaseWaiter");
 const oDropdown = require("../helper/dropdown");
 const HtmlElement = require("../helper/htmlElement");
+const oI18nHelper = require("../helper/i18n");
 
 const oSettings = require("../databaseObjects/settings");
 const oPersons = require("../databaseObjects/persons");
 const oAccounts = require("../databaseObjects/accounts");
 const oTypes = require("../databaseObjects/types");
 const oStores = require("../databaseObjects/stores");
+const oI18n = require("../databaseObjects/i18n");
 
 window.settingsSection = {
     reset: function () {
@@ -26,9 +28,16 @@ window.settingsSection = {
         oDatabaseWaiter.add(oAccounts);
         oDatabaseWaiter.add(oTypes);
         oDatabaseWaiter.add(oStores);
+        oDatabaseWaiter.add(oI18n);
 
         oDatabaseWaiter.getPromise().then(() => {
             let oElement;
+
+            oElement = document.querySelector("#section-settings .Language");
+            oDropdown.fill(oElement, oI18nHelper.getLanguages().map((sKey) => {
+                return { ID: sKey, DisplayName: sKey };
+            }));
+            oElement.value = oSettings.get().Language;
 
             oElement = document.querySelector("#section-settings .BillingAccount");
             oDropdown.fill(oElement, oPersons.get());
