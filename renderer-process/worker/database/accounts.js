@@ -8,7 +8,7 @@ oDb.readAccounts = (fnCallback) => {
     SELECT *
     FROM Accounts
     `;
-    return oDb.get(sSql, fnCallback);
+    return oDb.all(sSql, fnCallback);
 };
 
 window.ipcRenderer.on("read-accounts", (oEvent, sMessage) => {

@@ -8,7 +8,7 @@ oDb.readStores = (fnCallback) => {
     SELECT *
     FROM Stores
     `;
-    return oDb.get(sSql, fnCallback);
+    return oDb.all(sSql, fnCallback);
 };
 
 window.ipcRenderer.on("read-stores", (oEvent, sMessage) => {

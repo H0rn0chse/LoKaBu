@@ -8,7 +8,7 @@ oDb.readPersons = (fnCallback) => {
     SELECT *
     FROM Persons
     `;
-    return oDb.get(sSql, fnCallback);
+    return oDb.all(sSql, fnCallback);
 };
 
 window.ipcRenderer.on("read-persons", (oEvent, sMessage) => {

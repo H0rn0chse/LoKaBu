@@ -8,7 +8,7 @@ oDb.readReceiptList = (fnCallback) => {
     SELECT *
     FROM *
     `;
-    return oDb.get(sSql, fnCallback); */
+    return oDb.all(sSql, fnCallback); */
     fnCallback("ReceiptList is not yet implemented");
 };
 

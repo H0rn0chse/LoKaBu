@@ -8,7 +8,7 @@ oDb.readTypes = (fnCallback) => {
     SELECT *
     FROM Types
     `;
-    return oDb.get(sSql, fnCallback);
+    return oDb.all(sSql, fnCallback);
 };
 
 window.ipcRenderer.on("read-types", (oEvent, sMessage) => {
