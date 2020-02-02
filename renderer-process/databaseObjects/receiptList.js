@@ -15,6 +15,11 @@ function ReceiptList () {
     });
     return {
         get: function () {
+            if (Array.isArray(aReceiptList)) {
+                aReceiptList.sort((a, b) => {
+                    return a.ID.toString().localeCompare(b.ID);
+                });
+            }
             return aReceiptList;
         },
         update: function (aReceiptList) {

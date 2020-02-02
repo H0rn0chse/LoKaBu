@@ -15,6 +15,11 @@ function Stores () {
     });
     return {
         get: function () {
+            if (Array.isArray(aStores)) {
+                aStores.sort((a, b) => {
+                    return a.ID.toString().localeCompare(b.ID);
+                });
+            }
             return aStores;
         },
         update: function (aStores) {
