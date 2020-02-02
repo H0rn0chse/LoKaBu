@@ -17,7 +17,7 @@ module.exports = {
   },
   rules: {
 	"no-tabs": 0,
-	"indent": ["error", 4],
+	"indent": ["error", 4, { "SwitchCase": 1 }],
 	"quotes": 0,
 	"semi": [2, "always", { "omitLastInOneLineBlock": true}]
   }

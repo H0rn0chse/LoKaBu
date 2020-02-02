@@ -1,3 +1,7 @@
+.section {
+	margin-left: 2em;
+}
+
 .section:not(.is-shown) {
 	display: none;
 }
