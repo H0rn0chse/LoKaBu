@@ -29,6 +29,10 @@ function Settings () {
         },
         getProperty: function (sPropertyName) {
             return oSettings[sPropertyName];
+        },
+        setProperty: function (sPropertyName, oValue) {
+            oSettings[sPropertyName] = oValue;
+            window.ipcRenderer.sendTo(window.iDatabaseId, "write-settings", oSettings);
         }
     };
 };

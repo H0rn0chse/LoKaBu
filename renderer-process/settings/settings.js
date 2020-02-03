@@ -37,15 +37,15 @@ window.settingsSection = {
             oDropdown.fill(oElement, oI18nHelper.getLanguages().map((sKey) => {
                 return { ID: sKey, DisplayName: sKey };
             }));
-            oElement.value = oSettings.get().Language;
+            oElement.value = oSettings.getProperty("Language");
 
             oElement = document.querySelector("#section-settings .BillingAccount");
             oDropdown.fill(oElement, oPersons.get());
-            oElement.value = oSettings.get().Person;
+            oElement.value = oSettings.getProperty("Person");
 
             oElement = document.querySelector("#section-settings .Type");
             oDropdown.fill(oElement, oTypes.get());
-            oElement.value = oSettings.get().Type;
+            oElement.value = oSettings.getProperty("Type");
 
             // Generates the Lists
             [[oPersons, "Settings_Persons"], [oAccounts, "Settings_Accounts"], [oTypes, "Settings_Types"], [oStores, "Settings_Stores"]].forEach((aDatabase) => {
@@ -83,5 +83,20 @@ window.settingsSection = {
                 break;
         }
         return oSpan;
+    },
+    save: function () {
+        const oDatabaseWaiter = new DatabaseWaiter();
+        oDatabaseWaiter.add(oSettings);
+        // oDatabaseWaiter.add(oPersons);
+        // oDatabaseWaiter.add(oAccounts);
+        // oDatabaseWaiter.add(oTypes);
+        // oDatabaseWaiter.add(oStores);
+        // oDatabaseWaiter.add(oI18n);
+
+        oDatabaseWaiter.getPromise().then(() => {
+            oSettings.setProperty("Language", document.querySelector("#section-settings .Language").value);
+            oSettings.setProperty("Person", document.querySelector("#section-settings .BillingAccount").value);
+            oSettings.setProperty("Type", document.querySelector("#section-settings .Type").value);
+        });
     }
 };

@@ -20,3 +20,28 @@ window.ipcRenderer.on("read-settings", (oEvent, sMessage) => {
         }
     });
 });
+
+oDb.writeSettings = (oSettings, fnCallback) => {
+    const oParams = {
+        $Person: oSettings.Person,
+        $Type: oSettings.Type,
+        $Language: oSettings.Language
+    };
+    const sSql = `
+    UPDATE Settings
+    SET Person = $Person,
+        Type = $Type,
+        Language = $Language
+    `;
+    return oDb.run(sSql, oParams, fnCallback);
+};
+
+window.ipcRenderer.on("write-settings", (oEvent, oSettings) => {
+    oDb.writeSettings(oSettings, function (oErr) {
+        if (oErr) {
+            window.ipcRenderer.send("log", oErr);
+        } else {
+            window.ipcRenderer.send("log", "all fine");
+        }
+    });
+});
