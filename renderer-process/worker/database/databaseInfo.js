@@ -8,7 +8,9 @@ oDb.readDatabaseInfo = (fnCallback) => {
     SELECT *
     FROM view_databaseInfo
     `;
-    return oDb.get(sSql, fnCallback);
+    const oStmt = oDb.prepare(sSql);
+    const oResult = oStmt.get();
+    fnCallback(null, oResult);
 };
 
 window.ipcRenderer.on("read-databaseInfo", (oEvent, sMessage) => {

@@ -8,7 +8,9 @@ oDb.readSettings = (fnCallback) => {
     SELECT *
     FROM Settings
     `;
-    return oDb.get(sSql, fnCallback);
+    const oStmt = oDb.prepare(sSql);
+    const oResult = oStmt.get();
+    fnCallback(null, oResult);
 };
 
 window.ipcRenderer.on("read-settings", (oEvent, sMessage) => {
@@ -33,7 +35,9 @@ oDb.writeSettings = (oSettings, fnCallback) => {
         Type = $Type,
         Language = $Language
     `;
-    return oDb.run(sSql, oParams, fnCallback);
+    const oStmt = oDb.prepare(sSql);
+    const oResult = oStmt.run(oParams);
+    fnCallback(null, oResult);
 };
 
 window.ipcRenderer.on("write-settings", (oEvent, oSettings) => {

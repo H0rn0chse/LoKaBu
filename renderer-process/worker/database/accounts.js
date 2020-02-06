@@ -8,7 +8,9 @@ oDb.readAccounts = (fnCallback) => {
     SELECT *
     FROM Accounts
     `;
-    return oDb.all(sSql, fnCallback);
+    const oStmt = oDb.prepare(sSql);
+    const oResult = oStmt.all();
+    fnCallback(null, oResult);
 };
 
 window.ipcRenderer.on("read-accounts", (oEvent, sMessage) => {

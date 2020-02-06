@@ -8,7 +8,9 @@ oDb.readi18n = (fnCallback) => {
     SELECT *
     FROM i18n
     `;
-    return oDb.all(sSql, fnCallback);
+    const oStmt = oDb.prepare(sSql);
+    const oResult = oStmt.all();
+    fnCallback(null, oResult);
 };
 
 window.ipcRenderer.on("read-persons", (oEvent, sMessage) => {
