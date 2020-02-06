@@ -47,18 +47,18 @@
 			const { ipcRenderer } = require('electron');
 			window.ipcRenderer = ipcRenderer;
 			ipcRenderer.once("databaseChannel", (oEvent, sMessage) => {
-				window.iDatabaseId = sMessage;
+				window.iDatabaseId = sMessage;	
 			});
 			ipcRenderer.send("windowLoaded");
 
 			const load = require('./assets/load');
 
 			Promise.all([
-				load.html('./sections/new/new.html'),
-				load.html('./sections/edit/edit.html'),
-				load.html('./sections/history/history.html'),
-				load.html('./sections/analysis/analysis.html'),
-				load.html('./sections/settings/settings.html')
+				load.html('/sections/new/new.html'),
+				load.html('/sections/edit/edit.html'),
+				load.html('/sections/history/history.html'),
+				load.html('/sections/analysis/analysis.html'),
+				load.html('/sections/settings/settings.html')
 			]).then(function () {
 				load.rendererScripts();
 				require('./assets/navigation');

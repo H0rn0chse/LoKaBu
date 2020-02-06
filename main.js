@@ -5,6 +5,7 @@ let oDatabaseWindow;
 let iWindowsLoading = 2;
 
 function createWindow () {
+    require("./main-process/checkDatabase");
     oMainWindow = new BrowserWindow({
         show: false,
         webPreferences: {
@@ -13,7 +14,6 @@ function createWindow () {
     });
     oMainWindow.maximize();
     oMainWindow.show();
-
     oMainWindow.loadFile('index.html');
     oMainWindow.webContents.openDevTools();
 
@@ -23,8 +23,10 @@ function createWindow () {
             nodeIntegration: true
         }
     });
-    // oDatabaseWindow.show();
+    oDatabaseWindow.maximize();
+    oDatabaseWindow.show();
     oDatabaseWindow.loadFile('database.html');
+    oDatabaseWindow.webContents.openDevTools();
 
     oMainWindow.on('closed', () => {
         oMainWindow = null;
