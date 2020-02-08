@@ -25,9 +25,9 @@ window.ipcRenderer.on("read-settings", (oEvent, sMessage) => {
 
 oDb.writeSettings = (oSettings, fnCallback) => {
     const oParams = {
-        $Person: oSettings.Person,
-        $Type: oSettings.Type,
-        $Language: oSettings.Language
+        Person: oSettings.Person,
+        Type: oSettings.Type,
+        Language: oSettings.Language
     };
     const sSql = `
     UPDATE Settings
