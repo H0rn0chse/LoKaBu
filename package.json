@@ -1,5 +1,6 @@
 {
   "name": "lokabu",
+  "productName": "LoKaBu",
   "version": "0.0.2",
   "description": "",
   "main": "main.js",

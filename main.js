@@ -41,6 +41,8 @@ function createWindow () {
         if (iWindowsLoading > 1) {
             iWindowsLoading--;
         } else {
+            oMainWindow.setTitle(app.name);
+            oDatabaseWindow.setTitle(app.name + " - Database worker");
             oMainWindow.webContents.send("log", oMainWindow.webContents.id + "/" + oDatabaseWindow.webContents.id);
             oMainWindow.webContents.send("databaseChannel", oDatabaseWindow.webContents.id);
             oDatabaseWindow.webContents.send("rendererChannel", oMainWindow.webContents.id);
