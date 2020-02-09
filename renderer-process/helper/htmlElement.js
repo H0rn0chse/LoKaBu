@@ -24,6 +24,9 @@ function HtmlElement (sTag, oOptions) {
     if (oOptions.value) {
         oElement.value = oOptions.value;
     }
+    if (oOptions.onchange) {
+        oElement.onchange = oOptions.onchange;
+    }
 
     return oElement;
 }
