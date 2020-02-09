@@ -59,27 +59,36 @@ window.settingsSection = {
                     }
                 });
             });
+
+            oSettings.addListener("settings", this.init.bind(this));
+            oPersons.addListener("settings", this.init.bind(this));
+            oAccounts.addListener("settings", this.init.bind(this));
+            oTypes.addListener("settings", this.init.bind(this));
+            oStores.addListener("settings", this.init.bind(this));
         });
+    },
+    _markAsChanged: function (oEvent) {
+        oEvent.target.parentElement.classList.add("changed");
     },
     _getLineTemplate: function (sType) {
         const oSpan = new HtmlElement("span", { classes: ["flexLine"] });
         switch (sType) {
             case "Settings_Persons":
                 oSpan.appendChild(new HtmlElement("input", { type: "text", name: "ID", disabled: true }));
-                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "DisplayName" }));
+                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "DisplayName", onchange: this._markAsChanged }));
                 break;
             case "Settings_Accounts":
                 oSpan.appendChild(new HtmlElement("input", { type: "text", name: "ID", disabled: true }));
-                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "DisplayName" }));
-                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "Owner" }));
+                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "DisplayName", onchange: this._markAsChanged }));
+                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "Owner", onchange: this._markAsChanged }));
                 break;
             case "Settings_Types":
                 oSpan.appendChild(new HtmlElement("input", { type: "text", name: "ID", disabled: true }));
-                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "DisplayName" }));
+                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "DisplayName", onchange: this._markAsChanged }));
                 break;
             case "Settings_Stores":
                 oSpan.appendChild(new HtmlElement("input", { type: "text", name: "ID", disabled: true }));
-                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "DisplayName" }));
+                oSpan.appendChild(new HtmlElement("input", { type: "text", name: "DisplayName", onchange: this._markAsChanged }));
                 break;
         }
         return oSpan;
@@ -87,16 +96,78 @@ window.settingsSection = {
     save: function () {
         const oDatabaseWaiter = new DatabaseWaiter();
         oDatabaseWaiter.add(oSettings);
-        // oDatabaseWaiter.add(oPersons);
-        // oDatabaseWaiter.add(oAccounts);
-        // oDatabaseWaiter.add(oTypes);
-        // oDatabaseWaiter.add(oStores);
-        // oDatabaseWaiter.add(oI18n);
+        oDatabaseWaiter.add(oPersons);
+        oDatabaseWaiter.add(oAccounts);
+        oDatabaseWaiter.add(oTypes);
+        oDatabaseWaiter.add(oStores);
 
         oDatabaseWaiter.getPromise().then(() => {
             oSettings.setProperty("Language", document.querySelector("#section-settings .Language").value);
             oSettings.setProperty("Person", document.querySelector("#section-settings .BillingAccount").value);
             oSettings.setProperty("Type", document.querySelector("#section-settings .Type").value);
+
+            const aChangedLines = document.querySelectorAll(".changed:not(.added)");
+            aChangedLines.forEach((oLine) => {
+                const sId = oLine.querySelector("[name=ID]").value;
+                const oParams = {
+                    DisplayName: oLine.querySelector("[name=DisplayName]").value,
+                    Owner: null
+                };
+                if (oLine.querySelector("[name=Owner]")) {
+                    oParams.Owner = oLine.querySelector("[name=Owner]").value;
+                }
+
+                switch (oLine.parentElement.id) {
+                    case "Settings_Persons":
+                        oPersons.update(sId, oParams);
+                        break;
+                    case "Settings_Accounts":
+                        oAccounts.update(sId, oParams);
+                        break;
+                    case "Settings_Types":
+                        oTypes.update(sId, oParams);
+                        break;
+                    case "Settings_Stores":
+                        oStores.update(sId, oParams);
+                        break;
+                }
+                oLine.classList.remove("changed");
+            });
+            const aAddedLines = document.querySelectorAll(".added");
+            aAddedLines.forEach((oLine) => {
+                const oParams = {
+                    DisplayName: oLine.querySelector("[name=DisplayName]").value,
+                    Owner: null
+                };
+                if (oLine.querySelector("[name=Owner]")) {
+                    oParams.Owner = oLine.querySelector("[name=Owner]").value;
+                }
+
+                if (oParams.DisplayName !== undefined && oParams.Owner !== undefined) {
+                    switch (oLine.parentElement.id) {
+                        case "Settings_Persons":
+                            oPersons.add(oParams);
+                            break;
+                        case "Settings_Accounts":
+                            oAccounts.add(oParams);
+                            break;
+                        case "Settings_Types":
+                            oTypes.add(oParams);
+                            break;
+                        case "Settings_Stores":
+                            oStores.add(oParams);
+                            break;
+                    }
+                    oLine.classList.remove("added");
+                } else {
+                    oLine.parentElement.removeChild(oLine);
+                }
+            });
         });
+    },
+    addLine: function (sType) {
+        const oNewLine = this._getLineTemplate(sType);
+        oNewLine.classList.add("added");
+        document.querySelector("#" + sType).append(oNewLine);
     }
 };
