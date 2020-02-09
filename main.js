@@ -5,6 +5,13 @@ let oDatabaseWindow;
 let iWindowsLoading = 2;
 
 function createWindow () {
+    const bSingleInstanceLock = app.requestSingleInstanceLock();
+
+    if (!bSingleInstanceLock) {
+        app.quit();
+        return;
+    }
+
     require("./main-process/checkDatabase");
     oMainWindow = new BrowserWindow({
         show: false,
@@ -55,6 +62,12 @@ function createWindow () {
 }
 
 app.on('ready', createWindow);
+
+app.on('second-instance', (oEvent, aArgv, sWorkingDir) => {
+    if (oMainWindow) {
+        oMainWindow.focus();
+    }
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
