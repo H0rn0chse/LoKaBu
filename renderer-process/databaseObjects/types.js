@@ -34,8 +34,14 @@ function Types () {
             }
             return aTypes;
         },
-        update: function (aTypes) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-types", aTypes);
+        update: function (sId, oType) {
+            // eslint-disable-next-line eqeqeq
+            const iIndex = aTypes.findIndex(oType => oType.ID == sId);
+            if (iIndex !== -1) {
+                oType.ID = sId;
+                aTypes[iIndex] = oType;
+            }
+            window.ipcRenderer.sendTo(window.iDatabaseId, "write-types", oType);
         },
         refresh: function (fnCallback) {
             aRefreshCallbacks.push(fnCallback);

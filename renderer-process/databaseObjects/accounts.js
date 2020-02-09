@@ -34,8 +34,14 @@ function Accounts () {
             }
             return aAccounts;
         },
-        update: function (aAccounts) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-accounts", aAccounts);
+        update: function (sId, oAccount) {
+            // eslint-disable-next-line eqeqeq
+            const iIndex = aAccounts.findIndex(oAccount => oAccount.ID == sId);
+            if (iIndex !== -1) {
+                oAccount.ID = sId;
+                aAccounts[iIndex] = oAccount;
+            }
+            window.ipcRenderer.sendTo(window.iDatabaseId, "write-accounts", oAccount);
         },
         refresh: function (fnCallback) {
             aRefreshCallbacks.push(fnCallback);

@@ -34,8 +34,14 @@ function Persons () {
             }
             return aPersons;
         },
-        update: function (aPersons) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-persons", aPersons);
+        update: function (sId, oPerson) {
+            // eslint-disable-next-line eqeqeq
+            const iIndex = aPersons.findIndex(oPerson => oPerson.ID == sId);
+            if (iIndex !== -1) {
+                oPerson.ID = sId;
+                aPersons[iIndex] = oPerson;
+            }
+            window.ipcRenderer.sendTo(window.iDatabaseId, "write-persons", oPerson);
         },
         refresh: function (fnCallback) {
             aRefreshCallbacks.push(fnCallback);

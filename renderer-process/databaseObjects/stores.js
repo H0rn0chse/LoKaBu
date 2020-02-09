@@ -34,8 +34,14 @@ function Stores () {
             }
             return aStores;
         },
-        update: function (aStores) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-stores", aStores);
+        update: function (sId, oStore) {
+            // eslint-disable-next-line eqeqeq
+            const iIndex = aStores.findIndex(oStore => oStore.ID == sId);
+            if (iIndex !== -1) {
+                oStore.ID = sId;
+                aStores[iIndex] = oStore;
+            }
+            window.ipcRenderer.sendTo(window.iDatabaseId, "write-stores", oStore);
         },
         refresh: function (fnCallback) {
             aRefreshCallbacks.push(fnCallback);
