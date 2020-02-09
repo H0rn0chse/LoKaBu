@@ -8,3 +8,5 @@ fs.access(path.join(sDir, "database.sqlite3"), fs.constants.F_OK).then(() => {
 }).catch(() => {
     "base_database.sqlite3"
 }); */
+
+// test for code signing
