@@ -21,6 +21,11 @@
     "email": "h0rn0chse@gmx.de"
   },
   "license": "GPL-3.0",
+  "build": {
+    "nsis": {
+      "perMachine": true
+    }
+  },
   "dependencies": {
     "better-sqlite3": "^5.4.3",
     "glob": "^7.1.6"
