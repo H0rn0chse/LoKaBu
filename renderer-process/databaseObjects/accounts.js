@@ -1,6 +1,7 @@
 function Accounts () {
     let aAccounts;
     const aRefreshCallbacks = [];
+    const oListenerCallbacks = {};
     let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-accounts");
@@ -11,6 +12,11 @@ function Accounts () {
             fnCallback();
         });
         aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
+
+        Object.keys(oListenerCallbacks).forEach((sKey) => {
+            oListenerCallbacks[sKey](aAccounts);
+        });
+
         bRequestPending = false;
     });
     return {
@@ -40,6 +46,12 @@ function Accounts () {
         },
         add: function (oAccount) {
             window.ipcRenderer.sendTo(window.iDatabaseId, "write-accounts", oAccount);
+        },
+        addListener: function (sName, fnCallback) {
+            oListenerCallbacks[sName] = fnCallback;
+        },
+        removeListener: function (sName) {
+            delete oListenerCallbacks[sName];
         }
     };
 };

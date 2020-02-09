@@ -1,6 +1,7 @@
 function Persons () {
     let aPersons;
     const aRefreshCallbacks = [];
+    const oListenerCallbacks = {};
     let bRequestPending = true;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-persons");
@@ -11,6 +12,11 @@ function Persons () {
             fnCallback();
         });
         aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
+
+        Object.keys(oListenerCallbacks).forEach((sKey) => {
+            oListenerCallbacks[sKey](aPersons);
+        });
+
         bRequestPending = false;
     });
     return {
@@ -40,6 +46,12 @@ function Persons () {
         },
         add: function (oPerson) {
             window.ipcRenderer.sendTo(window.iDatabaseId, "write-persons", oPerson);
+        },
+        addListener: function (sName, fnCallback) {
+            oListenerCallbacks[sName] = fnCallback;
+        },
+        removeListener: function (sName) {
+            delete oListenerCallbacks[sName];
         }
     };
 };
