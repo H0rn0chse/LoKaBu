@@ -17,7 +17,13 @@ function Persons () {
         get: function () {
             if (Array.isArray(aPersons)) {
                 aPersons.sort((a, b) => {
-                    return a.ID.toString().localeCompare(b.ID);
+                    if (parseInt(a.ID, 10) < parseInt(b.ID, 10)) {
+                        return -1;
+                    }
+                    if (parseInt(a.ID, 10) > parseInt(b.ID, 10)) {
+                        return 1;
+                    }
+                    return 0;
                 });
             }
             return aPersons;
