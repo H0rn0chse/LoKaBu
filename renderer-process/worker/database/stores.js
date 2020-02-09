@@ -13,12 +13,57 @@ oDb.readStores = (fnCallback) => {
     fnCallback(null, oResult);
 };
 
+oDb.readStoresCallback = (oErr, oResult) => {
+    if (oErr) {
+        window.ipcRenderer.send("log", oErr);
+    } else {
+        window.ipcRenderer.sendTo(window.iRendererId, "read-stores", oResult);
+    }
+};
+
 window.ipcRenderer.on("read-stores", (oEvent, sMessage) => {
-    oDb.readStores((oErr, oResult) => {
+    oDb.readStores(oDb.readStoresCallback);
+});
+
+oDb.writeStores = (oStores, fnCallback) => {
+    if (Array.isArray(oStores)) {
+        // overwrite all
+        const sSql = `
+        UPDATE Stores
+        SET DisplayName = $DisplayName
+        WHERE ID = $ID
+        `;
+        const oStmt = oDb.prepare(sSql);
+        oStores.forEach((oParams) => {
+            oStmt.run(oParams);
+        });
+    } else if (oStores.ID !== undefined) {
+        // update
+        const sSql = `
+        UPDATE Stores
+        SET DisplayName = $DisplayName
+        WHERE ID = $ID
+        `;
+        const oStmt = oDb.prepare(sSql);
+        oStmt.run(oStores);
+    } else {
+        // add
+        const sSql = `
+        INSERT INTO Stores
+        (DisplayName) VALUES ($DisplayName)
+        `;
+        const oStmt = oDb.prepare(sSql);
+        oStmt.run(oStores);
+    }
+    fnCallback(null);
+};
+
+window.ipcRenderer.on("write-stores", (oEvent, oStores) => {
+    oDb.writeStores(oStores, function (oErr) {
         if (oErr) {
             window.ipcRenderer.send("log", oErr);
         } else {
-            window.ipcRenderer.sendTo(window.iRendererId, "read-stores", oResult);
+            oDb.readStores(oDb.readStoresCallback);
         }
     });
 });
