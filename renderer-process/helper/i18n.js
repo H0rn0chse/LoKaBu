@@ -23,7 +23,7 @@ module.exports = {
                 return oItem.scriptCode === sScriptCode;
             });
 
-            return oI18nItem[sLangCode] ? oI18nItem[sLangCode] : sScriptCode;
+            return oI18nItem && oI18nItem[sLangCode] ? oI18nItem[sLangCode] : sScriptCode;
         });
     },
     getLanguages: function () {
