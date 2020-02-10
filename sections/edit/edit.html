@@ -1,3 +1,43 @@
 <section id="section-edit" class="section">
-	<p>Edit Content</p>
+	<div class="flexLineContainer">
+		<span class="flexLine">
+			<h3 data-lang="edit.section.title.long"></h3>
+		</span>
+		<span class="flexLine">
+			<span data-lang="receipt.id"></span>:<input type="text" name="ID" disabled>
+				&nbsp;<span data-lang="common.store"></span>:<select id="Edit_Store"></select>
+			</span>
+		<span class="flexLine">
+			<span data-lang="common.date"></span>:<input type="text" name="Date">
+			&nbsp;<span data-lang="common.account"></span>:<select id="Edit_Account"></select>
+		</span>
+		<span id="Edit_Lines" class="flexLineContainer flexLine">
+			<span class="flexLine">
+				<select class="BillingAccount"></select>
+				<select class="Typ"></select>
+				<span class="currency"><input type="text" name="Value"></span>
+				<div class="buttonSmall removeLine">-</div>
+			</span>
+		</span>
+		<span class="flexLine">
+			<div class="button addLine">+</div>
+		</span>
+		<span class="flexLine">
+			<textarea id="Edit_Comment"></textarea>
+		</span>
+		<span class="flexLine">
+			&nbsp;
+		</span>
+		<span class="flexLine">
+			<span data-lang="common.result"></span>:<span id="Edit_Result">0</span>€
+		</span>
+		<span class="flexLine">
+			&nbsp;
+		</span>
+		<span class="flexLine">
+			<div class="button cancelEdit" data-lang="common.cancel"></div>
+			<div class="button removeReceipt" data-lang="common.delete"></div>
+			<div class="button updateReceipt" data-lang="common.save"></div>
+		</span>
+	</div>
 </section>

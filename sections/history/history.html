@@ -1,3 +1,28 @@
 <section id="section-history" class="section">
-	<p>History Content</p>
+	<div class="flexLineContainer">
+		<span class="flexLine">
+			<h3 data-lang="history.section.title"></h3>
+		</span>
+		<div id="History_Filter" class="flexLine"></div>
+		<span id="History_Sort" class="flexLine">
+			<div class="button sortID" data-lang="common.id"></div>
+			<div class="button sortDate" data-lang="common.date"></div>
+			<div class="button sortAccount" data-lang="common.account"></div>
+			<div class="button sortValue" data-lang="common.value"></div>
+		</span>
+		<div id="History_Receipts" class="flexLineContainer flexLine">
+			<span class="flexLine">
+				<input type="text" name="ID" disabled>
+				<input type="text" name="Date" disabled>
+				<input type="text" name="Account" disabled>
+				<input type="text" name="Value" disabled>
+				<div class="button editReceipt" data-lang="common.edit"></div>
+			</span>
+		</div>
+		<div id="History_Page" class="flexLine">
+			<button>&lt;</button>
+			<span>0 / 0</span>
+			<button>&gt;</button>
+		</div>
+	</div>
 </section>
