@@ -29,10 +29,10 @@
   "dependencies": {
     "better-sqlite3": "^5.4.3",
     "d3": "^5.15.0",
-    "electron": "^7.1.11",
     "glob": "^7.1.6"
   },
   "devDependencies": {
+    "electron": "^7.1.11",
     "electron-builder": "^22.3.2",
     "electron-rebuild": "^1.10.0",
     "eslint": "^6.8.0",
