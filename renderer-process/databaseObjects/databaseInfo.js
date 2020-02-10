@@ -5,13 +5,13 @@ function DatabaseInfo () {
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-databaseInfo");
     window.ipcRenderer.on("read-databaseInfo", (oEvent, oResult) => {
+        bRequestPending = false;
         oDataBaseInfo = oResult;
 
         aRefreshCallbacks.forEach(function (fnCallback) {
             fnCallback();
         });
         aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
-        bRequestPending = false;
     });
     return {
         get: function () {

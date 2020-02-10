@@ -6,6 +6,7 @@ function Stores () {
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-stores");
     window.ipcRenderer.on("read-stores", (oEvent, oResult) => {
+        bRequestPending = false;
         aStores = oResult;
 
         aRefreshCallbacks.forEach(function (fnCallback) {
@@ -16,8 +17,6 @@ function Stores () {
         Object.keys(oListenerCallbacks).forEach((sKey) => {
             oListenerCallbacks[sKey](aStores);
         });
-
-        bRequestPending = false;
     });
     return {
         get: function () {

@@ -6,13 +6,13 @@ function ReceiptDetail () {
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptDetail");
     window.ipcRenderer.on("read-receiptDetail", (oEvent, oResult) => {
+        bRequestPending = false;
         oReceiptDetail = oResult;
 
         aRefreshCallbacks.forEach(function (fnCallback) {
             fnCallback();
         });
         aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
-        bRequestPending = false;
     });
     return {
         get: function () {

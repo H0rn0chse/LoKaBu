@@ -6,6 +6,7 @@ function Types () {
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-types");
     window.ipcRenderer.on("read-types", (oEvent, oResult) => {
+        bRequestPending = false;
         aTypes = oResult;
 
         aRefreshCallbacks.forEach(function (fnCallback) {
@@ -16,8 +17,6 @@ function Types () {
         Object.keys(oListenerCallbacks).forEach((sKey) => {
             oListenerCallbacks[sKey](aTypes);
         });
-
-        bRequestPending = false;
     });
     return {
         get: function () {

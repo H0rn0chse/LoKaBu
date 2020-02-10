@@ -5,13 +5,13 @@ function ReceiptList () {
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptList");
     window.ipcRenderer.on("read-receiptList", (oEvent, oResult) => {
+        bRequestPending = false;
         aReceiptList = oResult;
 
         aRefreshCallbacks.forEach(function (fnCallback) {
             fnCallback();
         });
         aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
-        bRequestPending = false;
     });
     return {
         get: function () {

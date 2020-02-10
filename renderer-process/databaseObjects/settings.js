@@ -6,6 +6,7 @@ function Settings () {
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-settings");
     window.ipcRenderer.on("read-settings", (oEvent, oResult) => {
+        bRequestPending = false;
         oSettings = oResult;
 
         aRefreshCallbacks.forEach(function (fnCallback) {
@@ -16,8 +17,6 @@ function Settings () {
         Object.keys(oListenerCallbacks).forEach((sKey) => {
             oListenerCallbacks[sKey](oSettings);
         });
-
-        bRequestPending = false;
     });
     return {
         get: function () {

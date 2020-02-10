@@ -6,6 +6,7 @@ function Accounts () {
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-accounts");
     window.ipcRenderer.on("read-accounts", (oEvent, oResult) => {
+        bRequestPending = false;
         aAccounts = oResult;
 
         aRefreshCallbacks.forEach(function (fnCallback) {
@@ -16,8 +17,6 @@ function Accounts () {
         Object.keys(oListenerCallbacks).forEach((sKey) => {
             oListenerCallbacks[sKey](aAccounts);
         });
-
-        bRequestPending = false;
     });
     return {
         get: function () {

@@ -5,13 +5,13 @@ function I18n () {
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "read-i18n");
     window.ipcRenderer.on("read-i18n", (oEvent, oResult) => {
+        bRequestPending = false;
         oI18n = oResult;
 
         aRefreshCallbacks.forEach(function (fnCallback) {
             fnCallback();
         });
         aRefreshCallbacks.splice(0, aRefreshCallbacks.length);
-        bRequestPending = false;
     });
     return {
         get: function () {
