@@ -46,4 +46,4 @@ function hasChildByCss (oNode, sSelector) {
 }
 
 // default section
-navigateToSection("new");
+navigateToSection("detail");
