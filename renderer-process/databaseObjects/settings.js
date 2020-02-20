@@ -3,10 +3,15 @@ function Settings () {
     const aRefreshCallbacks = [];
     const oListenerCallbacks = {};
     let bRequestPending = true;
+    let bLanguageChanged = false;
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "settings-read-object");
     window.ipcRenderer.on("settings-read-object", (oEvent, oResult) => {
         bRequestPending = false;
+        if (bLanguageChanged) {
+            document.dispatchEvent(new CustomEvent("LanguageChanged", {}));
+            bLanguageChanged = false;
+        }
         oSettings = oResult;
 
         aRefreshCallbacks.forEach(function (fnCallback) {
@@ -23,6 +28,10 @@ function Settings () {
             return oSettings;
         },
         update: function (oSettingsObject) {
+            if (oSettingsObject.Language !== oSettings.Language) {
+                bLanguageChanged = true;
+            }
+            oSettings = oSettingsObject;
             window.ipcRenderer.sendTo(window.iDatabaseId, "settings-write-object", oSettings);
         },
         refresh: function (fnCallback) {
@@ -36,6 +45,9 @@ function Settings () {
             return oSettings[sPropertyName];
         },
         setProperty: function (sPropertyName, oValue) {
+            if (sPropertyName === "Language" && oSettings.Language !== oValue) {
+                bLanguageChanged = true;
+            }
             oSettings[sPropertyName] = oValue;
             window.ipcRenderer.sendTo(window.iDatabaseId, "settings-write-object", oSettings);
         },
