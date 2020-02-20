@@ -23,10 +23,7 @@
 				<p>Header</p>
 			</div>
 			<div class="nav-item">
-				<p class="nav-link" data-section="new" data-lang="new.section.title"></p>
-			</div>
-			<div class="nav-item">
-				<p class="nav-link" data-section="edit" data-lang="edit.section.title"></p>
+				<p class="nav-link" data-section="detail" data-lang="detail.section.title"></p>
 			</div>
 			<div class="nav-item">
 				<p class="nav-link" data-section="history" data-lang="history.section.title"></p>
@@ -53,8 +50,7 @@
 			const load = require('./assets/load');
 
 			Promise.all([
-				load.html('/sections/new/new.html'),
-				load.html('/sections/edit/edit.html'),
+				load.html('/sections/detail/detail.html'),
 				load.html('/sections/history/history.html'),
 				load.html('/sections/analysis/analysis.html'),
 				load.html('/sections/settings/settings.html')
@@ -63,6 +59,15 @@
 				require('./assets/navigation');
 				const i18nHelper = require("./renderer-process/helper/i18n");
 				i18nHelper.applyToAll();
+
+				document.addEventListener("AddedTranslateableElement", function (oEvent) {
+					const oItem = oEvent.target;
+					i18nHelper.applyToChildren(oItem);
+				});
+
+				document.addEventListener("LanguageChanged", function (oEvent) {
+					i18nHelper.applyToAll();
+				});
 			});
 		</script>
 	</body>
