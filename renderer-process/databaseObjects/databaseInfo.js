@@ -3,8 +3,8 @@ function DatabaseInfo () {
     const aRefreshCallbacks = [];
     let bRequestPending = true;
 
-    window.ipcRenderer.sendTo(window.iDatabaseId, "read-databaseInfo");
-    window.ipcRenderer.on("read-databaseInfo", (oEvent, oResult) => {
+    window.ipcRenderer.sendTo(window.iDatabaseId, "databaseInfo-read-object");
+    window.ipcRenderer.on("databaseInfo-read-object", (oEvent, oResult) => {
         bRequestPending = false;
         oDataBaseInfo = oResult;
 
@@ -18,13 +18,13 @@ function DatabaseInfo () {
             return oDataBaseInfo;
         },
         update: function (oDataBaseInfo) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-databaseInfo", oDataBaseInfo);
+            window.ipcRenderer.sendTo(window.iDatabaseId, "databaseInfo-write-object", oDataBaseInfo);
         },
         refresh: function (fnCallback) {
             aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
-                window.ipcRenderer.sendTo(window.iDatabaseId, "read-databaseInfo");
+                window.ipcRenderer.sendTo(window.iDatabaseId, "databaseInfo-read-object");
             }
         }
     };

@@ -13,12 +13,12 @@ oDb.readDatabaseInfo = (fnCallback) => {
     fnCallback(null, oResult);
 };
 
-window.ipcRenderer.on("read-databaseInfo", (oEvent, sMessage) => {
+window.ipcRenderer.on("databaseInfo-read-object", (oEvent, sMessage) => {
     oDb.readDatabaseInfo((oErr, oResult) => {
         if (oErr) {
             window.ipcRenderer.send("log", oErr);
         } else {
-            window.ipcRenderer.sendTo(window.iRendererId, "read-databaseInfo", oResult);
+            window.ipcRenderer.sendTo(window.iRendererId, "databaseInfo-read-object", oResult);
         }
     });
 });

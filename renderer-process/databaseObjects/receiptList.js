@@ -3,8 +3,8 @@ function ReceiptList () {
     const aRefreshCallbacks = [];
     let bRequestPending = true;
 
-    window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptList");
-    window.ipcRenderer.on("read-receiptList", (oEvent, oResult) => {
+    window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-read-list");
+    window.ipcRenderer.on("receiptList-read-list", (oEvent, oResult) => {
         bRequestPending = false;
         aReceiptList = oResult;
 
@@ -23,17 +23,17 @@ function ReceiptList () {
             return aReceiptList;
         },
         update: function (aReceiptList) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-receiptList", aReceiptList);
+            window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-write-list", aReceiptList);
         },
         refresh: function (fnCallback) {
             aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
-                window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptList");
+                window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-read-list");
             }
         },
         add: function (oReceipt) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-receiptList", oReceipt);
+            window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-write-object", oReceipt);
         }
     };
 };

@@ -4,8 +4,8 @@ function Stores () {
     const oListenerCallbacks = {};
     let bRequestPending = true;
 
-    window.ipcRenderer.sendTo(window.iDatabaseId, "read-stores");
-    window.ipcRenderer.on("read-stores", (oEvent, oResult) => {
+    window.ipcRenderer.sendTo(window.iDatabaseId, "stores-read-list");
+    window.ipcRenderer.on("stores-read-list", (oEvent, oResult) => {
         bRequestPending = false;
         aStores = oResult;
 
@@ -40,17 +40,17 @@ function Stores () {
                 oStore.ID = sId;
                 aStores[iIndex] = oStore;
             }
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-stores", oStore);
+            window.ipcRenderer.sendTo(window.iDatabaseId, "stores-write-object", oStore);
         },
         refresh: function (fnCallback) {
             aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
-                window.ipcRenderer.sendTo(window.iDatabaseId, "read-stores");
+                window.ipcRenderer.sendTo(window.iDatabaseId, "stores-read-list");
             }
         },
         add: function (oStore) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-stores", oStore);
+            window.ipcRenderer.sendTo(window.iDatabaseId, "stores-write-object", oStore);
         },
         addListener: function (sName, fnCallback) {
             oListenerCallbacks[sName] = fnCallback;

@@ -12,12 +12,12 @@ oDb.readReceiptAnalysis = (fnCallback) => {
     fnCallback("ReceiptAnalysis is not yet implemented");
 };
 
-window.ipcRenderer.on("read-receiptAnalysis", (oEvent, sMessage) => {
+window.ipcRenderer.on("receiptAnalysis-read-object", (oEvent, sMessage) => {
     oDb.readReceiptAnalysis((oErr, oResult) => {
         if (oErr) {
             window.ipcRenderer.send("log", oErr);
         } else {
-            window.ipcRenderer.sendTo(window.iRendererId, "read-receiptAnalysis", oResult);
+            window.ipcRenderer.sendTo(window.iRendererId, "receiptAnalysis-read-object", oResult);
         }
     });
 });

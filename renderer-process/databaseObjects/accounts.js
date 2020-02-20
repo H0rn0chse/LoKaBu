@@ -4,8 +4,8 @@ function Accounts () {
     const oListenerCallbacks = {};
     let bRequestPending = true;
 
-    window.ipcRenderer.sendTo(window.iDatabaseId, "read-accounts");
-    window.ipcRenderer.on("read-accounts", (oEvent, oResult) => {
+    window.ipcRenderer.sendTo(window.iDatabaseId, "accounts-read-list");
+    window.ipcRenderer.on("accounts-read-list", (oEvent, oResult) => {
         bRequestPending = false;
         aAccounts = oResult;
 
@@ -40,17 +40,17 @@ function Accounts () {
                 oAccount.ID = sId;
                 aAccounts[iIndex] = oAccount;
             }
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-accounts", oAccount);
+            window.ipcRenderer.sendTo(window.iDatabaseId, "accounts-write-object", oAccount);
         },
         refresh: function (fnCallback) {
             aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
-                window.ipcRenderer.sendTo(window.iDatabaseId, "read-accounts");
+                window.ipcRenderer.sendTo(window.iDatabaseId, "accounts-read-list");
             }
         },
         add: function (oAccount) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-accounts", oAccount);
+            window.ipcRenderer.sendTo(window.iDatabaseId, "accounts-write-object", oAccount);
         },
         addListener: function (sName, fnCallback) {
             oListenerCallbacks[sName] = fnCallback;

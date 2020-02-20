@@ -13,12 +13,12 @@ oDb.readi18n = (fnCallback) => {
     fnCallback(null, oResult);
 };
 
-window.ipcRenderer.on("read-persons", (oEvent, sMessage) => {
+window.ipcRenderer.on("i18n-read-list", (oEvent, sMessage) => {
     oDb.readi18n((oErr, oResult) => {
         if (oErr) {
             window.ipcRenderer.send("log", oErr);
         } else {
-            window.ipcRenderer.sendTo(window.iRendererId, "read-i18n", oResult);
+            window.ipcRenderer.sendTo(window.iRendererId, "i18n-read-list", oResult);
         }
     });
 });

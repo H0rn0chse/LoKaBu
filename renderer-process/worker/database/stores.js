@@ -17,11 +17,11 @@ oDb.readStoresCallback = (oErr, oResult) => {
     if (oErr) {
         window.ipcRenderer.send("log", oErr);
     } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "read-stores", oResult);
+        window.ipcRenderer.sendTo(window.iRendererId, "stores-read-list", oResult);
     }
 };
 
-window.ipcRenderer.on("read-stores", (oEvent, sMessage) => {
+window.ipcRenderer.on("stores-read-list", (oEvent, sMessage) => {
     oDb.readStores(oDb.readStoresCallback);
 });
 
@@ -58,7 +58,7 @@ oDb.writeStores = (oStores, fnCallback) => {
     fnCallback(null);
 };
 
-window.ipcRenderer.on("write-stores", (oEvent, oStores) => {
+window.ipcRenderer.on("stores-write-object", (oEvent, oStores) => {
     oDb.writeStores(oStores, function (oErr) {
         if (oErr) {
             window.ipcRenderer.send("log", oErr);

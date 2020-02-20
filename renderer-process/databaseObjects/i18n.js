@@ -3,8 +3,8 @@ function I18n () {
     const aRefreshCallbacks = [];
     let bRequestPending = true;
 
-    window.ipcRenderer.sendTo(window.iDatabaseId, "read-i18n");
-    window.ipcRenderer.on("read-i18n", (oEvent, oResult) => {
+    window.ipcRenderer.sendTo(window.iDatabaseId, "i18n-read-list");
+    window.ipcRenderer.on("i18n-read-list", (oEvent, oResult) => {
         bRequestPending = false;
         oI18n = oResult;
 
@@ -21,7 +21,7 @@ function I18n () {
             aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
-                window.ipcRenderer.sendTo(window.iDatabaseId, "read-i18n");
+                window.ipcRenderer.sendTo(window.iDatabaseId, "i18n-read-list");
             }
         }
     };

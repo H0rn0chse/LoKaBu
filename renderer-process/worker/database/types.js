@@ -17,11 +17,11 @@ oDb.readTypesCallback = (oErr, oResult) => {
     if (oErr) {
         window.ipcRenderer.send("log", oErr);
     } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "read-types", oResult);
+        window.ipcRenderer.sendTo(window.iRendererId, "types-read-list", oResult);
     }
 };
 
-window.ipcRenderer.on("read-types", (oEvent, sMessage) => {
+window.ipcRenderer.on("types-read-list", (oEvent, sMessage) => {
     oDb.readTypes(oDb.readTypesCallback);
 });
 
@@ -58,7 +58,7 @@ oDb.writeTypes = (oTypes, fnCallback) => {
     fnCallback(null);
 };
 
-window.ipcRenderer.on("write-types", (oEvent, oTypes) => {
+window.ipcRenderer.on("types-write-object", (oEvent, oTypes) => {
     oDb.writeTypes(oTypes, function (oErr) {
         if (oErr) {
             window.ipcRenderer.send("log", oErr);

@@ -17,11 +17,11 @@ oDb.readPersonsCallback = (oErr, oResult) => {
     if (oErr) {
         window.ipcRenderer.send("log", oErr);
     } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "read-persons", oResult);
+        window.ipcRenderer.sendTo(window.iRendererId, "persons-read-list", oResult);
     }
 };
 
-window.ipcRenderer.on("read-persons", (oEvent, sMessage) => {
+window.ipcRenderer.on("persons-read-list", (oEvent, sMessage) => {
     oDb.readPersons(oDb.readPersonsCallback);
 });
 
@@ -58,7 +58,7 @@ oDb.writePersons = (oPersons, fnCallback) => {
     fnCallback(null);
 };
 
-window.ipcRenderer.on("write-persons", (oEvent, oPersons) => {
+window.ipcRenderer.on("persons-write-object", (oEvent, oPersons) => {
     oDb.writePersons(oPersons, function (oErr) {
         if (oErr) {
             window.ipcRenderer.send("log", oErr);

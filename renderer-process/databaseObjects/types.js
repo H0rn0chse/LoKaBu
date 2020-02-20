@@ -4,8 +4,8 @@ function Types () {
     const oListenerCallbacks = {};
     let bRequestPending = false;
 
-    window.ipcRenderer.sendTo(window.iDatabaseId, "read-types");
-    window.ipcRenderer.on("read-types", (oEvent, oResult) => {
+    window.ipcRenderer.sendTo(window.iDatabaseId, "types-read-list");
+    window.ipcRenderer.on("types-read-list", (oEvent, oResult) => {
         bRequestPending = false;
         aTypes = oResult;
 
@@ -40,17 +40,17 @@ function Types () {
                 oType.ID = sId;
                 aTypes[iIndex] = oType;
             }
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-types", oType);
+            window.ipcRenderer.sendTo(window.iDatabaseId, "types-write-object", oType);
         },
         refresh: function (fnCallback) {
             aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
-                window.ipcRenderer.sendTo(window.iDatabaseId, "read-types");
+                window.ipcRenderer.sendTo(window.iDatabaseId, "types-read-list");
             }
         },
         add: function (oType) {
-            window.ipcRenderer.sendTo(window.iDatabaseId, "write-types", oType);
+            window.ipcRenderer.sendTo(window.iDatabaseId, "types-write-object", oType);
         },
         addListener: function (sName, fnCallback) {
             oListenerCallbacks[sName] = fnCallback;

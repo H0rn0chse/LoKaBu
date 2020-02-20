@@ -4,8 +4,8 @@ function ReceiptAnalysis () {
     const aRefreshCallbacks = [];
     let bRequestPending = true;
 
-    window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptAnalysis");
-    window.ipcRenderer.on("read-receiptAnalysis", (oEvent, oResult) => {
+    window.ipcRenderer.sendTo(window.iDatabaseId, "receiptAnalysis-read-object");
+    window.ipcRenderer.on("receiptAnalysis-read-object", (oEvent, oResult) => {
         bRequestPending = false;
         oReceiptAnalysis = oResult;
 
@@ -22,7 +22,7 @@ function ReceiptAnalysis () {
             aRefreshCallbacks.push(fnCallback);
             if (!bRequestPending) {
                 bRequestPending = true;
-                window.ipcRenderer.sendTo(window.iDatabaseId, "read-receiptAnalysis");
+                window.ipcRenderer.sendTo(window.iDatabaseId, "receiptAnalysis-read-object");
             }
         }
     };

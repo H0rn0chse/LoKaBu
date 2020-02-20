@@ -17,11 +17,11 @@ oDb.readAccountsCallback = (oErr, oResult) => {
     if (oErr) {
         window.ipcRenderer.send("log", oErr);
     } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "read-accounts", oResult);
+        window.ipcRenderer.sendTo(window.iRendererId, "accounts-read-list", oResult);
     }
 };
 
-window.ipcRenderer.on("read-accounts", (oEvent, sMessage) => {
+window.ipcRenderer.on("accounts-read-list", (oEvent, sMessage) => {
     oDb.readAccounts(oDb.readAccountsCallback);
 });
 
@@ -60,7 +60,7 @@ oDb.writeAccounts = (oAccounts, fnCallback) => {
     fnCallback(null);
 };
 
-window.ipcRenderer.on("write-accounts", (oEvent, oAccounts) => {
+window.ipcRenderer.on("accounts-write-object", (oEvent, oAccounts) => {
     oDb.writeAccounts(oAccounts, function (oErr) {
         if (oErr) {
             window.ipcRenderer.send("log", oErr);

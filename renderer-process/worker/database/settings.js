@@ -17,11 +17,11 @@ oDb.readSettingsCallback = (oErr, oResult) => {
     if (oErr) {
         window.ipcRenderer.send("log", oErr);
     } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "read-settings", oResult);
+        window.ipcRenderer.sendTo(window.iRendererId, "settings-read-object", oResult);
     }
 };
 
-window.ipcRenderer.on("read-settings", (oEvent, sMessage) => {
+window.ipcRenderer.on("settings-read-object", (oEvent, sMessage) => {
     oDb.readSettings(oDb.readSettingsCallback);
 });
 
@@ -42,7 +42,7 @@ oDb.writeSettings = (oSettings, fnCallback) => {
     fnCallback(null, oResult);
 };
 
-window.ipcRenderer.on("write-settings", (oEvent, oSettings) => {
+window.ipcRenderer.on("settings-write-object", (oEvent, oSettings) => {
     oDb.writeSettings(oSettings, function (oErr) {
         if (oErr) {
             window.ipcRenderer.send("log", oErr);
