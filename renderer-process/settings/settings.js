@@ -8,7 +8,13 @@ const oPersons = require("../databaseObjects/persons");
 const oAccounts = require("../databaseObjects/accounts");
 const oTypes = require("../databaseObjects/types");
 const oStores = require("../databaseObjects/stores");
-const oI18n = require("../databaseObjects/i18n");
+
+const oDatabaseWaiter = new DatabaseWaiter();
+oDatabaseWaiter.add(oSettings);
+oDatabaseWaiter.add(oPersons);
+oDatabaseWaiter.add(oAccounts);
+oDatabaseWaiter.add(oTypes);
+oDatabaseWaiter.add(oStores);
 
 window.settingsSection = {
     reset: function () {
@@ -22,29 +28,21 @@ window.settingsSection = {
     init: function () {
         this.reset();
 
-        const oDatabaseWaiter = new DatabaseWaiter();
-        oDatabaseWaiter.add(oSettings);
-        oDatabaseWaiter.add(oPersons);
-        oDatabaseWaiter.add(oAccounts);
-        oDatabaseWaiter.add(oTypes);
-        oDatabaseWaiter.add(oStores);
-        oDatabaseWaiter.add(oI18n);
-
         oDatabaseWaiter.getPromise().then(() => {
             let oElement;
 
             oElement = document.querySelector("#section-settings .Language");
             oDropdown.fill(oElement, oI18nHelper.getLanguages().map((sKey) => {
-                return { ID: sKey, DisplayName: sKey };
+                return { value: sKey, displayName: sKey };
             }));
             oElement.value = oSettings.getProperty("Language");
 
             oElement = document.querySelector("#section-settings .BillingAccount");
-            oDropdown.fill(oElement, oPersons.get());
+            oDropdown.fill(oElement, oPersons.get(), { value: "ID", displayName: "DisplayName" });
             oElement.value = oSettings.getProperty("Person");
 
             oElement = document.querySelector("#section-settings .Type");
-            oDropdown.fill(oElement, oTypes.get());
+            oDropdown.fill(oElement, oTypes.get(), { value: "ID", displayName: "DisplayName" });
             oElement.value = oSettings.getProperty("Type");
 
             // Generates the Lists
@@ -94,13 +92,6 @@ window.settingsSection = {
         return oSpan;
     },
     save: function () {
-        const oDatabaseWaiter = new DatabaseWaiter();
-        oDatabaseWaiter.add(oSettings);
-        oDatabaseWaiter.add(oPersons);
-        oDatabaseWaiter.add(oAccounts);
-        oDatabaseWaiter.add(oTypes);
-        oDatabaseWaiter.add(oStores);
-
         oDatabaseWaiter.getPromise().then(() => {
             oSettings.setProperty("Language", document.querySelector("#section-settings .Language").value);
             oSettings.setProperty("Person", document.querySelector("#section-settings .BillingAccount").value);

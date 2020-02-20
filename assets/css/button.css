@@ -19,3 +19,15 @@
 	background-color: #aaa;
 	cursor: pointer;
 }
+
+.button.asc::after{
+	content: "↑";
+}
+
+.button.desc::after{
+	content: "↓";
+}
+
+.button.is-hidden {
+	display: none;
+}

@@ -27,6 +27,12 @@ function HtmlElement (sTag, oOptions) {
     if (oOptions.onchange) {
         oElement.onchange = oOptions.onchange;
     }
+    if (oOptions.onclick) {
+        oElement.onclick = oOptions.onclick;
+    }
+    if (oOptions.i18n) {
+        oElement.setAttribute("data-lang", oOptions.i18n);
+    }
 
     return oElement;
 }
