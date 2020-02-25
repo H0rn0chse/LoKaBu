@@ -110,6 +110,7 @@ window.detailSection = {
     },
     changeReceipt: function () {
         this.hasChanged = true;
+        this._calcResult();
     },
     _clearLines: function () {
         this.DomRef.querySelector("#Detail_Lines").innerHTML = "";
@@ -191,6 +192,15 @@ window.detailSection = {
         }
 
         return oSpan;
+    },
+    _calcResult: function () {
+        let fResult = 0;
+        const aLineValues = this.DomRef.querySelectorAll("#Detail_Lines .flexLine input.currency");
+        aLineValues.forEach((oValue) => {
+            const sValue = oValue.value || "0";
+            fResult += parseFloat(sValue.replace(",", "."));
+        });
+        this.DomRef.querySelector("#Detail_Result").innerText = fResult.toFixed(2);
     },
     _getReceiptDetails: function () {
         const aReceiptDetails = [];
