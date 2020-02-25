@@ -1,14 +1,3 @@
-.currency{
-	position: relative
-}
-
-.currency input {
-	padding-right:2em;
-	text-align:end;
-	word-break: break-word;
-	display: inline;
-}
-
 .flexLine textarea{
 	width: 100%;
 }

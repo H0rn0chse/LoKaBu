@@ -120,9 +120,6 @@ window.detailSection = {
     },
     changeReceipt: function () {
         this.hasChanged = true;
-        this.DomRef.querySelectorAll(".invalid").forEach((oElement) => {
-            oElement.classList.remove("invalid");
-        });
         this._calcResult();
     },
     _clearLines: function () {
@@ -212,8 +209,18 @@ window.detailSection = {
         aLineValues.forEach((oValue) => {
             const sValue = oValue.value.replace(/,/g, ".");
             try {
-                fResult += Math.floor(stringMath(sValue) * 100) / 100;
-            } catch (oErr) {}
+                const fBefore = stringMath(sValue);
+                const fAfter = (fBefore * 100).toString().split(".")[0] / 100;
+                fResult += fAfter;
+                if (fBefore !== fAfter) {
+                    oValue.classList.add("converted");
+                } else {
+                    oValue.classList.remove("converted");
+                }
+                oValue.classList.remove("invalid");
+            } catch (oErr) {
+                oValue.classList.add("invalid");
+            }
         });
         this.DomRef.querySelector("#Detail_Result").innerText = fResult.toFixed(2);
     },
@@ -232,7 +239,7 @@ window.detailSection = {
         aLines.forEach((oLine) => {
             let sValue = oLine.querySelector("input.currency").value.replace(/,/g, ".");
             try {
-                sValue = Math.floor(stringMath(sValue) * 100);
+                sValue = (stringMath(sValue) * 100).toString().split(".")[0];
             } catch (oErr) {
                 oLine.querySelector("input.currency").classList.add("invalid");
                 sValue = 0;

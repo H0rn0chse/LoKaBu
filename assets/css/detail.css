@@ -1,3 +1,9 @@
+#section-detail .converted{
+	border-color: rgba(255, 165, 0, 0.5 );
+	border-style: solid;
+	border-width:  medium;
+}
+
 #section-detail .invalid{
 	border-color: red;
 	border-style: solid;
