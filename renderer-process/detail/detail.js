@@ -84,8 +84,11 @@ window.detailSection = {
     },
     saveReceipt: async function () {
         await oDatabaseWaiter.getPromise();
-        oReceiptDetail.update(this._getReceiptDetails());
-        window.historySection.doRefreshOnInit();
+        const oDetails = this._getReceiptDetails();
+        if (oDetails) {
+            oReceiptDetail.update(oDetails);
+            window.historySection.doRefreshOnInit();
+        }
     },
     resetReceipt: function () {
         this.initial = true;
@@ -93,9 +96,12 @@ window.detailSection = {
     },
     addReceipt: async function () {
         await oDatabaseWaiter.getPromise();
-        oReceiptDetail.add(this._getReceiptDetails());
-        this.resetReceipt();
-        window.historySection.doRefreshOnInit();
+        const oDetails = this._getReceiptDetails();
+        if (oDetails) {
+            oReceiptDetail.add(oDetails);
+            this.resetReceipt();
+            window.historySection.doRefreshOnInit();
+        }
     },
     addLine: async function (bSupressChange = false) {
         if (!bSupressChange) {
@@ -114,6 +120,9 @@ window.detailSection = {
     },
     changeReceipt: function () {
         this.hasChanged = true;
+        this.DomRef.querySelectorAll(".invalid").forEach((oElement) => {
+            oElement.classList.remove("invalid");
+        });
         this._calcResult();
     },
     _clearLines: function () {
@@ -212,6 +221,9 @@ window.detailSection = {
         const aReceiptDetails = [];
         const sReceiptID = this.DomRef.querySelector("input[name=ID]").value;
         const sReceiptDate = oDateFormatter.InputToUnix(this.DomRef.querySelector("input[name=Date]").value);
+        if (Number.isNaN(sReceiptDate)) {
+            this.DomRef.querySelector("input[name=Date]").classList.add("invalid");
+        }
         const sReceiptStore = this.DomRef.querySelector("#Detail_Store").value;
         const sReceiptAccount = this.DomRef.querySelector("#Detail_Account").value;
         const sReceiptComment = this.DomRef.querySelector("#Detail_Comment").value;
@@ -222,6 +234,7 @@ window.detailSection = {
             try {
                 sValue = Math.floor(stringMath(sValue) * 100);
             } catch (oErr) {
+                oLine.querySelector("input.currency").classList.add("invalid");
                 sValue = 0;
             }
             const oLineDetails = {
@@ -236,6 +249,8 @@ window.detailSection = {
             };
             aReceiptDetails.push(oLineDetails);
         });
-        return aReceiptDetails;
+        if (this.DomRef.querySelectorAll(".invalid").length === 0) {
+            return aReceiptDetails;
+        }
     }
 };
