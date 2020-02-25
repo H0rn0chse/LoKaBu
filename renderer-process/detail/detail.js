@@ -4,6 +4,7 @@ const oDropdown = require("../helper/dropdown");
 const HtmlElement = require("../helper/htmlElement");
 const oI18nHelper = require("../helper/i18n");
 const oNavigation = require("./../../assets/navigation");
+const stringMath = require('string-math');
 
 const oSettings = require("../databaseObjects/settings");
 const oStores = require("../databaseObjects/stores");
@@ -200,8 +201,10 @@ window.detailSection = {
         let fResult = 0;
         const aLineValues = this.DomRef.querySelectorAll("#Detail_Lines .flexLine input.currency");
         aLineValues.forEach((oValue) => {
-            const sValue = oValue.value || "0";
-            fResult += parseFloat(sValue.replace(",", "."));
+            const sValue = oValue.value.replace(/,/g, ".");
+            try {
+                fResult += Math.floor(stringMath(sValue) * 100) / 100;
+            } catch (oErr) {}
         });
         this.DomRef.querySelector("#Detail_Result").innerText = fResult.toFixed(2);
     },
@@ -215,6 +218,12 @@ window.detailSection = {
 
         const aLines = this.DomRef.querySelectorAll("#Detail_Lines .flexLine");
         aLines.forEach((oLine) => {
+            let sValue = oLine.querySelector("input.currency").value.replace(/,/g, ".");
+            try {
+                sValue = Math.floor(stringMath(sValue) * 100);
+            } catch (oErr) {
+                sValue = 0;
+            }
             const oLineDetails = {
                 ReceiptID: sReceiptID,
                 ReceiptDate: sReceiptDate,
@@ -223,7 +232,7 @@ window.detailSection = {
                 ReceiptComment: sReceiptComment,
                 LineBilling: oLine.querySelector("select.BillingAccount").value,
                 LineType: oLine.querySelector("select.Type").value,
-                LineValue: Math.round(oLine.querySelector("input.currency").value.replace(",", ".") * 100)
+                LineValue: sValue
             };
             aReceiptDetails.push(oLineDetails);
         });
