@@ -3,6 +3,7 @@ const oDropdown = require("../helper/dropdown");
 const HtmlElement = require("../helper/htmlElement");
 const oI18nHelper = require("../helper/i18n");
 const oDateFormatter = require("./../../assets/dateFormatter");
+const FilterOption = require("./../../assets/filterOption");
 
 const oReceiptList = require("../databaseObjects/receiptList");
 
@@ -175,8 +176,9 @@ window.historySection = {
                 valType: aSelectElements[2].value,
                 value: oLine.querySelector("input").value
             };
-            const oClonedFilterOption = Object.assign({}, aFilterOptions.find((oItem) => { return oItem.column === aSelectElements[0].value }));
+            const oClonedFilterOption = new FilterOption(Object.assign({}, aFilterOptions.find((oItem) => { return oItem.column === aSelectElements[0].value })));
             oClonedFilterOption.input = oInputs;
+            oClonedFilterOption.input.value = oClonedFilterOption.formatValue();
 
             aSelectedFilterOptions.push(oClonedFilterOption);
         });

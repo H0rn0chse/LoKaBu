@@ -17,6 +17,7 @@ function FilterOption (oArgs) {
     this.varType = oArgs.varType;
     this.valType = oArgs.valType;
     this.i18n = oArgs.i18n;
+    this.format = oArgs.format;
 };
 
 FilterOption.prototype.hasEmptyValue = function () {
@@ -161,6 +162,17 @@ FilterOption.prototype.getFromClause = function () {
         return ", json_each(" + this.column + ") as json" + this.column + "\n";
     }
     return "\n";
+};
+
+FilterOption.prototype.formatValue = function () {
+    let sValue = this.input.value || "";
+    switch (this.format) {
+        case "0,00":
+            sValue = parseFloat(sValue.replace(/,/g, ".")) || 0;
+            return Math.round(sValue * 100);
+        default:
+            return sValue;
+    }
 };
 
 module.exports = FilterOption;
