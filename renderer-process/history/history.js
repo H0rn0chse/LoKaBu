@@ -30,8 +30,11 @@ window.historySection = {
         oDatabaseWaiter.getPromise().then(() => {
             const oPages = oReceiptList.getPages();
             const oElement = document.querySelector("#History_Page span");
-
-            oElement.innerText = oPages.currentPage + "/" + oPages.pageCount;
+            if (oPages) {
+                oElement.innerText = oPages.currentPage + "/" + oPages.pageCount;
+            } else {
+                oElement.innerText = "0/0";
+            }
         });
     },
     updateReceiptList: function () {

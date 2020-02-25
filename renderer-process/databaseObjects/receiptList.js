@@ -78,29 +78,35 @@ function ReceiptList () {
             window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-write-object", oReceipt);
         },
         getPages: function () {
-            return {
-                currentPage: (iCurrentPage + 1),
-                pageCount: aReceiptList[0].PageCount
-            };
+            if (aReceiptList[0]) {
+                return {
+                    currentPage: (iCurrentPage + 1),
+                    pageCount: aReceiptList[0].PageCount
+                };
+            }
         },
         nextPage: function (aFilterOptions) {
-            if (iCurrentPage < aReceiptList[0].PageCount - 1) {
-                iCurrentPage = (iCurrentPage + 1) % aReceiptList[0].PageCount;
-                const aValidatedFilterOptions = [];
-                aFilterOptions.forEach((oFilterOption) => {
-                    aValidatedFilterOptions.push(new FilterOption(oFilterOption));
-                });
-                window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-write-filter", aValidatedFilterOptions, iCurrentPage, sCurrentSortColumn, sCurrentSortDirection);
+            if (aReceiptList[0]) {
+                if (iCurrentPage < aReceiptList[0].PageCount - 1) {
+                    iCurrentPage = (iCurrentPage + 1) % aReceiptList[0].PageCount;
+                    const aValidatedFilterOptions = [];
+                    aFilterOptions.forEach((oFilterOption) => {
+                        aValidatedFilterOptions.push(new FilterOption(oFilterOption));
+                    });
+                    window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-write-filter", aValidatedFilterOptions, iCurrentPage, sCurrentSortColumn, sCurrentSortDirection);
+                }
             }
         },
         prevPage: function (aFilterOptions) {
-            if (iCurrentPage > 0) {
-                iCurrentPage = Math.abs(iCurrentPage - 1) % aReceiptList[0].PageCount;
-                const aValidatedFilterOptions = [];
-                aFilterOptions.forEach((oFilterOption) => {
-                    aValidatedFilterOptions.push(new FilterOption(oFilterOption));
-                });
-                window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-write-filter", aValidatedFilterOptions, iCurrentPage, sCurrentSortColumn, sCurrentSortDirection);
+            if (aReceiptList[0]) {
+                if (iCurrentPage > 0) {
+                    iCurrentPage = Math.abs(iCurrentPage - 1) % aReceiptList[0].PageCount;
+                    const aValidatedFilterOptions = [];
+                    aFilterOptions.forEach((oFilterOption) => {
+                        aValidatedFilterOptions.push(new FilterOption(oFilterOption));
+                    });
+                    window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-write-filter", aValidatedFilterOptions, iCurrentPage, sCurrentSortColumn, sCurrentSortDirection);
+                }
             }
         },
         addListener: function (sName, fnCallback) {
