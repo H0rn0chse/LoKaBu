@@ -35,6 +35,7 @@ window.detailSection = {
             this.addLine(true);
             this.initial = false;
             this.hasChanged = false;
+            this._calcResult();
         }
     },
     editReceipt: async function (sId) {
@@ -55,14 +56,16 @@ window.detailSection = {
             this.DomRef.querySelector("#Detail_Store").value = aLineDetails[0].ReceiptStore;
             this.DomRef.querySelector("#Detail_Account").value = aLineDetails[0].ReceiptAccount;
             this.DomRef.querySelector("#Detail_Comment").value = aLineDetails[0].ReceiptComment;
-            aLineDetails.forEach((oLineDetail) => {
-                this.addLine(true).then((oLine) => {
+            Promise.all(aLineDetails.map((oLineDetail) => {
+                return this.addLine(true).then((oLine) => {
                     oLine.querySelector("select.BillingAccount").value = oLineDetail.LineBilling;
                     oLine.querySelector("select.Type").value = oLineDetail.LineType;
                     oLine.querySelector("input.currency").value = oLineDetail.LineValue / 100;
                 });
+            })).then(() => {
+                this.hasChanged = false;
+                this._calcResult();
             });
-            this.hasChanged = false;
         }
     },
     cancelEdit: function () {

@@ -51,7 +51,7 @@ window.historySection = {
                 oLine.querySelector("[name=ID]").value = oItem.ReceiptID;
                 oLine.querySelector("[name=Date]").value = oDateFormatter.UnixToInput(oItem.ReceiptDate);
                 oLine.querySelector("[name=Account]").value = oItem.ReceiptAccount;
-                oLine.querySelector("[name=Value]").value = Math.round(oItem.ReceiptValue / 100).toFixed(2);
+                oLine.querySelector("[name=Value]").value = (oItem.ReceiptValue / 100).toFixed(2);
                 oContainer.appendChild(oLine);
                 document.dispatchEvent(new CustomEvent("AddedTranslateableElement", { target: oLine }));
             });
