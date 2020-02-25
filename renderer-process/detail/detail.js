@@ -3,6 +3,7 @@ const oDateFormatter = require("../../assets/dateFormatter");
 const oDropdown = require("../helper/dropdown");
 const HtmlElement = require("../helper/htmlElement");
 const oI18nHelper = require("../helper/i18n");
+const oNavigation = require("./../../assets/navigation");
 
 const oSettings = require("../databaseObjects/settings");
 const oStores = require("../databaseObjects/stores");
@@ -37,7 +38,7 @@ window.detailSection = {
         }
     },
     editReceipt: async function (sId) {
-        document.querySelector(".nav-link[data-section=detail]").click();
+        oNavigation.navigateToSection("detail");
         let bResult = true;
         if (this.hasChanged) {
             const sMessage = await oI18nHelper.getProperty("detail.message.override");
@@ -67,20 +68,20 @@ window.detailSection = {
     cancelEdit: function () {
         this.mode = "new";
         this.resetReceipt();
-        document.querySelector(".nav-link[data-section=history]").click();
+        oNavigation.navigateToSection("history");
     },
     deleteReceipt: async function () {
         await oDatabaseWaiter.getPromise();
         oReceiptDetail.delete(this.DomRef.querySelector("input[name=ID]").value);
         this.mode = "new";
         this.resetReceipt();
-        window.historySection.bRefresh = true;
-        document.querySelector(".nav-link[data-section=history]").click();
+        window.historySection.doRefreshOnInit();
+        oNavigation.navigateToSection("history");
     },
     saveReceipt: async function () {
         await oDatabaseWaiter.getPromise();
         oReceiptDetail.update(this._getReceiptDetails());
-        this.resetReceipt();
+        window.historySection.doRefreshOnInit();
     },
     resetReceipt: function () {
         this.initial = true;
@@ -90,6 +91,7 @@ window.detailSection = {
         await oDatabaseWaiter.getPromise();
         oReceiptDetail.add(this._getReceiptDetails());
         this.resetReceipt();
+        window.historySection.doRefreshOnInit();
     },
     addLine: async function (bSupressChange = false) {
         if (!bSupressChange) {

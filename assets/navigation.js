@@ -45,5 +45,6 @@ function hasChildByCss (oNode, sSelector) {
     return false;
 }
 
-// default section
-navigateToSection("detail");
+module.exports = {
+    navigateToSection: navigateToSection
+};

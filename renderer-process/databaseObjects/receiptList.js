@@ -109,6 +109,15 @@ function ReceiptList () {
                 }
             }
         },
+        refreshPage: function (aFilterOptions) {
+            if (aReceiptList[0]) {
+                const aValidatedFilterOptions = [];
+                aFilterOptions.forEach((oFilterOption) => {
+                    aValidatedFilterOptions.push(new FilterOption(oFilterOption));
+                });
+                window.ipcRenderer.sendTo(window.iDatabaseId, "receiptList-write-filter", aValidatedFilterOptions, iCurrentPage, sCurrentSortColumn, sCurrentSortDirection);
+            }
+        },
         addListener: function (sName, fnCallback) {
             oListenerCallbacks[sName] = fnCallback;
         },

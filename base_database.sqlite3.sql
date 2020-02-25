@@ -108,6 +108,7 @@ INSERT INTO "i18n" VALUES ('filter.containsNot','Enthält nicht','Contains not')
 INSERT INTO "i18n" VALUES ('filter.all','Alle','All');
 INSERT INTO "i18n" VALUES ('filter.none','Keiner','None');
 INSERT INTO "i18n" VALUES ('filter.atLeastOne','Zumindest einer','At least one');
+INSERT INTO "i18n" VALUES ('detail.message.override','Möchtest du noch nicht gespeicherten Belegdaten verwerfen?','Do you want to deny the unsaved changes to the receipt?');
 INSERT INTO "Receipts" VALUES (1,1582156800,1,'This Receipts is here for test purposes',1);
 INSERT INTO "Stores" VALUES (1,'TestStore');
 INSERT INTO "Types" VALUES (1,'TestType');

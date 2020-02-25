@@ -22,9 +22,12 @@ window.historySection = {
         }
 
         if (this.bRefresh) {
-            this.nextPage();
-            this.prevPage();
+            this.refreshPage();
+            this.bRefresh = false;
         }
+    },
+    doRefreshOnInit: function () {
+        this.bRefresh = true;
     },
     updatePageNavigationLabel: function () {
         oDatabaseWaiter.getPromise().then(() => {
@@ -196,6 +199,11 @@ window.historySection = {
     prevPage: function () {
         oDatabaseWaiter.getPromise().then(() => {
             oReceiptList.prevPage(this.getFilter());
+        });
+    },
+    refreshPage: function () {
+        oDatabaseWaiter.getPromise().then(() => {
+            oReceiptList.refreshPage(this.getFilter());
         });
     }
 };

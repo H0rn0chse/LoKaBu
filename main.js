@@ -30,8 +30,8 @@ function createWindow () {
             nodeIntegration: true
         }
     });
-    // oDatabaseWindow.maximize();
-    // oDatabaseWindow.show();
+    oDatabaseWindow.maximize();
+    oDatabaseWindow.show();
     oDatabaseWindow.loadFile('database.html');
     oDatabaseWindow.webContents.openDevTools();
 

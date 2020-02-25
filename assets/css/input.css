@@ -9,13 +9,6 @@
 	display: inline;
 }
 
-.currency:before {
-	position: absolute;
-	top: 0;
-	content:"€";
-	right: 1em;
-}
-
 .flexLine textarea{
 	width: 100%;
 }

@@ -56,7 +56,7 @@
 				load.html('/sections/settings/settings.html')
 			]).then(function () {
 				load.rendererScripts();
-				require('./assets/navigation');
+				const oNavigation = require('./assets/navigation');
 				const i18nHelper = require("./renderer-process/helper/i18n");
 				i18nHelper.applyToAll();
 
@@ -68,6 +68,9 @@
 				document.addEventListener("LanguageChanged", function (oEvent) {
 					i18nHelper.applyToAll();
 				});
+
+				// default section
+				oNavigation.navigateToSection("detail");
 			});
 		</script>
 	</body>
