@@ -2,6 +2,7 @@ const DatabaseWaiter = require("../../assets/databaseWaiter");
 const oDropdown = require("../helper/dropdown");
 const HtmlElement = require("../helper/htmlElement");
 const oI18nHelper = require("../helper/i18n");
+const oDateFormatter = require("./../../assets/dateFormatter");
 
 const oReceiptList = require("../databaseObjects/receiptList");
 
@@ -47,9 +48,9 @@ window.historySection = {
             oReceiptList.get().forEach((oItem) => {
                 const oLine = this._getLineTemplate("History_Receipts");
                 oLine.querySelector("[name=ID]").value = oItem.ReceiptID;
-                oLine.querySelector("[name=Date]").value = oItem.ReceiptDate;
+                oLine.querySelector("[name=Date]").value = oDateFormatter.UnixToInput(oItem.ReceiptDate);
                 oLine.querySelector("[name=Account]").value = oItem.ReceiptAccount;
-                oLine.querySelector("[name=Value]").value = oItem.ReceiptValue;
+                oLine.querySelector("[name=Value]").value = Math.round(oItem.ReceiptValue / 100).toFixed(2);
                 oContainer.appendChild(oLine);
                 document.dispatchEvent(new CustomEvent("AddedTranslateableElement", { target: oLine }));
             });
