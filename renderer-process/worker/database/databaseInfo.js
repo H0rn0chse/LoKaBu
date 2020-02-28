@@ -1,24 +1,18 @@
-if (!window.oDatabase) {
-    require("./databaseConnection");
-}
-const oDb = window.oDatabase;
+const oDb = require("./databaseConnection");
 
-oDb.readDatabaseInfo = (fnCallback) => {
+function read () {
     const sSql = `
     SELECT *
     FROM view_databaseInfo
     `;
-    const oStmt = oDb.prepare(sSql);
-    const oResult = oStmt.get();
-    fnCallback(null, oResult);
+    const oStmt = oDb.get().prepare(sSql);
+    return oStmt.get();
 };
 
 window.ipcRenderer.on("databaseInfo-read-object", (oEvent, sMessage) => {
-    oDb.readDatabaseInfo((oErr, oResult) => {
-        if (oErr) {
-            window.ipcRenderer.send("log", oErr);
-        } else {
-            window.ipcRenderer.sendTo(window.iRendererId, "databaseInfo-read-object", oResult);
-        }
-    });
+    window.ipcRenderer.sendTo(window.iRendererId, "databaseInfo-read-object", read());
 });
+
+module.exports = {
+    read
+};

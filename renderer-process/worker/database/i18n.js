@@ -1,24 +1,18 @@
-if (!window.oDatabase) {
-    require("./databaseConnection");
-}
-const oDb = window.oDatabase;
+const oDb = require("./databaseConnection");
 
-oDb.readi18n = (fnCallback) => {
+function read () {
     const sSql = `
     SELECT *
     FROM i18n
     `;
-    const oStmt = oDb.prepare(sSql);
-    const oResult = oStmt.all();
-    fnCallback(null, oResult);
+    const oStmt = oDb.get("user").prepare(sSql);
+    return oStmt.all();
 };
 
 window.ipcRenderer.on("i18n-read-list", (oEvent, sMessage) => {
-    oDb.readi18n((oErr, oResult) => {
-        if (oErr) {
-            window.ipcRenderer.send("log", oErr);
-        } else {
-            window.ipcRenderer.sendTo(window.iRendererId, "i18n-read-list", oResult);
-        }
-    });
+    window.ipcRenderer.sendTo(window.iRendererId, "i18n-read-list", read());
 });
+
+module.exports = {
+    read
+};

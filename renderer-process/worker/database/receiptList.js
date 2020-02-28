@@ -1,37 +1,26 @@
 const SqlStatement = require("./../../../assets/sqlStatement");
 const FilterOption = require("./../../../assets/filterOption");
-if (!window.oDatabase) {
-    require("./databaseConnection");
-}
-const oDb = window.oDatabase;
+const oDb = require("./databaseConnection");
 
-oDb.readReceiptList = (sSql, fnCallback) => {
-    const oStmt = oDb.prepare(sSql);
+function read (sSql) {
+    const oStmt = oDb.get().prepare(sSql);
     const oResult = oStmt.all();
-    fnCallback(null, oResult);
+    oResult.forEach((oLine) => {
+        oLine.PageCount = Math.ceil(oLine.LineCount / oLine.PageSize);
+    });
+    return oResult;
 };
 
-oDb.readReceiptListCallback = (oErr, oResult) => {
-    if (oErr) {
-        window.ipcRenderer.send("log", oErr);
-    } else {
-        oResult.forEach((oLine) => {
-            oLine.PageCount = Math.ceil(oLine.LineCount / oLine.PageSize);
-        });
-        window.ipcRenderer.sendTo(window.iRendererId, "receiptList-read-list", oResult);
-    }
-};
-
-oDb.readReceiptListDefault = `
+const readDefault = `
 SELECT *
 FROM view_ReceiptList
 `;
 
 window.ipcRenderer.on("receiptList-read-list", (oEvent, sMessage) => {
     const oSqlStatement = new SqlStatement("view_ReceiptList", "ReceiptID");
-    oSqlStatement.setDefaultSql(oDb.readReceiptListDefault);
+    oSqlStatement.setDefaultSql(readDefault);
     oSqlStatement.setSort("ReceiptID", "ASC");
-    oDb.readReceiptList(oSqlStatement.getPageSql(0), oDb.readReceiptListCallback);
+    window.ipcRenderer.sendTo(window.iRendererId, "receiptList-read-list", read(oSqlStatement.getPageSql(0)));
 });
 
 window.ipcRenderer.on("receiptList-read-filter", (oEvent, sMessage) => {
@@ -51,12 +40,17 @@ window.ipcRenderer.on("receiptList-read-filter", (oEvent, sMessage) => {
 
 window.ipcRenderer.on("receiptList-write-filter", (oEvent, sMessage, sPage, sSortColumn, sSortDirection) => {
     const oSqlStatement = new SqlStatement("view_ReceiptList", "ReceiptID");
-    oSqlStatement.setDefaultSql(oDb.readReceiptListDefault);
+    oSqlStatement.setDefaultSql(readDefault);
     oSqlStatement.setSort(sSortColumn, sSortDirection);
     sMessage.forEach((oFilterOption) => {
         oSqlStatement.addFilterOption(new FilterOption(oFilterOption));
     });
     console.log(oSqlStatement.getPageSql(sPage));
 
-    oDb.readReceiptList(oSqlStatement.getPageSql(sPage), oDb.readReceiptListCallback);
+    window.ipcRenderer.sendTo(window.iRendererId, "receiptList-read-list", read(oSqlStatement.getPageSql(sPage)));
 });
+
+module.exports = {
+    read,
+    readDefault
+};

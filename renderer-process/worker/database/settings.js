@@ -1,31 +1,26 @@
-if (!window.oDatabase) {
-    require("./databaseConnection");
-}
-const oDb = window.oDatabase;
+const oDb = require("./databaseConnection");
 
-oDb.readSettings = (fnCallback) => {
+function read () {
     const sSql = `
     SELECT *
     FROM Settings
     `;
-    const oStmt = oDb.prepare(sSql);
+    const oStmt = oDb.get().prepare(sSql);
     const oResult = oStmt.get();
-    fnCallback(null, oResult);
+    oResult.SharedDir = readSharedDir();
+    return oResult;
 };
 
-oDb.readSettingsCallback = (oErr, oResult) => {
-    if (oErr) {
-        window.ipcRenderer.send("log", oErr);
-    } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "settings-read-object", oResult);
-    }
-};
+function readSharedDir () {
+    const sSql = `
+    SELECT SharedDir
+    FROM Settings
+    `;
+    const oStmt = oDb.get("user").prepare(sSql);
+    return oStmt.get().SharedDir;
+}
 
-window.ipcRenderer.on("settings-read-object", (oEvent, sMessage) => {
-    oDb.readSettings(oDb.readSettingsCallback);
-});
-
-oDb.writeSettings = (oSettings, fnCallback) => {
+function write (oSettings) {
     const oParams = {
         Person: oSettings.Person,
         Type: oSettings.Type,
@@ -37,17 +32,21 @@ oDb.writeSettings = (oSettings, fnCallback) => {
         Type = $Type,
         Language = $Language
     `;
-    const oStmt = oDb.prepare(sSql);
-    const oResult = oStmt.run(oParams);
-    fnCallback(null, oResult);
+    const oStmt = oDb.get("user").prepare(sSql);
+    oStmt.run(oParams);
 };
 
-window.ipcRenderer.on("settings-write-object", (oEvent, oSettings) => {
-    oDb.writeSettings(oSettings, function (oErr) {
-        if (oErr) {
-            window.ipcRenderer.send("log", oErr);
-        } else {
-            oDb.readSettings(oDb.readSettingsCallback);
-        }
-    });
+window.ipcRenderer.on("settings-read-object", (oEvent, sMessage) => {
+    window.ipcRenderer.sendTo(window.iRendererId, "settings-read-object", read());
 });
+
+window.ipcRenderer.on("settings-write-object", (oEvent, oSettings) => {
+    write(oSettings);
+    window.ipcRenderer.sendTo(window.iRendererId, "settings-read-object", read());
+});
+
+module.exports = {
+    read,
+    readSharedDir,
+    write
+};

@@ -1,31 +1,15 @@
-if (!window.oDatabase) {
-    require("./databaseConnection");
-}
-const oDb = window.oDatabase;
+const oDb = require("./databaseConnection");
 
-oDb.readTypes = (fnCallback) => {
+function read () {
     const sSql = `
     SELECT *
     FROM Types
     `;
-    const oStmt = oDb.prepare(sSql);
-    const oResult = oStmt.all();
-    fnCallback(null, oResult);
+    const oStmt = oDb.get().prepare(sSql);
+    return oStmt.all();
 };
 
-oDb.readTypesCallback = (oErr, oResult) => {
-    if (oErr) {
-        window.ipcRenderer.send("log", oErr);
-    } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "types-read-list", oResult);
-    }
-};
-
-window.ipcRenderer.on("types-read-list", (oEvent, sMessage) => {
-    oDb.readTypes(oDb.readTypesCallback);
-});
-
-oDb.writeTypes = (oTypes, fnCallback) => {
+function write (oTypes) {
     if (Array.isArray(oTypes)) {
         // overwrite all
         const sSql = `
@@ -33,7 +17,7 @@ oDb.writeTypes = (oTypes, fnCallback) => {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oTypes.forEach((oParams) => {
             oStmt.run(oParams);
         });
@@ -44,7 +28,7 @@ oDb.writeTypes = (oTypes, fnCallback) => {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oStmt.run(oTypes);
     } else {
         // add
@@ -52,18 +36,21 @@ oDb.writeTypes = (oTypes, fnCallback) => {
         INSERT INTO Types
         (DisplayName) VALUES ($DisplayName)
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oStmt.run(oTypes);
     }
-    fnCallback(null);
 };
 
-window.ipcRenderer.on("types-write-object", (oEvent, oTypes) => {
-    oDb.writeTypes(oTypes, function (oErr) {
-        if (oErr) {
-            window.ipcRenderer.send("log", oErr);
-        } else {
-            oDb.readTypes(oDb.readTypesCallback);
-        }
-    });
+window.ipcRenderer.on("types-read-list", (oEvent, sMessage) => {
+    window.ipcRenderer.sendTo(window.iRendererId, "types-read-list", read());
 });
+
+window.ipcRenderer.on("types-write-object", (oEvent, oTypes) => {
+    write();
+    window.ipcRenderer.sendTo(window.iRendererId, "types-read-list", read());
+});
+
+module.exports = {
+    read,
+    write
+};

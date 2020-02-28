@@ -1,31 +1,15 @@
-if (!window.oDatabase) {
-    require("./databaseConnection");
-}
-const oDb = window.oDatabase;
+const oDb = require("./databaseConnection");
 
-oDb.readStores = (fnCallback) => {
+function read () {
     const sSql = `
     SELECT *
     FROM Stores
     `;
-    const oStmt = oDb.prepare(sSql);
-    const oResult = oStmt.all();
-    fnCallback(null, oResult);
+    const oStmt = oDb.get().prepare(sSql);
+    return oStmt.all();
 };
 
-oDb.readStoresCallback = (oErr, oResult) => {
-    if (oErr) {
-        window.ipcRenderer.send("log", oErr);
-    } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "stores-read-list", oResult);
-    }
-};
-
-window.ipcRenderer.on("stores-read-list", (oEvent, sMessage) => {
-    oDb.readStores(oDb.readStoresCallback);
-});
-
-oDb.writeStores = (oStores, fnCallback) => {
+function write (oStores) {
     if (Array.isArray(oStores)) {
         // overwrite all
         const sSql = `
@@ -33,7 +17,7 @@ oDb.writeStores = (oStores, fnCallback) => {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oStores.forEach((oParams) => {
             oStmt.run(oParams);
         });
@@ -44,7 +28,7 @@ oDb.writeStores = (oStores, fnCallback) => {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oStmt.run(oStores);
     } else {
         // add
@@ -52,18 +36,21 @@ oDb.writeStores = (oStores, fnCallback) => {
         INSERT INTO Stores
         (DisplayName) VALUES ($DisplayName)
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oStmt.run(oStores);
     }
-    fnCallback(null);
 };
 
-window.ipcRenderer.on("stores-write-object", (oEvent, oStores) => {
-    oDb.writeStores(oStores, function (oErr) {
-        if (oErr) {
-            window.ipcRenderer.send("log", oErr);
-        } else {
-            oDb.readStores(oDb.readStoresCallback);
-        }
-    });
+window.ipcRenderer.on("stores-read-list", (oEvent, sMessage) => {
+    window.ipcRenderer.sendTo(window.iRendererId, "stores-read-list", read());
 });
+
+window.ipcRenderer.on("stores-write-object", (oEvent, oStores) => {
+    write(oStores);
+    window.ipcRenderer.sendTo(window.iRendererId, "stores-read-list", read());
+});
+
+module.exports = {
+    read,
+    write
+};

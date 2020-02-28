@@ -1,31 +1,15 @@
-if (!window.oDatabase) {
-    require("./databaseConnection");
-}
-const oDb = window.oDatabase;
+const oDb = require("./databaseConnection");
 
-oDb.readPersons = (fnCallback) => {
+function read () {
     const sSql = `
     SELECT *
     FROM Persons
     `;
-    const oStmt = oDb.prepare(sSql);
-    const oResult = oStmt.all();
-    fnCallback(null, oResult);
+    const oStmt = oDb.get().prepare(sSql);
+    return oStmt.all();
 };
 
-oDb.readPersonsCallback = (oErr, oResult) => {
-    if (oErr) {
-        window.ipcRenderer.send("log", oErr);
-    } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "persons-read-list", oResult);
-    }
-};
-
-window.ipcRenderer.on("persons-read-list", (oEvent, sMessage) => {
-    oDb.readPersons(oDb.readPersonsCallback);
-});
-
-oDb.writePersons = (oPersons, fnCallback) => {
+function write (oPersons) {
     if (Array.isArray(oPersons)) {
         // overwrite all
         const sSql = `
@@ -33,7 +17,7 @@ oDb.writePersons = (oPersons, fnCallback) => {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oPersons.forEach((oParams) => {
             oStmt.run(oParams);
         });
@@ -44,7 +28,7 @@ oDb.writePersons = (oPersons, fnCallback) => {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oStmt.run(oPersons);
     } else {
         // add
@@ -52,18 +36,21 @@ oDb.writePersons = (oPersons, fnCallback) => {
         INSERT INTO Persons
         (DisplayName) VALUES ($DisplayName)
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oStmt.run(oPersons);
     }
-    fnCallback(null);
 };
 
-window.ipcRenderer.on("persons-write-object", (oEvent, oPersons) => {
-    oDb.writePersons(oPersons, function (oErr) {
-        if (oErr) {
-            window.ipcRenderer.send("log", oErr);
-        } else {
-            oDb.readPersons(oDb.readPersonsCallback);
-        }
-    });
+window.ipcRenderer.on("persons-read-list", (oEvent, sMessage) => {
+    window.ipcRenderer.sendTo(window.iRendererId, "persons-read-list", read());
 });
+
+window.ipcRenderer.on("persons-write-object", (oEvent, oPersons) => {
+    write(oPersons);
+    window.ipcRenderer.sendTo(window.iRendererId, "persons-read-list", read());
+});
+
+module.exports = {
+    read,
+    write
+};

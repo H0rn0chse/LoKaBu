@@ -1,31 +1,15 @@
-if (!window.oDatabase) {
-    require("./databaseConnection");
-}
-const oDb = window.oDatabase;
+const oDb = require("./databaseConnection");
 
-oDb.readAccounts = (fnCallback) => {
+function read () {
     const sSql = `
     SELECT *
     FROM Accounts
     `;
-    const oStmt = oDb.prepare(sSql);
-    const oResult = oStmt.all();
-    fnCallback(null, oResult);
+    const oStmt = oDb.get().prepare(sSql);
+    return oStmt.all();
 };
 
-oDb.readAccountsCallback = (oErr, oResult) => {
-    if (oErr) {
-        window.ipcRenderer.send("log", oErr);
-    } else {
-        window.ipcRenderer.sendTo(window.iRendererId, "accounts-read-list", oResult);
-    }
-};
-
-window.ipcRenderer.on("accounts-read-list", (oEvent, sMessage) => {
-    oDb.readAccounts(oDb.readAccountsCallback);
-});
-
-oDb.writeAccounts = (oAccounts, fnCallback) => {
+function write (oAccounts) {
     if (Array.isArray(oAccounts)) {
         // overwrite all
         const sSql = `
@@ -34,7 +18,7 @@ oDb.writeAccounts = (oAccounts, fnCallback) => {
         Owner = $Owner
         WHERE ID = $ID
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oAccounts.forEach((oParams) => {
             oStmt.run(oParams);
         });
@@ -46,7 +30,7 @@ oDb.writeAccounts = (oAccounts, fnCallback) => {
         Owner = $Owner
         WHERE ID = $ID
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oStmt.run(oAccounts);
     } else {
         // add
@@ -54,18 +38,21 @@ oDb.writeAccounts = (oAccounts, fnCallback) => {
         INSERT INTO Accounts
         (DisplayName, Owner) VALUES ($DisplayName, $Owner)
         `;
-        const oStmt = oDb.prepare(sSql);
+        const oStmt = oDb.get().prepare(sSql);
         oStmt.run(oAccounts);
     }
-    fnCallback(null);
 };
 
-window.ipcRenderer.on("accounts-write-object", (oEvent, oAccounts) => {
-    oDb.writeAccounts(oAccounts, function (oErr) {
-        if (oErr) {
-            window.ipcRenderer.send("log", oErr);
-        } else {
-            oDb.readAccounts(oDb.readAccountsCallback);
-        }
-    });
+window.ipcRenderer.on("accounts-read-list", (oEvent, sMessage) => {
+    window.ipcRenderer.sendTo(window.iRendererId, "accounts-read-list", read());
 });
+
+window.ipcRenderer.on("accounts-write-object", (oEvent, oAccounts) => {
+    write(oAccounts);
+    window.ipcRenderer.sendTo(window.iRendererId, "accounts-read-list", read());
+});
+
+module.exports = {
+    read,
+    write
+};
