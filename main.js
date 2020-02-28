@@ -2,7 +2,22 @@ const { app, BrowserWindow, nativeTheme, ipcMain } = require('electron');
 
 let oMainWindow;
 let oDatabaseWindow;
-let iWindowsLoading = 2;
+let bAppIsClosing = false;
+
+function shutdownApp () {
+    oMainWindow.webContents.send("shutdownApp");
+    oDatabaseWindow.webContents.send("shutdownApp");
+
+    let iCount = 2;
+    ipcMain.on("windowProcessClosed", () => {
+        iCount--;
+        if (iCount === 0) {
+            bAppIsClosing = true;
+            oMainWindow.close();
+            oDatabaseWindow.close();
+        }
+    });
+}
 
 function createWindow () {
     const bSingleInstanceLock = app.requestSingleInstanceLock();
@@ -35,19 +50,32 @@ function createWindow () {
     oDatabaseWindow.loadFile('database.html');
     oDatabaseWindow.webContents.openDevTools();
 
-    oMainWindow.on('closed', () => {
-        oMainWindow = null;
-        oDatabaseWindow.close();
+    oMainWindow.on('close', (oEvent) => {
+        if (!bAppIsClosing) {
+            oEvent.preventDefault();
+            shutdownApp();
+        }
     });
 
-    oDatabaseWindow.on('closed', () => {
+    oMainWindow.on('closed', (oEvent) => {
+        oMainWindow = null;
+    });
+
+    oDatabaseWindow.on('close', (oEvent) => {
+        if (!bAppIsClosing) {
+            oEvent.preventDefault();
+            shutdownApp();
+        }
+    });
+
+    oDatabaseWindow.on('closed', (oEvent) => {
         oDatabaseWindow = null;
     });
 
+    let iCount = 2;
     ipcMain.on("windowLoaded", (oEvent, sMessage) => {
-        if (iWindowsLoading > 1) {
-            iWindowsLoading--;
-        } else {
+        iCount--;
+        if (iCount === 0) {
             oMainWindow.setTitle(app.name);
             oDatabaseWindow.setTitle(app.name + " - Database worker");
             oMainWindow.webContents.send("log", oMainWindow.webContents.id + "/" + oDatabaseWindow.webContents.id);

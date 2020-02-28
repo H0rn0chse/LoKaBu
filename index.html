@@ -42,10 +42,16 @@
 		<script type="text/javascript">
 			const { ipcRenderer } = require('electron');
 			window.ipcRenderer = ipcRenderer;
+
 			ipcRenderer.once("databaseChannel", (oEvent, sMessage) => {
 				window.iDatabaseId = sMessage;	
 			});
 			ipcRenderer.send("windowLoaded");
+
+			ipcRenderer.on("shutdownApp", () => {
+				console.log("nothing to close yet")
+				ipcRenderer.send("windowProcessClosed");
+			});
 
 			const load = require('./assets/load');
 
