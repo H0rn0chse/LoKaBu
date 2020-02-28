@@ -21,22 +21,30 @@ oDatabaseWaiter.add(oAccounts);
 oDatabaseWaiter.add(oTypes);
 oDatabaseWaiter.add(oReceiptDetail);
 
+document.addEventListener("databaseOpened_Level_1", (oEvent) => {
+    window.detailSection.reset();
+});
+
 window.detailSection = {
     DomRef: document.querySelector("#section-detail"),
     initial: true,
     mode: "new",
     hasChanged: false,
+    reset: function () {
+        this.initial = true;
+        this.init();
+    },
     init: function () {
         if (this.initial) {
+            this.initial = false;
             this._updateButtonActions();
             this._updateReceiptDropdowns();
             this._updateLineDropdowns();
             this._clearLines();
             this._clearInputs();
             this.addLine(true);
-            this.initial = false;
-            this.hasChanged = false;
             this._calcResult();
+            this.hasChanged = false;
         }
     },
     editReceipt: async function (sId) {

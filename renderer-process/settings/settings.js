@@ -16,17 +16,18 @@ oDatabaseWaiter.add(oAccounts);
 oDatabaseWaiter.add(oTypes);
 oDatabaseWaiter.add(oStores);
 
+document.addEventListener("databaseOpened_Level_1", (oEvent) => {
+    window.settingsSection.reset();
+});
+
 window.settingsSection = {
+    DomRef: document.querySelector("#section-settings"),
+    initial: true,
     reset: function () {
-        document.querySelector("#section-settings .BillingAccount").innerHTML = "";
-        document.querySelector("#section-settings .Type").innerHTML = "";
-        document.querySelector("#Settings_Persons").innerHTML = "";
-        document.querySelector("#Settings_Accounts").innerHTML = "";
-        document.querySelector("#Settings_Types").innerHTML = "";
-        document.querySelector("#Settings_Stores").innerHTML = "";
+        this.init();
     },
     init: function () {
-        this.reset();
+        this._clearAll();
 
         oDatabaseWaiter.getPromise().then(() => {
             let oElement;
@@ -64,6 +65,17 @@ window.settingsSection = {
             oTypes.addListener("settings", this.init.bind(this));
             oStores.addListener("settings", this.init.bind(this));
         });
+        if (this.initial) {
+            this.initial = false;
+        }
+    },
+    _clearAll: function () {
+        document.querySelector("#section-settings .BillingAccount").innerHTML = "";
+        document.querySelector("#section-settings .Type").innerHTML = "";
+        document.querySelector("#Settings_Persons").innerHTML = "";
+        document.querySelector("#Settings_Accounts").innerHTML = "";
+        document.querySelector("#Settings_Types").innerHTML = "";
+        document.querySelector("#Settings_Stores").innerHTML = "";
     },
     _markAsChanged: function (oEvent) {
         oEvent.target.parentElement.classList.add("changed");

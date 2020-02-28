@@ -10,7 +10,13 @@ const oReceiptList = require("../databaseObjects/receiptList");
 const oDatabaseWaiter = new DatabaseWaiter();
 oDatabaseWaiter.add(oReceiptList);
 
+document.addEventListener("databaseOpened_Level_1", (oEvent) => {
+    window.historySection.reset();
+});
+
 window.historySection = {
+    DomRef: document.querySelector("#section-history"),
+    initial: true,
     filterOptions: [],
     bRefresh: false,
     reset: function () {
@@ -22,10 +28,12 @@ window.historySection = {
         if (oContainer.childNodes.length === 0) {
             this.addLine("History_Filter");
         }
-
         if (this.bRefresh) {
             this.refreshPage();
             this.bRefresh = false;
+        }
+        if (this.initial) {
+            this.initial = false;
         }
     },
     doRefreshOnInit: function () {
