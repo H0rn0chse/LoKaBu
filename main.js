@@ -37,7 +37,11 @@ function createWindow () {
     oMainWindow.maximize();
     oMainWindow.show();
     oMainWindow.loadFile('index.html');
-    oMainWindow.webContents.openDevTools();
+    if (!app.isPackaged) {
+        oMainWindow.webContents.openDevTools();
+    } else {
+        oMainWindow.removeMenu();
+    }
 
     oDatabaseWindow = new BrowserWindow({
         show: false,
@@ -45,8 +49,10 @@ function createWindow () {
             nodeIntegration: true
         }
     });
-    oDatabaseWindow.maximize();
-    oDatabaseWindow.show();
+    if (!app.isPackaged) {
+        oDatabaseWindow.maximize();
+        oDatabaseWindow.show();
+    }
     oDatabaseWindow.loadFile('database.html');
     oDatabaseWindow.webContents.openDevTools();
 
