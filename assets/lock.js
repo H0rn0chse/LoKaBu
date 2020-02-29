@@ -7,12 +7,16 @@ function Lock (fnAbort) {
 }
 
 Lock.prototype.abort = function () {
-    this.bLocked = false;
     this.fnAbort();
 };
 
 Lock.prototype.close = function (sDir) {
-    this.sLockFilePath = path.join(sDir, "lock");
+    try {
+        fs.lstatSync("/some/path").isDirectory();
+        this.sLockFilePath = path.join(sDir, "lock");
+    } catch (err) {
+        this.sLockFilePath = sDir + ".lock";
+    }
 
     if (!fs.existsSync(this.sLockFilePath)) {
         this.bLocked = true;
@@ -37,11 +41,19 @@ Lock.prototype.forceClose = function (sPath) {
 
 Lock.prototype.open = function () {
     if (this.bLocked) {
+        this.bLocked = false;
         this.oWatcher.close();
         fs.unlinkSync(this.sLockFilePath);
         return true;
     }
     return false;
+};
+
+Lock.prototype.forceOpen = function () {
+    if (this.bLocked) {
+        this.bLocked = false;
+        this.oWatcher.close();
+    }
 };
 
 Lock.prototype.getTimestamp = function () {
