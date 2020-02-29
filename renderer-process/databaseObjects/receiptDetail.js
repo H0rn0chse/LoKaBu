@@ -23,14 +23,14 @@ function ReceiptDetail () {
     }
 
     window.ipcRenderer.sendTo(window.iDatabaseId, "receiptDetail-read-list", 1);
-    window.ipcRenderer.on("receiptDetail-read-list", (oEvent, sId, oResult) => {
-        bRequestPending[sId] = false;
-        oReceiptDetail[sId] = oResult;
-        aRefreshCallbacks[sId].forEach(function (fnCallback) {
-            fnCallback(oResult);
+    window.ipcRenderer.on("receiptDetail-read-list", (oEvent, oMessage) => {
+        bRequestPending[oMessage.id] = false;
+        oReceiptDetail[oMessage.id] = oMessage.result;
+        aRefreshCallbacks[oMessage.id].forEach(function (fnCallback) {
+            fnCallback(oMessage.result);
         });
-        aRefreshCallbacks[sId].splice(0, aRefreshCallbacks.length);
-        _manageHistrory(sId);
+        aRefreshCallbacks[oMessage.id].splice(0, aRefreshCallbacks.length);
+        _manageHistrory(oMessage.id);
     });
     return {
         get: function (sId = 1) {

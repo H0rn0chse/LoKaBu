@@ -23,13 +23,13 @@ window.historySection = {
         document.querySelector("#History_Filter").innerHTML = "";
         document.querySelector("#History_Receipts").innerHTML = "";
     },
-    init: function () {
+    init: async function () {
         const oContainer = document.querySelector("#History_Filter");
         if (oContainer.childNodes.length === 0) {
-            this.addLine("History_Filter");
+            await this.addLine("History_Filter");
         }
         if (this.bRefresh) {
-            this.refreshPage();
+            await this.refreshPage();
             this.bRefresh = false;
         }
         if (this.initial) {
@@ -67,9 +67,9 @@ window.historySection = {
         this.updatePageNavigationLabel();
     },
     addLine: function (sType) {
-        switch (sType) {
-            case "History_Filter":
-                oDatabaseWaiter.getPromise().then(() => {
+        return oDatabaseWaiter.getPromise().then(() => {
+            switch (sType) {
+                case "History_Filter": {
                     const oLine = this._getLineTemplate("History_Filter");
 
                     const oElement = oLine.querySelectorAll("select")[0];
@@ -82,19 +82,20 @@ window.historySection = {
                     oDropdown.fill(oElement, aList);
 
                     document.querySelector("#History_Filter").appendChild(oLine);
-                    oI18nHelper.applyToChildren(oLine).then(() => {
+                    return oI18nHelper.applyToChildren(oLine).then(() => {
                         oDropdown.sort(oLine.querySelectorAll("select")[0]);
                         this._changeFilterOption(oElement);
                     });
-                });
-                break;
-        }
+                }
+            }
+        });
     },
     removeLine: function (oEvent) {
         const oLine = oEvent.target.closest(".flexLine");
         oLine.parentNode.removeChild(oLine);
     },
     _changeFilterOption: function (oEvent) {
+        console.trace("was called");
         let oElement = oEvent;
         if (oEvent instanceof Event) {
             oElement = oEvent.target;
@@ -213,7 +214,7 @@ window.historySection = {
         });
     },
     refreshPage: function () {
-        oDatabaseWaiter.getPromise().then(() => {
+        return oDatabaseWaiter.getPromise().then(() => {
             oReceiptList.refreshPage(this.getFilter());
         });
     }

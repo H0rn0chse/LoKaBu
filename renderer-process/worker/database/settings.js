@@ -7,32 +7,43 @@ function read () {
     `;
     const oStmt = oDb.get().prepare(sSql);
     const oResult = oStmt.get();
-    oResult.SharedDir = readSharedDir();
+    oResult.DefaultDir = readDefaultDir();
+    oResult.CurrentDir = oDb.get().name;
     return oResult;
 };
 
-function readSharedDir () {
+function readDefaultDir () {
     const sSql = `
-    SELECT SharedDir
+    SELECT DefaultDir
     FROM Settings
     `;
     const oStmt = oDb.get("user").prepare(sSql);
-    return oStmt.get().SharedDir;
+    return oStmt.get().DefaultDir;
 }
 
 function write (oSettings) {
-    const oParams = {
+    let oParams = {
         Person: oSettings.Person,
         Type: oSettings.Type,
         Language: oSettings.Language
     };
-    const sSql = `
+    let sSql = `
     UPDATE Settings
     SET Person = $Person,
         Type = $Type,
         Language = $Language
     `;
-    const oStmt = oDb.get("user").prepare(sSql);
+    let oStmt = oDb.get().prepare(sSql);
+    oStmt.run(oParams);
+    // User specific defaults
+    oParams = {
+        DefaultDir: oSettings.DefaultDir
+    };
+    sSql = `
+    UPDATE Settings
+    SET DefaultDir = $DefaultDir
+    `;
+    oStmt = oDb.get("user").prepare(sSql);
     oStmt.run(oParams);
 };
 
@@ -47,6 +58,6 @@ window.ipcRenderer.on("settings-write-object", (oEvent, oSettings) => {
 
 module.exports = {
     read,
-    readSharedDir,
+    readDefaultDir,
     write
 };

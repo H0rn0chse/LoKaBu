@@ -21,7 +21,7 @@ function read (sId) {
 };
 
 window.ipcRenderer.on("receiptDetail-read-list", (oEvent, sMessage) => {
-    read(sMessage);
+    window.ipcRenderer.sendTo(window.iRendererId, "receiptDetail-read-list", read(sMessage));
 });
 
 window.ipcRenderer.on("receiptDetail-write-list", (oEvent, aNewDetailList) => {

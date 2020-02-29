@@ -4,6 +4,7 @@ const oDropdown = require("../helper/dropdown");
 const HtmlElement = require("../helper/htmlElement");
 const oI18nHelper = require("../helper/i18n");
 const oNavigation = require("./../../assets/navigation");
+const Deferred = require("./../../assets/deferred");
 const stringMath = require('string-math');
 
 const oSettings = require("../databaseObjects/settings");
@@ -30,21 +31,33 @@ window.detailSection = {
     initial: true,
     mode: "new",
     hasChanged: false,
+    aInitPromises: [],
     reset: function () {
         this.initial = true;
         this.init();
     },
-    init: function () {
+    init: async function () {
+        const oDeferred = new Deferred();
+        this.aInitPromises.push(oDeferred.promise);
+        await Promise.all(this.aInitPromises.slice(0, -1));
+
         if (this.initial) {
             this.initial = false;
             this._updateButtonActions();
-            this._updateReceiptDropdowns();
-            this._updateLineDropdowns();
+            await this._updateReceiptDropdowns();
+            await this._updateLineDropdowns();
             this._clearLines();
             this._clearInputs();
-            this.addLine(true);
+            const oLine = await this.addLine(true);
+            oLine.querySelector("input.currency").value = 0;
             this._calcResult();
             this.hasChanged = false;
+        }
+
+        oDeferred.resolve();
+        const iId = this.aInitPromises.indexOf(oDeferred.promise);
+        if (iId !== -1) {
+            this.aInitPromises.splice(iId, 1);
         }
     },
     editReceipt: async function (sId) {
@@ -218,7 +231,10 @@ window.detailSection = {
             const sValue = oValue.value.replace(/,/g, ".");
             try {
                 const fBefore = stringMath(sValue);
-                const fAfter = (fBefore * 100).toString().split(".")[0] / 100;
+                const fAfter = (fBefore * 100)
+                    .toPrecision(12)
+                    .toString()
+                    .split(".")[0] / 100;
                 fResult += fAfter;
                 if (fBefore !== fAfter) {
                     oValue.classList.add("converted");
@@ -247,7 +263,10 @@ window.detailSection = {
         aLines.forEach((oLine) => {
             let sValue = oLine.querySelector("input.currency").value.replace(/,/g, ".");
             try {
-                sValue = (stringMath(sValue) * 100).toString().split(".")[0];
+                sValue = (stringMath(sValue) * 100)
+                    .toPrecision(12)
+                    .toString()
+                    .split(".")[0];
             } catch (oErr) {
                 oLine.querySelector("input.currency").classList.add("invalid");
                 sValue = 0;
