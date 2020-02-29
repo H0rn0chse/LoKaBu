@@ -3,11 +3,15 @@ const oDropdown = require("../helper/dropdown");
 const HtmlElement = require("../helper/htmlElement");
 const oI18nHelper = require("../helper/i18n");
 
+const oDatabaseOpenDialog = require("./../dialogs/databaseOpen");
+const oDatabaseCreateDialog = require("./../dialogs/databaseCreate");
+
 const oSettings = require("../databaseObjects/settings");
 const oPersons = require("../databaseObjects/persons");
 const oAccounts = require("../databaseObjects/accounts");
 const oTypes = require("../databaseObjects/types");
 const oStores = require("../databaseObjects/stores");
+const oDatabaseInfo = require("./../databaseObjects/databaseInfo");
 
 const oDatabaseWaiter = new DatabaseWaiter();
 oDatabaseWaiter.add(oSettings);
@@ -15,6 +19,7 @@ oDatabaseWaiter.add(oPersons);
 oDatabaseWaiter.add(oAccounts);
 oDatabaseWaiter.add(oTypes);
 oDatabaseWaiter.add(oStores);
+oDatabaseWaiter.add(oDatabaseInfo);
 
 document.addEventListener("databaseOpened_Level_1", (oEvent) => {
     window.settingsSection.reset();
@@ -27,10 +32,18 @@ window.settingsSection = {
         this.init();
     },
     init: function () {
+        oSettings.removeListener("settings", this.init.bind(this));
+        oPersons.removeListener("settings", this.init.bind(this));
+        oAccounts.removeListener("settings", this.init.bind(this));
+        oTypes.removeListener("settings", this.init.bind(this));
+        oStores.removeListener("settings", this.init.bind(this));
         this._clearAll();
 
         oDatabaseWaiter.getPromise().then(() => {
             let oElement;
+
+            oElement = document.querySelector("#section-settings .currentDatabase");
+            oElement.value = oSettings.getProperty("CurrentDir");
 
             oElement = document.querySelector("#section-settings .Language");
             oDropdown.fill(oElement, oI18nHelper.getLanguages().map((sKey) => {
@@ -172,5 +185,26 @@ window.settingsSection = {
         const oNewLine = this._getLineTemplate(sType);
         oNewLine.classList.add("added");
         document.querySelector("#" + sType).append(oNewLine);
+    },
+    createSharedDatabase: function () {
+        oDatabaseCreateDialog.open().then(result => {
+            if (!result.canceled) {
+                oDatabaseInfo.openDatabase(result.filePath);
+            }
+        });
+    },
+    openSharedDatabase: function () {
+        oDatabaseOpenDialog.open()
+            .then(result => {
+                if (!result.canceled) {
+                    oDatabaseInfo.createDatabase(result.filePaths[0]);
+                }
+            });
+    },
+    openUserDatabase: function () {
+        oDatabaseInfo.openDatabase();
+    },
+    setDefaultDatabase: function () {
+        oSettings.setProperty("DefaultDir", document.querySelector("#section-settings .currentDatabase").value);
     }
 };

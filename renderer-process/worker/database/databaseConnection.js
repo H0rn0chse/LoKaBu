@@ -37,18 +37,25 @@ function _openOrCreateDatabase (sPath, sBasePath) {
     return oRef;
 }
 
-function open () {
+function open (bSupressShared = false) {
     oDatabase = _openOrCreateDatabase(sDatabasePath, sBasePath);
 
-    const sSharedDatabasePath = oSettings.readSharedDir();
-    if (sSharedDatabasePath !== "") {
-        openOrCreateShared(sSharedDatabasePath);
+    if (!bSupressShared) {
+        const sDefaultDatabasePath = oSettings.readDefaultDir();
+        if (JSON.stringify(path.parse(sDatabasePath)) !== JSON.stringify(path.parse(sDefaultDatabasePath))) {
+            openOrCreateShared(sDefaultDatabasePath);
+        }
     }
 }
 
 function close () {
-    console.log("i should close the file");
-    if (oLock) {
+    closeShared();
+}
+
+function closeShared () {
+    if (oSharedDatabase) {
+        oSharedDatabase.close();
+        oSharedDatabase = null;
         oLock.open();
     }
 }
@@ -68,12 +75,20 @@ function get (sLayer) {
 }
 
 function openOrCreateShared (sPath) {
+    closeShared();
+
     oLock = new Lock(() => {
         console.log("lock was opened");
-        window.ipcRenderer.sendTo(window.iRendererId, "database-abort");
+        if (oSharedDatabase) {
+            oSharedDatabase.close();
+            oSharedDatabase = null;
+            oLock.forceOpen();
+            window.ipcRenderer.sendTo(window.iRendererId, "database-abort");
+            window.ipcRenderer.sendTo(window.iRendererId, "database-open");
+        }
     });
     console.log(sPath);
-    if (oLock.close(path.dirname(sPath))) {
+    if (oLock.close(sPath)) {
         console.log("lock was successfully closed");
 
         oSharedDatabase = _openOrCreateDatabase(sPath, sSharedBasePath);
@@ -93,6 +108,7 @@ function openOrCreateShared (sPath) {
 module.exports = {
     open,
     close,
+    closeShared,
     get,
     openOrCreateShared
 };

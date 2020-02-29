@@ -1,4 +1,14 @@
 BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "Settings" (
+	"Person"	INTEGER NOT NULL,
+	"Type"	INTEGER NOT NULL,
+	"Version"	TEXT NOT NULL,
+	"PageItems"	INTEGER NOT NULL,
+	"Language"	TEXT,
+	"DefaultDir"	TEXT,
+	FOREIGN KEY("Person") REFERENCES "Persons"("ID"),
+	FOREIGN KEY("Type") REFERENCES "Types"("ID")
+);
 CREATE TABLE IF NOT EXISTS "Lines" (
 	"ID"	INTEGER NOT NULL UNIQUE,
 	"Receipt"	INTEGER NOT NULL,
@@ -6,15 +16,6 @@ CREATE TABLE IF NOT EXISTS "Lines" (
 	"Billing"	INTEGER NOT NULL,
 	"Type"	INTEGER NOT NULL,
 	PRIMARY KEY("ID"),
-	FOREIGN KEY("Type") REFERENCES "Types"("ID")
-);
-CREATE TABLE IF NOT EXISTS "Settings" (
-	"Person"	INTEGER NOT NULL,
-	"Type"	INTEGER NOT NULL,
-	"Version"	TEXT NOT NULL,
-	"PageItems"	INTEGER NOT NULL,
-	"Language"	TEXT,
-	FOREIGN KEY("Person") REFERENCES "Persons"("ID"),
 	FOREIGN KEY("Type") REFERENCES "Types"("ID")
 );
 CREATE TABLE IF NOT EXISTS "i18n" (
@@ -55,8 +56,8 @@ CREATE TABLE IF NOT EXISTS "Accounts" (
 	PRIMARY KEY("ID"),
 	FOREIGN KEY("Owner") REFERENCES "Persons"("ID")
 );
+INSERT INTO "Settings" VALUES (1,1,'1.2',10,'en_GB','');
 INSERT INTO "Lines" VALUES (1,1,4200,1,1);
-INSERT INTO "Settings" VALUES (1,1,'1.2',10,'en_GB');
 INSERT INTO "i18n" VALUES ('detail.section.title','Beleg Details','Receipt details');
 INSERT INTO "i18n" VALUES ('analysis.section.title','Auswertung','Analysis');
 INSERT INTO "i18n" VALUES ('history.section.title','Verlauf','History');
@@ -109,6 +110,14 @@ INSERT INTO "i18n" VALUES ('filter.all','Alle','All');
 INSERT INTO "i18n" VALUES ('filter.none','Keiner','None');
 INSERT INTO "i18n" VALUES ('filter.atLeastOne','Zumindest einer','At least one');
 INSERT INTO "i18n" VALUES ('detail.message.override','Möchtest du noch nicht gespeicherten Belegdaten verwerfen?','Do you want to deny the unsaved changes to the receipt?');
+INSERT INTO "i18n" VALUES ('database.locked','Die Datenbank die du gerade öffnen möchtest ist seit $ gesperrt. Bitte bestätige, dass du die Sperrung aufheben möchtest. Bedenke aber, dass dies Andere und ihre Arbeit beeinträchtigen könnte.','The database you''re trying to access is locked since $. Pease confirm that you want to unlock it. But keep in mind that this might affect other and their work.');
+INSERT INTO "i18n" VALUES ('database.abort','Die geteilte Datenbank wurde von einer anderen Person bearbeitet. Bitte öffne die geteilte Datenbank erneut oder starte das Programm neu.','The shared databas opened by another person. Please reopen the shared database or restart the program.');
+INSERT INTO "i18n" VALUES ('settings.createSharedDatabase','Erstelle Datenbank','Create database');
+INSERT INTO "i18n" VALUES ('settings.openSharedDatabase','Öffne Datenbank','Open database');
+INSERT INTO "i18n" VALUES ('settings.openUserDatabase','Öffne Nutzerdatenbank','Open user database');
+INSERT INTO "i18n" VALUES ('settings.setDefaultDatabase','Setze aktuelle Datenbank als Standard','Set current database as default');
+INSERT INTO "i18n" VALUES ('common.confirm','Bestätigen','Confirm');
+INSERT INTO "i18n" VALUES ('database.openDefault','Öffne Nutzerdatenbank','Open user database');
 INSERT INTO "Receipts" VALUES (1,1582156800,1,'This Receipts is here for test purposes',1);
 INSERT INTO "Stores" VALUES (1,'TestStore');
 INSERT INTO "Types" VALUES (1,'TestType');

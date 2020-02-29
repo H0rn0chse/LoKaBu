@@ -78,21 +78,6 @@
 				// default section
 				oNavigation.navigateToSection("detail");
 			});
-
-			// temp stuff
-			ipcRenderer.on("database-locked", (oEvent, sMessage) => {
-				console.log(sMessage)
-				const oDateFormatter = require("./assets/dateFormatter")
-				const sText = " The Database you are trying to access is currently locked since " + oDateFormatter.DateToInput(new Date(parseInt(sMessage, 10))) + " Confirm that you want to remove the lock. This may affect other users and their work."
-				if(confirm(sText)) {
-					ipcRenderer.sendTo(window.iDatabaseId, "database-force");
-				}
-			});
-			ipcRenderer.on("database-open", (oEvent, sMessage) => {
-				document.dispatchEvent(new CustomEvent("databaseOpened_Level_0", {}));
-				document.dispatchEvent(new CustomEvent("databaseOpened_Level_1", {}));
-				document.dispatchEvent(new CustomEvent("LanguageChanged", {}));
-			});
 		</script>
 	</body>
 </html>

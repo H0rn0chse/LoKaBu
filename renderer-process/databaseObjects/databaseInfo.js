@@ -26,6 +26,12 @@ function DatabaseInfo () {
                 bRequestPending = true;
                 window.ipcRenderer.sendTo(window.iDatabaseId, "databaseInfo-read-object");
             }
+        },
+        openDatabase: function (sPath) {
+            window.ipcRenderer.sendTo(window.iDatabaseId, "databaseInfo-open-database", sPath);
+        },
+        createDatabase: function (sPath) {
+            window.ipcRenderer.sendTo(window.iDatabaseId, "databaseInfo-create-database", sPath);
         }
     };
 };
