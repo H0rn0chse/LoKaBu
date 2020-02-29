@@ -1,4 +1,4 @@
-Available Languages: [Deutsch](../master/README_DE.md), [English](../master/README.md)
+Available Languages: [Deutsch](./README_DE.md), [English](./README.md)
 # LoKaBu [![Latest Release](https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg)](https://github.com/H0rn0chse/LoKaBu/releases/latest) [![Release status](https://github.com/H0rn0chse/LoKaBu/workflows/Release/badge.svg?branch=feature%2FelectronTransformation)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ARelease) [![GitHub Actions status](https://github.com/H0rn0chse/LoKaBu/workflows/Test/badge.svg?branch=feature%2FelectronTransformation)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ATest)
 
 This project realizes a cash book for the normal household. The core idea of the project is to have full control over the data that is stored. This Project is based on the combination of the framework Electron and the file based database SQLite3
