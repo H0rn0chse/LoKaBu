@@ -33,3 +33,13 @@ Du musst deinen plattformabhängigen Build selber bauen (und signieren) oder nut
   * Migrationspläne für Datenbankupgrades
   * Unit Tests und E2E Tests
   * Automatische Updates
+
+## Bildschirmfots
+
+  ![details][details]
+  ![history][history]
+  ![settings][settings]
+
+[details]: ./screenshots/details_de.png "Beleg Details"
+[history]: ./screenshots/history_de.png "Belegverlauf"
+[settings]: ./screenshots/settings_de.png "Einstellungen"

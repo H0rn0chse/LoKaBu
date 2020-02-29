@@ -33,3 +33,13 @@ You have to build (and sign) your platform-dependent build yourself or just use 
   * Migration paths for database upgrades
   * Unit tests and E2E tests
   * Automatic updates
+
+  ## Screenshots
+  
+  ![details][details]
+  ![history][history]
+  ![settings][settings]
+
+[details]: ./screenshots/details.png "Receipt details"
+[history]: ./screenshots/history.png "Receipt history"
+[settings]: ./screenshots/settings.png "Settings"
