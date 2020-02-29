@@ -1,48 +1,35 @@
 Available Languages: [Deutsch](../master/README_DE.md), [English](../master/README.md)
-# LoKaBu
-Dieses Projekt realisiert ein Kassenbuch für den normalen Haushalt. Dabei ist die Kernidee des Projektes, ein Kassenbuch ohne Installation, Abhängigkeiten und Setup einrichten und transportieren zu können.
+# LoKaBu [![Latest Release](https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg)](https://github.com/H0rn0chse/LoKaBu/releases/latest) [![Release status](https://github.com/H0rn0chse/LoKaBu/workflows/Release/badge.svg?branch=feature%2FelectronTransformation)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ARelease) [![GitHub Actions status](https://github.com/H0rn0chse/LoKaBu/workflows/Test/badge.svg?branch=feature%2FelectronTransformation)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ATest)
 
-Es basiert auf einer SQLite Datenbank, welche durch einen python Container ausgelesen und beschrieben wird. Die Oberfläche wird dynamisch mit HTML und JavaScript aufgebaut und interagiert mit dem python Container.
+Dieses Projekt realisiert ein Kassenbuch für den normalen Haushalt. Die Grundidee des Projektes ist über die abgespeicherten Daten volle Kontrolle zu haben. Das Projekt basiert auf der Kombination aus dem Framework Electron und der dateibasierten Datenbank SQLite3.
 ## Funktionalitäten
-### Definierbare Variablen und Auswahlmöglichkeiten
-Neben der bloßen Ablage von Belegen, lassen sich weitere Eigenschaften bzgl. des Gesamtbeleges und einzelner Belegpositionen definieren. Aktuell werden folgende Felder unterstützt:
-#### Beleg
-  * Datum (Text/ Datepicker)
-  * ID (automatisch vergeben)
-  *	Kommentar (Freitext)
-  *	Konto (definierbare Auswahl)
-  *	Laden (definierbare Auswahl)
-#### Belegposition
-  *	ID (automatisch vergeben)
-  *	Abzurechnende Person (definierbare Auswahl)
-  *	Abrechnungskategorie (definierbare Auswahl)
-  *	Betrag (Freitext/ Formel)
-## Nutzung auf Windows
-Voraussetzungen: Installation der Projekt Abhängigkeiten
-Dieses Projekt läuft derzeit auf:
-   * Python 3.7.2
-   * Qt 5.12.1
-   
-Das Projekt kann unter Windows mit der Datei build.bat in eine einzige ausführbare Datei gepackt werden.
+### Erstellen/ Öffnen von Datenbanken
+Du kannst zusätzlich zur Standard Datenbank eine weitere anlegen, welche an einem belibiegen Ort abgelegt werden kann. Damit kannst du das KAssenbuch auch über das Netzwerk zB. über Cloudanbieter teilen. Um Fehler zu vermeiden ist nur ein Nutzer auf einmal gestattet. Sollte eine andere Person die Datenbank öffnen wirst bekommst du eine Mitteilung.
 
-Alternativ mit dem Befehl:
+### Belege hinzufügen
+Du kannst Belege hinzufügen, bearbeiten und löschen. Um bessere Analyseergebnisse zu erreichen werden vordefinierte Auswahllisten verwendet. Um Belege schneller und einfacher anlefgen zu können kannst du die Datumsauswahl und Berechnung (anstatt von Werten) verwenden. Um später die Belege einfacher zu finden oder um den Belegen einfach nur weitere Daten anzuhängen kannst du ein Kommentar hinzufügen.
 
-```
-pyinstaller client.spec --onefile –noconsole
-```
-## Geplante Funktionen
-### Gesamt
-  *	Unterstützung weiterer Sprachen: Englisch, eigene Sprachpakete
-### Belegerstellung
-  *	Kompakteres Design
-### Belegverlauf
-  *	Suchfunktion
-### Belegbearbeitung
-  *	Kompakteres Design
-### Visualisierung
-  *	Weitere Diagrammmöglichkeiten
-  *	Feldauswahl zur dynamischen Visualisierung
-### Einstellungen
-  *	Kompakteres Design
-  *	Zurücksetzen der Datenbank
-  *	Einbindung von Datenbanken mit anderen Namen
+### Verlauf
+Im Verlauzf kannst du die Belege anhand unterschiedlicher Filtermöglichkeiten durchsuchen.
+
+### Konfiguration von statischen Listen und Werten
+Nachdem du ein weiteres Kassenbuch hinzugefügt hast kannst dieses Kassenbuch als deinen Standard festlegen. Desweiteren kannst du Standardauswahlen für Sprache, Abrechnungsperson und -typ festlegen.
+Du kannst auch die Einträge der vordefinierten Listen erweitern oder bearbeiten.
+  *	Abrechnungspersonen
+  *	Konten (welche einer Person gehören)
+  *	Läden
+  *	Abrechnungstypen
+
+### Sprachenunterstützung
+Derzeit wird nur Englisch und Detusch unterstützt, aber die Datenbank kann einfach mit weiteren LTR Sprachen erweitert werden.
+
+## Nutzung auf anderen Platformen als Windows
+Du musst deinen plattformabhängigen Build selber bauen (und signieren) oder nutzt dieses Repository einfach lokal.
+
+## Weitere Pläne
+  * Implementierung des Analysesicht
+  * Überarbeitung des gesamten Designs und Codes
+  * Scanner zur Unterstützung beim Anlegen neuer Belege
+  * Migrationspläne für Datenbankupgrades
+  * Unit Tests und E2E Tests
+  * Automatische Updates
