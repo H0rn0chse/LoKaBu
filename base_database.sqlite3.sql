@@ -118,6 +118,8 @@ INSERT INTO "i18n" VALUES ('settings.openUserDatabase','Öffne Nutzerdatenbank',
 INSERT INTO "i18n" VALUES ('settings.setDefaultDatabase','Setze aktuelle Datenbank als Standard','Set current database as default');
 INSERT INTO "i18n" VALUES ('common.confirm','Bestätigen','Confirm');
 INSERT INTO "i18n" VALUES ('database.openDefault','Öffne Nutzerdatenbank','Open user database');
+INSERT INTO "i18n" VALUES ('settings.databaseSettings','Datenbankeinstellungen','Database settings');
+INSERT INTO "i18n" VALUES ('settings.currentDatabase','Aktuelle Datenbank','Current database');
 INSERT INTO "Receipts" VALUES (1,1582156800,1,'This Receipts is here for test purposes',1);
 INSERT INTO "Stores" VALUES (1,'TestStore');
 INSERT INTO "Types" VALUES (1,'TestType');
