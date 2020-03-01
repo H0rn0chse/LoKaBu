@@ -1,0 +1,33 @@
+.button, .buttonSmall {
+	background-color: #ccc;
+	display: inline-block;
+	margin: 10px;
+	padding: 10px;
+	border-radius:20px;
+	transition: 0.3s;
+}
+
+.buttonSmall {
+	margin: 5px;
+	padding: 0;
+	width: 1.4em;
+	height: 1.4em;
+	text-align: center;
+}
+
+.button:hover {
+	background-color: #aaa;
+	cursor: pointer;
+}
+
+.button.asc::after{
+	content: "↑";
+}
+
+.button.desc::after{
+	content: "↓";
+}
+
+.button.is-hidden {
+	display: none;
+}

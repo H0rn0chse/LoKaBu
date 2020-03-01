@@ -1,0 +1,11 @@
+.section {
+	margin-left: 2em;
+}
+
+.section:not(.is-shown) {
+	display: none;
+}
+
+.section.is-shown {
+	display: inherit;
+}

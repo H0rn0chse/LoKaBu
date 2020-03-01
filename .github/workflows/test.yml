@@ -1,0 +1,28 @@
+name: Test
+
+on: 
+  push:
+    branches:
+      - feature/electronTransformation
+jobs:
+  test_on_win:
+    runs-on: windows-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+        with:
+          ref: 'feature/electronTransformation'
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      
+      - name: Install dependencies
+        run: npm install
+          
+      - name: Start tests
+        run: npm run test
+      
+      - name: Static code checks
+        run: npm run eslint
