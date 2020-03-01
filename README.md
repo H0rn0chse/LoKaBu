@@ -1,50 +1,45 @@
-Available Languages: [Deutsch](../master/README_DE.md), [English](../master/README.md)
+Available Languages: [Deutsch](./README_DE.md), [English](./README.md)
 # LoKaBu [![Latest Release](https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg)](https://github.com/H0rn0chse/LoKaBu/releases/latest) [![Release status](https://github.com/H0rn0chse/LoKaBu/workflows/Release/badge.svg?branch=feature%2FelectronTransformation)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ARelease) [![GitHub Actions status](https://github.com/H0rn0chse/LoKaBu/workflows/Test/badge.svg?branch=feature%2FelectronTransformation)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ATest)
-Latest Release: [Installer.exe](https://github.com/H0rn0chse/LoKaBu/releases/latest/download/lokabu-Installer.exe) - [Changelog](https://github.com/H0rn0chse/LoKaBu/releases/latest)
 
-This project realizes a cash book for the ordinary household. The core idea of the project is to be able to set up and transport a cash book without any installation, dependencies and setup.
-
-It is based on a SQLite database, which is read and written through a python container. The interface is built dynamically with HTML and JavaScript interacting with the python container.
+This project realizes a cash book for the normal household. The core idea of the project is to have full control over the data that is stored. This Project is based on the combination of the framework Electron and the file based database SQLite3
 ## Features
-### Configurable Variables and Options
-In addition to simply storing receipts, you can define additional properties for the entire receipt and individual receipt items. The following fields are currently supported:
-#### Receipt
-  * Date (Text/ Date Picker)
-  * ID (automatically assigned)
-  *	Comment (user-defined Text)
-  *	Account (definable Selection)
-  *	Store (definable Selection)
-#### Receipt Items
-  *	ID (automatically assigned)
-  *	Person to be charged (definable Selection)
-  *	Payment Group (definable Selection)
-  *	Sum (user-defined Text / Formula)
-## Usage on Windows
-Prerequisites: Installation of the project dependencies
-This project runs currently on:
-   * Python 3.7.2
-   * Qt 5.12.1
+### Create/ Open Database
+You can add in addition to the user default another database which can be loacted wherever you want. With this you can share the cash book across the network e.g. via a cloud service. There are checks implemented to allow only one user at a time to avoid constant changing data. You get notified if there is concurrent work going on.
 
-The project can be packed into a single executable file on Windows using the build.bat file.
+### Adding Receipt
+You can add, update and delete receipts. The categorization gets unified by predefined lists to achieve better analytic results. You can also make use of the Chrome date picker and calculations (instead of values) within the receipt positions to get your receipt updates faster done. You are able to add comments to an receipt to find them later easier or to store other informations.
 
-Alternatively with the command:
+### History
+Within the history you can filter the receipts via various filter fields and options.
 
-```
-pyinstaller client.spec --onefile –noconsole
-```
-## Planned Features
-### Overall
-  *	Support of other languages: English, custom language packs
-### Receipt Creation
-  *	More compact design
-### Receipt History
-  *	Search option
-### Receipt Editing
-  *	More compact design
-### Visualization
-  *	Further chart options
-  *	Field selection for dynamic visualization
-### Settings
-  *	More compact design
-  *	Reset of the database
-  *	Integration of databases with other names
+### Configuration of static Lists and Values
+After you have added another cash book you are able to mark this cash book as the default one. You can also save default values for used language, person and payment group.
+There is also the possibility to add and rename the the entries in the predefined lists.
+  *	Persons
+  *	Accounts (which are owned by a person)
+  *	Stores
+  *	Payment Groups
+
+### Language support
+Currently there is only support for english and german, but the database is easily extendable for other LTR languages.
+
+## Usage on other Platforms then Windows
+You have to build (and sign) your platform-dependent build yourself or just use this repository locally.
+
+## Roadmap
+  * Implementation of the analyitcal view
+  * Refactoring/ overhaul of the design
+  * Scanner for adding receipts
+  * Migration paths for database upgrades
+  * Unit tests and E2E tests
+  * Automatic updates
+
+  ## Screenshots
+  
+  ![details][details]
+  ![history][history]
+  ![settings][settings]
+
+[details]: ./screenshots/details.png "Receipt details"
+[history]: ./screenshots/history.png "Receipt history"
+[settings]: ./screenshots/settings.png "Settings"

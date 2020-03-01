@@ -1,0 +1,48 @@
+{
+  "name": "lokabu",
+  "productName": "LoKaBu",
+  "version": "0.0.2",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "postinstall": "electron-builder install-app-deps",
+    "buildLocal": "electron-builder --windows",
+    "release": "electron-builder --windows --publish always",
+    "test": "qunit \"test/**/*qunit.js\"",
+    "eslint": "eslint \"**/*.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/H0rn0chse/LoKaBu.git"
+  },
+  "author": {
+    "name": "H0rn0chse",
+    "email": "h0rn0chse@gmx.de"
+  },
+  "license": "GPL-3.0",
+  "build": {
+    "nsis": {
+      "perMachine": true
+    }
+  },
+  "dependencies": {
+    "better-sqlite3": "^5.4.3",
+    "d3": "^5.15.0",
+    "glob": "^7.1.6",
+    "string-math": "^1.2.1"
+  },
+  "devDependencies": {
+    "electron": "^7.1.11",
+    "electron-builder": "^22.3.2",
+    "electron-rebuild": "^1.10.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "qunit": "^2.9.3",
+    "sinon": "^8.1.1"
+  }
+}
