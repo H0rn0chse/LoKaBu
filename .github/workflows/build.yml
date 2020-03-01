@@ -3,7 +3,8 @@ name: Release
 on:
   push:
     branches:
-      - feature/electronTransformation
+      - master
+      - develop
 
 jobs:
   build_on_win:
@@ -22,6 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Release app
+        if: github.ref == 'refs/heads/master'
         env:
           GH_TOKEN: ${{ secrets.github_token }}
         run: npm run release
+      - name: Build app without release
+        if: github.ref != 'refs/heads/master'
+        run: npm run buildLocal
