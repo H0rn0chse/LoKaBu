@@ -3,15 +3,14 @@ name: Test
 on: 
   push:
     branches:
-      - feature/electronTransformation
+      - master
+      - develop
 jobs:
   test_on_win:
     runs-on: windows-latest
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
-        with:
-          ref: 'feature/electronTransformation'
+        uses: actions/checkout@v2
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
