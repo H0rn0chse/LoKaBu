@@ -1,0 +1,13 @@
+.HeaderItem{
+	padding:0.5em 1em;
+	color: white;
+	cursor: default;
+}
+
+.HeaderItem:not(.HeaderIcon) {
+	cursor: pointer;
+}
+
+.HeaderItem.is-shown, .HeaderItem:hover:not(.HeaderIcon) {
+	background: #1F4788;
+}

@@ -27,7 +27,7 @@ function createWindow () {
         return;
     }
 
-    require("./main-process/checkDatabase");
+    require("./main/checkDatabase");
     oMainWindow = new BrowserWindow({
         show: false,
         webPreferences: {
@@ -37,10 +37,9 @@ function createWindow () {
     oMainWindow.maximize();
     oMainWindow.show();
     oMainWindow.loadFile('index.html');
+    // oMainWindow.setMenuBarVisibility(false);
     if (!app.isPackaged) {
         oMainWindow.webContents.openDevTools();
-    } else {
-        oMainWindow.removeMenu();
     }
 
     oDatabaseWindow = new BrowserWindow({
@@ -50,8 +49,8 @@ function createWindow () {
         }
     });
     if (!app.isPackaged) {
-        oDatabaseWindow.maximize();
-        oDatabaseWindow.show();
+        // oDatabaseWindow.maximize();
+        // oDatabaseWindow.show();
     }
     oDatabaseWindow.loadFile('database.html');
     oDatabaseWindow.webContents.openDevTools();

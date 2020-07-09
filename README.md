@@ -40,6 +40,6 @@ You have to build (and sign) your platform-dependent build yourself or just use 
   ![history][history]
   ![settings][settings]
 
-[details]: ./screenshots/details.png "Receipt details"
-[history]: ./screenshots/history.png "Receipt history"
-[settings]: ./screenshots/settings.png "Settings"
+[details]: ./docu/screenshots/details.png "Receipt details"
+[history]: ./docu/screenshots/history.png "Receipt history"
+[settings]: ./docu/screenshots/settings.png "Settings"

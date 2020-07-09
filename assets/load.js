@@ -2,11 +2,14 @@ const fs = require('fs').promises;
 const glob = require('glob');
 const path = require('path');
 
-module.exports = {
+export const load = {
     html: (sPath) => {
         return fs.readFile(path.join(__dirname, "/../", sPath), 'utf-8').then(function (sData) {
             document.getElementById('content').innerHTML += sData;
         });
+    },
+    css: (sPath) => {
+        document.head.innerHTML += `<link type="text/css" rel="stylesheet" href=.${sPath}>`;
     },
     rendererScripts: () => {
         var aFiles = glob.sync(__dirname.replace(/\\/g, "/") + "/../renderer-process/*!(worker)*/*.js");
@@ -16,7 +19,7 @@ module.exports = {
         });
     },
     workerScripts: (sWorker) => {
-        var aFiles = glob.sync(__dirname.replace(/\\/g, "/") + "/../renderer-process/*+(worker)*/*+(" + sWorker + ")*/*.js");
+        var aFiles = glob.sync(__dirname.replace(/\\/g, "/") + `/../renderer-process/*+(worker)*/*+(${sWorker})*/*.js`);
 
         aFiles.forEach((sPath) => {
             require(sPath);

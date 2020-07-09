@@ -1,0 +1,37 @@
+<div class="flexLineContainer">
+    <span class="flexLine">
+        <h3 data-lang="detail.section.title"></h3>
+    </span>
+    <span class="flexLine">
+        <span data-lang="receipt.id"></span>:<input type="text" name="ID" disabled>
+            &nbsp;<span data-lang="common.store"></span>:<select id="Detail_Store" onchange="window.detailSection.changeReceipt()"></select>
+        </span>
+    <span class="flexLine">
+        <span data-lang="common.date"></span>:<input type="date" name="Date" onchange="window.detailSection.changeReceipt()">
+        &nbsp;<span data-lang="common.account"></span>:<select id="Detail_Account" onchange="window.detailSection.changeReceipt()"></select>
+    </span>
+    <span id="Detail_Lines" class="flexLineContainer flexLine">
+    </span>
+    <span class="flexLine">
+        <div class="button addLine" onclick="window.detailSection.addLine()">+</div>
+    </span>
+    <span class="flexLine">
+        <textarea id="Detail_Comment" onchange="window.detailSection.changeReceipt()"></textarea>
+    </span>
+    <span class="flexLine">
+        &nbsp;
+    </span>
+    <span class="flexLine">
+        <span data-lang="common.result"></span>:<span id="Detail_Result">-</span>
+    </span>
+    <span class="flexLine">
+        &nbsp;
+    </span>
+    <span id="Detail_ReceiptActions" class="flexLine">
+        <div class="button cancel" data-lang="common.cancel" onclick="window.detailSection.cancelEdit()"></div>
+        <div class="button delete" data-lang="common.delete" onclick="window.detailSection.deleteReceipt()"></div>
+        <div class="button save" data-lang="common.save" onclick="window.detailSection.saveReceipt()"></div>
+        <div class="button reset" data-lang="common.reset" onclick="window.detailSection.resetReceipt()"></div>
+        <div class="button add" data-lang="common.add" onclick="window.detailSection.addReceipt()"></div>
+    </span>
+</div>
