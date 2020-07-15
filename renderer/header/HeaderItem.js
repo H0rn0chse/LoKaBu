@@ -8,7 +8,8 @@ export class HeaderItem extends View {
     getPropertyDefault (sProperty) {
         const oPropertyDefaults = {
             section: "section",
-            text: "defaultSection"
+            text: "defaultSection",
+            i18n: "default"
         };
         return oPropertyDefaults[sProperty];
     }

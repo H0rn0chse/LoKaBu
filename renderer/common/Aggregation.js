@@ -1,18 +1,9 @@
-export class Aggregation {
+import { BindingManager } from "./BindingManager.js";
+
+export class Aggregation extends BindingManager {
     constructor (sModel, aPath) {
+        super();
         this.model = sModel;
         this.path = aPath;
-        this.bindings = {};
-    }
-
-    bindProperty (sProperty, sModel, aPath) {
-        this.bindings[sProperty] = {
-            path: aPath,
-            model: sModel
-        };
-    }
-
-    getPropertyBindings () {
-        return this.bindings;
     }
 };

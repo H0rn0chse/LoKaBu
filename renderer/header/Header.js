@@ -17,22 +17,22 @@ export class Header extends View {
 
         const oDomRef = oNode.getNode();
 
-        this.renderAggregation("headerItems", oDomRef);
+        this.renderAggregation("headerItems", oDomRef, HeaderItem);
 
         return oDomRef;
     }
 
-    renderAggregation (sAggregation, oDomRef) {
+    renderAggregation (sAggregation, oDomRef, Constructor) {
         const aItems = this.getAggregation(sAggregation);
         const oBinding = this.getAggregationBinding(sAggregation);
 
         aItems.forEach((oItem, iIndex) => {
-            const oHeaderItem = new HeaderItem();
-            oHeaderItem.setModels(this.getModels());
-            oHeaderItem.setBindings(oBinding.getPropertyBindings());
-            oHeaderItem.setBindingContext(oBinding.path, iIndex);
-            oHeaderItem.setParent(oDomRef);
-            oHeaderItem.update();
+            const oChild = new Constructor();
+            oChild.setModels(this.getModels());
+            oChild.setBindings(oBinding);
+            oChild.setBindingContext(oBinding, iIndex);
+            oChild.setParent(oDomRef);
+            oChild.update();
         });
     }
 };

@@ -1,30 +1,16 @@
 import { DomElement } from "./DomElement.js";
-import { Aggregation } from "./Aggregation.js";
-import { deepClone } from "../../assets/Utils.js";
+import { BindingManager } from "./BindingManager.js";
 
-export class View {
+export class View extends BindingManager {
     constructor (oParent) {
+        super();
         this.parent = oParent;
         this.eventHandler = {};
         this.models = {};
-        this.propertyBindings = {};
-        this.aggregationBindings = {};
     }
 
     addModel (oModel, sName) {
         this.models[sName] = oModel;
-    }
-
-    bindProperty (sProperty, sModel, aPath) {
-        this.propertyBindings[sProperty] = {
-            path: aPath,
-            model: sModel
-        };
-    }
-
-    bindAggregation (sProperty, sModel, aPath) {
-        this.aggregationBindings[sProperty] = new Aggregation(sModel, aPath);
-        return this.aggregationBindings[sProperty];
     }
 
     clearContent () {
@@ -32,17 +18,13 @@ export class View {
     }
 
     getAggregation (sAggregation) {
-        if (this.aggregationBindings[sAggregation] !== undefined) {
-            const oBinding = this.aggregationBindings[sAggregation];
+        const oBinding = this.getAggregationBinding(sAggregation);
+        if (oBinding !== undefined) {
             if (this.models[oBinding.model] !== undefined) {
                 const oModel = this.models[oBinding.model];
                 return oModel.get(oBinding.path);
             }
         }
-    }
-
-    getAggregationBinding (sAggregation) {
-        return this.aggregationBindings[sAggregation];
     }
 
     getModels () {
@@ -54,22 +36,27 @@ export class View {
     }
 
     getProperty (sProperty) {
-        if (this.propertyBindings[sProperty] !== undefined) {
-            const oBinding = this.propertyBindings[sProperty];
-            if (this.models[oBinding.model] !== undefined) {
-                const oModel = this.models[oBinding.model];
-                return oModel.get(oBinding.path, this.bindingContext);
+        const oBinding = this.getPropertyBinding(sProperty);
+        if (oBinding !== undefined && this.models[oBinding.model] !== undefined) {
+            const oModel = this.models[oBinding.model];
+            // regular binding
+            if (Array.isArray(oBinding.path)) {
+                const oBindingContext = this.getBindingContext();
+                if (oBinding.model === oBindingContext.model) {
+                    return oModel.get(oBinding.path, oBindingContext.path);
+                }
+                return oModel.get(oBinding.path, []);
+            // relative binding
+            } else {
+                const vProperty = this.getProperty(oBinding.path);
+                const oBindingContext = this.getBindingContext();
+                if (oBinding.model === oBindingContext.model) {
+                    return oModel.get(vProperty, oBindingContext.path);
+                }
+                return oModel.get(vProperty, []);
             }
         }
         return this.getPropertyDefault(sProperty);
-    }
-
-    getPropertyBinding (sProperty) {
-        return this.propertyBindings[sProperty];
-    }
-
-    getPropertyBindings () {
-        return this.propertyBindings;
     }
 
     getPropertyDefault (sProperty) {
@@ -80,22 +67,8 @@ export class View {
         return new DomElement("div").getNode();
     }
 
-    setRelativeBindingPath (sModel, ) {
-
-    }
-
     setParent (oDomRef) {
         this.parent = oDomRef;
-    }
-
-    setBindingContext (aPath, iIndex) {
-        const aBindingContextPath = deepClone(aPath);
-        aBindingContextPath.push(iIndex);
-        this.bindingContext = aBindingContextPath;
-    }
-
-    setBindings (oBindings) {
-        this.propertyBindings = oBindings;
     }
 
     setModels (oModels) {
