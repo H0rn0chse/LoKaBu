@@ -1,11 +1,12 @@
 import { DomElement } from "./DomElement.js";
 import { BindingManager } from "../../common/BindingManager.js";
+import { EventManager } from "../../common/EventManager.js";
+import { MultiClass } from "../../common/MultiClass.js";
 
-export class View extends BindingManager {
-    constructor (oParent) {
+export class View extends MultiClass(BindingManager, EventManager) {
+    constructor () {
         super();
-        this.parent = oParent;
-        this.eventHandler = {};
+        this.parent = null;
         this.models = {};
     }
 
@@ -65,6 +66,21 @@ export class View extends BindingManager {
 
     render () {
         return new DomElement("div").getNode();
+    }
+
+    renderAggregation (sAggregation, oDomRef, Constructor, fnChild) {
+        const aItems = this.getAggregation(sAggregation);
+        const oBinding = this.getAggregationBinding(sAggregation);
+
+        aItems.forEach((oItem, iIndex) => {
+            const oChild = new Constructor();
+            oChild.setModels(this.getModels());
+            oChild.setBindings(oBinding);
+            oChild.setBindingContext(oBinding, iIndex);
+            oChild.setParent(oDomRef);
+            fnChild(oChild);
+            oChild.update();
+        });
     }
 
     setParent (oDomRef) {

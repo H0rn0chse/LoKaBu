@@ -8,6 +8,6 @@
 	cursor: pointer;
 }
 
-.HeaderItem.is-shown, .HeaderItem:hover:not(.HeaderIcon) {
+.HeaderItem.selected, .HeaderItem:hover:not(.HeaderIcon) {
 	background: #1F4788;
 }

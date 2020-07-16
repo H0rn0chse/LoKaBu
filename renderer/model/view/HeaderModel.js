@@ -1,22 +1,35 @@
 import { Model } from "../common/Model.js";
 
-export const HeaderModel = new Model({
+class _HeaderModel extends Model {
+    setSelectedSection (sSection) {
+        this.get(["items"]).forEach(oElement => {
+            oElement.selected = oElement.section === sSection;
+        });
+        this.update();
+    }
+}
+
+export const HeaderModel = new _HeaderModel({
     items: [
         {
-            link: "detail",
-            i18n: ["detail.section.title"]
+            section: "detail",
+            i18n: ["detail.section.title"],
+            selected: true
         },
         {
-            link: "history",
-            i18n: ["history.section.title"]
+            section: "history",
+            i18n: ["history.section.title"],
+            selected: false
         },
         {
-            link: "analysis",
-            i18n: ["analysis.section.title"]
+            section: "analysis",
+            i18n: ["analysis.section.title"],
+            selected: false
         },
         {
-            link: "settings",
-            i18n: ["settings.section.title"]
+            section: "settings",
+            i18n: ["settings.section.title"],
+            selected: false
         }
     ]
 });

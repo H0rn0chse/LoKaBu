@@ -1,8 +1,11 @@
 import { deepClone, objectGet, objectSet } from "../../../assets/Utils.js";
+import { EventManager } from "../../common/EventManager.js";
 
-export class Model {
+export class Model extends EventManager {
     constructor (oData) {
+        super();
         this._data = oData;
+        this.addEvent("update");
     }
 
     get (aPath, aBindingContextPath = []) {
@@ -11,7 +14,18 @@ export class Model {
         return objectGet(this._data, aContextPath);
     }
 
-    set (aPath, vValue) {
+    onUpdate (oEvent) {
+        this.handleEvent("update", oEvent);
+    }
+
+    set (aPath, vValue, bSuppressUpdate) {
         objectSet(this._data, aPath, vValue);
+        if (!bSuppressUpdate) {
+            this.onUpdate({});
+        }
+    }
+
+    update () {
+        this.onUpdate({});
     }
 };

@@ -9,15 +9,28 @@ export class HeaderController extends Controller {
         super();
         this.node = oDomRef;
 
+        HeaderModel.addEventListener("update", this.onHeaderModelUpdate, this);
+
         this.header = new Header();
         this.header.setParent(this.node);
-        this.header.addModel(HeaderModel, "tabs");
+        this.header.addModel(HeaderModel, "viewModel");
         this.header.addModel(LanguageModel, "lang");
-        this.header.bindAggregation("headerItems", new Aggregation("tabs", ["items"]))
-            .bindProperty("section", "tabs", ["link"])
-            .bindProperty("i18n", "tabs", ["i18n"])
+        this.header.bindAggregation("headerItems", new Aggregation("viewModel", ["items"]))
+            .bindProperty("section", "viewModel", ["section"])
+            .bindProperty("selected", "viewModel", ["selected"])
+            .bindProperty("i18n", "viewModel", ["i18n"])
             .bindProperty("text", "lang", "i18n");
 
+        this.header.addEventListener("click", this.onHeaderClick, this);
+
+        this.header.update();
+    }
+
+    onHeaderClick (oEvent) {
+        HeaderModel.setSelectedSection(oEvent.customData.section);
+    }
+
+    onHeaderModelUpdate (oEvent) {
         this.header.update();
     }
 };

@@ -4,20 +4,6 @@ export class DomElement {
         return this;
     }
 
-    setText (sText) {
-        this.node.innerText = sText;
-        return this;
-    }
-
-    setData (sKey, sValue) {
-        this.node.setAttribute(`data-${sKey}`, sValue);
-        return this;
-    }
-
-    getNode () {
-        return this.node;
-    }
-
     addClass (sClass) {
         this.node.classList.add(sClass);
         return this;
@@ -25,6 +11,25 @@ export class DomElement {
 
     appendNode (oNode) {
         this.node.appendChild(oNode.getNode());
+        return this;
+    }
+
+    getNode () {
+        return this.node;
+    }
+
+    setData (sKey, sValue) {
+        this.node.setAttribute(`data-${sKey}`, sValue);
+        return this;
+    }
+
+    setEventHandler (sEventName, fnHandler) {
+        this.node.addEventListener("click", fnHandler);
+        return this;
+    }
+
+    setText (sText) {
+        this.node.innerText = sText;
         return this;
     }
 };
