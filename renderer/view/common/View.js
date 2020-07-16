@@ -1,5 +1,5 @@
 import { DomElement } from "./DomElement.js";
-import { BindingManager } from "./BindingManager.js";
+import { BindingManager } from "../../common/BindingManager.js";
 
 export class View extends BindingManager {
     constructor (oParent) {

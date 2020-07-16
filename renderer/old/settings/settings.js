@@ -1,4 +1,4 @@
-const DatabaseWaiter = require("../../assets/databaseWaiter");
+const DatabaseWaiter = require("../../../assets/databaseWaiter");
 const oDropdown = require("../helper/dropdown");
 const HtmlElement = require("../helper/htmlElement");
 const oI18nHelper = require("../helper/i18n");

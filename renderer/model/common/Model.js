@@ -1,4 +1,4 @@
-import { deepClone, objectGet, objectSet } from "../../assets/Utils.js";
+import { deepClone, objectGet, objectSet } from "../../../assets/Utils.js";
 
 export class Model {
     constructor (oData) {

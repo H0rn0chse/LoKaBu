@@ -1,8 +1,8 @@
-import { load } from "../../assets/load.js";
+import { load } from "../../../assets/load.js";
 import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 
-load.css("/renderer/header/HeaderItem.css");
+load.css("/renderer/view/header/HeaderItem.css");
 
 export class HeaderItem extends View {
     getPropertyDefault (sProperty) {
