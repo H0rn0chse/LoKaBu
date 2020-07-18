@@ -1,4 +1,4 @@
-const BetterSqlite3 = require("./better-sqlite3");
+const BetterSqlite3 = require("better-sqlite3");
 const path = require("path");
 const fs = require("fs");
 const { remote } = require('electron');
@@ -6,8 +6,8 @@ const Lock = require("../../assets/lock");
 
 const sDir = remote.app.getPath("userData");
 const sDatabasePath = path.join(sDir, "database.sqlite3");
-const sBasePath = path.join(__dirname, "/../../../base_database.sqlite3.sql");
-const sSharedBasePath = path.join(__dirname, "/../../../base_database.sqlite3.sql");
+const sBasePath = path.join(__dirname, "/../../base_database.sqlite3.sql");
+const sSharedBasePath = path.join(__dirname, "/../../base_database.sqlite3.sql");
 
 let oLock;
 

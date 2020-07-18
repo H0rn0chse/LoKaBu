@@ -16,9 +16,9 @@ export class EventManager {
         this.eventHandler[sEventName].push(fnBoundHandler);
     }
 
-    handleEvent (sEventName, oEvent) {
+    handleEvent (sEventName, ...args) {
         this.eventHandler[sEventName].forEach(fnHandler => {
-            fnHandler(oEvent);
+            fnHandler(...args);
         });
     }
 };

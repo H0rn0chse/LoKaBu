@@ -14,6 +14,11 @@ export class DomElement {
         return this;
     }
 
+    appendToParent (oParent) {
+        oParent.appendChild(this.node);
+        return this;
+    }
+
     getNode () {
         return this.node;
     }

@@ -12,10 +12,12 @@ export class View extends MultiClass(BindingManager, EventManager) {
 
     addModel (oModel, sName) {
         this.models[sName] = oModel;
+        return this;
     }
 
     clearContent () {
         this.node.innerHTML = "";
+        return this;
     }
 
     getAggregation (sAggregation) {
@@ -81,14 +83,17 @@ export class View extends MultiClass(BindingManager, EventManager) {
             fnChild(oChild);
             oChild.update();
         });
+        return this;
     }
 
     setParent (oDomRef) {
         this.parent = oDomRef;
+        return this;
     }
 
     setModels (oModels) {
         this.models = oModels;
+        return this;
     }
 
     update () {
@@ -103,6 +108,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
             this.node.parentElement.replaceChild(oNode, this.node);
             this.node = oNode;
         }
+        return this;
     }
 
     updateParent () {
@@ -114,5 +120,6 @@ export class View extends MultiClass(BindingManager, EventManager) {
             this.node.parentElement.removeChild(this.node);
             this.parent.appendChild(this.node);
         }
+        return this;
     }
 };

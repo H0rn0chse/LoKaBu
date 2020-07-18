@@ -6,21 +6,20 @@
 		<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 	</head>
 	<body>
-		<script type="text/javascript">
+		<script type="module">
 			const { ipcRenderer } = require('electron');
+			import { load } from "./assets/load.js";
 			window.ipcRenderer = ipcRenderer;
 
 			ipcRenderer.once("rendererChannel", (oEvent, sMessage) => {
 				window.iRendererId = sMessage;
-
-				const load = require('./assets/load');
 				load.workerScripts("database");
-				require("./renderer-process/worker/database/databaseConnection").open();
+				require("./worker/database/databaseConnection").open();
 			})
 			ipcRenderer.send("windowLoaded");
 
 			ipcRenderer.on("shutdownApp", () => {
-				require("./renderer-process/worker/database/databaseConnection").close();
+				require("./worker/database/databaseConnection").close();
 				ipcRenderer.send("windowProcessClosed");
 			});
 

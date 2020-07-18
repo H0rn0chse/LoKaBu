@@ -4,86 +4,31 @@
 		<meta charset="UTF-8">
 		<!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
 		<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-		<!--<style>
-			body {
-				background-color: white;
+
+		<style>
+			body, html {
+				border: 0;
+				margin: 0;
+				padding: 0;
 			}
 		</style>
 
-		<link rel="stylesheet" href="assets/css/button.css">
-		<link rel="stylesheet" href="assets/css/flexLine.css">
-		<link rel="stylesheet" href="assets/css/global.css">
-		<link rel="stylesheet" href="assets/css/input.css">
-		<link rel="stylesheet" href="assets/css/navHeader.css">
-		<link rel="stylesheet" href="assets/css/section.css">-->
-
 		<script type="module">
 			const { ipcRenderer } = require('electron');
-			window.ipcRenderer = ipcRenderer;
-
-			ipcRenderer.once("databaseChannel", (oEvent, sMessage) => {
-				window.iDatabaseId = sMessage;	
-			});
-			ipcRenderer.send("windowLoaded");
-
-			ipcRenderer.on("shutdownApp", () => {
-				console.log("nothing to close yet")
-				ipcRenderer.send("windowProcessClosed");
-			});
-
-			//const load = require('./assets/load');
-
 			import { AppController } from './renderer/AppController.js'
+			import { EventBus } from './renderer/EventBus.js'
 
-			const oDomRef = document.body
-
-			new AppController(oDomRef)
-
-			/*Promise.all([
-				load.html('/sections/detail/detail.html'),
-				load.html('/sections/history/history.html'),
-				load.html('/sections/analysis/analysis.html'),
-				load.html('/sections/settings/settings.html')
-			]).then(function () {
-				load.rendererScripts();
-				const oNavigation = require('./assets/navigation');
-				const i18nHelper = require("./renderer-process/helper/i18n");
-				i18nHelper.applyToAll();
-
-				document.addEventListener("AddedTranslateableElement", (oEvent) => {
-					const oItem = oEvent.target;
-					i18nHelper.applyToChildren(oItem);
-				});
-
-				document.addEventListener("LanguageChanged", (oEvent) => {
-					i18nHelper.applyToAll();
-				});
-
-				// default section
-				oNavigation.navigateToSection("detail");
-			});*/
+			const oRootDomRef = document.body
+			const oApp = new AppController(oRootDomRef);
+			EventBus.setIpcRenderer(ipcRenderer);
+			EventBus.sendToMain("windowLoaded");
+			EventBus.listen("shutdownApp", () => {
+				console.log("shutdown");
+				EventBus.sendToMain("windowProcessClosed");
+			});
+			oApp.start();
 		</script>
 	</head>
 	<body>
-		<!--<nav class="nav">
-			<div class="nav-item nav-header">
-				<p>Header</p>
-			</div>
-			<div class="nav-item">
-				<p class="nav-link" data-section="detail" data-lang="detail.section.title"></p>
-			</div>
-			<div class="nav-item">
-				<p class="nav-link" data-section="history" data-lang="history.section.title"></p>
-			</div>
-			<div class="nav-item">
-				<p class="nav-link" data-section="analysis" data-lang="analysis.section.title"></p>
-			</div>
-			<div class="nav-item">
-				<p class="nav-link" data-section="settings" data-lang="settings.section.title"></p>
-			</div>
-		</nav>
-
-		<div id="content">
-		</div>-->
 	</body>
 </html>
