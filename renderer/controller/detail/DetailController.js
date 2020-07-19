@@ -16,6 +16,6 @@ export class DetailController extends Controller {
     }
 
     onNavigation (sSection) {
-        this.getContainer("detail").getContent().setVisibilty(sSection === "detail");
+        this.getContainer("detail").setVisibilty(sSection === "detail");
     }
 }

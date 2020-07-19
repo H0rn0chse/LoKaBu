@@ -16,6 +16,6 @@ export class HistoryController extends Controller {
     }
 
     onNavigation (sSection) {
-        this.getContainer("history").getContent().setVisibilty(sSection === "history");
+        this.getContainer("history").setVisibilty(sSection === "history");
     }
 }

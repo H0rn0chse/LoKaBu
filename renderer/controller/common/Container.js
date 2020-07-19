@@ -10,6 +10,7 @@ export class Container {
             .appendToParent(oRoot)
             .getNode();
         this.content = null;
+        this.visibility = true;
     }
 
     getContent () {
@@ -22,6 +23,19 @@ export class Container {
 
     setContent (oContent) {
         this.content = oContent;
+        return this;
+    }
+
+    setVisibilty (bVisible) {
+        if (bVisible !== undefined) {
+            this.visibility = bVisible;
+        } else {
+            bVisible = this.visibilty;
+        }
+
+        if (this.node !== undefined) {
+            this.node.style.display = bVisible ? "" : "none";
+        }
         return this;
     }
 };

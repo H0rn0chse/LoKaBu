@@ -1,4 +1,4 @@
-module.exports = {
+export const databaseHelper = {
     getUsedIds: function (oDatabase, sTable) {
         let sSql = `
         SELECT ROWID

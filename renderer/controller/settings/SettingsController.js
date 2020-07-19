@@ -16,6 +16,6 @@ export class SettingsController extends Controller {
     }
 
     onNavigation (sSection) {
-        this.getContainer("settings").getContent().setVisibilty(sSection === "settings");
+        this.getContainer("settings").setVisibilty(sSection === "settings");
     }
 }

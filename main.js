@@ -49,8 +49,8 @@ function createWindow () {
         }
     });
     if (!app.isPackaged) {
-        // oDatabaseWindow.maximize();
-        // oDatabaseWindow.show();
+        oDatabaseWindow.maximize();
+        oDatabaseWindow.show();
     }
     oDatabaseWindow.loadFile('database.html');
     oDatabaseWindow.webContents.openDevTools();

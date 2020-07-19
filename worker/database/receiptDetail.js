@@ -1,8 +1,8 @@
-const oDatabaseHelper = require("../../renderer/helper/database");
-const oDb = require("./databaseConnection");
-
-const oReceipts = require("./receipts");
-const oLines = require("./lines");
+import { db } from "./databaseConnection.js";
+import { ipc } from "./ipc.js";
+import { databaseHelper } from "./databaseHelper.js";
+import { receipts } from "./receipts.js";
+import { lines } from "./lines.js";
 
 function read (sId) {
     const oParams = {
@@ -13,43 +13,43 @@ function read (sId) {
     FROM view_ReceiptDetail
     WHERE ReceiptID = $ReceiptID
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     return {
         result: oStmt.all(oParams),
         id: sId
     };
 };
 
-window.ipcRenderer.on("receiptDetail-read-list", (oEvent, sMessage) => {
-    window.ipcRenderer.sendTo(window.iRendererId, "receiptDetail-read-list", read(sMessage));
+ipc.on("receiptDetail-read-list", (oEvent, sMessage) => {
+    ipc.sendToRenderer("receiptDetail-read-list", read(sMessage));
 });
 
-window.ipcRenderer.on("receiptDetail-write-list", (oEvent, aNewDetailList) => {
+ipc.on("receiptDetail-write-list", (oEvent, aNewDetailList) => {
     let sId = aNewDetailList[0].ReceiptID;
     if (sId) {
         const aOldDetailList = read(sId).result;
         aOldDetailList.forEach((oLine) => {
-            oLines.remove(oLine.LineID);
+            lines.remove(oLine.LineID);
         });
 
-        oReceipts.update(aNewDetailList[0]);
+        receipts.update(aNewDetailList[0]);
     } else {
-        sId = oDatabaseHelper.getNextId(oDb.get(), "Receipts");
+        sId = databaseHelper.getNextId(db.get(), "Receipts");
         aNewDetailList[0].ReceiptID = sId;
-        oReceipts.add(aNewDetailList[0]);
+        receipts.add(aNewDetailList[0]);
     }
 
     aNewDetailList.forEach((oLine) => {
         oLine.ReceiptID = sId;
-        oLines.add(oLine);
+        lines.add(oLine);
     });
 });
 
-window.ipcRenderer.on("receiptDetail-delete-list", (oEvent, sId) => {
-    oReceipts.remove(sId);
-    oLines.removeByReceipt(sId);
+ipc.on("receiptDetail-delete-list", (oEvent, sId) => {
+    receipts.remove(sId);
+    lines.removeByReceipt(sId);
 });
 
-module.exports = {
+export const receiptDetail = {
     read
 };

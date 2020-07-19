@@ -1,18 +1,19 @@
-const oDb = require("./databaseConnection");
+import { db } from "./databaseConnection.js";
+import { ipc } from "./ipc.js";
 
 function read () {
     const sSql = `
     SELECT *
     FROM i18n
     `;
-    const oStmt = oDb.get("user").prepare(sSql);
+    const oStmt = db.get("user").prepare(sSql);
     return oStmt.all();
 };
 
-window.ipcRenderer.on("i18n-read-list", (oEvent, sMessage) => {
-    window.ipcRenderer.sendTo(window.iRendererId, "i18n-read-list", read());
+ipc.on("i18n-read-list", (oEvent, sMessage) => {
+    ipc.sendToRenderer("i18n-read-list", read());
 });
 
-module.exports = {
+export const i18n = {
     read
 };

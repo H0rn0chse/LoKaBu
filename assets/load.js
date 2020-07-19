@@ -24,9 +24,12 @@ export const load = {
         });
     },
     workerScripts: (sWorker) => {
-        var aFiles = glob.sync(__dirname.replace(/\\/g, "/") + `/../renderer-process/*+(worker)*/*+(${sWorker})*/*.js`);
+        var aFiles = glob.sync(__dirname.replace(/\\/g, "/") + `/../*+(worker)*/*+(${sWorker})*/*.js`);
 
         aFiles.forEach((sPath) => {
+            if (sPath.endsWith("Lock.js") && sPath.endsWith("databaseConnection.js")) {
+                return;
+            }
             require(sPath);
         });
     }

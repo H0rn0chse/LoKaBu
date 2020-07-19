@@ -1,5 +1,5 @@
-const oDb = require("./databaseConnection");
-const oDatabaseHelper = require("../../renderer/helper/database");
+import { db } from "./databaseConnection.js";
+import { databaseHelper } from "./databaseHelper.js";
 
 function remove (sId) {
     const oParams = {
@@ -10,13 +10,13 @@ function remove (sId) {
     FROM Lines
     WHERE ID=$ID
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     oStmt.run(oParams);
 };
 
 function add (oLine) {
     const oParams = {
-        ID: oDatabaseHelper.getNextId(oDb.get(), "Lines"),
+        ID: databaseHelper.getNextId(db.get(), "Lines"),
         Receipt: oLine.ReceiptID,
         Value: oLine.LineValue,
         Billing: oLine.LineBilling,
@@ -27,7 +27,7 @@ function add (oLine) {
         (ID, Receipt, Value, Billing, Type)
     Values ($ID, $Receipt, $Value, $Billing, $Type)
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     oStmt.run(oParams);
 };
 
@@ -40,11 +40,11 @@ function removeByReceipt (sId) {
     FROM Lines
     WHERE Receipt=$ID
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     oStmt.run(oParams);
 };
 
-module.exports = {
+export const lines = {
     remove,
     add,
     removeByReceipt

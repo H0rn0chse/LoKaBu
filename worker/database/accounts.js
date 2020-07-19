@@ -1,11 +1,12 @@
-const oDb = require("./databaseConnection");
+import { db } from "./databaseConnection.js";
+import { ipc } from "./ipc.js";
 
 function read () {
     const sSql = `
     SELECT *
     FROM Accounts
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     return oStmt.all();
 };
 
@@ -18,7 +19,7 @@ function write (oAccounts) {
         Owner = $Owner
         WHERE ID = $ID
         `;
-        const oStmt = oDb.get().prepare(sSql);
+        const oStmt = db.get().prepare(sSql);
         oAccounts.forEach((oParams) => {
             oStmt.run(oParams);
         });
@@ -30,7 +31,7 @@ function write (oAccounts) {
         Owner = $Owner
         WHERE ID = $ID
         `;
-        const oStmt = oDb.get().prepare(sSql);
+        const oStmt = db.get().prepare(sSql);
         oStmt.run(oAccounts);
     } else {
         // add
@@ -38,21 +39,21 @@ function write (oAccounts) {
         INSERT INTO Accounts
         (DisplayName, Owner) VALUES ($DisplayName, $Owner)
         `;
-        const oStmt = oDb.get().prepare(sSql);
+        const oStmt = db.get().prepare(sSql);
         oStmt.run(oAccounts);
     }
 };
 
-window.ipcRenderer.on("accounts-read-list", (oEvent, sMessage) => {
-    window.ipcRenderer.sendTo(window.iRendererId, "accounts-read-list", read());
+ipc.on("accounts-read-list", (oEvent, sMessage) => {
+    ipc.sendToRenderer("accounts-read-list", read());
 });
 
-window.ipcRenderer.on("accounts-write-object", (oEvent, oAccounts) => {
+ipc.on("accounts-write-object", (oEvent, oAccounts) => {
     write(oAccounts);
-    window.ipcRenderer.sendTo(window.iRendererId, "accounts-read-list", read());
+    ipc.sendToRenderer("accounts-read-list", read());
 });
 
-module.exports = {
+export const accounts = {
     read,
     write
 };

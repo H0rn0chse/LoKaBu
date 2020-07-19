@@ -1,4 +1,4 @@
-const oDb = require("./databaseConnection");
+import { db } from "./databaseConnection.js";
 
 function read (oLine) {
     const oParams = {
@@ -9,7 +9,7 @@ function read (oLine) {
     FROM view_ReceiptDetail
     WHERE ReceiptID = $ReceiptID
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     return oStmt.all(oParams);
 };
 
@@ -26,7 +26,7 @@ function add (oLine) {
         (ID, Date, Account, Comment, Store)
     Values ($ID, $Date, $Account, $Comment, $Store)
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     oStmt.run(oParams);
 };
 
@@ -43,7 +43,7 @@ function update (oLine) {
     SET Date=$Date, Account=$Account, Comment=$Comment, Store=$Store
     WHERE ID=$ID
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     oStmt.run(oParams);
 };
 
@@ -56,11 +56,11 @@ function remove (sId) {
     FROM Receipts
     WHERE ID=$ID;
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     oStmt.run(oParams);
 };
 
-module.exports = {
+export const receipts = {
     read,
     add,
     update,

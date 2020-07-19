@@ -8,22 +8,23 @@
 	<body>
 		<script type="module">
 			const { ipcRenderer } = require('electron');
-			import { load } from "./assets/load.js";
-			window.ipcRenderer = ipcRenderer;
+			import { db } from "./worker/database/databaseConnection.js";
+			import { main } from "./worker/database/main.js";
+			import { ipc } from "./worker/database/ipc.js";
+			ipc.setIpc(ipcRenderer);
 
-			ipcRenderer.once("rendererChannel", (oEvent, sMessage) => {
-				window.iRendererId = sMessage;
-				load.workerScripts("database");
-				require("./worker/database/databaseConnection").open();
+			ipc.once("rendererChannel", (oEvent, sMessage) => {
+				ipc.setRendererId(sMessage);
+				db.open();
 			})
-			ipcRenderer.send("windowLoaded");
+			ipc.send("windowLoaded");
 
-			ipcRenderer.on("shutdownApp", () => {
-				require("./worker/database/databaseConnection").close();
-				ipcRenderer.send("windowProcessClosed");
+			ipc.on("shutdownApp", () => {
+				db.close();
+				ipc.send("windowProcessClosed");
 			});
 
-			
+
 		</script>
 	</body>
 </html>

@@ -1,11 +1,12 @@
-const oDb = require("./databaseConnection");
+import { db } from "./databaseConnection.js";
+import { ipc } from "./ipc.js";
 
 function read () {
     const sSql = `
     SELECT *
     FROM Types
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     return oStmt.all();
 };
 
@@ -17,7 +18,7 @@ function write (oTypes) {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        const oStmt = oDb.get().prepare(sSql);
+        const oStmt = db.get().prepare(sSql);
         oTypes.forEach((oParams) => {
             oStmt.run(oParams);
         });
@@ -28,7 +29,7 @@ function write (oTypes) {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        const oStmt = oDb.get().prepare(sSql);
+        const oStmt = db.get().prepare(sSql);
         oStmt.run(oTypes);
     } else {
         // add
@@ -36,21 +37,21 @@ function write (oTypes) {
         INSERT INTO Types
         (DisplayName) VALUES ($DisplayName)
         `;
-        const oStmt = oDb.get().prepare(sSql);
+        const oStmt = db.get().prepare(sSql);
         oStmt.run(oTypes);
     }
 };
 
-window.ipcRenderer.on("types-read-list", (oEvent, sMessage) => {
-    window.ipcRenderer.sendTo(window.iRendererId, "types-read-list", read());
+ipc.on("types-read-list", (oEvent, sMessage) => {
+    ipc.sendToRenderer("types-read-list", read());
 });
 
-window.ipcRenderer.on("types-write-object", (oEvent, oTypes) => {
+ipc.on("types-write-object", (oEvent, oTypes) => {
     write();
-    window.ipcRenderer.sendTo(window.iRendererId, "types-read-list", read());
+    ipc.sendToRenderer("types-read-list", read());
 });
 
-module.exports = {
+export const types = {
     read,
     write
 };

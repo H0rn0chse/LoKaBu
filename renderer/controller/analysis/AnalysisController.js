@@ -16,6 +16,6 @@ export class AnalysisController extends Controller {
     }
 
     onNavigation (sSection) {
-        this.getContainer("analysis").getContent().setVisibilty(sSection === "analysis");
+        this.getContainer("analysis").setVisibilty(sSection === "analysis");
     }
 }

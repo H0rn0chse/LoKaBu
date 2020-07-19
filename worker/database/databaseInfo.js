@@ -1,32 +1,33 @@
-const oDb = require("./databaseConnection");
+import { db } from "./databaseConnection.js";
+import { ipc } from "./ipc.js";
 
 function read () {
     const sSql = `
     SELECT *
     FROM view_databaseInfo
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     return oStmt.get();
 };
 
-window.ipcRenderer.on("databaseInfo-read-object", (oEvent, sMessage) => {
-    window.ipcRenderer.sendTo(window.iRendererId, "databaseInfo-read-object", read());
+ipc.on("databaseInfo-read-object", (oEvent, sMessage) => {
+    ipc.sendToRenderer("databaseInfo-read-object", read());
 });
 
-window.ipcRenderer.on("databaseInfo-open-database", (oEvent, sMessage) => {
+ipc.on("databaseInfo-open-database", (oEvent, sMessage) => {
     // user default
     if (!sMessage) {
-        oDb.close();
-        oDb.open(true);
+        db.close();
+        db.open(true);
     } else {
-        oDb.openOrCreateShared(sMessage);
+        db.openOrCreateShared(sMessage);
     }
 });
 
-window.ipcRenderer.on("databaseInfo-create-database", (oEvent, sMessage) => {
-    oDb.openOrCreateShared(sMessage);
+ipc.on("databaseInfo-create-database", (oEvent, sMessage) => {
+    db.openOrCreateShared(sMessage);
 });
 
-module.exports = {
+export const databaseInfo = {
     read
 };

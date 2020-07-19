@@ -1,4 +1,5 @@
 import { Lock } from "../common/Lock.js";
+import { ipc } from "./ipc.js";
 const BetterSqlite3 = require("better-sqlite3");
 const path = require("path");
 const fs = require("fs");
@@ -6,13 +7,16 @@ const { remote } = require('electron');
 
 const sDir = remote.app.getPath("userData");
 const sDatabasePath = path.join(sDir, "database.sqlite3");
-const sBasePath = path.join(__dirname, "/../../base_database.sqlite3.sql");
-const sSharedBasePath = path.join(__dirname, "/../../base_database.sqlite3.sql");
+const sBasePath = path.join(__dirname, "./base_database.sqlite3.sql");
+const sSharedBasePath = path.join(__dirname, "./base_database.sqlite3.sql");
 
 let oLock;
 
 let oDatabase;
 let oSharedDatabase;
+let oSettings = {
+    readDefaultDir: () => {}
+};
 
 function _openOrCreateDatabase (sPath, sBasePath) {
     let oRef;
@@ -20,7 +24,7 @@ function _openOrCreateDatabase (sPath, sBasePath) {
         fs.accessSync(sPath, (fs.constants || fs).F_OK);
         oRef = new BetterSqlite3(sPath, { verbose: console.log });
 
-        window.ipcRenderer.send("log", "database was loaded", sPath);
+        ipc.send("log", "database was loaded", sPath);
     } catch (err) {
         oRef = new BetterSqlite3(sPath, { verbose: console.log });
 
@@ -31,9 +35,9 @@ function _openOrCreateDatabase (sPath, sBasePath) {
         });
         oRef.exec("PRAGMA foreign_keys = ON;");
 
-        window.ipcRenderer.send("log", "database was created", sPath);
+        ipc.send("log", "database was created", sPath);
     }
-    window.ipcRenderer.sendTo(window.iRendererId, "database-open");
+    ipc.sendToRenderer("database-open");
     return oRef;
 }
 
@@ -83,8 +87,8 @@ function openOrCreateShared (sPath) {
             oSharedDatabase.close();
             oSharedDatabase = null;
             oLock.forceOpen();
-            window.ipcRenderer.sendTo(window.iRendererId, "database-abort");
-            window.ipcRenderer.sendTo(window.iRendererId, "database-open");
+            ipc.sendToRenderer("database-abort");
+            ipc.sendToRenderer("database-open");
         }
     });
     console.log(sPath);
@@ -96,22 +100,24 @@ function openOrCreateShared (sPath) {
     // if lock file exists
     } else {
         console.log("lock could not be closed");
-        window.ipcRenderer.sendTo(window.iRendererId, "database-locked", oLock.getTimestamp());
+        ipc.sendToRenderer("database-locked", oLock.getTimestamp());
 
-        window.ipcRenderer.once("database-force", () => {
+        ipc.once("database-force", () => {
             oLock.forceClose();
             oSharedDatabase = _openOrCreateDatabase(sPath, sSharedBasePath);
         });
     }
 }
 
-module.exports = {
+function setSettings (oSettingsObject) {
+    oSettings = oSettingsObject;
+}
+
+export const db = {
     open,
     close,
     closeShared,
     get,
-    openOrCreateShared
+    openOrCreateShared,
+    setSettings
 };
-
-// require of database after module.exports due to cyclic dependencies
-const oSettings = require("./settings");

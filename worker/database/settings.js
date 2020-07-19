@@ -1,14 +1,15 @@
-const oDb = require("./databaseConnection");
+import { db } from "./databaseConnection.js";
+import { ipc } from "./ipc.js";
 
 function read () {
     const sSql = `
     SELECT *
     FROM Settings
     `;
-    const oStmt = oDb.get().prepare(sSql);
+    const oStmt = db.get().prepare(sSql);
     const oResult = oStmt.get();
     oResult.DefaultDir = readDefaultDir();
-    oResult.CurrentDir = oDb.get().name;
+    oResult.CurrentDir = db.get().name;
     return oResult;
 };
 
@@ -17,7 +18,7 @@ function readDefaultDir () {
     SELECT DefaultDir
     FROM Settings
     `;
-    const oStmt = oDb.get("user").prepare(sSql);
+    const oStmt = db.get("user").prepare(sSql);
     return oStmt.get().DefaultDir;
 }
 
@@ -33,7 +34,7 @@ function write (oSettings) {
         Type = $Type,
         Language = $Language
     `;
-    let oStmt = oDb.get().prepare(sSql);
+    let oStmt = db.get().prepare(sSql);
     oStmt.run(oParams);
     // User specific defaults
     oParams = {
@@ -43,20 +44,20 @@ function write (oSettings) {
     UPDATE Settings
     SET DefaultDir = $DefaultDir
     `;
-    oStmt = oDb.get("user").prepare(sSql);
+    oStmt = db.get("user").prepare(sSql);
     oStmt.run(oParams);
 };
 
-window.ipcRenderer.on("settings-read-object", (oEvent, sMessage) => {
-    window.ipcRenderer.sendTo(window.iRendererId, "settings-read-object", read());
+ipc.on("settings-read-object", (oEvent, sMessage) => {
+    ipc.sendToRenderer("settings-read-object", read());
 });
 
-window.ipcRenderer.on("settings-write-object", (oEvent, oSettings) => {
+ipc.on("settings-write-object", (oEvent, oSettings) => {
     write(oSettings);
-    window.ipcRenderer.sendTo(window.iRendererId, "settings-read-object", read());
+    ipc.sendToRenderer("settings-read-object", read());
 });
 
-module.exports = {
+export const settings = {
     read,
     readDefaultDir,
     write

@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-const oDb = require("./databaseConnection");
+import { db } from "./databaseConnection.js";
+import { ipc } from "./ipc.js";
 
 function read () {
     /* const sSql = `
@@ -9,10 +10,10 @@ function read () {
     return oDb.get().get(sSql); */
 };
 
-window.ipcRenderer.on("receiptAnalysis-read-object", (oEvent, sMessage) => {
-    window.ipcRenderer.sendTo(window.iRendererId, "receiptAnalysis-read-object", read());
+ipc.on("receiptAnalysis-read-object", (oEvent, sMessage) => {
+    ipc.sendToRenderer("receiptAnalysis-read-object", read());
 });
 
-module.exports = {
+export const receiptAnalysis = {
     read
 };
