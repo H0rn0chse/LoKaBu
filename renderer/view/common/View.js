@@ -67,11 +67,16 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return "";
     }
 
+    getValueById (sId) {
+        const oNode = document.querySelector(`[id^="${sId}-"]`);
+        return oNode && oNode.value;
+    }
+
     render () {
         return new DomElement("div").getNode();
     }
 
-    renderAggregation (sAggregation, oDomRef, Constructor, fnChild) {
+    renderAggregation (oDomRef, sAggregation, Constructor, fnChild = () => {}) {
         const aItems = this.getAggregation(sAggregation);
         const oBinding = this.getAggregationBinding(sAggregation);
 

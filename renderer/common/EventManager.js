@@ -5,6 +5,7 @@ export class EventManager {
 
     addEvent (sEventName) {
         this.eventHandler[sEventName] = [];
+        return this;
     }
 
     addEventListener (sEventName, fnHandler, oScope) {
@@ -14,11 +15,13 @@ export class EventManager {
             this.eventHandler[sEventName] = [];
         }
         this.eventHandler[sEventName].push(fnBoundHandler);
+        return this;
     }
 
     handleEvent (sEventName, ...args) {
         this.eventHandler[sEventName].forEach(fnHandler => {
             fnHandler(...args);
         });
+        return this;
     }
 };

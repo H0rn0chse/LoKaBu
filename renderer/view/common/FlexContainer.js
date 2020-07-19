@@ -13,6 +13,12 @@ export class FlexContainer extends DomElement {
         });
     }
 
+    appendNode (oNode) {
+        oNode.addClass("flexItem");
+        super.appendNode(oNode);
+        return this;
+    }
+
     createItem (sTag) {
         const oItem = new DomElement(sTag)
             .addClass("flexItem");

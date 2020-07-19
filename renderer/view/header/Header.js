@@ -17,13 +17,11 @@ export class Header extends View {
 
     render () {
         const oNode = new DomElement("nav")
-            .addClass("Header");
+            .addClass("Header")
+            .insertAggregation(this, "headerItems", HeaderItem, this.renderHeaderItem.bind(this))
+            .getNode();
 
-        const oDomRef = oNode.getNode();
-
-        this.renderAggregation("headerItems", oDomRef, HeaderItem, this.renderHeaderItem.bind(this));
-
-        return oDomRef;
+        return oNode;
     }
 
     renderHeaderItem (oChild) {

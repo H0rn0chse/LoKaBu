@@ -5,6 +5,7 @@ class _EventBus extends EventManager {
     constructor () {
         super();
         this.ipc = new Deferred();
+        this.database = new Deferred();
     }
 
     listen (sChannel, fnCallback, oScope) {
@@ -15,8 +16,11 @@ class _EventBus extends EventManager {
     }
 
     sendToDatabase (...args) {
-        this.ipc.promise.then(ipc => {
-            ipc.sendTo(this.database, ...args);
+        Promise.all([
+            this.database.promise,
+            this.ipc.promise
+        ]).then((ipc, database) => {
+            ipc.sendTo(database, ...args);
         });
     }
 
@@ -34,7 +38,7 @@ class _EventBus extends EventManager {
         this.ipc.resolve(oIpcRenderer);
 
         oIpcRenderer.once("databaseChannel", (oEvent, sMessage) => {
-            this.database = sMessage;
+            this.database.resolve(sMessage);
         });
     }
 };

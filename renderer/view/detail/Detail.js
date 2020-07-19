@@ -11,30 +11,48 @@ import { FlexContainer } from "../common/FlexContainer.js";
 export class Detail extends MultiView {
     constructor () {
         super();
-        this.addView("receiptDetail", new ReceiptDetail());
+        this.addEvent("storeChange");
+        this.addEvent("save");
+        this.addView("receiptDetail", new ReceiptDetail()
+            .addEventListener("storeChange", this.onStoreChange, this)
+        );
         this.addView("lineDetail", new LineDetail());
         this.addView("scanner", new Scanner());
     }
 
     render () {
-        const oFlex = new FlexContainer("div", {
-            flexDirection: "row",
-            justifyContent: "space-evenly"
-        });
-
         // base DOM element
-        const oBase = new DomElement("section")
+        const oNode = new DomElement("section")
             .addClass("detail")
             .appendNode(new DomElement("h3")
-                .setText(this.getProperty("title"))
+                .setText(this.getProperty("title-translation"))
             )
-            .appendNode(oFlex);
+            .appendNode(new FlexContainer("div", { flexDirection: "row", justifyContent: "space-evenly" })
+                .appendNode(new DomElement("div")
+                    .setChildView(this.getView("receiptDetail"))
+                )
+                .appendNode(new DomElement("div")
+                    .setChildView(this.getView("lineDetail"))
+                )
+                .appendNode(new DomElement("div")
+                    .setChildView(this.getView("scanner"))
+                )
+            )
+            .appendNode(new DomElement("div")
+                .appendNode(new DomElement("div"))
+                .setText("Click to Submit")
+                .addEventHandler("click", this.onSave, this)
+            )
+            .getNode();
 
-        // Adding subViews to flexContainer
-        this.getView("receiptDetail").setParent(oFlex.createItem("div").getNode());
-        this.getView("lineDetail").setParent(oFlex.createItem("div").getNode());
-        this.getView("scanner").setParent(oFlex.createItem("div").getNode());
+        return oNode;
+    }
 
-        return oBase.getNode();
+    onStoreChange (oEvent) {
+        this.handleEvent("storeChange", oEvent);
+    }
+
+    onSave (oEvent) {
+        this.handleEvent("save", oEvent);
     }
 };

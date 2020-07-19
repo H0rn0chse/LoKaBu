@@ -1,3 +1,4 @@
+let guid = 1;
 export class DomElement {
     constructor (sTag) {
         this.node = document.createElement(sTag);
@@ -6,6 +7,13 @@ export class DomElement {
 
     addClass (sClass) {
         this.node.classList.add(sClass);
+        return this;
+    }
+
+    addEventHandler (sEventName, fnHandler, oScope) {
+        const fnBoundHandler = oScope ? fnHandler.bind(oScope) : fnHandler;
+
+        this.node.addEventListener(sEventName, fnBoundHandler);
         return this;
     }
 
@@ -19,8 +27,23 @@ export class DomElement {
         return this;
     }
 
+    createGuid () {
+        guid += 1;
+        return guid;
+    }
+
     getNode () {
         return this.node;
+    }
+
+    insertAggregation (oView, ...args) {
+        oView.renderAggregation(this.getNode(), ...args);
+        return this;
+    }
+
+    setChildView (oView) {
+        oView.setParent(this.getNode());
+        return this;
     }
 
     setData (sKey, sValue) {
@@ -28,13 +51,18 @@ export class DomElement {
         return this;
     }
 
-    setEventHandler (sEventName, fnHandler) {
-        this.node.addEventListener("click", fnHandler);
+    setId (sId) {
+        this.node.id = `${sId}-${this.createGuid()}`;
         return this;
     }
 
     setText (sText) {
         this.node.innerText = sText;
+        return this;
+    }
+
+    setValue (sValue) {
+        this.node.value = sValue;
         return this;
     }
 };

@@ -14,8 +14,8 @@ export class HeaderItem extends View {
     getPropertyDefault (sProperty) {
         const oPropertyDefaults = {
             section: "section",
-            text: "defaultSection",
-            i18n: "default"
+            "title-translation": "defaultSection",
+            "title-i18n": "default"
         };
         return oPropertyDefaults[sProperty];
     }
@@ -30,10 +30,10 @@ export class HeaderItem extends View {
     render () {
         const oNode = new DomElement("div")
             .addClass("HeaderItem")
-            .setEventHandler("click", this.onClick.bind(this))
+            .addEventHandler("click", this.onClick, this)
             .appendNode(new DomElement("p")
                 .addClass("unselectable")
-                .setText(this.getProperty("text"))
+                .setText(this.getProperty("title-translation"))
             );
         if (this.getProperty("selected")) {
             oNode.addClass("selected");
