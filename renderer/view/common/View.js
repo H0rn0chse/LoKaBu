@@ -8,6 +8,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
         super();
         this.parent = null;
         this.models = {};
+        this.visibilty = true;
     }
 
     addModel (oModel, sName) {
@@ -96,6 +97,19 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return this;
     }
 
+    setVisibilty (bVisible) {
+        if (bVisible !== undefined) {
+            this.visibilty = bVisible;
+        } else {
+            bVisible = this.visibilty;
+        }
+
+        if (this.node !== undefined) {
+            this.node.style.display = bVisible ? "" : "none";
+        }
+        return this;
+    }
+
     update () {
         if (this.parent) {
             if (this.node) {
@@ -107,6 +121,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
             var oNode = this.render();
             this.node.parentElement.replaceChild(oNode, this.node);
             this.node = oNode;
+            this.setVisibilty();
         }
         return this;
     }

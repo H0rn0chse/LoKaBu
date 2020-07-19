@@ -14,7 +14,7 @@ export const HeaderModel = new _HeaderModel({
         {
             section: "detail",
             i18n: ["detail.section.title"],
-            selected: true
+            selected: false
         },
         {
             section: "history",

@@ -1,13 +1,23 @@
 import { EventManager } from "./common/EventManager.js";
+import { Deferred } from "./common/Deferred.js";
 
 class _EventBus extends EventManager {
+    constructor () {
+        super();
+        this.ipc = new Deferred();
+    }
+
     listen (sChannel, fnCallback, oScope) {
-        this.ipcRenderer.on(sChannel, fnCallback, oScope);
+        this.ipc.promise.then(ipc => {
+            ipc.on(sChannel, fnCallback, oScope);
+        });
         this.addEventListener(sChannel, fnCallback, oScope);
     }
 
     sendToDatabase (...args) {
-        this.ipcRenderer.sendTo(this.database, ...args);
+        this.ipc.promise.then(ipc => {
+            ipc.sendTo(this.database, ...args);
+        });
     }
 
     sendToBrowser (sEventName, ...args) {
@@ -15,13 +25,15 @@ class _EventBus extends EventManager {
     }
 
     sendToMain (...args) {
-        this.ipcRenderer.send(...args);
+        this.ipc.promise.then(ipc => {
+            ipc.send(...args);
+        });
     }
 
     setIpcRenderer (oIpcRenderer) {
-        this.ipcRenderer = oIpcRenderer;
+        this.ipc.resolve(oIpcRenderer);
 
-        this.ipcRenderer.once("databaseChannel", (oEvent, sMessage) => {
+        oIpcRenderer.once("databaseChannel", (oEvent, sMessage) => {
             this.database = sMessage;
         });
     }

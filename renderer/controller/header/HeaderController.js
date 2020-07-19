@@ -3,6 +3,7 @@ import { Header } from "../../view/header/Header.js";
 import { LanguageModel } from "../../model/database/LanguageModel.js";
 import { HeaderModel } from "../../model/view/HeaderModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
+import { EventBus } from "../../EventBus.js";
 
 export class HeaderController extends Controller {
     constructor (oDomRef) {
@@ -26,17 +27,19 @@ export class HeaderController extends Controller {
             .bindProperty("text", "lang", "i18n");
 
         oHeader.addEventListener("click", this.onHeaderClick, this);
+
+        EventBus.listen("navigation", this.onNavigation, this);
     }
 
     onHeaderClick (oEvent) {
-        HeaderModel.setSelectedSection(oEvent.customData.section);
+        EventBus.sendToBrowser("navigation", oEvent.customData.section);
+    }
+
+    onNavigation (sSection) {
+        HeaderModel.setSelectedSection(sSection);
     }
 
     onHeaderModelUpdate (oEvent) {
         this.update();
-    }
-
-    update () {
-        this.getContainer("header").getContent().update();
     }
 };
