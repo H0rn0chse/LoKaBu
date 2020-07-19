@@ -1,8 +1,8 @@
+import { Lock } from "../common/Lock.js";
 const BetterSqlite3 = require("better-sqlite3");
 const path = require("path");
 const fs = require("fs");
 const { remote } = require('electron');
-const Lock = require("../../assets/lock");
 
 const sDir = remote.app.getPath("userData");
 const sDatabasePath = path.join(sDir, "database.sqlite3");

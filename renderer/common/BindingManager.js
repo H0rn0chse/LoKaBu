@@ -1,4 +1,4 @@
-import { deepClone } from "../../assets/Utils.js";
+import { deepClone } from "./Utils.js";
 
 export class BindingManager {
     constructor () {

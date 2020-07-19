@@ -1,4 +1,4 @@
-import { deepClone, objectGet, objectSet } from "../../../assets/Utils.js";
+import { deepClone, objectGet, objectSet } from "../../common/Utils.js";
 import { EventManager } from "../../common/EventManager.js";
 
 export class Model extends EventManager {

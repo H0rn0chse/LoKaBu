@@ -1,4 +1,4 @@
-const Deferred = require("../../assets/deferred");
+const Deferred = require("../../common/Deferred.js");
 
 function ReceiptDetail () {
     const iMaxItems = 5;

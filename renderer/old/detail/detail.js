@@ -4,7 +4,7 @@ const oDropdown = require("../helper/dropdown");
 const HtmlElement = require("../helper/htmlElement");
 const oI18nHelper = require("../helper/i18n");
 const oNavigation = require("./../../assets/navigation");
-const Deferred = require("./../../assets/deferred");
+const Deferred = require("./../../common/Deferred.js");
 const stringMath = require('string-math');
 
 const oSettings = require("../databaseObjects/settings");
