@@ -4,6 +4,7 @@ export class BindingManager {
     constructor () {
         this.propertyBindings = {};
         this.aggregationBindings = {};
+        this.bindingContext = {};
     }
 
     bindProperty (sProperty, sModel, aPath) {
