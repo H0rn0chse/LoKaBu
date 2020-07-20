@@ -6,5 +6,7 @@ export const LanguageModel = new Model({
     "settings.section.title": "Settings",
     "analysis.section.title": "Analysis",
     "receipt.id": "ID",
-    "common.store": "Store"
+    "common.store": "Store",
+    "common.date": "Date",
+    "common.account": "Account"
 });

@@ -4,13 +4,10 @@ import { load } from "../../../assets/load.js";
 load.css("/renderer/view/common/FlexContainer.css");
 
 export class FlexContainer extends DomElement {
-    constructor (sTag, oFlex) {
-        super(sTag);
+    constructor (sTag, oInlineStyles) {
+        super(sTag, oInlineStyles);
 
         this.addClass("flexContainer");
-        Object.keys(oFlex).forEach(sKey => {
-            this.getNode().style[sKey] = oFlex[sKey];
-        });
     }
 
     appendNode (oNode) {

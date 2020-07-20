@@ -17,20 +17,32 @@ export class DetailController extends Controller {
             .addModel(DetailModel, "viewModel")
             .addModel(LanguageModel, "lang");
 
-        oDetail.bindProperty("title-i18n", "viewModel", ["title-i18n"]);
-        oDetail.bindProperty("title-translation", "lang", "title-i18n");
+        // Main View
+        oDetail.bindProperty("title-i18n", "viewModel", ["title-i18n"])
+            .bindProperty("title-translation", "lang", "title-i18n");
 
-        oDetail.bindProperty("id-i18n", "viewModel", ["id-i18n"]);
-        oDetail.bindProperty("id-translation", "lang", "id-i18n");
-        oDetail.bindProperty("id", "viewModel", ["id"]);
-
-        oDetail.bindProperty("store-i18n", "viewModel", ["store-i18n"]);
-        oDetail.bindProperty("store-translation", "lang", "store-i18n");
-        oDetail.bindProperty("store", "viewModel", ["store"]);
-        oDetail.bindAggregation("stores", new Aggregation("viewModel", ["stores"])
-            .bindProperty("text", "viewModel", ["text"])
-            .bindProperty("value", "viewModel", ["value"])
-        );
+        // ReceiptDetail
+        oDetail.bindProperty("id-i18n", "viewModel", ["id-i18n"])
+            .bindProperty("id-translation", "lang", "id-i18n")
+            .bindProperty("id", "viewModel", ["id"])
+            .bindProperty("date-i18n", "viewModel", ["date-i18n"])
+            .bindProperty("date-translation", "lang", "date-i18n")
+            .bindProperty("date", "viewModel", ["date"])
+            .bindProperty("store-i18n", "viewModel", ["store-i18n"])
+            .bindProperty("store-translation", "lang", "store-i18n")
+            .bindProperty("store", "viewModel", ["store"])
+            .bindAggregation("stores", new Aggregation("viewModel", ["stores"])
+                .bindProperty("text", "viewModel", ["text"])
+                .bindProperty("value", "viewModel", ["value"])
+            )
+            .bindProperty("account-i18n", "viewModel", ["account-i18n"])
+            .bindProperty("account-translation", "lang", "account-i18n")
+            .bindProperty("account", "viewModel", ["account"])
+            .bindAggregation("accounts", new Aggregation("viewModel", ["accounts"])
+                .bindProperty("text", "viewModel", ["text"])
+                .bindProperty("value", "viewModel", ["value"])
+            )
+            .bindProperty("comment", "viewModel", ["comment"]);
 
         oDetail
             .addEventListener("storeChange", this.onStoreChange, this)

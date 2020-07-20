@@ -1,7 +1,11 @@
 let guid = 1;
 export class DomElement {
-    constructor (sTag) {
+    constructor (sTag, oInlineStyles = {}) {
         this.node = document.createElement(sTag);
+
+        Object.keys(oInlineStyles).forEach(sKey => {
+            this.node.style[sKey] = oInlineStyles[sKey];
+        });
         return this;
     }
 
@@ -51,13 +55,30 @@ export class DomElement {
         return this;
     }
 
+    setDisabled () {
+        this.node.setAttribute('disabled', "");
+        return this;
+    }
+
     setId (sId) {
         this.node.id = `${sId}-${this.createGuid()}`;
         return this;
     }
 
+    setRows (iRow) {
+        this.node.setAttribute('rows', iRow);
+        return this;
+    }
+
     setText (sText) {
+        // make spaces non-breakable
+        sText = sText.replace(/ /g, '\xa0');
         this.node.innerText = sText;
+        return this;
+    }
+
+    setType (sType) {
+        this.node.setAttribute('type', sType);
         return this;
     }
 

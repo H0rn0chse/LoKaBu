@@ -20,11 +20,12 @@ export class HeaderController extends Controller {
             .addModel(LanguageModel, "lang");
 
         // do the binding
-        oHeader.bindAggregation("headerItems", new Aggregation("viewModel", ["items"]))
+        oHeader.bindAggregation("headerItems", new Aggregation("viewModel", ["items"])
             .bindProperty("section", "viewModel", ["section"])
             .bindProperty("selected", "viewModel", ["selected"])
             .bindProperty("title-i18n", "viewModel", ["i18n"])
-            .bindProperty("title-translation", "lang", "title-i18n");
+            .bindProperty("title-translation", "lang", "title-i18n")
+        );
 
         oHeader.addEventListener("click", this.onHeaderClick, this);
 

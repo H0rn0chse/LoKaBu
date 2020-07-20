@@ -17,7 +17,7 @@ export class BindingManager {
 
     bindAggregation (sProperty, oAggregation) {
         this.aggregationBindings[sProperty] = oAggregation;
-        return this.aggregationBindings[sProperty];
+        return this;
     }
 
     getAggregation (sAggregation) {
