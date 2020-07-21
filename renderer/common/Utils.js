@@ -29,3 +29,15 @@ export function objectSet (oObject, aPath, vValue) {
     oTemp[aPath[aPath.length - 1]] = vValue;
     return oObject;
 };
+
+export function isConstructor (O) {
+    try {
+        // eslint-disable-next-line no-new
+        new O();
+    } catch (err) {
+        if (err.message.indexOf('is not a constructor') >= 0) {
+            return false;
+        }
+    }
+    return true;
+}

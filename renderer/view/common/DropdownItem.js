@@ -10,5 +10,4 @@ export class DropdownItem extends View {
 
         return oNode;
     }
-
-}
+};

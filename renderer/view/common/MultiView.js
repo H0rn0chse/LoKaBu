@@ -8,6 +8,7 @@ export class MultiView extends View {
 
     addView (sName, oView) {
         this.subViews[sName] = oView;
+        return this;
     }
 
     applyBindingsToSubViews () {
@@ -15,6 +16,7 @@ export class MultiView extends View {
             subView.setModels(this.getModels());
             subView.setBindings(this);
         });
+        return this;
     }
 
     getView (sName) {

@@ -14,24 +14,20 @@ export const DetailModel = new _DetailModel({
     "account-i18n": ["common.account"],
     "account": "value2",
     "comment": `some\nmultiline\ncomment\nwith\nmore\nthan\nfive\nlines`,
-    "stores": [{
-        text: "store1",
-        value: "value1"
+    "receiptLines": [{
+        id: "1",
+        person: "value1",
+        type: "value1",
+        value: 1
     }, {
-        text: "store2",
-        value: "value2"
+        id: "2",
+        person: "value2",
+        type: "value2",
+        value: 2.5
     }, {
-        text: "store3",
-        value: "value3"
-    }],
-    "accounts": [{
-        text: "account1",
-        value: "value1"
-    }, {
-        text: "account2",
-        value: "value2"
-    }, {
-        text: "account3",
-        value: "value3"
+        id: "3",
+        person: "value3",
+        type: "value3",
+        value: 3 + 1 / 3
     }]
 });

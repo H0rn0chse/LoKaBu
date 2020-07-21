@@ -1,10 +1,18 @@
 export class EventManager {
     constructor () {
         this.eventHandler = {};
+        this.eventManager = [];
     }
 
     addEvent (sEventName) {
         this.eventHandler[sEventName] = [];
+        return this;
+    }
+
+    addEvents (aEventNames) {
+        aEventNames.forEach(sEventName => {
+            this.addEvent(sEventName);
+        });
         return this;
     }
 
@@ -18,9 +26,20 @@ export class EventManager {
         return this;
     }
 
+    addGenericListener (oEventManager) {
+        this.eventManager.push(oEventManager);
+        return this;
+    }
+
     handleEvent (sEventName, ...args) {
+        if (!this.eventHandler[sEventName]) {
+            this.addEvent(sEventName);
+        }
         this.eventHandler[sEventName].forEach(fnHandler => {
             fnHandler(...args);
+        });
+        this.eventManager.forEach(oEventManager => {
+            oEventManager.handleEvent(sEventName, ...args);
         });
         return this;
     }

@@ -67,8 +67,17 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return "";
     }
 
-    getValueById (sId) {
-        const oNode = document.querySelector(`[id^="${sId}-"]`);
+    getValueById (sId, oSource) {
+        let oRoot;
+        if (oSource) {
+            oRoot = oSource;
+        } else if (this.node) {
+            oRoot = this.node;
+        } else {
+            oRoot = document;
+        }
+
+        const oNode = oRoot.querySelector(`[id^="${sId}-"]`);
         return oNode && oNode.value;
     }
 

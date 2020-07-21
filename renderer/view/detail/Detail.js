@@ -11,13 +11,15 @@ load.css("/renderer/view/Detail/Detail.css");
 export class Detail extends MultiView {
     constructor () {
         super();
-        this.addEvent("storeChange");
         this.addEvent("save");
         this.addView("receiptDetail", new ReceiptDetail()
-            .addEventListener("storeChange", this.onStoreChange, this)
-        );
-        this.addView("lineDetail", new LineDetail());
-        this.addView("scanner", new Scanner());
+            .addGenericListener(this));
+
+        this.addView("lineDetail", new LineDetail()
+            .addGenericListener(this));
+
+        this.addView("scanner", new Scanner()
+            .addGenericListener(this));
     }
 
     render () {
@@ -47,10 +49,6 @@ export class Detail extends MultiView {
             .getNode();
 
         return oNode;
-    }
-
-    onStoreChange (oEvent) {
-        this.handleEvent("storeChange", oEvent);
     }
 
     onSave (oEvent) {

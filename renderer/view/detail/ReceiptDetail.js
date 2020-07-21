@@ -9,8 +9,11 @@ load.css("/renderer/view/detail/ReceiptDetail.css");
 export class ReceiptDetail extends View {
     constructor () {
         super();
-        this.addEvent("storeChange");
-        this.addEvent("accountChange");
+        this.addEvents([
+            "accountChange",
+            "dateChange",
+            "storeChange"
+        ]);
     }
 
     render () {
@@ -34,6 +37,7 @@ export class ReceiptDetail extends View {
                 .appendNode(new DomElement("input")
                     .setType("date")
                     .setValue(this.getProperty("date"))
+                    .addEventHandler("change", this.onDateChange, this)
                 )
             )
             // Store
@@ -43,7 +47,6 @@ export class ReceiptDetail extends View {
                 )
                 .appendNode(new DomElement("select")
                     .insertAggregation(this, "stores", DropdownItem)
-                    .setId("store")
                     .setValue(this.getProperty("store"))
                     .addEventHandler("change", this.onStoreChange, this)
                 )
@@ -55,7 +58,6 @@ export class ReceiptDetail extends View {
                 )
                 .appendNode(new DomElement("select")
                     .insertAggregation(this, "accounts", DropdownItem)
-                    .setId("account")
                     .setValue(this.getProperty("account"))
                     .addEventHandler("change", this.onAccountChange, this)
                 )
@@ -69,18 +71,24 @@ export class ReceiptDetail extends View {
         return oBase.getNode();
     }
 
+    onDateChange (oEvent) {
+        oEvent.customData = {
+            date: oEvent.target.value
+        };
+        this.handleEvent("dateChange", oEvent);
+    }
+
     onStoreChange (oEvent) {
         oEvent.customData = {
-            store: this.getValueById("store")
+            store: oEvent.target.value
         };
         this.handleEvent("storeChange", oEvent);
     }
 
     onAccountChange (oEvent) {
         oEvent.customData = {
-            account: this.getValueById("account")
+            account: oEvent.target.value
         };
         this.handleEvent("accountChange", oEvent);
     }
-
 };
