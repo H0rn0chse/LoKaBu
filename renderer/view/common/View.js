@@ -11,6 +11,10 @@ export class View extends MultiClass(BindingManager, EventManager) {
         this.visibilty = true;
     }
 
+    addGenericListenerToChild (oChild) {
+        oChild.addGenericListener(this);
+    }
+
     addModel (oModel, sName) {
         this.models[sName] = oModel;
         return this;
@@ -24,11 +28,20 @@ export class View extends MultiClass(BindingManager, EventManager) {
     getAggregation (sAggregation) {
         const oBinding = this.getAggregationBinding(sAggregation);
         if (oBinding !== undefined) {
-            if (this.models[oBinding.model] !== undefined) {
-                const oModel = this.models[oBinding.model];
-                return oModel.get(oBinding.path);
+            const oModel = this.models[oBinding.model];
+            if (oModel !== undefined) {
+                const aData = oModel.get(oBinding.path);
+                if (Array.isArray(aData)) {
+                    return aData;
+                }
+                console.error(`${oBinding.model} => ${JSON.stringify(oBinding.path)} did not return an array`, this);
+            } else {
+                console.error(`${oBinding.model} was not added to this view`, this);
             }
+        } else {
+            console.error(`${sAggregation} was not bound to this view`, this);
         }
+        return [];
     }
 
     getModels () {
@@ -41,24 +54,38 @@ export class View extends MultiClass(BindingManager, EventManager) {
 
     getProperty (sProperty) {
         const oBinding = this.getPropertyBinding(sProperty);
-        if (oBinding !== undefined && this.models[oBinding.model] !== undefined) {
+        if (oBinding !== undefined) {
             const oModel = this.models[oBinding.model];
-            // regular binding
-            if (Array.isArray(oBinding.path)) {
-                const oBindingContext = this.getBindingContext();
-                if (oBinding.model === oBindingContext.model) {
-                    return oModel.get(oBinding.path, oBindingContext.path);
+            if (oModel !== undefined) {
+                let aArgs;
+                // regular binding
+                if (Array.isArray(oBinding.path)) {
+                    const oBindingContext = this.getBindingContext();
+                    if (oBinding.model === oBindingContext.model) {
+                        aArgs = [oBinding.path, oBindingContext.path];
+                    } else {
+                        aArgs = [oBinding.path, []];
+                    }
+                // relative binding
+                } else {
+                    const vProperty = this.getProperty(oBinding.path);
+                    const oBindingContext = this.getBindingContext();
+                    if (oBinding.model === oBindingContext.model) {
+                        aArgs = [vProperty, oBindingContext.path];
+                    } else {
+                        aArgs = [vProperty, []];
+                    }
                 }
-                return oModel.get(oBinding.path, []);
-            // relative binding
+                const oData = oModel.get(...aArgs);
+                if (oData !== undefined) {
+                    return oData;
+                }
+                console.error(`${oBinding.model} => ${JSON.stringify(aArgs)} was undefined`, this);
             } else {
-                const vProperty = this.getProperty(oBinding.path);
-                const oBindingContext = this.getBindingContext();
-                if (oBinding.model === oBindingContext.model) {
-                    return oModel.get(vProperty, oBindingContext.path);
-                }
-                return oModel.get(vProperty, []);
+                console.error(`${oBinding.model} was not added to this view`, this);
             }
+        } else {
+            console.error(`${sProperty} was not bound to this view`, this);
         }
         return this.getPropertyDefault(sProperty);
     }

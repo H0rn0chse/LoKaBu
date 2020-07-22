@@ -30,7 +30,8 @@ export class DetailController extends Controller {
             .bindProperty("title-translation", "lang", "title-i18n");
 
         // ReceiptDetail
-        oDetail.bindProperty("id-i18n", "viewModel", ["id-i18n"])
+        oDetail
+            .bindProperty("id-i18n", "viewModel", ["id-i18n"])
             .bindProperty("id-translation", "lang", "id-i18n")
             .bindProperty("id", "viewModel", ["id"])
             .bindProperty("date-i18n", "viewModel", ["date-i18n"])

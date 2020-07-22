@@ -11,7 +11,9 @@ load.css("/renderer/view/Detail/Detail.css");
 export class Detail extends MultiView {
     constructor () {
         super();
-        this.addEvent("save");
+        this.addEvents([
+            "save"
+        ]);
         this.addView("receiptDetail", new ReceiptDetail()
             .addGenericListener(this));
 
@@ -26,9 +28,9 @@ export class Detail extends MultiView {
         // base DOM element
         const oNode = new DomElement("section")
             .addClass("detail")
-            .appendNode(new DomElement("h3")
+            /* appendNode(new DomElement("h3")
                 .setText(this.getProperty("title-translation"))
-            )
+            ) */
             .appendNode(new FlexContainer("div", { flexDirection: "row" })
                 .appendNode(new DomElement("div", { flexBasis: "100%" })
                     .setChildView(this.getView("receiptDetail"))

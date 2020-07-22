@@ -10,7 +10,9 @@ export class DomElement {
     }
 
     addClass (sClass) {
-        this.node.classList.add(sClass);
+        if (sClass !== "" && sClass !== undefined) {
+            this.node.classList.add(sClass);
+        }
         return this;
     }
 

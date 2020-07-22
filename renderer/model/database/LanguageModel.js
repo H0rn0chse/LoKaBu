@@ -8,5 +8,7 @@ export const LanguageModel = new Model({
     "receipt.id": "ID",
     "common.store": "Store",
     "common.date": "Date",
-    "common.account": "Account"
+    "common.account": "Account",
+    "common.value": "Value",
+    "common.edit": "Edit"
 });

@@ -20,16 +20,6 @@ export class BindingManager {
         return this;
     }
 
-    getAggregation (sAggregation) {
-        if (this.aggregationBindings[sAggregation] !== undefined) {
-            const oBinding = this.aggregationBindings[sAggregation];
-            if (this.models[oBinding.model] !== undefined) {
-                const oModel = this.models[oBinding.model];
-                return oModel.get(oBinding.path);
-            }
-        }
-    }
-
     getAggregationBinding (sAggregation) {
         return this.aggregationBindings[sAggregation];
     }

@@ -5,13 +5,36 @@ export class Model extends EventManager {
     constructor (oData) {
         super();
         this._data = oData;
-        this.addEvent("update");
+        this.addEvents([
+            "update"
+        ]);
     }
 
     get (aPath, aBindingContextPath = []) {
-        const aContextPath = deepClone(aBindingContextPath);
-        aContextPath.push(...deepClone(aPath));
-        return objectGet(this._data, aContextPath);
+        if (Array.isArray(aPath)) {
+            let aContextPath = deepClone(aBindingContextPath);
+            aContextPath.push(...deepClone(aPath));
+
+            aContextPath = aContextPath.reduce((acc, vCurrentItem) => {
+                if (typeof vCurrentItem === "string" || typeof vCurrentItem === "number") {
+                    acc.push(vCurrentItem);
+                } else if (typeof vCurrentItem === "object") {
+                    const sIdentifier = Object.keys(vCurrentItem)[0];
+                    const sLookUpValue = vCurrentItem[sIdentifier];
+                    const vValue = this.get(acc);
+                    if (Array.isArray(vValue)) {
+                        const iIndex = vValue.findIndex(vItem => {
+                            return vItem[sIdentifier] === sLookUpValue;
+                        });
+                        if (iIndex > -1) {
+                            acc.push(iIndex);
+                        }
+                    }
+                }
+                return acc;
+            }, []);
+            return objectGet(this._data, aContextPath);
+        }
     }
 
     onUpdate (oEvent) {

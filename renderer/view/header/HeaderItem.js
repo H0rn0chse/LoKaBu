@@ -8,7 +8,9 @@ load.css("/renderer/view/common/Text.css");
 export class HeaderItem extends View {
     constructor () {
         super();
-        this.addEvent("click");
+        this.addEvents([
+            "click"
+        ]);
     }
 
     getPropertyDefault (sProperty) {
@@ -34,10 +36,10 @@ export class HeaderItem extends View {
             .appendNode(new DomElement("p")
                 .addClass("unselectable")
                 .setText(this.getProperty("title-translation"))
-            );
-        if (this.getProperty("selected")) {
-            oNode.addClass("selected");
-        }
-        return oNode.getNode();
+            )
+            .addClass(this.getProperty("selected") ? "selected" : "")
+            .getNode();
+
+        return oNode;
     }
 };

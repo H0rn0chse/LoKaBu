@@ -23,10 +23,6 @@ export class LineDetail extends View {
         return oNode;
     }
 
-    addGenericListenerToChild (oChild) {
-        oChild.addGenericListener(this);
-    }
-
     onLineAdd (oEvent) {
         oEvent.customData = {};
         this.handleEvent("lineAdd", oEvent);
