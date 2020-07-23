@@ -19,6 +19,11 @@ export class HistoryController extends Controller {
             .addModel(AccountModel, "account")
             .addModel(LanguageModel, "lang");
 
+        // Base view
+        oHistory
+            .bindProperty("currentPage", "viewModel", ["currentPage"])
+            .bindProperty("pageCount", "viewModel", ["pageCount"]);
+
         // SortBar
         oHistory
             .bindAggregation("sort", new Aggregation("viewModel", ["sort"])
@@ -40,13 +45,19 @@ export class HistoryController extends Controller {
             );
 
         oHistory
-            .addEventListener("editLine", this.onEditLine, this);
+            .addEventListener("editLine", this.onEditLine, this)
+            .addEventListener("navBefore", this.onPaging.bind(this, "before"))
+            .addEventListener("navNext", this.onPaging.bind(this, "next"));
 
         EventBus.listen("navigation", this.onNavigation, this);
     }
 
     onNavigation (sSection) {
         this.getContainer("history").setVisibilty(sSection === "history");
+    }
+
+    onPaging (sDirection, oEvent) {
+        console.log(sDirection, oEvent);
     }
 
     onEditLine (oEvent) {

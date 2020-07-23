@@ -31,5 +31,7 @@ export const HistoryModel = new _HistoryModel({
         date: "2020-12-05",
         account: ["accounts", { value: "value2" }, "text"],
         value: 42.1
-    }]
+    }],
+    "currentPage": 1,
+    "pageCount": 5
 });

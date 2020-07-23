@@ -73,8 +73,13 @@ export class DomElement {
     }
 
     setText (sText) {
+        if (typeof sText !== "string") {
+            sText = sText.toString();
+        }
+
         // make spaces non-breakable
         sText = sText.replace(/ /g, '\xa0');
+
         this.node.innerText = sText;
         return this;
     }
