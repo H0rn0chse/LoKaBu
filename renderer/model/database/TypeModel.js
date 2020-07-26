@@ -2,13 +2,13 @@ import { Model } from "../common/Model.js";
 
 export const TypeModel = new Model({
     types: [{
-        text: "type1",
-        value: "value1"
+        id: "0",
+        text: "type1"
     }, {
-        text: "type2",
-        value: "value2"
+        id: "1",
+        text: "type2"
     }, {
-        text: "type3",
-        value: "value3"
+        id: "2",
+        text: "type3"
     }]
 });

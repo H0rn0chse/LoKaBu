@@ -52,7 +52,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return this.parent;
     }
 
-    getProperty (sProperty) {
+    getProperty (sProperty, bSupressError = false) {
         const oBinding = this.getPropertyBinding(sProperty);
         if (oBinding !== undefined) {
             const oModel = this.models[oBinding.model];
@@ -80,12 +80,18 @@ export class View extends MultiClass(BindingManager, EventManager) {
                 if (oData !== undefined) {
                     return oData;
                 }
-                console.error(`${oBinding.model} => ${JSON.stringify(aArgs)} was undefined`, this);
+                if (!bSupressError) {
+                    console.error(`${oBinding.model} => ${JSON.stringify(aArgs)} was undefined`, this);
+                }
             } else {
-                console.error(`${oBinding.model} was not added to this view`, this);
+                if (!bSupressError) {
+                    console.error(`${oBinding.model} was not added to this view`, this);
+                }
             }
         } else {
-            console.error(`${sProperty} was not bound to this view`, this);
+            if (!bSupressError) {
+                console.error(`${sProperty} was not bound to this view`, this);
+            }
         }
         return this.getPropertyDefault(sProperty);
     }
@@ -112,7 +118,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return new DomElement("div").getNode();
     }
 
-    renderAggregation (oDomRef, sAggregation, Constructor, fnChild = () => {}) {
+    renderAggregation (oDomRef, sAggregation, Constructor, fnAfterBinding = () => {}) {
         const aItems = this.getAggregation(sAggregation);
         const oBinding = this.getAggregationBinding(sAggregation);
 
@@ -122,7 +128,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
             oChild.setBindings(oBinding);
             oChild.setBindingContext(oBinding, iIndex);
             oChild.setParent(oDomRef);
-            fnChild(oChild);
+            fnAfterBinding(oChild);
             oChild.update();
         });
         return this;

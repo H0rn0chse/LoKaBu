@@ -25,31 +25,27 @@ export class DetailController extends Controller {
             .addModel(TypeModel, "type")
             .addModel(LanguageModel, "lang");
 
-        // Main View
-        oDetail.bindProperty("title-i18n", "viewModel", ["title-i18n"])
-            .bindProperty("title-translation", "lang", "title-i18n");
-
         // ReceiptDetail
         oDetail
             .bindProperty("id-i18n", "viewModel", ["id-i18n"])
-            .bindProperty("id-translation", "lang", "id-i18n")
+            .bindProperty("id-trans", "lang", "id-i18n")
             .bindProperty("id", "viewModel", ["id"])
             .bindProperty("date-i18n", "viewModel", ["date-i18n"])
-            .bindProperty("date-translation", "lang", "date-i18n")
+            .bindProperty("date-trans", "lang", "date-i18n")
             .bindProperty("date", "viewModel", ["date"])
             .bindProperty("store-i18n", "viewModel", ["store-i18n"])
-            .bindProperty("store-translation", "lang", "store-i18n")
+            .bindProperty("store-trans", "lang", "store-i18n")
             .bindProperty("store", "viewModel", ["store"])
             .bindAggregation("stores", new Aggregation("store", ["stores"])
                 .bindProperty("text", "store", ["text"])
-                .bindProperty("value", "store", ["value"])
+                .bindProperty("value", "store", ["id"])
             )
             .bindProperty("account-i18n", "viewModel", ["account-i18n"])
-            .bindProperty("account-translation", "lang", "account-i18n")
+            .bindProperty("account-trans", "lang", "account-i18n")
             .bindProperty("account", "viewModel", ["account"])
             .bindAggregation("accounts", new Aggregation("account", ["accounts"])
                 .bindProperty("text", "account", ["text"])
-                .bindProperty("value", "account", ["value"])
+                .bindProperty("value", "account", ["id"])
             )
             .bindProperty("comment", "viewModel", ["comment"]);
 
@@ -57,17 +53,17 @@ export class DetailController extends Controller {
         oDetail
             .bindAggregation("receiptLines", new Aggregation("viewModel", ["receiptLines"])
                 .bindProperty("id", "viewModel", ["id"])
-                .bindProperty("person", "viewModel", ["person"])
-                .bindProperty("type", "viewModel", ["type"])
-                .bindProperty("value", "viewModel", ["value"])
                 .bindAggregation("persons", new Aggregation("person", ["persons"])
                     .bindProperty("text", "person", ["text"])
-                    .bindProperty("value", "person", ["value"])
+                    .bindProperty("value", "person", ["id"])
                 )
+                .bindProperty("person", "viewModel", ["person"])
                 .bindAggregation("types", new Aggregation("type", ["types"])
                     .bindProperty("text", "type", ["text"])
-                    .bindProperty("value", "type", ["value"])
+                    .bindProperty("value", "type", ["id"])
                 )
+                .bindProperty("type", "viewModel", ["type"])
+                .bindProperty("value", "viewModel", ["id"])
             );
 
         oDetail

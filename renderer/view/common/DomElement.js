@@ -42,6 +42,13 @@ export class DomElement {
         return this.node;
     }
 
+    /**
+     * Inserts an aggregation into the view node
+     * @param {object} oView The base view where the aggregation gets included
+     * @param {*} sAggregation Name of the aggregation
+     * @param {*} Constructor Constructor of the aggregation child
+     * @param {*} [fnAfterBinding] A method which gets called after bindings were attached
+     */
     insertAggregation (oView, ...args) {
         oView.renderAggregation(this.getNode(), ...args);
         return this;
@@ -52,6 +59,11 @@ export class DomElement {
         return this;
     }
 
+    setChecked (bChecked) {
+        this.node.checked = bChecked;
+        return this;
+    }
+
     setData (sKey, sValue) {
         this.node.setAttribute(`data-${sKey}`, sValue);
         return this;
@@ -59,6 +71,11 @@ export class DomElement {
 
     setDisabled () {
         this.node.setAttribute('disabled', "");
+        return this;
+    }
+
+    setName (sName) {
+        this.node.setAttribute('name', sName);
         return this;
     }
 

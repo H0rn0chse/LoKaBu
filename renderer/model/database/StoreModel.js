@@ -2,13 +2,13 @@ import { Model } from "../common/Model.js";
 
 export const StoreModel = new Model({
     stores: [{
-        text: "store1",
-        value: "value1"
+        id: "0",
+        text: "store1"
     }, {
-        text: "store2",
-        value: "value2"
+        id: "1",
+        text: "store2"
     }, {
-        text: "store3",
-        value: "value3"
+        id: "2",
+        text: "store3"
     }]
 });

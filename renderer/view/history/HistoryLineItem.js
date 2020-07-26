@@ -5,7 +5,9 @@ import { FlexContainer } from "../common/FlexContainer.js";
 export class HistoryLineItem extends View {
     constructor () {
         super();
-        this.addEvent("editLine");
+        this.addEvents([
+            "editLine"
+        ]);
     }
 
     render () {

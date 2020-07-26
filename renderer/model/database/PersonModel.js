@@ -2,13 +2,13 @@ import { Model } from "../common/Model.js";
 
 export const PersonModel = new Model({
     persons: [{
-        text: "person1",
-        value: "value1"
+        id: "0",
+        text: "person1"
     }, {
-        text: "person2",
-        value: "value2"
+        id: "1",
+        text: "person2"
     }, {
-        text: "person3",
-        value: "value3"
+        id: "2",
+        text: "person3"
     }]
 });

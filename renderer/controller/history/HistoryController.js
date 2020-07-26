@@ -27,6 +27,7 @@ export class HistoryController extends Controller {
         // SortBar
         oHistory
             .bindAggregation("sort", new Aggregation("viewModel", ["sort"])
+                .bindProperty("id", "viewModel", ["id"])
                 .bindProperty("text-i18n", "viewModel", ["text-i18n"])
                 .bindProperty("text", "lang", "text-i18n")
                 .bindProperty("selected", "viewModel", ["selected"])
@@ -47,7 +48,8 @@ export class HistoryController extends Controller {
         oHistory
             .addEventListener("editLine", this.onEditLine, this)
             .addEventListener("navBefore", this.onPaging.bind(this, "before"))
-            .addEventListener("navNext", this.onPaging.bind(this, "next"));
+            .addEventListener("navNext", this.onPaging.bind(this, "next"))
+            .addEventListener("sort", this.onSort, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
     }
@@ -58,6 +60,10 @@ export class HistoryController extends Controller {
 
     onPaging (sDirection, oEvent) {
         console.log(sDirection, oEvent);
+    }
+
+    onSort (oEvent) {
+        console.log("sort", oEvent.customData);
     }
 
     onEditLine (oEvent) {

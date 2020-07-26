@@ -10,24 +10,24 @@ export const DetailModel = new _DetailModel({
     "date-i18n": ["common.date"],
     "date": "2020-12-04",
     "store-i18n": ["common.store"],
-    "store": "value2",
+    "store": "1",
     "account-i18n": ["common.account"],
-    "account": "value2",
+    "account": "1",
     "comment": `some\nmultiline\ncomment\nwith\nmore\nthan\nfive\nlines`,
     "receiptLines": [{
-        id: "1",
-        person: "value1",
-        type: "value1",
-        value: 1
+        "id": "1",
+        "person": "0",
+        "type": "0",
+        "value": 1
     }, {
-        id: "2",
-        person: "value2",
-        type: "value2",
-        value: 2.5
+        "id": "2",
+        "person": "1",
+        "type": "1",
+        "value": 2.5
     }, {
-        id: "3",
-        person: "value3",
-        type: "value3",
-        value: 3 + 1 / 3
+        "id": "3",
+        "person": "2",
+        "type": "2",
+        "value": 3 + 1 / 3
     }]
 });

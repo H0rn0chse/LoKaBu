@@ -2,6 +2,10 @@ export function deepClone (oObject) {
     return JSON.parse(JSON.stringify(oObject));
 };
 
+export function deepEqual (vA, vB) {
+    return JSON.stringify(vA) === JSON.stringify(vB);
+};
+
 export function objectGet (oObject, aPath) {
     let vValue = oObject;
     for (let i = 0; i < aPath.length; i++) {
