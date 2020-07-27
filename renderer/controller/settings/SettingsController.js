@@ -51,7 +51,7 @@ export class SettingsController extends Controller {
                 .bindProperty("text", "lang", ["value"])
                 .bindProperty("value", "lang", ["value"])
             )
-            .bindProperty("language", "viewModel", ["currentLanguage"]);
+            .bindProperty("language", "viewModel", ["current-language"]);
 
         // default settings
         oSettings
@@ -144,7 +144,6 @@ export class SettingsController extends Controller {
         console.log("listChange", oEvent.customData);
         const sList = oEvent.customData.list;
         SettingsModel.updateList(sList);
-        this.update();
     }
 
     onDefaultChange (oEvent) {

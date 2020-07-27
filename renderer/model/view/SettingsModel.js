@@ -32,7 +32,7 @@ export const SettingsModel = new _SettingsModel({
 
     "default-section-i18n": ["settings.defaultValues"],
     "language-i18n": ["common.language"],
-    "currentLanguage": "de",
+    "current-language": "de",
 
     "list-section-i18n": ["settings.lists"],
 

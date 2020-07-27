@@ -25,6 +25,11 @@ export class DetailController extends Controller {
             .addModel(TypeModel, "type")
             .addModel(LanguageModel, "lang");
 
+        // detail base view
+        oDetail
+            .bindProperty("save-i18n", "viewModel", ["save-i18n"])
+            .bindProperty("save-trans", "lang", "save-i18n");
+
         // ReceiptDetail
         oDetail
             .bindProperty("id-i18n", "viewModel", ["id-i18n"])

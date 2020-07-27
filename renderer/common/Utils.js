@@ -20,17 +20,29 @@ export function objectGet (oObject, aPath) {
 export function objectSet (oObject, aPath, vValue) {
     oObject = oObject || {};
     let oTemp = oObject;
-    for (let i = 0; i < aPath.length - 1; i++) {
-        if (oTemp[aPath[i]] === undefined) {
-            if (Number.isInteger(aPath[i])) {
-                oTemp[aPath[i]] = new Array(aPath[i]).fill();
-            } else {
-                oTemp[aPath[i]] = {};
+
+    if (aPath.length === 0) {
+        Object.keys(oObject).forEach(sKey => {
+            delete oObject[sKey];
+        });
+        Object.keys(vValue).forEach(sKey => {
+            oObject[sKey] = vValue[sKey];
+        });
+    } else {
+        // build path
+        for (let i = 0; i < aPath.length - 1; i++) {
+            if (oTemp[aPath[i]] === undefined) {
+                if (Number.isInteger(aPath[i])) {
+                    oTemp[aPath[i]] = new Array(aPath[i]).fill();
+                } else {
+                    oTemp[aPath[i]] = {};
+                }
             }
+            oTemp = oTemp[aPath[i]];
         }
-        oTemp = oTemp[aPath[i]];
+        oTemp[aPath[aPath.length - 1]] = vValue;
     }
-    oTemp[aPath[aPath.length - 1]] = vValue;
+
     return oObject;
 };
 

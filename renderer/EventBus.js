@@ -10,7 +10,11 @@ class _EventBus extends EventManager {
 
     listen (sChannel, fnCallback, oScope) {
         this.ipc.promise.then(ipc => {
-            ipc.on(sChannel, fnCallback, oScope);
+            let fnBoundCallback = fnCallback;
+            if (oScope) {
+                fnBoundCallback = fnBoundCallback.bind(oScope);
+            }
+            ipc.on(sChannel, fnBoundCallback);
         });
         this.addEventListener(sChannel, fnCallback, oScope);
     }
@@ -19,7 +23,7 @@ class _EventBus extends EventManager {
         Promise.all([
             this.database.promise,
             this.ipc.promise
-        ]).then((ipc, database) => {
+        ]).then(([database, ipc]) => {
             ipc.sendTo(database, ...args);
         });
     }

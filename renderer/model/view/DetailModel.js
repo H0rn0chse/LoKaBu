@@ -4,6 +4,7 @@ import { Model } from "../common/Model.js";
 class _DetailModel extends Model {}
 
 export const DetailModel = new _DetailModel({
+    "save-i18n": ["common.save"],
     "title-i18n": ["detail.section.title"],
     "id-i18n": ["receipt.id"],
     "id": "some special id",

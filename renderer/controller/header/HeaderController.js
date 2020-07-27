@@ -9,8 +9,6 @@ export class HeaderController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        HeaderModel.addEventListener("update", this.onHeaderModelUpdate, this);
-
         const oHeader = new Header();
         const oHeaderContainer = this.createContainer("header")
             .setContent(oHeader);
