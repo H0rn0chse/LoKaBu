@@ -82,11 +82,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
                     return oData;
                 }
                 if (!bSupressError) {
-                    const sError = `${oBinding.model} => ${JSON.stringify(aArgs)} was undefined`;
-                    if (sError === `lang => [["value"],["languages",0]] was undefined`) {
-                        debugger
-                    }
-                    console.error(`${oBinding.model} => ${JSON.stringify(aArgs)} was undefined`, this);
+                    console.warn(`${oBinding.model} => ${JSON.stringify(aArgs)} was undefined`, this);
                 }
             } else {
                 if (!bSupressError) {

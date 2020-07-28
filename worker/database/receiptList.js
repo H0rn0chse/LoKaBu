@@ -1,7 +1,7 @@
 import { db } from "./databaseConnection.js";
 import { ipc } from "./ipc.js";
-const SqlStatement = require("./assets/sqlStatement");
-const FilterOption = require("./assets/filterOption");
+import { SqlStatement } from "../../assets/sqlStatement.js";
+import { FilterOption } from "../../assets/filterOption.js";
 
 function read (sSql) {
     const oStmt = db.get().prepare(sSql);

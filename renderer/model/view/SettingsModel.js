@@ -1,7 +1,38 @@
 /* eslint-disable quote-props */
 import { Model } from "../common/Model.js";
+import { LanguageModel } from "../database/LanguageModel.js";
+import { EventBus } from "../../EventBus.js";
 
 class _SettingsModel extends Model {
+    constructor (...args) {
+        super(...args);
+        this.updateLanguageModel = true;
+
+        EventBus.sendToDatabase("settings-read-object");
+        EventBus.listen("settings-read-object", (oEvent, oData) => {
+            console.log("SettingsModel loaded");
+            this.mergeObject(oData);
+
+            if (this.updateLanguageModel) {
+                this.updateLanguageModel = false;
+                LanguageModel.update();
+            }
+        });
+
+        EventBus.listen("settings-write-error", (oEvent, sError) => {
+            throw sError;
+        });
+
+        EventBus.listen("settings-write-success", (oEvent, oData) => {
+            this.update();
+
+            if (this.updateLanguageModel) {
+                this.updateLanguageModel = false;
+                LanguageModel.update();
+            }
+        });
+    }
+
     get (aPath, aBindingContextPath = []) {
         if (aPath.length === 1 && aPath[0] === "checked-id") {
             return this.getCheckedId();
@@ -19,21 +50,30 @@ class _SettingsModel extends Model {
     updateList (sList) {
         this.set(["current-list"], sList);
     }
+
+    setLanguage (sLanguage) {
+        // views can indirectly consume this model
+        this.updateLanguageModel = true;
+
+        const aPath = ["Language"];
+        this.set(aPath, sLanguage, true);
+        this.save();
+    }
+
+    save () {
+        EventBus.sendToDatabase("settings-write-object", this.get([]));
+    }
 }
 
 export const SettingsModel = new _SettingsModel({
     "database-section-i18n": ["settings.databaseSettings"],
     "current-database-i18n": ["settings.currentDatabase"],
-    "database-path": "C:/somePath/to/A/File.sqlite",
     "database-create-i18n": ["settings.createDatabase"],
     "database-open-i18n": ["settings.openDatabase"],
     "database-open-user-i18n": ["settings.openUserDatabase"],
     "database-default-i18n": ["settings.setDefaultDatabase"],
-
     "default-section-i18n": ["settings.defaultValues"],
     "language-i18n": ["common.language"],
-    "current-language": "de",
-
     "list-section-i18n": ["settings.lists"],
 
     "lists": [{
@@ -55,4 +95,7 @@ export const SettingsModel = new _SettingsModel({
     }],
     "current-list": "accounts",
     "default-i18n": ["common.default"]
+
+    /* "database-path": "C:/somePath/to/A/File.sqlite",
+    "current-language": "de", */
 });

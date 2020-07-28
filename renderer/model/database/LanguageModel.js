@@ -9,6 +9,24 @@ const aReservedPaths = [
     "translations"
 ];
 
+const tempTranslations = [
+    {
+        scriptCode: "settings.createDatabase",
+        en_GB: "Create Database...",
+        de: "Datenbank erstellen..."
+    },
+    {
+        scriptCode: "settings.openDatabase",
+        en_GB: "Open Database...",
+        de: "Datenbank öffnen"
+    },
+    {
+        scriptCode: "common.default",
+        en_GB: "Default",
+        de: "Standard"
+    }
+];
+
 class _LanguageModel extends Model {
     constructor (...args) {
         super(...args);
@@ -16,6 +34,7 @@ class _LanguageModel extends Model {
         EventBus.sendToDatabase("i18n-read-list");
         EventBus.listen("i18n-read-list", (oEvent, aData) => {
             console.log("LanguageModel loaded");
+            aData = aData.concat(tempTranslations);
             this.set(["translations"], aData);
         });
     }
@@ -24,11 +43,11 @@ class _LanguageModel extends Model {
         let aContextPath = deepClone(aBindingContextPath);
         aContextPath.push(...deepClone(aPath));
 
-        if (aReservedPaths.includes(aContextPath[0])) {
+        if (aContextPath[0] === undefined || aReservedPaths.includes(aContextPath[0])) {
             return super.get(aPath, aBindingContextPath);
         }
         // get translation values
-        const sCurrentLanguage = SettingsModel.get(["current-language"]) || "en_GB";
+        const sCurrentLanguage = SettingsModel.get(["Language"]) || "en_GB";
         aContextPath = ["translations", { scriptCode: aPath[0] }, sCurrentLanguage];
         return super.get(aContextPath);
     }
@@ -43,29 +62,4 @@ export const LanguageModel = new _LanguageModel({
         }
     ],
     "translations": []
-    /* ,
-    "detail.section.title": "Detail",
-    "history.section.title": "History",
-    "settings.section.title": "Settings",
-    "analysis.section.title": "Analysis",
-    "receipt.id": "ID",
-    "common.store": "Store",
-    "common.date": "Date",
-    "common.account": "Account",
-    "common.value": "Value",
-    "common.edit": "Edit",
-    "common.default": "Default",
-    "settings.databaseSettings": "Database Settings",
-    "settings.currentDatabase": "Current Database",
-    "settings.createDatabase": "Create Database...",
-    "settings.openDatabase": "Open Database...",
-    "settings.openUserDatabase": "Open User Database",
-    "settings.setDefaultDatabase": "Set current Database as default",
-    "settings.defaultValues": "Default values",
-    "common.language": "Language",
-    "settings.lists": "Lists",
-    "common.persons": "Persons",
-    "common.accounts": "Accounts",
-    "common.types": "Types",
-    "common.stores": "Stores", */
 });

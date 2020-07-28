@@ -31,7 +31,7 @@ export class SettingsController extends Controller {
             .bindProperty("database-section-trans", "lang", "database-section-i18n")
             .bindProperty("current-database-i18n", "viewModel", ["current-database-i18n"])
             .bindProperty("current-database-trans", "lang", "current-database-i18n")
-            .bindProperty("database-path", "viewModel", ["database-path"])
+            .bindProperty("database-path", "viewModel", ["CurrentDir"])
             .bindProperty("database-create-i18n", "viewModel", ["database-create-i18n"])
             .bindProperty("database-create-trans", "lang", "database-create-i18n")
             .bindProperty("database-open-i18n", "viewModel", ["database-open-i18n"])
@@ -51,7 +51,7 @@ export class SettingsController extends Controller {
                 .bindProperty("text", "lang", ["value"])
                 .bindProperty("value", "lang", ["value"])
             )
-            .bindProperty("language", "viewModel", ["current-language"]);
+            .bindProperty("language", "viewModel", ["Language"]);
 
         // default settings
         oSettings
@@ -159,6 +159,7 @@ export class SettingsController extends Controller {
     }
 
     onLanguageChange (oEvent) {
-        console.log("languageChange", oEvent.customData);
+        const sLanguage = oEvent.customData.language;
+        SettingsModel.setLanguage(sLanguage);
     }
 };

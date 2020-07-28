@@ -1,9 +1,0 @@
-.flexLine {
-	flex-basis: 100%;
-}
-
-.flexLineContainer {
-	flex-flow: row wrap;
-	align-content: flex-start;
-	display: flex;
-}

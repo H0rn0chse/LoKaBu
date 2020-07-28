@@ -23,29 +23,34 @@ function readDefaultDir () {
 }
 
 function write (oSettings) {
-    let oParams = {
-        Person: oSettings.Person,
-        Type: oSettings.Type,
-        Language: oSettings.Language
-    };
-    let sSql = `
-    UPDATE Settings
-    SET Person = $Person,
-        Type = $Type,
-        Language = $Language
-    `;
-    let oStmt = db.get().prepare(sSql);
-    oStmt.run(oParams);
-    // User specific defaults
-    oParams = {
-        DefaultDir: oSettings.DefaultDir
-    };
-    sSql = `
-    UPDATE Settings
-    SET DefaultDir = $DefaultDir
-    `;
-    oStmt = db.get("user").prepare(sSql);
-    oStmt.run(oParams);
+    try {
+        let oParams = {
+            Person: oSettings.Person,
+            Type: oSettings.Type,
+            Language: oSettings.Language
+        };
+        let sSql = `
+        UPDATE Settings
+        SET Person = $Person,
+            Type = $Type,
+            Language = $Language
+        `;
+        let oStmt = db.get().prepare(sSql);
+        oStmt.run(oParams);
+        // User specific defaults
+        oParams = {
+            DefaultDir: oSettings.DefaultDir
+        };
+        sSql = `
+        UPDATE Settings
+        SET DefaultDir = $DefaultDir
+        `;
+        oStmt = db.get("user").prepare(sSql);
+        oStmt.run(oParams);
+    } catch (oError) {
+        return oError.toString();
+    }
+    return true;
 };
 
 ipc.on("settings-read-object", (oEvent, sMessage) => {
@@ -53,8 +58,12 @@ ipc.on("settings-read-object", (oEvent, sMessage) => {
 });
 
 ipc.on("settings-write-object", (oEvent, oSettings) => {
-    write(oSettings);
-    ipc.sendToRenderer("settings-read-object", read());
+    const sError = write(oSettings);
+    if (sError !== true) {
+        ipc.sendToRenderer("settings-write-error", sError);
+    } else {
+        ipc.sendToRenderer("settings-write-success");
+    }
 });
 
 export const settings = {
