@@ -91,8 +91,9 @@ export class Settings extends View {
     }
 
     onAddListItem (oEvent) {
+        const sCurrentList = this.getProperty("current-list");
         oEvent.customData = {
-            list: this.getProperty("current-list")
+            model: this.getAggregationBinding(sCurrentList).model
         };
         this.handleEvent("addListItem", oEvent);
     }

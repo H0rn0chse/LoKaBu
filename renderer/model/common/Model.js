@@ -58,4 +58,9 @@ export class Model extends EventManager {
     update () {
         this.onUpdate({});
     }
+
+    addEntry (aPath, vEntry, bSuppressUpdate) {
+        const aList = this.get(aPath);
+        this.set(aPath.concat(aList.length), vEntry, bSuppressUpdate);
+    }
 };

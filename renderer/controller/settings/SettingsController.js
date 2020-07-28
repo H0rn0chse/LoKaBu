@@ -121,7 +121,9 @@ export class SettingsController extends Controller {
     }
 
     onAddListItem (oEvent) {
-        console.log("addListItem", oEvent.customData);
+        const sModel = oEvent.customData.model;
+        const oModel = this.getContainer("settings").getContent().getModel(sModel);
+        console.log(oModel);
     }
 
     onDatabaseCreate (oEvent) {

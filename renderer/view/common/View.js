@@ -21,6 +21,10 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return this;
     }
 
+    getModel (sName) {
+        return this.models[sName];
+    }
+
     clearContent () {
         this.node.innerHTML = "";
         return this;

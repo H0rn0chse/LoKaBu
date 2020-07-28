@@ -45,7 +45,6 @@ export class SettingListItem extends View {
                 .addEventHandler("change", this.onDefaultChange, this)
             );
 
-
         return oDomElement.getNode();
     }
 
