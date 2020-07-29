@@ -20,11 +20,15 @@ function read (sId) {
     };
 };
 
-ipc.on("receiptDetail-read-list", (oEvent, sMessage) => {
-    ipc.sendToRenderer("receiptDetail-read-list", read(sMessage));
+ipc.on("receiptDetail-create", (oEvent, sMessage) => {
+    // todo implementation
 });
 
-ipc.on("receiptDetail-write-list", (oEvent, aNewDetailList) => {
+ipc.on("receiptDetail-read", (oEvent, sMessage) => {
+    ipc.sendToRenderer("receiptDetail-read", read(sMessage));
+});
+
+ipc.on("receiptDetail-update", (oEvent, aNewDetailList) => {
     let sId = aNewDetailList[0].ReceiptID;
     if (sId) {
         const aOldDetailList = read(sId).result;
@@ -45,7 +49,7 @@ ipc.on("receiptDetail-write-list", (oEvent, aNewDetailList) => {
     });
 });
 
-ipc.on("receiptDetail-delete-list", (oEvent, sId) => {
+ipc.on("receiptDetail-delete", (oEvent, sId) => {
     receipts.remove(sId);
     lines.removeByReceipt(sId);
 });

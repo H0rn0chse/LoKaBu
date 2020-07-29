@@ -53,17 +53,26 @@ function write (oSettings) {
     return true;
 };
 
-ipc.on("settings-read-object", (oEvent, sMessage) => {
-    ipc.sendToRenderer("settings-read-object", read());
+ipc.on("settings-create", (oEvent, sMessage) => {
+    // todo error handling
 });
 
-ipc.on("settings-write-object", (oEvent, oSettings) => {
+ipc.on("settings-read", (oEvent, sMessage) => {
+    ipc.sendToRenderer("settings-read", read());
+});
+
+// todo handle error cases
+ipc.on("settings-update", (oEvent, oSettings) => {
     const sError = write(oSettings);
     if (sError !== true) {
-        ipc.sendToRenderer("settings-write-error", sError);
+        ipc.sendToRenderer("settings-update", sError);
     } else {
-        ipc.sendToRenderer("settings-write-success");
+        ipc.sendToRenderer("settings-update");
     }
+});
+
+ipc.on("settings-delete", (oEvent, sMessage) => {
+    // todo error handling
 });
 
 export const settings = {

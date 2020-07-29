@@ -8,8 +8,8 @@ class _SettingsModel extends Model {
         super(...args);
         this.updateLanguageModel = true;
 
-        EventBus.sendToDatabase("settings-read-object");
-        EventBus.listen("settings-read-object", (oEvent, oData) => {
+        EventBus.sendToDatabase("settings-read");
+        EventBus.listen("settings-read", (oEvent, oData) => {
             console.log("SettingsModel loaded");
             this.mergeObject(oData);
 
@@ -19,11 +19,12 @@ class _SettingsModel extends Model {
             }
         });
 
-        EventBus.listen("settings-write-error", (oEvent, sError) => {
+        // todo better error handling
+        /* EventBus.listen("settings-write", (oEvent, sError) => {
             throw sError;
-        });
+        }); */
 
-        EventBus.listen("settings-write-success", (oEvent, oData) => {
+        EventBus.listen("settings-write", (oEvent, oData) => {
             this.update();
 
             if (this.updateLanguageModel) {
@@ -61,7 +62,7 @@ class _SettingsModel extends Model {
     }
 
     save () {
-        EventBus.sendToDatabase("settings-write-object", this.get([]));
+        EventBus.sendToDatabase("settings-write", this.get([]));
     }
 }
 

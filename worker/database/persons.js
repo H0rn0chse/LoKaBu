@@ -42,13 +42,21 @@ function write (oPersons) {
     }
 };
 
-ipc.on("persons-read-list", (oEvent, sMessage) => {
-    ipc.sendToRenderer("persons-read-list", read());
+ipc.on("persons-create", (oEvent, sMessage) => {
+    // todo implementation
 });
 
-ipc.on("persons-write-object", (oEvent, oPersons) => {
+ipc.on("persons-read", (oEvent, sMessage) => {
+    ipc.sendToRenderer("persons-read", read());
+});
+
+ipc.on("persons-update", (oEvent, oPersons) => {
     write(oPersons);
-    ipc.sendToRenderer("persons-read-list", read());
+    ipc.sendToRenderer("persons-read", read());
+});
+
+ipc.on("persons-delete", (oEvent, sMessage) => {
+    // todo error handling
 });
 
 export const persons = {

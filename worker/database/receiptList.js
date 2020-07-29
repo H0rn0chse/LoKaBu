@@ -17,13 +17,18 @@ SELECT *
 FROM view_ReceiptList
 `;
 
-ipc.on("receiptList-read-list", (oEvent, sMessage) => {
+ipc.on("receiptList-read", (oEvent, sMessage) => {
     const oSqlStatement = new SqlStatement("view_ReceiptList", "ReceiptID");
     oSqlStatement.setDefaultSql(readDefault);
     oSqlStatement.setSort("ReceiptID", "ASC");
-    ipc.sendToRenderer("receiptList-read-list", read(oSqlStatement.getPageSql(0)));
+    ipc.sendToRenderer("receiptList-read", read(oSqlStatement.getPageSql(0)));
 });
 
+ipc.on("receiptList-create", (oEvent, sMessage) => {
+    // todo error handling
+});
+
+// todo move to the respective model
 ipc.on("receiptList-read-filter", (oEvent, sMessage) => {
     const aFilterOptions = [
         new FilterOption({ column: "ReceiptID", i18n: "filter.ReceiptID", valType: "number", varType: "value" }),
@@ -39,6 +44,7 @@ ipc.on("receiptList-read-filter", (oEvent, sMessage) => {
     ipc.sendToRenderer("receiptList-read-filter", aFilterOptions);
 });
 
+// todo move to read
 ipc.on("receiptList-write-filter", (oEvent, sMessage, sPage, sSortColumn, sSortDirection) => {
     const oSqlStatement = new SqlStatement("view_ReceiptList", "ReceiptID");
     oSqlStatement.setDefaultSql(readDefault);
@@ -49,6 +55,14 @@ ipc.on("receiptList-write-filter", (oEvent, sMessage, sPage, sSortColumn, sSortD
     console.log(oSqlStatement.getPageSql(sPage));
 
     ipc.sendToRenderer("receiptList-read-list", read(oSqlStatement.getPageSql(sPage)));
+});
+
+ipc.on("receiptList-update", (oEvent, sMessage) => {
+    // todo error handling
+});
+
+ipc.on("receiptList-delete", (oEvent, sMessage) => {
+    // todo error handling
 });
 
 export const receiptList = {

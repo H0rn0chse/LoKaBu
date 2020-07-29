@@ -42,13 +42,21 @@ function write (oTypes) {
     }
 };
 
-ipc.on("types-read-list", (oEvent, sMessage) => {
-    ipc.sendToRenderer("types-read-list", read());
+ipc.on("types-create", (oEvent, sMessage) => {
+    // todo error handling
 });
 
-ipc.on("types-write-object", (oEvent, oTypes) => {
+ipc.on("types-read", (oEvent, sMessage) => {
+    ipc.sendToRenderer("types-read", read());
+});
+
+ipc.on("types-update", (oEvent, oTypes) => {
     write();
-    ipc.sendToRenderer("types-read-list", read());
+    ipc.sendToRenderer("types-read", read());
+});
+
+ipc.on("types-delete", (oEvent, sMessage) => {
+    // todo error handling
 });
 
 export const types = {

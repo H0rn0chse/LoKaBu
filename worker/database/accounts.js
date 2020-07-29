@@ -44,13 +44,21 @@ function write (oAccounts) {
     }
 };
 
-ipc.on("accounts-read-list", (oEvent, sMessage) => {
-    ipc.sendToRenderer("accounts-read-list", read());
+ipc.on("accounts-create", (oEvent, oMessage) => {
+    // todo implementation
 });
 
-ipc.on("accounts-write-object", (oEvent, oAccounts) => {
+ipc.on("accounts-read", (oEvent, sMessage) => {
+    ipc.sendToRenderer("accounts-read", read());
+});
+
+ipc.on("accounts-update", (oEvent, oAccounts) => {
     write(oAccounts);
-    ipc.sendToRenderer("accounts-read-list", read());
+    ipc.sendToRenderer("accounts-read", read());
+});
+
+ipc.on("accounts-delete", (oEvent, oMessage) => {
+    // todo error handling
 });
 
 export const accounts = {

@@ -42,13 +42,21 @@ function write (oStores) {
     }
 };
 
-ipc.on("stores-read-list", (oEvent, sMessage) => {
-    ipc.sendToRenderer("stores-read-list", read());
+ipc.on("stores-create", (oEvent, sMessage) => {
+    // todo implementation
 });
 
-ipc.on("stores-write-object", (oEvent, oStores) => {
+ipc.on("stores-read", (oEvent, sMessage) => {
+    ipc.sendToRenderer("stores-read", read());
+});
+
+ipc.on("stores-update", (oEvent, oStores) => {
     write(oStores);
-    ipc.sendToRenderer("stores-read-list", read());
+    ipc.sendToRenderer("stores-read", read());
+});
+
+ipc.on("stores-delete", (oEvent, sMessage) => {
+    // todo error handling
 });
 
 export const stores = {

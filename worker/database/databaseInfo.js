@@ -10,11 +10,14 @@ function read () {
     return oStmt.get();
 };
 
-ipc.on("databaseInfo-read-object", (oEvent, sMessage) => {
-    ipc.sendToRenderer("databaseInfo-read-object", read());
+// This table contains ReceiptCount, LineIdList and ReceiptIdList
+// and is considered to be removed
+
+ipc.on("databaseInfo-read", (oEvent, sMessage) => {
+    ipc.sendToRenderer("databaseInfo-read", read());
 });
 
-ipc.on("databaseInfo-open-database", (oEvent, sMessage) => {
+ipc.on("databaseInfo-open", (oEvent, sMessage) => {
     // user default
     if (!sMessage) {
         db.close();
@@ -24,7 +27,7 @@ ipc.on("databaseInfo-open-database", (oEvent, sMessage) => {
     }
 });
 
-ipc.on("databaseInfo-create-database", (oEvent, sMessage) => {
+ipc.on("databaseInfo-create", (oEvent, sMessage) => {
     db.openOrCreateShared(sMessage);
 });
 
