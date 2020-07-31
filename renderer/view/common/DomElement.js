@@ -110,4 +110,21 @@ export class DomElement {
         this.node.value = sValue;
         return this;
     }
+
+    sortChildren (sDir = "ASC") {
+        switch (sDir) {
+            case "ASC":
+                [...this.node.children]
+                    .sort((a, b) => a.innerText.localeCompare(b.innerText, "de") > 0 ? 1 : -1)
+                    .forEach(child => this.node.appendChild(child));
+                break;
+            case "DESC":
+                [...this.node.children]
+                    .sort((a, b) => a.innerText < b.innerText ? 1 : -1)
+                    .forEach(child => this.node.appendChild(child));
+                break;
+            default:
+        }
+        return this;
+    }
 };

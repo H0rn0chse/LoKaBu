@@ -27,11 +27,12 @@ export class SettingListItem extends View {
 
         if (this.getProperty("select-value", true) !== null) {
             oDomElement.appendNode(new DomElement("select")
+                .setId("select")
                 .insertAggregation(this, "select", DropdownItem)
                 .setValue(this.getProperty("select-value"))
+                .sortChildren()
                 .addEventListener("change", this.onListEntryChange, this)
-            )
-                .setId("select");
+            );
         }
 
         oDomElement

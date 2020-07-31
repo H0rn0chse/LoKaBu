@@ -11,6 +11,10 @@ class _PersonModel extends DatabaseModel {
             DisplayName: ""
         };
         EventBus.sendToDatabase("persons-create", oEntry);
+
+        const iIndex = this.get(["persons"]).length;
+        const aPath = ["persons", iIndex];
+        this.set(aPath, oEntry);
     }
 
     updateEntry (iId, sDisplayName) {
@@ -19,10 +23,14 @@ class _PersonModel extends DatabaseModel {
             DisplayName: sDisplayName
         };
         EventBus.sendToDatabase("persons-update", oEntry);
+
+        const aPath = ["persons", { ID: iId }];
+        this.set(aPath, oEntry);
     }
 
-    processCreate () {
-        EventBus.sendToDatabase("persons-read");
+    processCreate (oEvent, oData) {
+        const aPath = ["persons", { ID: undefined }, "ID"];
+        this.set(aPath, oData.lastInsertRowid);
     }
 
     processRead (...args) {
@@ -30,9 +38,7 @@ class _PersonModel extends DatabaseModel {
         console.log("PersonsModel loaded");
     }
 
-    processUpdate () {
-        EventBus.sendToDatabase("persons-read");
-    }
+    processUpdate () {}
 }
 
 export const PersonModel = new _PersonModel({

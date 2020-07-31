@@ -26,14 +26,14 @@ export const HistoryModel = new _HistoryModel({
         "direction": ""
     }],
     "entries": [{
-        id: "1",
+        id: 1,
         date: "2020-12-04",
-        account: ["accounts", { id: "0" }, "text"],
+        account: ["accounts", { ID: 1 }, "DisplayName"],
         value: 1.23
     }, {
-        id: "2",
+        id: 2,
         date: "2020-12-05",
-        account: ["accounts", { id: "2" }, "text"],
+        account: ["accounts", { ID: 3 }, "DisplayName"],
         value: 42.1
     }],
     "currentPage": 1,
