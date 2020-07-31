@@ -1,19 +1,22 @@
 /* eslint-disable no-unused-vars */
 
-import { accounts } from "./accounts.js";
+import { AccountTable } from "./accounts.js";
 import { db } from "./databaseConnection.js";
 import { databaseInfo } from "./databaseInfo.js";
-import { i18n } from "./i18n.js";
-import { lines } from "./lines.js";
-import { persons } from "./persons.js";
+import { I18nTable } from "./i18n.js";
+import { LinesTable } from "./lines.js";
+import { PersonsTable } from "./persons.js";
 import { receiptAnalysis } from "./receiptAnalysis.js";
-import { receiptDetail } from "./receiptDetail.js";
-import { receiptList } from "./receiptList.js";
-import { receipts } from "./receipts.js";
-import { settings } from "./settings.js";
-import { stores } from "./stores.js";
-import { types } from "./types.js";
+// import { receiptDetail } from "./receiptDetail.js";
+import { ReceiptListView } from "./receiptList.js";
+import { ReceiptsTable } from "./receipts.js";
+import { SettingsTable } from "./settings.js";
+import { StoresTable } from "./stores.js";
+import { TypesTable } from "./types.js";
 
-db.setSettings(settings);
+db.open();
+db.resolveSettings(SettingsTable);
+
+console.log("all loaded", db.get());
 
 export const main = {};

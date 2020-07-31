@@ -2,31 +2,37 @@ import { db } from "./databaseConnection.js";
 import { ipc } from "./ipc.js";
 import { SqlStatement } from "../../assets/sqlStatement.js";
 import { FilterOption } from "../../assets/filterOption.js";
+import { Table } from "../common/Table.js";
 
-function read (sSql) {
-    const oStmt = db.get().prepare(sSql);
-    const oResult = oStmt.all();
-    oResult.forEach((oLine) => {
-        oLine.PageCount = Math.ceil(oLine.LineCount / oLine.PageSize);
-    });
-    return oResult;
-};
+class _ReceiptListView extends Table {
+    constructor () {
+        super("receiptList");
 
-const readDefault = `
-SELECT *
-FROM view_ReceiptList
-`;
+        this.baseSelect = `
+        SELECT *
+        FROM view_ReceiptList
+        `;
+    }
 
-ipc.on("receiptList-read", (oEvent, sMessage) => {
-    const oSqlStatement = new SqlStatement("view_ReceiptList", "ReceiptID");
-    oSqlStatement.setDefaultSql(readDefault);
-    oSqlStatement.setSort("ReceiptID", "ASC");
-    ipc.sendToRenderer("receiptList-read", read(oSqlStatement.getPageSql(0)));
-});
+    readSqlAction (aFilter = [], sPage = "0", sSortColumn = "ReceiptID", sSortDirection = "ASC") {
+        const oSqlStatement = new SqlStatement("view_ReceiptList", "ReceiptID")
+            .setDefaultSql(this.baseSelect)
+            .setSort(sSortColumn, sSortDirection);
 
-ipc.on("receiptList-create", (oEvent, sMessage) => {
-    // todo error handling
-});
+        aFilter.forEach((oFilterOption) => {
+            oSqlStatement.addFilterOption(new FilterOption(oFilterOption));
+        });
+
+        return db.get()
+            .prepare(oSqlStatement.getPageSql(sPage))
+            .all()
+            .map((oItem) => {
+                oItem.PageCount = Math.ceil(oItem.LineCount / oItem.PageSize);
+            });
+    }
+}
+
+export const ReceiptListView = new _ReceiptListView();
 
 // todo move to the respective model
 ipc.on("receiptList-read-filter", (oEvent, sMessage) => {
@@ -43,29 +49,3 @@ ipc.on("receiptList-read-filter", (oEvent, sMessage) => {
     ];
     ipc.sendToRenderer("receiptList-read-filter", aFilterOptions);
 });
-
-// todo move to read
-ipc.on("receiptList-write-filter", (oEvent, sMessage, sPage, sSortColumn, sSortDirection) => {
-    const oSqlStatement = new SqlStatement("view_ReceiptList", "ReceiptID");
-    oSqlStatement.setDefaultSql(readDefault);
-    oSqlStatement.setSort(sSortColumn, sSortDirection);
-    sMessage.forEach((oFilterOption) => {
-        oSqlStatement.addFilterOption(new FilterOption(oFilterOption));
-    });
-    console.log(oSqlStatement.getPageSql(sPage));
-
-    ipc.sendToRenderer("receiptList-read-list", read(oSqlStatement.getPageSql(sPage)));
-});
-
-ipc.on("receiptList-update", (oEvent, sMessage) => {
-    // todo error handling
-});
-
-ipc.on("receiptList-delete", (oEvent, sMessage) => {
-    // todo error handling
-});
-
-export const receiptList = {
-    read,
-    readDefault
-};

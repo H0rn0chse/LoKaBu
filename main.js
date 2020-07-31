@@ -49,8 +49,8 @@ function createWindow () {
         }
     });
     if (!app.isPackaged) {
-    //    oDatabaseWindow.maximize();
-    //    oDatabaseWindow.show();
+        oDatabaseWindow.maximize();
+        oDatabaseWindow.show();
     }
     oDatabaseWindow.loadFile('database.html');
     oDatabaseWindow.webContents.openDevTools();
@@ -84,8 +84,8 @@ function createWindow () {
             oMainWindow.setTitle(app.name);
             oDatabaseWindow.setTitle(app.name + " - Database worker");
             oMainWindow.webContents.send("log", oMainWindow.webContents.id + "/" + oDatabaseWindow.webContents.id);
-            oMainWindow.webContents.send("databaseChannel", oDatabaseWindow.webContents.id);
-            oDatabaseWindow.webContents.send("rendererChannel", oMainWindow.webContents.id);
+            oMainWindow.webContents.send("workerChannel", oDatabaseWindow.webContents.id);
+            oDatabaseWindow.webContents.send("workerChannel", oMainWindow.webContents.id);
         }
     });
 

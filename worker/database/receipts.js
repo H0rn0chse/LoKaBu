@@ -1,68 +1,54 @@
 import { db } from "./databaseConnection.js";
+import { Table } from "../common/Table.js";
 
-function read (oLine) {
-    const oParams = {
-        ReceiptID: oLine.ReceiptID
-    };
-    const sSql = `
-    SELECT *
-    FROM view_ReceiptDetail
-    WHERE ReceiptID = $ReceiptID
-    `;
-    const oStmt = db.get().prepare(sSql);
-    return oStmt.all(oParams);
-};
+class _ReceiptsTable extends Table {
+    constructor () {
+        super("receipts");
+    }
 
-function add (oLine) {
-    const oParams = {
-        ID: oLine.ReceiptID,
-        Date: oLine.ReceiptDate,
-        Account: oLine.ReceiptAccount,
-        Comment: oLine.ReceiptComment,
-        Store: oLine.ReceiptStore
-    };
-    const sSql = `
-    INSERT INTO Receipts
-        (ID, Date, Account, Comment, Store)
-    Values ($ID, $Date, $Account, $Comment, $Store)
-    `;
-    const oStmt = db.get().prepare(sSql);
-    oStmt.run(oParams);
-};
+    createSqlAction (oReceipt) {
+        const sSql = `
+        INSERT INTO Receipts
+            (Date, Account, Comment, Store)
+        Values ($Date, $Account, $Comment, $Store)
+        `;
+        return db.get()
+            .prepare(sSql)
+            .run(oReceipt);
+    }
 
-function update (oLine) {
-    const oParams = {
-        ID: oLine.ReceiptID,
-        Date: oLine.ReceiptDate,
-        Account: oLine.ReceiptAccount,
-        Comment: oLine.ReceiptComment,
-        Store: oLine.ReceiptStore
-    };
-    const sSql = `
-    UPDATE Receipts
-    SET Date=$Date, Account=$Account, Comment=$Comment, Store=$Store
-    WHERE ID=$ID
-    `;
-    const oStmt = db.get().prepare(sSql);
-    oStmt.run(oParams);
-};
+    readSqlAction (oReceipt) {
+        const sSql = `
+        SELECT *
+        FROM Receipts
+        WHERE ID = $ID
+        `;
+        return db.get()
+            .prepare(sSql)
+            .all(oReceipt);
+    }
 
-function remove (sId) {
-    const oParams = {
-        ID: sId
-    };
-    const sSql = `
-    DELETE
-    FROM Receipts
-    WHERE ID=$ID;
-    `;
-    const oStmt = db.get().prepare(sSql);
-    oStmt.run(oParams);
-};
+    updateSqlAction (oReceipt) {
+        const sSql = `
+        UPDATE Receipts
+        SET Date=$Date, Account=$Account, Comment=$Comment, Store=$Store
+        WHERE ID=$ID
+        `;
+        return db.get()
+            .prepare(sSql)
+            .run(oReceipt);
+    }
 
-export const receipts = {
-    read,
-    add,
-    update,
-    remove
-};
+    deleteSqlAction (oReceipt) {
+        const sSql = `
+        DELETE
+        FROM Receipts
+        WHERE ID=$ID;
+        `;
+        return db.get()
+            .prepare(sSql)
+            .run(oReceipt);
+    }
+}
+
+export const ReceiptsTable = new _ReceiptsTable();

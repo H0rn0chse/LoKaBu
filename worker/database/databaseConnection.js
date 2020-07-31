@@ -1,5 +1,6 @@
 import { Lock } from "../common/Lock.js";
-import { ipc } from "./ipc.js";
+import { EventBus } from "../../renderer/EventBus.js";
+import { Deferred } from "../../renderer/common/Deferred.js";
 const BetterSqlite3 = require("better-sqlite3");
 const path = require("path");
 const fs = require("fs");
@@ -14,9 +15,7 @@ let oLock;
 
 let oDatabase;
 let oSharedDatabase;
-let oSettings = {
-    readDefaultDir: () => {}
-};
+const pSettings = new Deferred();
 
 function _openOrCreateDatabase (sPath, sBasePath) {
     let oRef;
@@ -24,7 +23,7 @@ function _openOrCreateDatabase (sPath, sBasePath) {
         fs.accessSync(sPath, (fs.constants || fs).F_OK);
         oRef = new BetterSqlite3(sPath, { verbose: console.log });
 
-        ipc.send("log", "database was loaded", sPath);
+        EventBus.sendToMain("log", "database was loaded", sPath);
     } catch (err) {
         oRef = new BetterSqlite3(sPath, { verbose: console.log });
 
@@ -35,9 +34,9 @@ function _openOrCreateDatabase (sPath, sBasePath) {
         });
         oRef.exec("PRAGMA foreign_keys = ON;");
 
-        ipc.send("log", "database was created", sPath);
+        EventBus.sendToMain("log", "database was created", sPath);
     }
-    ipc.sendToRenderer("database-open");
+    EventBus.sendToBrowser("database-open");
     return oRef;
 }
 
@@ -45,10 +44,13 @@ function open (bSupressShared = false) {
     oDatabase = _openOrCreateDatabase(sDatabasePath, sBasePath);
 
     if (!bSupressShared) {
-        const sDefaultDatabasePath = oSettings.readDefaultDir();
-        if (JSON.stringify(path.parse(sDatabasePath)) !== JSON.stringify(path.parse(sDefaultDatabasePath))) {
-            openOrCreateShared(sDefaultDatabasePath);
-        }
+        return pSettings.promise
+            .then(oSettings => {
+                const sDefaultDatabasePath = oSettings._readDefaultDir();
+                if (JSON.stringify(path.parse(sDatabasePath)) !== JSON.stringify(path.parse(sDefaultDatabasePath))) {
+                    openOrCreateShared(sDefaultDatabasePath);
+                }
+            });
     }
 }
 
@@ -87,8 +89,8 @@ function openOrCreateShared (sPath) {
             oSharedDatabase.close();
             oSharedDatabase = null;
             oLock.forceOpen();
-            ipc.sendToRenderer("database-abort");
-            ipc.sendToRenderer("database-open");
+            EventBus.sendToBrowser("database-abort");
+            EventBus.sendToBrowser("database-open");
         }
     });
     console.log(sPath);
@@ -100,17 +102,17 @@ function openOrCreateShared (sPath) {
     // if lock file exists
     } else {
         console.log("lock could not be closed");
-        ipc.sendToRenderer("database-locked", oLock.getTimestamp());
+        EventBus.sendToBrowser("database-locked", oLock.getTimestamp());
 
-        ipc.once("database-force", () => {
+        EventBus.listen("database-force", () => {
             oLock.forceClose();
             oSharedDatabase = _openOrCreateDatabase(sPath, sSharedBasePath);
         });
     }
 }
 
-function setSettings (oSettingsObject) {
-    oSettings = oSettingsObject;
+function resolveSettings (oSettingsTable) {
+    pSettings.resolve(oSettingsTable);
 }
 
 export const db = {
@@ -119,5 +121,5 @@ export const db = {
     closeShared,
     get,
     openOrCreateShared,
-    setSettings
+    resolveSettings
 };

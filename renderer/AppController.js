@@ -27,7 +27,7 @@ export class AppController extends Controller {
     }
 
     start () {
-        EventBus.sendToBrowser("navigation", "detail");
+        EventBus.sendToCurrentWindow("navigation", "detail");
         this.update();
     }
 };

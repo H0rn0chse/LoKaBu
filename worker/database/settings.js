@@ -1,29 +1,37 @@
 import { db } from "./databaseConnection.js";
-import { ipc } from "./ipc.js";
+import { Table } from "../common/Table.js";
 
-function read () {
-    const sSql = `
-    SELECT *
-    FROM Settings
-    `;
-    const oStmt = db.get().prepare(sSql);
-    const oResult = oStmt.get();
-    oResult.DefaultDir = readDefaultDir();
-    oResult.CurrentDir = db.get().name;
-    return oResult;
-};
+class _SettingsTable extends Table {
+    constructor () {
+        super("settings");
+    }
 
-function readDefaultDir () {
-    const sSql = `
-    SELECT DefaultDir
-    FROM Settings
-    `;
-    const oStmt = db.get("user").prepare(sSql);
-    return oStmt.get().DefaultDir;
-}
+    _readDefaultDir () {
+        const sSql = `
+        SELECT DefaultDir
+        FROM Settings
+        `;
+        return db.get("user")
+            .prepare(sSql)
+            .get().DefaultDir;
+    }
 
-function write (oSettings) {
-    try {
+    readSqlAction () {
+        const sSql = `
+        SELECT *
+        FROM Settings
+        `;
+        const oResult = db.get()
+            .prepare(sSql)
+            .get();
+
+        oResult.DefaultDir = this._readDefaultDir();
+        oResult.CurrentDir = db.get().name;
+
+        return oResult;
+    }
+
+    updateSqlAction (oSettings) {
         let oParams = {
             Person: oSettings.Person,
             Type: oSettings.Type,
@@ -35,8 +43,9 @@ function write (oSettings) {
             Type = $Type,
             Language = $Language
         `;
-        let oStmt = db.get().prepare(sSql);
-        oStmt.run(oParams);
+        db.get()
+            .prepare(sSql)
+            .run(oParams);
         // User specific defaults
         oParams = {
             DefaultDir: oSettings.DefaultDir
@@ -45,38 +54,10 @@ function write (oSettings) {
         UPDATE Settings
         SET DefaultDir = $DefaultDir
         `;
-        oStmt = db.get("user").prepare(sSql);
-        oStmt.run(oParams);
-    } catch (oError) {
-        return oError.toString();
+        db.get("user")
+            .prepare(sSql)
+            .run(oParams);
     }
-    return true;
-};
+}
 
-ipc.on("settings-create", (oEvent, sMessage) => {
-    // todo error handling
-});
-
-ipc.on("settings-read", (oEvent, sMessage) => {
-    ipc.sendToRenderer("settings-read", read());
-});
-
-// todo handle error cases
-ipc.on("settings-update", (oEvent, oSettings) => {
-    const sError = write(oSettings);
-    if (sError !== true) {
-        ipc.sendToRenderer("settings-update", sError);
-    } else {
-        ipc.sendToRenderer("settings-update");
-    }
-});
-
-ipc.on("settings-delete", (oEvent, sMessage) => {
-    // todo error handling
-});
-
-export const settings = {
-    read,
-    readDefaultDir,
-    write
-};
+export const SettingsTable = new _SettingsTable();

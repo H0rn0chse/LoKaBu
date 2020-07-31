@@ -1,31 +1,20 @@
 import { db } from "./databaseConnection.js";
-import { ipc } from "./ipc.js";
+import { Table } from "../common/Table.js";
 
-function read () {
-    const sSql = `
-    SELECT *
-    FROM i18n
-    `;
-    const oStmt = db.get("user").prepare(sSql);
-    return oStmt.all();
-};
+class _I18nTable extends Table {
+    constructor () {
+        super("i18n");
+    }
 
-ipc.on("i18n-create", (oEvent, sMessage) => {
-    // todo error handling
-});
+    readSqlAction () {
+        const sSql = `
+        SELECT *
+        FROM i18n
+        `;
+        return db.get("user")
+            .prepare(sSql)
+            .all();
+    }
+}
 
-ipc.on("i18n-read", (oEvent, sMessage) => {
-    ipc.sendToRenderer("i18n-read", read());
-});
-
-ipc.on("i18n-update", (oEvent, sMessage) => {
-    // todo error handling
-});
-
-ipc.on("i18n-delete", (oEvent, sMessage) => {
-    // todo error handling
-});
-
-export const i18n = {
-    read
-};
+export const I18nTable = new _I18nTable();

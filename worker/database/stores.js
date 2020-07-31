@@ -1,65 +1,41 @@
 import { db } from "./databaseConnection.js";
-import { ipc } from "./ipc.js";
+import { Table } from "../common/Table.js";
 
-function read () {
-    const sSql = `
-    SELECT *
-    FROM Stores
-    `;
-    const oStmt = db.get().prepare(sSql);
-    return oStmt.all();
-};
+class _StoresTable extends Table {
+    constructor () {
+        super("stores");
+    }
 
-function write (oStores) {
-    if (Array.isArray(oStores)) {
-        // overwrite all
-        const sSql = `
-        UPDATE Stores
-        SET DisplayName = $DisplayName
-        WHERE ID = $ID
-        `;
-        const oStmt = db.get().prepare(sSql);
-        oStores.forEach((oParams) => {
-            oStmt.run(oParams);
-        });
-    } else if (oStores.ID !== undefined) {
-        // update
-        const sSql = `
-        UPDATE Stores
-        SET DisplayName = $DisplayName
-        WHERE ID = $ID
-        `;
-        const oStmt = db.get().prepare(sSql);
-        oStmt.run(oStores);
-    } else {
-        // add
+    createSqlAction (oStore) {
         const sSql = `
         INSERT INTO Stores
         (DisplayName) VALUES ($DisplayName)
         `;
-        const oStmt = db.get().prepare(sSql);
-        oStmt.run(oStores);
+        return db.get()
+            .prepare(sSql)
+            .run(oStore);
     }
-};
 
-ipc.on("stores-create", (oEvent, sMessage) => {
-    // todo implementation
-});
+    readSqlAction () {
+        const sSql = `
+        SELECT *
+        FROM Stores
+        `;
+        return db.get()
+            .prepare(sSql)
+            .all();
+    }
 
-ipc.on("stores-read", (oEvent, sMessage) => {
-    ipc.sendToRenderer("stores-read", read());
-});
+    updateSqlAction (oStore) {
+        const sSql = `
+        UPDATE Stores
+        SET DisplayName = $DisplayName
+        WHERE ID = $ID
+        `;
+        return db.get()
+            .prepare(sSql)
+            .run(oStore);
+    }
+}
 
-ipc.on("stores-update", (oEvent, oStores) => {
-    write(oStores);
-    ipc.sendToRenderer("stores-read", read());
-});
-
-ipc.on("stores-delete", (oEvent, sMessage) => {
-    // todo error handling
-});
-
-export const stores = {
-    read,
-    write
-};
+export const StoresTable = new _StoresTable();

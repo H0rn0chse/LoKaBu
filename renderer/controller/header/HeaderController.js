@@ -31,7 +31,7 @@ export class HeaderController extends Controller {
     }
 
     onHeaderClick (oEvent) {
-        EventBus.sendToBrowser("navigation", oEvent.customData.section);
+        EventBus.sendToCurrentWindow("navigation", oEvent.customData.section);
     }
 
     onNavigation (sSection) {

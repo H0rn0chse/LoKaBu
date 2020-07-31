@@ -10,21 +10,16 @@
 			const { ipcRenderer } = require('electron');
 			import { db } from "./worker/database/databaseConnection.js";
 			import { main } from "./worker/database/main.js";
-			import { ipc } from "./worker/database/ipc.js";
-			ipc.setIpc(ipcRenderer);
+			import { EventBus } from './renderer/EventBus.js'
 
-			ipc.once("rendererChannel", (oEvent, sMessage) => {
-				ipc.setRendererId(sMessage);
-				db.open();
-			})
-			ipc.send("windowLoaded");
+			db.open();
 
-			ipc.on("shutdownApp", () => {
-				db.close();
-				ipc.send("windowProcessClosed");
+			EventBus.setIpcRenderer(ipcRenderer);
+			EventBus.sendToMain("windowLoaded");
+			EventBus.listen("shutdownApp", () => {
+				console.log("shutdown");
+				EventBus.sendToMain("windowProcessClosed");
 			});
-
-
 		</script>
 	</body>
 </html>

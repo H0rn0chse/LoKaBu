@@ -9,11 +9,13 @@ export class SqlStatement {
 
     setDefaultSql (sSql) {
         this.default = sSql;
+        return this;
     }
 
     setSort (sSortColumn, sSortDirection) {
         this.sortColumn = sSortColumn;
         this.sortDirection = sSortDirection;
+        return this;
     }
 
     addFilterOption (oFilterOption) {
@@ -31,6 +33,7 @@ export class SqlStatement {
             this.sql += "GROUP BY " + this.controlColumn + "\n";
             this.sql += sHavingClause;
         }
+        return this;
     }
 
     getSql () {

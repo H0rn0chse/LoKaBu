@@ -28,7 +28,11 @@ class _EventBus extends EventManager {
         });
     }
 
-    sendToBrowser (sEventName, ...args) {
+    sendToBrowser (...args) {
+        this.sendToDatabase(...args);
+    }
+
+    sendToCurrentWindow (sEventName, ...args) {
         this.handleEvent(sEventName, ...args);
     }
 
@@ -41,7 +45,7 @@ class _EventBus extends EventManager {
     setIpcRenderer (oIpcRenderer) {
         this.ipc.resolve(oIpcRenderer);
 
-        oIpcRenderer.once("databaseChannel", (oEvent, sMessage) => {
+        oIpcRenderer.once("workerChannel", (oEvent, sMessage) => {
             this.database.resolve(sMessage);
         });
     }

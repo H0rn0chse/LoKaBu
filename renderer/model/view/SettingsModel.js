@@ -24,7 +24,7 @@ class _SettingsModel extends Model {
             throw sError;
         }); */
 
-        EventBus.listen("settings-write", (oEvent, oData) => {
+        EventBus.listen("settings-update", (oEvent, oData) => {
             this.update();
 
             if (this.updateLanguageModel) {
@@ -62,7 +62,7 @@ class _SettingsModel extends Model {
     }
 
     save () {
-        EventBus.sendToDatabase("settings-write", this.get([]));
+        EventBus.sendToDatabase("settings-update", this.get([]));
     }
 }
 

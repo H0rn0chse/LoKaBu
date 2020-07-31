@@ -1,51 +1,54 @@
 import { db } from "./databaseConnection.js";
-import { databaseHelper } from "./databaseHelper.js";
+import { Table } from "../common/Table.js";
 
-function remove (sId) {
-    const oParams = {
-        ID: sId
-    };
-    const sSql = `
-    DELETE
-    FROM Lines
-    WHERE ID=$ID
-    `;
-    const oStmt = db.get().prepare(sSql);
-    oStmt.run(oParams);
-};
+class _LinesTable extends Table {
+    constructor () {
+        super("lines");
+    }
 
-function add (oLine) {
-    const oParams = {
-        ID: databaseHelper.getNextId(db.get(), "Lines"),
-        Receipt: oLine.ReceiptID,
-        Value: oLine.LineValue,
-        Billing: oLine.LineBilling,
-        Type: oLine.LineType
-    };
-    const sSql = `
-    INSERT INTO Lines
-        (ID, Receipt, Value, Billing, Type)
-    Values ($ID, $Receipt, $Value, $Billing, $Type)
-    `;
-    const oStmt = db.get().prepare(sSql);
-    oStmt.run(oParams);
-};
+    createSqlAction (oLine) {
+        const sSql = `
+        INSERT INTO Lines
+            (Receipt, Value, Billing, Type)
+        Values ($Receipt, $Value, $Billing, $Type)
+        `;
+        return db.get()
+            .prepare(sSql)
+            .run(oLine);
+    }
 
-function removeByReceipt (sId) {
-    const oParams = {
-        ID: sId
-    };
-    const sSql = `
-    DELETE
-    FROM Lines
-    WHERE Receipt=$ID
-    `;
-    const oStmt = db.get().prepare(sSql);
-    oStmt.run(oParams);
-};
+    readSqlAction (oLine) {
+        const sSql = `
+        INSERT INTO Lines
+            (Receipt, Value, Billing, Type)
+        Values ($Receipt, $Value, $Billing, $Type)
+        `;
+        return db.get()
+            .prepare(sSql)
+            .run(oLine);
+    }
 
-export const lines = {
-    remove,
-    add,
-    removeByReceipt
-};
+    updateSqlAction (oLine) {
+        const sSql = `
+        UPDATE Lines
+        SET Receipt=$Receipt, Value=$Value, Billing=$Billing, Type=$Type
+        WHERE ID=$ID
+        `;
+        return db.get()
+            .prepare(sSql)
+            .run(oLine);
+    }
+
+    deleteSqlAction (oLine) {
+        const sSql = `
+        DELETE
+        FROM Lines
+        WHERE ID=$ID
+        `;
+        return db.get()
+            .prepare(sSql)
+            .run(oLine);
+    }
+}
+
+export const LinesTable = new _LinesTable();
