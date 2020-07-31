@@ -64,8 +64,8 @@ export class SettingsController extends Controller {
             )
             .bindProperty("current-list", "viewModel", ["current-list"])
             .bindAggregation("persons", new Aggregation("person", ["persons"])
-                .bindProperty("id", "person", ["id"])
-                .bindProperty("text", "person", ["text"])
+                .bindProperty("id", "person", ["ID"])
+                .bindProperty("text", "person", ["DisplayName"])
 
                 .bindProperty("checked-id", "viewModel", ["checked-id"])
                 .bindProperty("default-i18n", "viewModel", ["default-i18n"])
@@ -75,8 +75,8 @@ export class SettingsController extends Controller {
                 .bindProperty("id", "account", ["id"])
                 .bindProperty("text", "account", ["text"])
                 .bindAggregation("select", new Aggregation("person", ["persons"])
-                    .bindProperty("value", "person", ["id"])
-                    .bindProperty("text", "person", ["text"])
+                    .bindProperty("value", "person", ["ID"])
+                    .bindProperty("text", "person", ["DisplayName"])
                 )
                 .bindProperty("select-value", "account", ["owner"])
 
@@ -108,9 +108,7 @@ export class SettingsController extends Controller {
             .addEventListener("databaseOpenUser", this.onDatabaseOpenUser, this)
             .addEventListener("databaseDefault", this.onDatabaseDefault, this)
             .addEventListener("listChange", this.onListChange, this)
-            .addEventListener("defaultChange", this.onDefaultChange, this)
-            .addEventListener("nameChange", this.onNameChange, this)
-            .addEventListener("selectChange", this.onSelectChange, this)
+            .addEventListener("listEntryChange", this.onListEntryChange, this)
             .addEventListener("languageChange", this.onLanguageChange, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
@@ -118,12 +116,6 @@ export class SettingsController extends Controller {
 
     onNavigation (sSection) {
         this.getContainer("settings").setVisibilty(sSection === "settings");
-    }
-
-    onAddListItem (oEvent) {
-        const sModel = oEvent.customData.model;
-        const oModel = this.getContainer("settings").getContent().getModel(sModel);
-        console.log(oModel);
     }
 
     onDatabaseCreate (oEvent) {
@@ -148,16 +140,19 @@ export class SettingsController extends Controller {
         SettingsModel.updateList(sList);
     }
 
-    onDefaultChange (oEvent) {
-        console.log("defaultChange", oEvent.customData);
+    onAddListItem (oEvent) {
+        const oData = oEvent.customData;
+        const oModel = this.getContainer("settings").getContent().getModel(oData.model);
+        oModel.addEntry();
     }
 
-    onNameChange (oEvent) {
-        console.log("nameChange", oEvent.customData);
-    }
-
-    onSelectChange (oEvent) {
-        console.log("selectChange", oEvent.customData);
+    onListEntryChange (oEvent) {
+        const oData = oEvent.customData;
+        const oModel = this.getContainer("settings").getContent().getModel(oData.model);
+        oModel.updateEntry(oData.id, oData.name, oData.select);
+        if (oData.default) {
+            oModel.setDefault(oData.id);
+        }
     }
 
     onLanguageChange (oEvent) {

@@ -15,7 +15,7 @@ export class SortBarItem extends View {
                 .setText(this.getProperty("text"))
                 .addClass(this.getProperty("selected") ? "selected" : "")
                 .addClass(this.getProperty("direction") ? this.getProperty("direction") : "")
-                .addEventHandler("click", this.onSort, this)
+                .addEventListener("click", this.onSort, this)
             )
             .getNode();
 

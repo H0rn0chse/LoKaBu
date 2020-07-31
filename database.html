@@ -8,11 +8,8 @@
 	<body>
 		<script type="module">
 			const { ipcRenderer } = require('electron');
-			import { db } from "./worker/database/databaseConnection.js";
 			import { main } from "./worker/database/main.js";
 			import { EventBus } from './renderer/EventBus.js'
-
-			db.open();
 
 			EventBus.setIpcRenderer(ipcRenderer);
 			EventBus.sendToMain("windowLoaded");

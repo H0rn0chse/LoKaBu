@@ -34,7 +34,7 @@ export class HistoryLineItem extends View {
             )
             .appendNode(new DomElement("div")
                 .setText(this.getProperty("edit"))
-                .addEventHandler("click", this.onEditLine, this)
+                .addEventListener("click", this.onEditLine, this)
             )
             .getNode();
 

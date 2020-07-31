@@ -1,5 +1,5 @@
 import { db } from "./databaseConnection.js";
-import { ipc } from "./ipc.js";
+import { EventBus } from "../../renderer/EventBus.js";
 
 function read () {
     const sSql = `
@@ -13,11 +13,11 @@ function read () {
 // This table contains ReceiptCount, LineIdList and ReceiptIdList
 // and is considered to be removed
 
-ipc.on("databaseInfo-read", (oEvent, sMessage) => {
-    ipc.sendToRenderer("databaseInfo-read", read());
+EventBus.listen("databaseInfo-read", (oEvent, sMessage) => {
+    EventBus.sendToBrowser("databaseInfo-read", read());
 });
 
-ipc.on("databaseInfo-open", (oEvent, sMessage) => {
+EventBus.listen("databaseInfo-open", (oEvent, sMessage) => {
     // user default
     if (!sMessage) {
         db.close();
@@ -27,7 +27,7 @@ ipc.on("databaseInfo-open", (oEvent, sMessage) => {
     }
 });
 
-ipc.on("databaseInfo-create", (oEvent, sMessage) => {
+EventBus.listen("databaseInfo-create", (oEvent, sMessage) => {
     db.openOrCreateShared(sMessage);
 });
 

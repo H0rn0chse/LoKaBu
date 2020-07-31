@@ -43,7 +43,7 @@ export class Detail extends MultiView {
                 .addClass("user-actions")
                 .appendNode(new DomElement("div"))
                 .setText(this.getProperty("save-trans"))
-                .addEventHandler("click", this.onSave, this)
+                .addEventListener("click", this.onSave, this)
             )
             .getNode();
 

@@ -1,8 +1,8 @@
 import { db } from "./databaseConnection.js";
-import { ipc } from "./ipc.js";
 import { SqlStatement } from "../../assets/sqlStatement.js";
 import { FilterOption } from "../../assets/filterOption.js";
 import { Table } from "../common/Table.js";
+import { EventBus } from "../../renderer/EventBus.js";
 
 class _ReceiptListView extends Table {
     constructor () {
@@ -35,7 +35,7 @@ class _ReceiptListView extends Table {
 export const ReceiptListView = new _ReceiptListView();
 
 // todo move to the respective model
-ipc.on("receiptList-read-filter", (oEvent, sMessage) => {
+EventBus.listen("receiptList-read-filter", (oEvent, sMessage) => {
     const aFilterOptions = [
         new FilterOption({ column: "ReceiptID", i18n: "filter.ReceiptID", valType: "number", varType: "value" }),
         new FilterOption({ column: "ReceiptDate", i18n: "filter.ReceiptDate", valType: "date", varType: "value" }),
@@ -47,5 +47,5 @@ ipc.on("receiptList-read-filter", (oEvent, sMessage) => {
         new FilterOption({ column: "LinePersons", i18n: "filter.LinePersons", valType: "text", varType: "list" }),
         new FilterOption({ column: "LineValues", i18n: "filter.LineValues", valType: "number", varType: "list", format: "0,00" })
     ];
-    ipc.sendToRenderer("receiptList-read-filter", aFilterOptions);
+    EventBus.sendToBrowser("receiptList-read-filter", aFilterOptions);
 });

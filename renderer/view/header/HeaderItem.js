@@ -32,7 +32,7 @@ export class HeaderItem extends View {
     render () {
         const oNode = new DomElement("div")
             .addClass("HeaderItem")
-            .addEventHandler("click", this.onClick, this)
+            .addEventListener("click", this.onClick, this)
             .appendNode(new DomElement("p")
                 .addClass("unselectable")
                 .setText(this.getProperty("title-trans"))

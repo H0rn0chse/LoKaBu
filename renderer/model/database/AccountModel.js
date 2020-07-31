@@ -1,6 +1,8 @@
 import { Model } from "../common/Model.js";
 
-class _AccountModel extends Model {}
+class _AccountModel extends Model {
+
+}
 
 export const AccountModel = new _AccountModel({
     accounts: [{

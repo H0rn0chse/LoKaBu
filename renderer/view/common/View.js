@@ -105,7 +105,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return "";
     }
 
-    getValueById (sId, oSource) {
+    getNodeById (sId, oSource) {
         let oRoot;
         if (oSource) {
             oRoot = oSource;
@@ -116,7 +116,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
         }
 
         const oNode = oRoot.querySelector(`[id^="${sId}-"]`);
-        return oNode && oNode.value;
+        return oNode || {};
     }
 
     render () {

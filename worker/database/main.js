@@ -2,7 +2,7 @@
 
 import { AccountTable } from "./accounts.js";
 import { db } from "./databaseConnection.js";
-import { databaseInfo } from "./databaseInfo.js";
+// import { databaseInfo } from "./databaseInfo.js";
 import { I18nTable } from "./i18n.js";
 import { LinesTable } from "./lines.js";
 import { PersonsTable } from "./persons.js";

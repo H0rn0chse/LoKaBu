@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { db } from "./databaseConnection.js";
-import { ipc } from "./ipc.js";
+import { EventBus } from "../../renderer/EventBus.js";
 
 function read () {
     /* const sSql = `
@@ -10,19 +10,19 @@ function read () {
     return oDb.get().get(sSql); */
 };
 
-ipc.on("receiptAnalysis-create", (oEvent, sMessage) => {
+EventBus.listen("receiptAnalysis-create", (oEvent, sMessage) => {
     // todo error handling
 });
 
-ipc.on("receiptAnalysis-read", (oEvent, sMessage) => {
-    ipc.sendToRenderer("receiptAnalysis-read", read());
+EventBus.listen("receiptAnalysis-read", (oEvent, sMessage) => {
+    EventBus.sendToBrowser("receiptAnalysis-read", read());
 });
 
-ipc.on("receiptAnalysis-update", (oEvent, sMessage) => {
+EventBus.listen("receiptAnalysis-update", (oEvent, sMessage) => {
     // todo error handling
 });
 
-ipc.on("receiptAnalysis-delete", (oEvent, sMessage) => {
+EventBus.listen("receiptAnalysis-delete", (oEvent, sMessage) => {
     // todo error handling
 });
 

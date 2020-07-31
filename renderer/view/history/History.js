@@ -28,7 +28,7 @@ export class History extends View {
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
                 .appendNode(new DomElement("div")
                     .setText("<")
-                    .addEventHandler("click", this.handleEvent.bind(this, "navBefore"))
+                    .addEventListener("click", this.handleEvent.bind(this, "navBefore"))
                 )
                 .appendNode(new DomElement("div")
                     .setText(this.getProperty("currentPage"))
@@ -41,7 +41,7 @@ export class History extends View {
                 )
                 .appendNode(new DomElement("div")
                     .setText(">")
-                    .addEventHandler("click", this.handleEvent.bind(this, "navNext"))
+                    .addEventListener("click", this.handleEvent.bind(this, "navNext"))
                 )
             )
             .getNode();

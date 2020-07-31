@@ -16,7 +16,7 @@ export class LineDetail extends View {
             .insertAggregation(this, "receiptLines", LineDetailLine, this.addGenericListenerToChild.bind(this))
             .appendNode(new DomElement("div")
                 .setText("+")
-                .addEventHandler("click", this.onLineAdd, this)
+                .addEventListener("click", this.onLineAdd, this)
             )
             .getNode();
 

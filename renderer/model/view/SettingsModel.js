@@ -11,18 +11,13 @@ class _SettingsModel extends Model {
         EventBus.sendToDatabase("settings-read");
         EventBus.listen("settings-read", (oEvent, oData) => {
             console.log("SettingsModel loaded");
-            this.mergeObject(oData);
+            this.mergeObjectIntoData(oData);
 
             if (this.updateLanguageModel) {
                 this.updateLanguageModel = false;
                 LanguageModel.update();
             }
         });
-
-        // todo better error handling
-        /* EventBus.listen("settings-write", (oEvent, sError) => {
-            throw sError;
-        }); */
 
         EventBus.listen("settings-update", (oEvent, oData) => {
             this.update();
@@ -61,6 +56,11 @@ class _SettingsModel extends Model {
         this.save();
     }
 
+    setDefault (sList, iId) {
+        const aPath = ["lists", { "id": sList }, "default"];
+        this.set(aPath, iId);
+    }
+
     save () {
         EventBus.sendToDatabase("settings-update", this.get([]));
     }
@@ -80,21 +80,21 @@ export const SettingsModel = new _SettingsModel({
     "lists": [{
         "id": "persons",
         "i18n": ["common.persons"],
-        "default": "0"
+        "default": 1
     }, {
         "id": "accounts",
         "i18n": ["common.accounts"],
-        "default": "1"
+        "default": 2
     }, {
         "id": "types",
         "i18n": ["common.types"],
-        "default": "2"
+        "default": 3
     }, {
         "id": "stores",
         "i18n": ["common.stores"],
-        "default": "0"
+        "default": 1
     }],
-    "current-list": "accounts",
+    "current-list": "persons",
     "default-i18n": ["common.default"]
 
     /* "database-path": "C:/somePath/to/A/File.sqlite",

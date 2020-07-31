@@ -1,6 +1,10 @@
 import { Model } from "../common/Model.js";
 
-export const StoreModel = new Model({
+class _StoreModel extends Model {
+
+}
+
+export const StoreModel = new _StoreModel({
     stores: [{
         id: "0",
         text: "store1"

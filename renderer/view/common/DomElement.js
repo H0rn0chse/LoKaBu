@@ -16,7 +16,7 @@ export class DomElement {
         return this;
     }
 
-    addEventHandler (sEventName, fnHandler, oScope) {
+    addEventListener (sEventName, fnHandler, oScope) {
         const fnBoundHandler = oScope ? fnHandler.bind(oScope) : fnHandler;
 
         this.node.addEventListener(sEventName, fnBoundHandler);

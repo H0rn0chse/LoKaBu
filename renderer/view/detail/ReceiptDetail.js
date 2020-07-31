@@ -37,7 +37,7 @@ export class ReceiptDetail extends View {
                 .appendNode(new DomElement("input")
                     .setType("date")
                     .setValue(this.getProperty("date"))
-                    .addEventHandler("change", this.onDateChange, this)
+                    .addEventListener("change", this.onDateChange, this)
                 )
             )
             // Store
@@ -48,7 +48,7 @@ export class ReceiptDetail extends View {
                 .appendNode(new DomElement("select")
                     .insertAggregation(this, "stores", DropdownItem)
                     .setValue(this.getProperty("store"))
-                    .addEventHandler("change", this.onStoreChange, this)
+                    .addEventListener("change", this.onStoreChange, this)
                 )
             )
             // Account
@@ -59,7 +59,7 @@ export class ReceiptDetail extends View {
                 .appendNode(new DomElement("select")
                     .insertAggregation(this, "accounts", DropdownItem)
                     .setValue(this.getProperty("account"))
-                    .addEventHandler("change", this.onAccountChange, this)
+                    .addEventListener("change", this.onAccountChange, this)
                 )
             )
             // Comments

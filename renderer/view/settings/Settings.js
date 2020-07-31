@@ -39,19 +39,19 @@ export class Settings extends View {
                 .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
                     .appendNode(new DomElement("div")
                         .setText(this.getProperty("database-create-trans"))
-                        .addEventHandler("click", this.onDatabaseCreate, this)
+                        .addEventListener("click", this.onDatabaseCreate, this)
                     )
                     .appendNode(new DomElement("div")
                         .setText(this.getProperty("database-open-trans"))
-                        .addEventHandler("click", this.onDatabaseOpen, this)
+                        .addEventListener("click", this.onDatabaseOpen, this)
                     )
                     .appendNode(new DomElement("div")
                         .setText(this.getProperty("database-open-user-trans"))
-                        .addEventHandler("click", this.onDatabaseOpenUser, this)
+                        .addEventListener("click", this.onDatabaseOpenUser, this)
                     )
                     .appendNode(new DomElement("div")
                         .setText(this.getProperty("database-default-trans"))
-                        .addEventHandler("click", this.onDatabaseDefault, this)
+                        .addEventListener("click", this.onDatabaseDefault, this)
                     )
                 )
                 // default values
@@ -65,7 +65,7 @@ export class Settings extends View {
                     .appendNode(new DomElement("select")
                         .insertAggregation(this, "languages", DropdownItem)
                         .setValue(this.getProperty("language"))
-                        .addEventHandler("change", this.onLanguageChange, this)
+                        .addEventListener("change", this.onLanguageChange, this)
                     )
                 )
                 // list values
@@ -75,13 +75,13 @@ export class Settings extends View {
                 .appendNode(new DomElement("select")
                     .insertAggregation(this, "lists", DropdownItem)
                     .setValue(this.getProperty("current-list"))
-                    .addEventHandler("change", this.onListChange, this)
+                    .addEventListener("change", this.onListChange, this)
                 )
                 .appendNode(new FlexContainer("div", { flexDirection: "column", flexWrap: "nowrap" })
-                    .insertAggregation(this, this.getProperty("current-list"), SettingListItem, this.addGenericListenerToChild.bind(this))
+                    .insertAggregation(this, this.getProperty("current-list"), SettingListItem, this._addSettingListItemEventHandler.bind(this))
                     .appendNode(new DomElement("div")
                         .setText("+")
-                        .addEventHandler("click", this.onAddListItem, this)
+                        .addEventListener("click", this.onAddListItem, this)
                     )
                 )
             )
@@ -90,10 +90,24 @@ export class Settings extends View {
         return oNode;
     }
 
-    onAddListItem (oEvent) {
+    _addSettingListItemEventHandler (oItem) {
+        oItem
+            .addEventListener("listEntryChange", this.onListEntryChange, this);
+    }
+
+    _getListModel () {
         const sCurrentList = this.getProperty("current-list");
+        return this.getAggregationBinding(sCurrentList).model;
+    }
+
+    onListEntryChange (oEvent) {
+        oEvent.customData.model = this._getListModel();
+        this.handleEvent("listEntryChange", oEvent);
+    }
+
+    onAddListItem (oEvent) {
         oEvent.customData = {
-            model: this.getAggregationBinding(sCurrentList).model
+            model: this._getListModel()
         };
         this.handleEvent("addListItem", oEvent);
     }

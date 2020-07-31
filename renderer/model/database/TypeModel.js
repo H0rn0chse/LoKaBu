@@ -1,6 +1,10 @@
 import { Model } from "../common/Model.js";
 
-export const TypeModel = new Model({
+class _TypeModel extends Model {
+
+}
+
+export const TypeModel = new _TypeModel({
     types: [{
         id: "0",
         text: "type1"

@@ -7,9 +7,7 @@ export class SettingListItem extends View {
     constructor () {
         super();
         this.addEvents([
-            "defaultChange",
-            "nameChange",
-            "selectChange"
+            "listEntryChange"
         ]);
     }
 
@@ -21,17 +19,19 @@ export class SettingListItem extends View {
                 .setDisabled()
             )
             .appendNode(new DomElement("input")
+                .setId("text")
                 .setType("text")
                 .setValue(this.getProperty("text"))
-                .addEventHandler("change", this.onNameChange, this)
+                .addEventListener("change", this.onListEntryChange, this)
             );
 
         if (this.getProperty("select-value", true) !== null) {
             oDomElement.appendNode(new DomElement("select")
                 .insertAggregation(this, "select", DropdownItem)
                 .setValue(this.getProperty("select-value"))
-                .addEventHandler("change", this.onSelectChange, this)
-            );
+                .addEventListener("change", this.onListEntryChange, this)
+            )
+                .setId("select");
         }
 
         oDomElement
@@ -39,12 +39,12 @@ export class SettingListItem extends View {
                 .setText(`${this.getProperty("default-trans")}: `)
             )
             .appendNode(new DomElement("input")
+                .setId("default")
                 .setType("radio")
                 .setName("settings-select")
                 .setChecked(this.getProperty("id") === this.getProperty("checked-id"))
-                .addEventHandler("change", this.onDefaultChange, this)
+                .addEventListener("change", this.onListEntryChange, this)
             );
-
         return oDomElement.getNode();
     }
 
@@ -57,27 +57,13 @@ export class SettingListItem extends View {
         }
     }
 
-    onDefaultChange (oEvent) {
+    onListEntryChange (oEvent) {
         oEvent.customData = {
             id: this.getProperty("id"),
-            checked: oEvent.target.checked
+            name: this.getNodeById("text").value,
+            select: this.getNodeById("select").value,
+            default: this.getNodeById("default").checked
         };
-        this.handleEvent("defaultChange", oEvent);
-    }
-
-    onNameChange (oEvent) {
-        oEvent.customData = {
-            id: this.getProperty("id"),
-            checked: oEvent.target.value
-        };
-        this.handleEvent("nameChange", oEvent);
-    }
-
-    onSelectChange (oEvent) {
-        oEvent.customData = {
-            id: this.getProperty("id"),
-            value: oEvent.target.value
-        };
-        this.handleEvent("selectChange", oEvent);
+        this.handleEvent("listEntryChange", oEvent);
     }
 };
