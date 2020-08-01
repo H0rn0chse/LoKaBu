@@ -17,14 +17,14 @@ class _StoreModel extends DatabaseModel {
         this.set(aPath, oEntry);
     }
 
-    updateEntry (iId, sDisplayName) {
+    updateEntry (sId, sDisplayName) {
         const oEntry = {
-            ID: iId,
+            ID: sId,
             DisplayName: sDisplayName
         };
         EventBus.sendToDatabase("stores-update", oEntry);
 
-        const aPath = ["stores", { ID: iId }];
+        const aPath = ["stores", { ID: sId }];
         this.set(aPath, oEntry);
     }
 

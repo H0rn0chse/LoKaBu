@@ -17,14 +17,14 @@ class _TypeModel extends DatabaseModel {
         this.set(aPath, oEntry);
     }
 
-    updateEntry (iId, sDisplayName) {
+    updateEntry (sId, sDisplayName) {
         const oEntry = {
-            ID: iId,
+            ID: sId,
             DisplayName: sDisplayName
         };
         EventBus.sendToDatabase("types-update", oEntry);
 
-        const aPath = ["types", { ID: iId }];
+        const aPath = ["types", { ID: sId }];
         this.set(aPath, oEntry);
     }
 

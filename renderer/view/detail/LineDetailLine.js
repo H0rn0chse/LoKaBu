@@ -8,9 +8,7 @@ export class LineDetailLine extends View {
         super();
         this.addEvents([
             "lineRemove",
-            "personChange",
-            "typeChange",
-            "lineValueChange"
+            "lineChange"
         ]);
     }
 
@@ -18,21 +16,24 @@ export class LineDetailLine extends View {
         const oNode = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
             .addClass("line-detail-line")
             .appendNode(new DomElement("select")
+                .setId("person")
                 .insertAggregation(this, "persons", DropdownItem)
                 .setValue(this.getProperty("person"))
                 .sortChildren()
-                .addEventListener("change", this.onPersonChange, this)
+                .addEventListener("change", this.onLineChange, this)
             )
             .appendNode(new DomElement("select")
+                .setId("type")
                 .insertAggregation(this, "types", DropdownItem)
                 .setValue(this.getProperty("type"))
                 .sortChildren()
-                .addEventListener("change", this.onTypeChange, this)
+                .addEventListener("change", this.onLineChange, this)
             )
             .appendNode(new DomElement("input")
+                .setId("value")
                 .setType("number")
                 .setValue(this.getProperty("value"))
-                .addEventListener("change", this.onLineValueChange, this)
+                .addEventListener("change", this.onLineChange, this)
             )
             .appendNode(new DomElement("div")
                 .setText("-")
@@ -43,22 +44,6 @@ export class LineDetailLine extends View {
         return oNode;
     }
 
-    onPersonChange (oEvent) {
-        oEvent.customData = {
-            id: this.getProperty("id"),
-            person: oEvent.target.value
-        };
-        this.handleEvent("personChange", oEvent);
-    }
-
-    onTypeChange (oEvent) {
-        oEvent.customData = {
-            id: this.getProperty("id"),
-            type: oEvent.target.value
-        };
-        this.handleEvent("typeChange", oEvent);
-    }
-
     onLineRemove (oEvent) {
         oEvent.customData = {
             id: this.getProperty("id")
@@ -66,11 +51,13 @@ export class LineDetailLine extends View {
         this.handleEvent("lineRemove", oEvent);
     }
 
-    onLineValueChange (oEvent) {
+    onLineChange (oEvent) {
         oEvent.customData = {
             id: this.getProperty("id"),
-            lineValue: oEvent.target.value
+            value: this.getNodeById("value").valueAsNumber,
+            type: this.getNodeById("type").value,
+            person: this.getNodeById("person").value
         };
-        this.handleEvent("lineValueChange", oEvent);
+        this.handleEvent("lineChange", oEvent);
     }
 };

@@ -18,15 +18,15 @@ class _AccountModel extends DatabaseModel {
         this.set(aPath, oEntry);
     }
 
-    updateEntry (iId, sDisplayName, iOwner) {
+    updateEntry (sId, sDisplayName, iOwner) {
         const oEntry = {
-            ID: iId,
+            ID: sId,
             DisplayName: sDisplayName,
             Owner: iOwner
         };
         EventBus.sendToDatabase("accounts-update", oEntry);
 
-        const aPath = ["accounts", { ID: iId }];
+        const aPath = ["accounts", { ID: sId }];
         this.set(aPath, oEntry);
     }
 

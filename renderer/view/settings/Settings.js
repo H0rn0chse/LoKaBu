@@ -14,7 +14,8 @@ export class Settings extends View {
             "databaseOpenUser",
             "databaseDefault",
             "listChange",
-            "languageChange"
+            "languageChange",
+            "listEntryChange"
         ]);
     }
 

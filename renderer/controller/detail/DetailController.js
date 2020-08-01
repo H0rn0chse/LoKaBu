@@ -79,13 +79,11 @@ export class DetailController extends Controller {
             .addEventListener("accountChange", this.onAccountChange, this)
             .addEventListener("dateChange", this.onDateChange, this)
             .addEventListener("commentChange", this.onCommentChange, this)
-            .addEventListener("personChange", this.onPersonChange, this)
+            .addEventListener("lineChange", this.onLineChange, this)
             .addEventListener("lineAdd", this.onLineAdd, this)
             .addEventListener("lineRemove", this.onLineRemove, this)
-            .addEventListener("lineValueChange", this.onLineValueChange, this)
             .addEventListener("save", this.onSave, this)
             .addEventListener("storeChange", this.onStoreChange, this)
-            .addEventListener("typeChange", this.onTypeChange, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
     }
@@ -102,26 +100,6 @@ export class DetailController extends Controller {
         ReceiptModel.setDate(oEvent.customData.date);
     }
 
-    onLineAdd (oEvent) {
-        console.log("lineAdd", oEvent.customData);
-    }
-
-    onLineRemove (oEvent) {
-        console.log("lineRemove", oEvent.customData);
-    }
-
-    onLineValueChange (oEvent) {
-        console.log("lineValueChange", oEvent.customData);
-    }
-
-    onPersonChange (oEvent) {
-        console.log("personChange", oEvent.customData);
-    }
-
-    onSave (oEvent) {
-        console.log("save", oEvent);
-    }
-
     onStoreChange (oEvent) {
         ReceiptModel.setStore(oEvent.customData.store);
     }
@@ -130,7 +108,20 @@ export class DetailController extends Controller {
         ReceiptModel.setComment(oEvent.customData.comment);
     }
 
-    onTypeChange (oEvent) {
-        console.log("typeChange", oEvent.customData);
+    onLineAdd (oEvent) {
+        LineModel.addEntry(oEvent.customData.id);
+    }
+
+    onLineChange (oEvent) {
+        const oData = oEvent.customData;
+        LineModel.updateEntry(oData.id, oData.receipt, oData.value, oData.person, oData.type);
+    }
+
+    onLineRemove (oEvent) {
+        LineModel.deleteEntry(oEvent.customData.id);
+    }
+
+    onSave (oEvent) {
+        console.log("save", oEvent);
     }
 }

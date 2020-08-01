@@ -56,9 +56,9 @@ class _SettingsModel extends Model {
         this.save();
     }
 
-    setDefault (sList, iId) {
+    setDefault (sList, sId) {
         const aPath = ["lists", { "id": sList }, "default"];
-        this.set(aPath, iId);
+        this.set(aPath, sId);
     }
 
     save () {

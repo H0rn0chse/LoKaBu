@@ -17,14 +17,14 @@ class _PersonModel extends DatabaseModel {
         this.set(aPath, oEntry);
     }
 
-    updateEntry (iId, sDisplayName) {
+    updateEntry (sId, sDisplayName) {
         const oEntry = {
-            ID: iId,
+            ID: sId,
             DisplayName: sDisplayName
         };
         EventBus.sendToDatabase("persons-update", oEntry);
 
-        const aPath = ["persons", { ID: iId }];
+        const aPath = ["persons", { ID: sId }];
         this.set(aPath, oEntry);
     }
 

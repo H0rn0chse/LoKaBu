@@ -6,14 +6,15 @@ export class LineDetail extends View {
     constructor () {
         super();
         this.addEvents([
-            "lineAdd"
+            "lineAdd",
+            "lineChange"
         ]);
     }
 
     render () {
         const oNode = new DomElement("div")
             .addClass("line-detail")
-            .insertAggregation(this, "receiptLines", LineDetailLine, this.addGenericListenerToChild.bind(this))
+            .insertAggregation(this, "receiptLines", LineDetailLine, this._addLineItemEventHandler.bind(this))
             .appendNode(new DomElement("div")
                 .setText("+")
                 .addEventListener("click", this.onLineAdd, this)
@@ -23,8 +24,25 @@ export class LineDetail extends View {
         return oNode;
     }
 
+    _addLineItemEventHandler (oItem) {
+        oItem
+            .addEventListener("lineChange", this.onLineChange, this)
+            .addEventListener("lineRemove", this.onLineRemove, this);
+    }
+
+    onLineChange (oEvent) {
+        oEvent.customData.receipt = this.getProperty("id");
+        this.handleEvent("lineChange", oEvent);
+    }
+
+    onLineRemove (oEvent) {
+        this.handleEvent("lineRemove", oEvent);
+    }
+
     onLineAdd (oEvent) {
-        oEvent.customData = {};
+        oEvent.customData = {
+            id: this.getProperty("id")
+        };
         this.handleEvent("lineAdd", oEvent);
     }
 };
