@@ -3,14 +3,16 @@ import { EventBus } from "../../EventBus.js";
 import { SettingsModel } from "../view/SettingsModel.js";
 
 export class DatabaseModel extends Model {
-    constructor (oData, sTable) {
+    constructor (oData, sTable, bSkipInitialLoad = false) {
         super(oData);
 
         this.table = sTable;
 
         EventBus.listen(`${this.table}-create`, this.processCreate, this);
 
-        EventBus.sendToDatabase(`${this.table}-read`);
+        if (!bSkipInitialLoad) {
+            EventBus.sendToDatabase(`${this.table}-read`);
+        }
         EventBus.listen(`${this.table}-read`, this.processRead, this);
 
         EventBus.listen(`${this.table}-update`, this.processUpdate, this);

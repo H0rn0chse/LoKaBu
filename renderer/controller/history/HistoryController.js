@@ -68,5 +68,6 @@ export class HistoryController extends Controller {
 
     onEditLine (oEvent) {
         console.log("editLine", oEvent.customData);
+
     }
 };

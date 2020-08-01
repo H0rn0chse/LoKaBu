@@ -25,7 +25,7 @@ class _ReceiptsTable extends Table {
         `;
         return db.get()
             .prepare(sSql)
-            .all(oReceipt);
+            .get(oReceipt);
     }
 
     updateSqlAction (oReceipt) {

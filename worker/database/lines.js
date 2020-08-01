@@ -17,15 +17,24 @@ class _LinesTable extends Table {
             .run(oLine);
     }
 
-    readSqlAction (oLine) {
-        const sSql = `
-        INSERT INTO Lines
-            (Receipt, Value, Billing, Type)
-        Values ($Receipt, $Value, $Billing, $Type)
-        `;
+    readSqlAction (oObject) {
+        let sSql;
+        if (oObject.ID) {
+            sSql = `
+            SELECT *
+            FROM Lines
+            WHERE ID = $ID
+            `;
+        } else {
+            sSql = `
+            SELECT *
+            FROM Lines
+            WHERE Receipt = $Receipt
+            `;
+        }
         return db.get()
             .prepare(sSql)
-            .run(oLine);
+            .all(oObject);
     }
 
     updateSqlAction (oLine) {

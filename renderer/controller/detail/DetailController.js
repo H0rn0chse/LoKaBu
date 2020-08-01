@@ -8,6 +8,8 @@ import { TypeModel } from "../../model/database/TypeModel.js";
 import { LanguageModel } from "../../model/database/LanguageModel.js";
 import { DetailModel } from "../../model/view/DetailModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
+import { ReceiptModel } from "../../model/database/ReceiptModel.js";
+import { LineModel } from "../../model/database/LineModel.js";
 
 export class DetailController extends Controller {
     constructor (oDomRef) {
@@ -19,6 +21,8 @@ export class DetailController extends Controller {
 
         oDetail.setParent(oDetailContainer.getNode())
             .addModel(DetailModel, "viewModel")
+            .addModel(ReceiptModel, "receipt")
+            .addModel(LineModel, "lines")
             .addModel(AccountModel, "account")
             .addModel(StoreModel, "store")
             .addModel(PersonModel, "person")
@@ -34,41 +38,41 @@ export class DetailController extends Controller {
         oDetail
             .bindProperty("id-i18n", "viewModel", ["id-i18n"])
             .bindProperty("id-trans", "lang", "id-i18n")
-            .bindProperty("id", "viewModel", ["id"])
             .bindProperty("date-i18n", "viewModel", ["date-i18n"])
             .bindProperty("date-trans", "lang", "date-i18n")
-            .bindProperty("date", "viewModel", ["date"])
             .bindProperty("store-i18n", "viewModel", ["store-i18n"])
             .bindProperty("store-trans", "lang", "store-i18n")
-            .bindProperty("store", "viewModel", ["store"])
+            .bindProperty("account-i18n", "viewModel", ["account-i18n"])
+            .bindProperty("account-trans", "lang", "account-i18n")
             .bindAggregation("stores", new Aggregation("store", ["stores"])
                 .bindProperty("text", "store", ["DisplayName"])
                 .bindProperty("value", "store", ["ID"])
             )
-            .bindProperty("account-i18n", "viewModel", ["account-i18n"])
-            .bindProperty("account-trans", "lang", "account-i18n")
-            .bindProperty("account", "viewModel", ["account"])
             .bindAggregation("accounts", new Aggregation("account", ["accounts"])
                 .bindProperty("text", "account", ["DisplayName"])
                 .bindProperty("value", "account", ["ID"])
             )
-            .bindProperty("comment", "viewModel", ["comment"]);
+            .bindProperty("id", "receipt", ["ID"])
+            .bindProperty("date", "receipt", ["Date"])
+            .bindProperty("store", "receipt", ["Store"])
+            .bindProperty("account", "receipt", ["Account"])
+            .bindProperty("comment", "receipt", ["Comment"]);
 
         // ReceiptLines
         oDetail
-            .bindAggregation("receiptLines", new Aggregation("viewModel", ["receiptLines"])
-                .bindProperty("id", "viewModel", ["id"])
+            .bindAggregation("receiptLines", new Aggregation("lines", ["lines"])
                 .bindAggregation("persons", new Aggregation("person", ["persons"])
                     .bindProperty("text", "person", ["DisplayName"])
                     .bindProperty("value", "person", ["ID"])
                 )
-                .bindProperty("person", "viewModel", ["person"])
                 .bindAggregation("types", new Aggregation("type", ["types"])
                     .bindProperty("text", "type", ["DisplayName"])
                     .bindProperty("value", "type", ["ID"])
                 )
-                .bindProperty("type", "viewModel", ["type"])
-                .bindProperty("value", "viewModel", ["id"])
+                .bindProperty("id", "lines", ["ID"])
+                .bindProperty("person", "lines", ["Billing"])
+                .bindProperty("type", "lines", ["Type"])
+                .bindProperty("value", "lines", ["Value"])
             );
 
         oDetail
