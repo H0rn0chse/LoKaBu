@@ -78,6 +78,7 @@ export class DetailController extends Controller {
         oDetail
             .addEventListener("accountChange", this.onAccountChange, this)
             .addEventListener("dateChange", this.onDateChange, this)
+            .addEventListener("commentChange", this.onCommentChange, this)
             .addEventListener("personChange", this.onPersonChange, this)
             .addEventListener("lineAdd", this.onLineAdd, this)
             .addEventListener("lineRemove", this.onLineRemove, this)
@@ -94,11 +95,11 @@ export class DetailController extends Controller {
     }
 
     onAccountChange (oEvent) {
-        console.log("accountChange", oEvent.customData);
+        ReceiptModel.setAccount(oEvent.customData.account);
     }
 
     onDateChange (oEvent) {
-        console.log("dateChange", oEvent.customData);
+        ReceiptModel.setDate(oEvent.customData.date);
     }
 
     onLineAdd (oEvent) {
@@ -122,7 +123,11 @@ export class DetailController extends Controller {
     }
 
     onStoreChange (oEvent) {
-        console.log("storeChange", oEvent.customData);
+        ReceiptModel.setStore(oEvent.customData.store);
+    }
+
+    onCommentChange (oEvent) {
+        ReceiptModel.setComment(oEvent.customData.comment);
     }
 
     onTypeChange (oEvent) {

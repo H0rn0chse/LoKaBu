@@ -12,7 +12,8 @@ export class ReceiptDetail extends View {
         this.addEvents([
             "accountChange",
             "dateChange",
-            "storeChange"
+            "storeChange",
+            "commentChange"
         ]);
     }
 
@@ -37,7 +38,7 @@ export class ReceiptDetail extends View {
                 .appendNode(new DomElement("input")
                     .setType("date")
                     .setValue(this.getProperty("date"))
-                    .addEventListener("change", this.onDateChange, this)
+                    .addEventListener("focusout", this.onDateChange, this)
                 )
             )
             // Store
@@ -68,16 +69,21 @@ export class ReceiptDetail extends View {
             .appendNode(new DomElement("textarea")
                 .setRows(5)
                 .setValue(this.getProperty("comment"))
+                .addEventListener("change", this.onCommentChange, this)
             );
 
         return oBase.getNode();
     }
 
     onDateChange (oEvent) {
-        oEvent.customData = {
-            date: oEvent.target.value
-        };
-        this.handleEvent("dateChange", oEvent);
+        if (this.getProperty("date") !== oEvent.target.value) {
+            oEvent.customData = {
+                date: oEvent.target.value
+            };
+            this.handleEvent("dateChange", oEvent);
+        }
+        oEvent.preventDefault();
+        oEvent.stopImmediatePropagation();
     }
 
     onStoreChange (oEvent) {
@@ -92,5 +98,12 @@ export class ReceiptDetail extends View {
             account: oEvent.target.value
         };
         this.handleEvent("accountChange", oEvent);
+    }
+
+    onCommentChange (oEvent) {
+        oEvent.customData = {
+            comment: oEvent.target.value
+        };
+        this.handleEvent("commentChange", oEvent);
     }
 };

@@ -1,18 +1,11 @@
 import { EventBus } from "../../EventBus.js";
 import { DatabaseModel } from "../common/DatabaseModel.js";
-import { UnixToInput } from "../../../assets/dateFormatter.js";
+import { UnixToInput, InputToUnix } from "../../../assets/dateFormatter.js";
+import { deepClone } from "../../common/Utils.js";
 
 class _ReceiptModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "receipts", true);
-    }
-
-    get (aPath, aBindingContextPath) {
-        if (aPath[0] === "Date") {
-            const iDate = super.get(aPath, aBindingContextPath);
-            return iDate ? UnixToInput(iDate) : "";
-        }
-        return super.get(aPath, aBindingContextPath);
     }
 
     read (iId) {
@@ -34,29 +27,43 @@ class _ReceiptModel extends DatabaseModel {
         this.mergeObjectIntoData(oEntry);
     }
 
-    updateEntry (iId, iDate, iAccount, sComment, iStore) {
-        const oEntry = {
-            ID: iId,
-            Date: iDate,
-            Account: iAccount,
-            Comment: sComment,
-            Store: iStore
-        };
-        EventBus.sendToDatabase("receipts-update", oEntry);
-
-        this.mergeObjectIntoData(oEntry);
-    }
-
     processCreate (oEvent, oData) {
         this.set(["ID"], oData.lastInsertRowid);
     }
 
     processRead (oEvent, oData) {
+        oData.Date = UnixToInput(oData.Date);
         this.mergeObjectIntoData(oData);
         console.log("ReceiptsModel loaded");
     }
 
     processUpdate () {}
+
+    setDate (sDate) {
+        this.set(["Date"], sDate);
+        this.save();
+    }
+
+    setAccount (iAccount) {
+        this.set(["Account"], iAccount);
+        this.save();
+    }
+
+    setComment (sComment) {
+        this.set(["Comment"], sComment);
+        this.save();
+    }
+
+    setStore (iStore) {
+        this.set(["Store"], iStore);
+        this.save();
+    }
+
+    save () {
+        const oEntry = deepClone(this.get([]));
+        oEntry.Date = InputToUnix(oEntry.Date);
+        EventBus.sendToDatabase("receipts-update", oEntry);
+    }
 }
 
 export const ReceiptModel = new _ReceiptModel({
