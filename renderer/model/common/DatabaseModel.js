@@ -3,18 +3,19 @@ import { EventBus } from "../../EventBus.js";
 import { SettingsModel } from "../view/SettingsModel.js";
 
 export class DatabaseModel extends Model {
-    constructor (oData, sTable, bSkipInitialLoad = false) {
+    constructor (oData, sTable, bSkipInitialRead = false) {
         super(oData);
 
         this.table = sTable;
 
-        EventBus.listen(`${this.table}-create`, this.processCreate, this);
-
-        if (!bSkipInitialLoad) {
-            EventBus.sendToDatabase(`${this.table}-read`);
+        if (!bSkipInitialRead) {
+            EventBus.listen("database-open", (oEvent) => {
+                EventBus.sendToDatabase(`${this.table}-read`);
+            });
         }
-        EventBus.listen(`${this.table}-read`, this.processRead, this);
 
+        EventBus.listen(`${this.table}-create`, this.processCreate, this);
+        EventBus.listen(`${this.table}-read`, this.processRead, this);
         EventBus.listen(`${this.table}-update`, this.processUpdate, this);
         EventBus.listen(`${this.table}-delete`, this.processDelete, this);
     }

@@ -7,6 +7,8 @@ import { PersonModel } from "../../model/database/PersonModel.js";
 import { TypeModel } from "../../model/database/TypeModel.js";
 import { SettingsModel } from "../../model/view/SettingsModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
+import { DialogManager } from "../../common/DialogManager.js";
+import { SettingModel } from "../../model/database/SettingModel.js";
 
 export class SettingsController extends Controller {
     constructor (oDomRef) {
@@ -18,6 +20,7 @@ export class SettingsController extends Controller {
 
         oSettings.setParent(oSettingsContainer.getNode())
             .addModel(SettingsModel, "viewModel")
+            .addModel(SettingModel, "settings")
             .addModel(AccountModel, "account")
             .addModel(StoreModel, "store")
             .addModel(PersonModel, "person")
@@ -27,7 +30,7 @@ export class SettingsController extends Controller {
         oSettings
             .bindProperty("database-section-i18n", "viewModel", ["database-section-i18n"])
             .bindProperty("current-database-i18n", "viewModel", ["current-database-i18n"])
-            .bindProperty("database-path", "viewModel", ["CurrentDir"])
+            .bindProperty("database-path", "settings", ["CurrentDir"])
             .bindProperty("database-create-i18n", "viewModel", ["database-create-i18n"])
             .bindProperty("database-open-i18n", "viewModel", ["database-open-i18n"])
             .bindProperty("database-open-user-i18n", "viewModel", ["database-open-user-i18n"])
@@ -41,7 +44,7 @@ export class SettingsController extends Controller {
                 .bindProperty("text", "lang", ["value"])
                 .bindProperty("value", "lang", ["value"])
             )
-            .bindProperty("language", "viewModel", ["Language"]);
+            .bindProperty("language", "settings", ["Language"]);
 
         // default settings
         oSettings
@@ -104,19 +107,33 @@ export class SettingsController extends Controller {
     }
 
     onDatabaseCreate (oEvent) {
-        console.log("databaseCreate", oEvent.customData);
+        DialogManager.createDatabase()
+            .then(oResult => {
+                console.log("databaseCreate", oResult.filePath);
+                EventBus.sendToDatabase("database-create", oResult.filePath);
+            })
+            .catch(() => {
+                console.log("createDatabase was canceled");
+            });
     }
 
     onDatabaseOpen (oEvent) {
-        console.log("databaseOpen", oEvent.customData);
+        DialogManager.openDatabase()
+            .then(oResult => {
+                console.log("databaseOpen", oResult.filePaths[0]);
+                EventBus.sendToDatabase("database-open", oResult.filePaths[0]);
+            })
+            .catch(() => {
+                console.log("openDatabase was canceled");
+            });
     }
 
     onDatabaseOpenUser (oEvent) {
-        console.log("databaseOpenUser", oEvent.customData);
+        EventBus.sendToDatabase("database-open");
     }
 
     onDatabaseDefault (oEvent) {
-        console.log("databaseDefault", oEvent.customData);
+        SettingModel.setDefaultDatabase();
     }
 
     onListChange (oEvent) {
@@ -141,6 +158,6 @@ export class SettingsController extends Controller {
 
     onLanguageChange (oEvent) {
         const sLanguage = oEvent.customData.language;
-        SettingsModel.setLanguage(sLanguage);
+        SettingModel.setLanguage(sLanguage);
     }
 };

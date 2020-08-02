@@ -2,12 +2,15 @@
 import { Model } from "../common/Model.js";
 import { LineModel } from "../database/LineModel.js";
 import { ReceiptModel } from "../database/ReceiptModel.js";
+import { EventBus } from "../../EventBus.js";
 
 class _DetailModel extends Model {
     constructor (...args) {
         super(...args);
 
-        this.readReceipt(1);
+        EventBus.listen("database-open", (oEvent) => {
+            this.readReceipt(1);
+        });
     }
 
     readReceipt (iId) {

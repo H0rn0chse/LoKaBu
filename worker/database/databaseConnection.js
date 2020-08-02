@@ -17,6 +17,20 @@ let oDatabase;
 let oSharedDatabase;
 const pSettings = new Deferred();
 
+EventBus.listen("database-open", (oEvent, sMessage) => {
+    // user default
+    if (!sMessage) {
+        close();
+        open(true);
+    } else {
+        openOrCreateShared(sMessage);
+    }
+});
+
+EventBus.listen("database-create", (oEvent, sMessage) => {
+    openOrCreateShared(sMessage);
+});
+
 function _openOrCreateDatabase (sPath, sBasePath) {
     let oRef;
     try {

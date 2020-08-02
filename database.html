@@ -10,10 +10,12 @@
 			const { ipcRenderer } = require('electron');
 			import { main } from "./worker/database/main.js";
 			import { EventBus } from './renderer/EventBus.js'
+			import { db } from './worker/database/databaseConnection.js'
 
 			EventBus.setIpcRenderer(ipcRenderer);
 			EventBus.sendToMain("windowLoaded");
 			EventBus.listen("shutdownApp", () => {
+				db.close();
 				console.log("shutdown");
 				EventBus.sendToMain("windowProcessClosed");
 			});
