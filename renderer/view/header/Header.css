@@ -1,4 +1,4 @@
 .Header {
 	display: flex;
-	background: #4B77BE;
+	background: var(--bg-element-base);
 }

@@ -25,4 +25,3 @@ export function DateToUnix (dDate) {
 export function InputToUnix (sInputValue) {
     return DateToUnix(InputToDate(sInputValue));
 }
-

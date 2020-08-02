@@ -1,6 +1,6 @@
 .HeaderItem{
 	padding:0.5em 1em;
-	color: white;
+	color: var(--element-font);
 	cursor: default;
 }
 
@@ -9,5 +9,5 @@
 }
 
 .HeaderItem.selected, .HeaderItem:hover:not(.HeaderIcon) {
-	background: #1F4788;
+	background: var(--bg-element-dark);
 }

@@ -33,6 +33,7 @@ export class HistoryLineItem extends View {
                 .setDisabled()
             )
             .appendNode(new DomElement("div")
+                .addClass("button")
                 .setText(this.getProperty("edit"))
                 .addEventListener("click", this.onEditLine, this)
             )

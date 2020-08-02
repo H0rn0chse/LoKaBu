@@ -36,6 +36,7 @@ export class LineDetailLine extends View {
                 .addEventListener("change", this.onLineChange, this)
             )
             .appendNode(new DomElement("div")
+                .addClass("buttonCircle")
                 .setText("-")
                 .addEventListener("click", this.onLineRemove, this)
             )

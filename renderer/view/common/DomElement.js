@@ -6,6 +6,7 @@ export class DomElement {
         Object.keys(oInlineStyles).forEach(sKey => {
             this.node.style[sKey] = oInlineStyles[sKey];
         });
+        this.addClass("unselectable");
         return this;
     }
 

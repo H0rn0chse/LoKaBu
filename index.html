@@ -5,24 +5,7 @@
 		<!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
 		<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 
-		<style>
-			body, html {
-				border: 0;
-				margin: 0;
-				padding: 0;
-				height: 100%;
-				width: 100%;
-			}
-
-			* {
-				font-family: sans-serif;
-			}
-
-			section {
-				margin-left: 2em;
-			}
-
-		</style>
+		<link rel="stylesheet" href="./renderer/view/common/Main.css">
 
 		<script type="module">
 			const { ipcRenderer } = require('electron');
