@@ -37,7 +37,7 @@ export class SettingListItem extends View {
 
         oDomElement
             .appendNode(new DomElement("div")
-                .setText(`${this.getProperty("default-trans")}: `)
+                .setText(`${this.getTranslation("default-i18n")}: `)
             )
             .appendNode(new DomElement("input")
                 .setId("default")

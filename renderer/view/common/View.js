@@ -2,6 +2,7 @@ import { DomElement } from "./DomElement.js";
 import { BindingManager } from "../../common/BindingManager.js";
 import { EventManager } from "../../common/EventManager.js";
 import { MultiClass } from "../../common/MultiClass.js";
+import { LanguageModel } from "../../model/database/LanguageModel.js";
 
 export class View extends MultiClass(BindingManager, EventManager) {
     constructor () {
@@ -9,6 +10,8 @@ export class View extends MultiClass(BindingManager, EventManager) {
         this.parent = null;
         this.models = {};
         this.visibilty = true;
+
+        this.addModel(LanguageModel, "lang");
     }
 
     addGenericListenerToChild (oChild) {
@@ -99,6 +102,12 @@ export class View extends MultiClass(BindingManager, EventManager) {
             }
         }
         return this.getPropertyDefault(sProperty);
+    }
+
+    getTranslation (sProperty) {
+        const aPath = this.getProperty(sProperty);
+        const oModel = this.getModel("lang");
+        return oModel.get(aPath) || "";
     }
 
     getPropertyDefault (sProperty) {

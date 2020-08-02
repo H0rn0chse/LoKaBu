@@ -5,7 +5,6 @@ import { AccountModel } from "../../model/database/AccountModel.js";
 import { StoreModel } from "../../model/database/StoreModel.js";
 import { PersonModel } from "../../model/database/PersonModel.js";
 import { TypeModel } from "../../model/database/TypeModel.js";
-import { LanguageModel } from "../../model/database/LanguageModel.js";
 import { SettingsModel } from "../../model/view/SettingsModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 
@@ -22,31 +21,22 @@ export class SettingsController extends Controller {
             .addModel(AccountModel, "account")
             .addModel(StoreModel, "store")
             .addModel(PersonModel, "person")
-            .addModel(TypeModel, "type")
-            .addModel(LanguageModel, "lang");
+            .addModel(TypeModel, "type");
 
         // database settings
         oSettings
             .bindProperty("database-section-i18n", "viewModel", ["database-section-i18n"])
-            .bindProperty("database-section-trans", "lang", "database-section-i18n")
             .bindProperty("current-database-i18n", "viewModel", ["current-database-i18n"])
-            .bindProperty("current-database-trans", "lang", "current-database-i18n")
             .bindProperty("database-path", "viewModel", ["CurrentDir"])
             .bindProperty("database-create-i18n", "viewModel", ["database-create-i18n"])
-            .bindProperty("database-create-trans", "lang", "database-create-i18n")
             .bindProperty("database-open-i18n", "viewModel", ["database-open-i18n"])
-            .bindProperty("database-open-trans", "lang", "database-open-i18n")
             .bindProperty("database-open-user-i18n", "viewModel", ["database-open-user-i18n"])
-            .bindProperty("database-open-user-trans", "lang", "database-open-user-i18n")
             .bindProperty("database-default-i18n", "viewModel", ["database-default-i18n"])
-            .bindProperty("database-default-trans", "lang", "database-default-i18n");
 
         // default settings
         oSettings
             .bindProperty("default-section-i18n", "viewModel", ["default-section-i18n"])
-            .bindProperty("default-section-trans", "lang", "default-section-i18n")
             .bindProperty("language-i18n", "viewModel", ["language-i18n"])
-            .bindProperty("language-trans", "lang", "language-i18n")
             .bindAggregation("languages", new Aggregation("lang", ["languages"])
                 .bindProperty("text", "lang", ["value"])
                 .bindProperty("value", "lang", ["value"])
@@ -56,7 +46,6 @@ export class SettingsController extends Controller {
         // default settings
         oSettings
             .bindProperty("list-section-i18n", "viewModel", ["list-section-i18n"])
-            .bindProperty("list-section-trans", "lang", "list-section-i18n")
             .bindAggregation("lists", new Aggregation("viewModel", ["lists"])
                 .bindProperty("i18n", "viewModel", ["i18n"])
                 .bindProperty("text", "lang", "i18n")
@@ -69,7 +58,6 @@ export class SettingsController extends Controller {
 
                 .bindProperty("checked-id", "viewModel", ["checked-id"])
                 .bindProperty("default-i18n", "viewModel", ["default-i18n"])
-                .bindProperty("default-trans", "lang", "default-i18n")
             )
             .bindAggregation("accounts", new Aggregation("account", ["accounts"])
                 .bindProperty("id", "account", ["ID"])
@@ -82,7 +70,6 @@ export class SettingsController extends Controller {
 
                 .bindProperty("checked-id", "viewModel", ["checked-id"])
                 .bindProperty("default-i18n", "viewModel", ["default-i18n"])
-                .bindProperty("default-trans", "lang", "default-i18n")
             )
             .bindAggregation("types", new Aggregation("type", ["types"])
                 .bindProperty("id", "type", ["ID"])
@@ -90,7 +77,6 @@ export class SettingsController extends Controller {
 
                 .bindProperty("checked-id", "viewModel", ["checked-id"])
                 .bindProperty("default-i18n", "viewModel", ["default-i18n"])
-                .bindProperty("default-trans", "lang", "default-i18n")
             )
             .bindAggregation("stores", new Aggregation("store", ["stores"])
                 .bindProperty("id", "store", ["ID"])
@@ -98,7 +84,6 @@ export class SettingsController extends Controller {
 
                 .bindProperty("checked-id", "viewModel", ["checked-id"])
                 .bindProperty("default-i18n", "viewModel", ["default-i18n"])
-                .bindProperty("default-trans", "lang", "default-i18n")
             );
 
         oSettings
@@ -135,7 +120,6 @@ export class SettingsController extends Controller {
     }
 
     onListChange (oEvent) {
-        console.log("listChange", oEvent.customData);
         const sList = oEvent.customData.list;
         SettingsModel.updateList(sList);
     }

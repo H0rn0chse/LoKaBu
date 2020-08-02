@@ -89,7 +89,7 @@ export class DomElement {
         return this;
     }
 
-    setText (sText) {
+    setText (sText = "") {
         if (typeof sText !== "string") {
             sText = sText.toString();
         }

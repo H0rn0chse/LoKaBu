@@ -2,7 +2,6 @@ import { Controller } from "../common/Controller.js";
 import { History } from "../../view/history/History.js";
 import { EventBus } from "../../EventBus.js";
 import { HistoryModel } from "../../model/view/HistoryModel.js";
-import { LanguageModel } from "../../model/database/LanguageModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { AccountModel } from "../../model/database/AccountModel.js";
 
@@ -16,8 +15,7 @@ export class HistoryController extends Controller {
 
         oHistory.setParent(oHistoryContainer.getNode())
             .addModel(HistoryModel, "viewModel")
-            .addModel(AccountModel, "account")
-            .addModel(LanguageModel, "lang");
+            .addModel(AccountModel, "account");
 
         // Base view
         oHistory

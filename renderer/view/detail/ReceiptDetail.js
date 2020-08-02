@@ -23,7 +23,7 @@ export class ReceiptDetail extends View {
             // ID
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
                 .appendNode(new DomElement("span")
-                    .setText(`${this.getProperty("id-trans")}: `)
+                    .setText(`${this.getTranslation("id-i18n")}: `)
                 )
                 .appendNode(new DomElement("input")
                     .setDisabled()
@@ -33,7 +33,7 @@ export class ReceiptDetail extends View {
             // Date
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
                 .appendNode(new DomElement("span")
-                    .setText(`${this.getProperty("date-trans")}: `)
+                    .setText(`${this.getTranslation("date-i18n")}: `)
                 )
                 .appendNode(new DomElement("input")
                     .setType("date")
@@ -44,7 +44,7 @@ export class ReceiptDetail extends View {
             // Store
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
                 .appendNode(new DomElement("span")
-                    .setText(`${this.getProperty("store-trans")}: `)
+                    .setText(`${this.getTranslation("store-i18n")}: `)
                 )
                 .appendNode(new DomElement("select")
                     .insertAggregation(this, "stores", DropdownItem)
@@ -56,7 +56,7 @@ export class ReceiptDetail extends View {
             // Account
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
                 .appendNode(new DomElement("span")
-                    .setText(`${this.getProperty("account-trans")}: `)
+                    .setText(`${this.getTranslation("account-i18n")}: `)
                 )
                 .appendNode(new DomElement("select")
                     .insertAggregation(this, "accounts", DropdownItem)

@@ -5,7 +5,6 @@ import { AccountModel } from "../../model/database/AccountModel.js";
 import { StoreModel } from "../../model/database/StoreModel.js";
 import { PersonModel } from "../../model/database/PersonModel.js";
 import { TypeModel } from "../../model/database/TypeModel.js";
-import { LanguageModel } from "../../model/database/LanguageModel.js";
 import { DetailModel } from "../../model/view/DetailModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { ReceiptModel } from "../../model/database/ReceiptModel.js";
@@ -26,24 +25,18 @@ export class DetailController extends Controller {
             .addModel(AccountModel, "account")
             .addModel(StoreModel, "store")
             .addModel(PersonModel, "person")
-            .addModel(TypeModel, "type")
-            .addModel(LanguageModel, "lang");
+            .addModel(TypeModel, "type");
 
         // detail base view
         oDetail
             .bindProperty("save-i18n", "viewModel", ["save-i18n"])
-            .bindProperty("save-trans", "lang", "save-i18n");
 
         // ReceiptDetail
         oDetail
             .bindProperty("id-i18n", "viewModel", ["id-i18n"])
-            .bindProperty("id-trans", "lang", "id-i18n")
             .bindProperty("date-i18n", "viewModel", ["date-i18n"])
-            .bindProperty("date-trans", "lang", "date-i18n")
             .bindProperty("store-i18n", "viewModel", ["store-i18n"])
-            .bindProperty("store-trans", "lang", "store-i18n")
             .bindProperty("account-i18n", "viewModel", ["account-i18n"])
-            .bindProperty("account-trans", "lang", "account-i18n")
             .bindAggregation("stores", new Aggregation("store", ["stores"])
                 .bindProperty("text", "store", ["DisplayName"])
                 .bindProperty("value", "store", ["ID"])
