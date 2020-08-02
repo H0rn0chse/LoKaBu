@@ -37,10 +37,12 @@ class _LineModel extends DatabaseModel {
             Type: sType
         };
         const aPath = ["lines", { ID: iId }];
-        this.set(aPath, deepClone(oEntry));
+        this.set(aPath, deepClone(oEntry), true);
 
         oEntry.Value = parseInt(oEntry.Value * 100, 10);
         EventBus.sendToDatabase("lines-update", oEntry);
+
+        this.update();
     }
 
     deleteEntry (iId) {

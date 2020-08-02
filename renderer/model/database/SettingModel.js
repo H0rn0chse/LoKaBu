@@ -29,18 +29,18 @@ class _SettingModel extends DatabaseModel {
     }
 
     setLanguage (sLanguage) {
-        // views can indirectly consume this model
         this.updateLanguageModel = true;
+
+        EventBus.sendToDatabase("settings-update", this.get([]));
 
         const aPath = ["Language"];
         this.set(aPath, sLanguage, true);
-        EventBus.sendToDatabase("settings-update", this.get([]));
     }
 
     setDefaultDatabase () {
+        EventBus.sendToDatabase("settings-update", this.get([]));
         const sPath = this.get(["CurrentDir"]);
         this.set(["DefaultDir"], sPath);
-        EventBus.sendToDatabase("settings-update", this.get([]));
     }
 }
 

@@ -1,5 +1,5 @@
 export class SqlStatement {
-    constructorc (sTableName, sControlColumn) {
+    constructor (sTableName, sControlColumn) {
         this.tableName = sTableName;
         this.controlColumn = sControlColumn;
         this.sql = "";
@@ -47,7 +47,8 @@ export class SqlStatement {
         return sSql.replace(/\$SelectClause/g, this.tableName + ".*");
     }
 
-    getPageSql (sPage) {
+    getPageSql (iPage) {
+        const sPage = parseInt(iPage, 10) - 1;
         let sSql = this.sql;
         if (sSql === "") {
             sSql = this.default;

@@ -47,23 +47,27 @@ class _ReceiptModel extends DatabaseModel {
     processUpdate () {}
 
     setDate (sDate) {
-        this.set(["Date"], sDate);
+        this.set(["Date"], sDate, true);
         this.save();
+        this.update();
     }
 
     setAccount (iAccount) {
-        this.set(["Account"], iAccount);
+        this.set(["Account"], iAccount, true);
         this.save();
+        this.update();
     }
 
     setComment (sComment) {
-        this.set(["Comment"], sComment);
+        this.set(["Comment"], sComment, true);
         this.save();
+        this.update();
     }
 
     setStore (iStore) {
-        this.set(["Store"], iStore);
+        this.set(["Store"], iStore, true);
         this.save();
+        this.update();
     }
 
     save () {

@@ -54,8 +54,9 @@ export class Model extends EventManager {
     mergeObjectIntoData (oData, aPath = []) {
         Object.keys(oData).forEach(sKey => {
             const aCurrentPath = aPath.concat([sKey]);
-            this.set(aCurrentPath, oData[sKey]);
+            this.set(aCurrentPath, oData[sKey], true);
         });
+        this.update();
     }
 
     update () {

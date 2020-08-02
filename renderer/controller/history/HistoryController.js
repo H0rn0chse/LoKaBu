@@ -4,6 +4,7 @@ import { EventBus } from "../../EventBus.js";
 import { HistoryModel } from "../../model/view/HistoryModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { AccountModel } from "../../model/database/AccountModel.js";
+import { DetailModel } from "../../model/view/DetailModel.js";
 
 export class HistoryController extends Controller {
     constructor (oDomRef) {
@@ -19,8 +20,8 @@ export class HistoryController extends Controller {
 
         // Base view
         oHistory
-            .bindProperty("currentPage", "viewModel", ["currentPage"])
-            .bindProperty("pageCount", "viewModel", ["pageCount"]);
+            .bindProperty("currentPage", "viewModel", ["CurrentPage"])
+            .bindProperty("pageCount", "viewModel", ["PageCount"]);
 
         // SortBar
         oHistory
@@ -35,11 +36,11 @@ export class HistoryController extends Controller {
         // LineEntries
         oHistory
             .bindAggregation("entries", new Aggregation("viewModel", ["entries"])
-                .bindProperty("id", "viewModel", ["id"])
-                .bindProperty("account-id", "viewModel", ["account"])
-                .bindProperty("account", "account", "account-id")
-                .bindProperty("date", "viewModel", ["date"])
-                .bindProperty("value", "viewModel", ["value"])
+                .bindProperty("id", "viewModel", ["ID"])
+                .bindProperty("account-ref", "viewModel", ["AccountRef"])
+                .bindProperty("account", "account", "account-ref")
+                .bindProperty("date", "viewModel", ["Date"])
+                .bindProperty("value", "viewModel", ["ReceiptSum"])
                 .bindProperty("edit", "lang", ["common.edit"])
             );
 
@@ -57,7 +58,15 @@ export class HistoryController extends Controller {
     }
 
     onPaging (sDirection, oEvent) {
-        console.log(sDirection, oEvent);
+        switch (sDirection) {
+            case "next":
+                HistoryModel.readNext();
+                break;
+            case "before":
+                HistoryModel.readBefore();
+                break;
+            default:
+        }
     }
 
     onSort (oEvent) {
@@ -65,7 +74,7 @@ export class HistoryController extends Controller {
     }
 
     onEditLine (oEvent) {
-        console.log("editLine", oEvent.customData);
-
+        DetailModel.readReceipt(oEvent.customData.id);
+        EventBus.sendToCurrentWindow("navigation", "detail");
     }
 };

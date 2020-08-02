@@ -14,8 +14,8 @@ class _ReceiptListView extends Table {
         `;
     }
 
-    readSqlAction (aFilter = [], sPage = "0", sSortColumn = "ReceiptID", sSortDirection = "ASC") {
-        const oSqlStatement = new SqlStatement("view_ReceiptList", "ReceiptID")
+    readSqlAction (aFilter = [], iPage = 1, sSortColumn = "ID", sSortDirection = "ASC") {
+        const oSqlStatement = new SqlStatement("view_ReceiptList", "ID")
             .setDefaultSql(this.baseSelect)
             .setSort(sSortColumn, sSortDirection);
 
@@ -23,12 +23,15 @@ class _ReceiptListView extends Table {
             oSqlStatement.addFilterOption(new FilterOption(oFilterOption));
         });
 
-        return db.get()
-            .prepare(oSqlStatement.getPageSql(sPage))
-            .all()
-            .map((oItem) => {
-                oItem.PageCount = Math.ceil(oItem.LineCount / oItem.PageSize);
-            });
+        const aEntries = db.get()
+            .prepare(oSqlStatement.getPageSql(iPage))
+            .all();
+
+        return {
+            entries: aEntries,
+            CurrentPage: iPage,
+            PageCount: aEntries.length > 0 ? Math.ceil(aEntries[0].LineCount / aEntries[0].PageSize) : 1
+        };
     }
 }
 
