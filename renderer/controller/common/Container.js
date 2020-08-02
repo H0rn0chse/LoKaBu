@@ -1,4 +1,4 @@
-import { load } from "../../../assets/load.js";
+import { load } from "../../common/load.js";
 import { DomElement } from "../../view/common/DomElement.js";
 
 load.css("/renderer/controller/common/Container.css");

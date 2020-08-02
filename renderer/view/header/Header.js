@@ -1,4 +1,4 @@
-import { load } from "../../../assets/load.js";
+import { load } from "../../common/load.js";
 import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { HeaderItem } from "./HeaderItem.js";

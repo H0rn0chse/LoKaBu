@@ -1,6 +1,6 @@
 import { db } from "./databaseConnection.js";
-import { SqlStatement } from "../../assets/sqlStatement.js";
-import { FilterOption } from "../../assets/filterOption.js";
+import { SqlStatement } from "../common/sqlStatement.js";
+import { FilterOption } from "../../renderer/common/filterOption.js";
 import { Table } from "../common/Table.js";
 import { EventBus } from "../../renderer/EventBus.js";
 
