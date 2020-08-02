@@ -31,7 +31,7 @@ export class SettingsController extends Controller {
             .bindProperty("database-create-i18n", "viewModel", ["database-create-i18n"])
             .bindProperty("database-open-i18n", "viewModel", ["database-open-i18n"])
             .bindProperty("database-open-user-i18n", "viewModel", ["database-open-user-i18n"])
-            .bindProperty("database-default-i18n", "viewModel", ["database-default-i18n"])
+            .bindProperty("database-default-i18n", "viewModel", ["database-default-i18n"]);
 
         // default settings
         oSettings

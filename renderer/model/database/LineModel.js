@@ -57,6 +57,18 @@ class _LineModel extends DatabaseModel {
         }
     }
 
+    deleteReceipt (iId) {
+        const oEntry = {
+            Receipt: iId
+        };
+        EventBus.sendToDatabase("lines-delete", oEntry);
+        this.emptyList();
+    }
+
+    emptyList () {
+        this.set(["lines"], []);
+    }
+
     processCreate (oEvent, oData) {
         const aPath = ["lines", { ID: undefined }, "ID"];
         this.set(aPath, oData.lastInsertRowid);

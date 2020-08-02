@@ -27,6 +27,13 @@ class _ReceiptModel extends DatabaseModel {
         this.mergeObjectIntoData(oEntry);
     }
 
+    deleteEntry (iId) {
+        const oEntry = {
+            ID: iId
+        };
+        EventBus.sendToDatabase("receipts-delete", oEntry);
+    }
+
     processCreate (oEvent, oData) {
         this.set(["ID"], oData.lastInsertRowid);
     }

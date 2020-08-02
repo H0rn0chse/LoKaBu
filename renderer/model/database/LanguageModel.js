@@ -24,6 +24,16 @@ const tempTranslations = [
         scriptCode: "common.default",
         en_GB: "Default",
         de: "Standard"
+    },
+    {
+        scriptCode: "detail.newReceipt",
+        en_GB: "New Receipt...",
+        de: "Neuer Beleg..."
+    },
+    {
+        scriptCode: "detail.deleteReceipt",
+        en_GB: "Delete Receipt...",
+        de: "Beleg löschen..."
     }
 ];
 

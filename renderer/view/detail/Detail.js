@@ -12,7 +12,8 @@ export class Detail extends MultiView {
     constructor () {
         super();
         this.addEvents([
-            "save"
+            "new",
+            "delete"
         ]);
         this.addView("receiptDetail", new ReceiptDetail()
             .addGenericListener(this));
@@ -29,6 +30,19 @@ export class Detail extends MultiView {
         const oNode = new DomElement("section")
             .addClass("detail")
             .appendNode(new FlexContainer("div", { flexDirection: "row" })
+                .addClass("user-actions")
+                .appendNode(new DomElement("div")
+                    .addClass("button")
+                    .setText(this.getTranslation("new-i18n"))
+                    .addEventListener("click", this.onNew, this)
+                )
+                .appendNode(new DomElement("div")
+                    .addClass("button")
+                    .setText(this.getTranslation("delete-i18n"))
+                    .addEventListener("click", this.onDelete, this)
+                )
+            )
+            .appendNode(new FlexContainer("div", { flexDirection: "row" })
                 .appendNode(new DomElement("div", { flexBasis: "100%" })
                     .setChildView(this.getView("receiptDetail"))
                 )
@@ -39,18 +53,19 @@ export class Detail extends MultiView {
                     .setChildView(this.getView("scanner"))
                 )
             )
-            .appendNode(new DomElement("div")
-                .addClass("user-actions")
-                .appendNode(new DomElement("div"))
-                .setText(this.getTranslation("save-i18n"))
-                .addEventListener("click", this.onSave, this)
-            )
             .getNode();
 
         return oNode;
     }
 
-    onSave (oEvent) {
-        this.handleEvent("save", oEvent);
+    onNew (oEvent) {
+        this.handleEvent("new", oEvent);
+    }
+
+    onDelete (oEvent) {
+        oEvent.customData = {
+            id: this.getProperty("id")
+        };
+        this.handleEvent("delete", oEvent);
     }
 };

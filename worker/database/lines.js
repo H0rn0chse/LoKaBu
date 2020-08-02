@@ -48,15 +48,24 @@ class _LinesTable extends Table {
             .run(oLine);
     }
 
-    deleteSqlAction (oLine) {
-        const sSql = `
-        DELETE
-        FROM Lines
-        WHERE ID=$ID
-        `;
+    deleteSqlAction (oObject) {
+        let sSql;
+        if (oObject.ID) {
+            sSql = `
+            DELETE
+            FROM Lines
+            WHERE ID = $ID
+            `;
+        } else {
+            sSql = `
+            DELETE
+            FROM Lines
+            WHERE Receipt = $Receipt
+            `;
+        }
         return db.get()
             .prepare(sSql)
-            .run(oLine);
+            .run(oObject);
     }
 }
 

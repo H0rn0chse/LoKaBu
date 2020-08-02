@@ -29,7 +29,8 @@ export class DetailController extends Controller {
 
         // detail base view
         oDetail
-            .bindProperty("save-i18n", "viewModel", ["save-i18n"])
+            .bindProperty("new-i18n", "viewModel", ["new-i18n"])
+            .bindProperty("delete-i18n", "viewModel", ["delete-i18n"]);
 
         // ReceiptDetail
         oDetail
@@ -75,8 +76,9 @@ export class DetailController extends Controller {
             .addEventListener("lineChange", this.onLineChange, this)
             .addEventListener("lineAdd", this.onLineAdd, this)
             .addEventListener("lineRemove", this.onLineRemove, this)
-            .addEventListener("save", this.onSave, this)
             .addEventListener("storeChange", this.onStoreChange, this)
+            .addEventListener("new", this.onNew, this)
+            .addEventListener("delete", this.onDelete, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
     }
@@ -114,7 +116,11 @@ export class DetailController extends Controller {
         LineModel.deleteEntry(oEvent.customData.id);
     }
 
-    onSave (oEvent) {
-        console.log("save", oEvent);
+    onNew (oEvent) {
+        DetailModel.newReceipt();
+    }
+
+    onDelete (oEvent) {
+        DetailModel.deleteReceipt(oEvent.customData.id);
     }
 }
