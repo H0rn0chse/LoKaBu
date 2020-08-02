@@ -23,11 +23,7 @@ export class ReceiptDetail extends View {
             // ID
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
                 .appendNode(new DomElement("span")
-                    .setText(`${this.getTranslation("id-i18n")}: `)
-                )
-                .appendNode(new DomElement("input")
-                    .setDisabled()
-                    .setValue(this.getProperty("id"))
+                    .setText(`${this.getTranslation("id-i18n")}: ${this.getProperty("id")}`)
                 )
             )
             // Date

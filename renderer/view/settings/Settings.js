@@ -2,7 +2,7 @@ import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
-import { SettingListItem } from "./SettingListItem.js";
+import { SettingsListItem } from "./SettingsListItem.js";
 
 export class Settings extends View {
     constructor () {
@@ -31,10 +31,8 @@ export class Settings extends View {
                     .appendNode(new DomElement("div")
                         .setText(`${this.getTranslation("current-database-i18n")}: `)
                     )
-                    .appendNode(new DomElement("input")
-                        .setType("text")
-                        .setDisabled()
-                        .setValue(this.getProperty("database-path"))
+                    .appendNode(new DomElement("div")
+                        .setText(this.getProperty("database-path"))
                     )
                 )
                 .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
@@ -85,7 +83,7 @@ export class Settings extends View {
                     .addEventListener("change", this.onListChange, this)
                 )
                 .appendNode(new FlexContainer("div", { flexDirection: "column", flexWrap: "nowrap" })
-                    .insertAggregation(this, this.getProperty("current-list"), SettingListItem, this._addSettingListItemEventHandler.bind(this))
+                    .insertAggregation(this, this.getProperty("current-list"), SettingsListItem, this._addSettingListItemEventHandler.bind(this))
                     .appendNode(new DomElement("div")
                         .addClass("buttonCircle")
                         .setText("+")

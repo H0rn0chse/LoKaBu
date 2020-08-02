@@ -3,7 +3,7 @@ import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
 
-export class SettingListItem extends View {
+export class SettingsListItem extends View {
     constructor () {
         super();
         this.addEvents([
@@ -13,10 +13,8 @@ export class SettingListItem extends View {
 
     render () {
         const oDomElement = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
-            .appendNode(new DomElement("input")
-                .setType("text")
-                .setValue(this.getProperty("id"))
-                .setDisabled()
+            .appendNode(new DomElement("div")
+                .setText(this.getProperty("id"))
             )
             .appendNode(new DomElement("input")
                 .setId("text")

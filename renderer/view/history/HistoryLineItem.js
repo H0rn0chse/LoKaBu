@@ -1,6 +1,9 @@
 import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
+import { load } from "../../../assets/load.js";
+
+load.css("/renderer/view/history/HistoryLineItem.css");
 
 export class HistoryLineItem extends View {
     constructor () {
@@ -12,25 +15,21 @@ export class HistoryLineItem extends View {
 
     render () {
         const oNode = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
-            .appendNode(new DomElement("input")
-                .setType("text")
-                .setValue(this.getProperty("id"))
-                .setDisabled()
+            .appendNode(new DomElement("div")
+                .addClass("historyLineProperty")
+                .setText(this.getProperty("id"))
             )
-            .appendNode(new DomElement("input")
-                .setType("date")
-                .setValue(this.getProperty("date"))
-                .setDisabled()
+            .appendNode(new DomElement("div")
+                .addClass("historyLineProperty")
+                .setText(this.getProperty("date"))
             )
-            .appendNode(new DomElement("input")
-                .setType("text")
-                .setValue(this.getProperty("account"))
-                .setDisabled()
+            .appendNode(new DomElement("div")
+                .addClass("historyLineProperty")
+                .setText(this.getProperty("account"))
             )
-            .appendNode(new DomElement("input")
-                .setType("number")
-                .setValue(this.getProperty("value"))
-                .setDisabled()
+            .appendNode(new DomElement("div")
+                .addClass("historyLineProperty")
+                .setText(this.getProperty("value"))
             )
             .appendNode(new DomElement("div")
                 .addClass("button")
