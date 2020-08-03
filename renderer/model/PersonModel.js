@@ -1,5 +1,6 @@
-import { EventBus } from "../../EventBus.js";
-import { DatabaseModel } from "../common/DatabaseModel.js";
+import { EventBus } from "../EventBus.js";
+import { DatabaseModel } from "./common/DatabaseModel.js";
+import { SettingsModel } from "./SettingsModel.js";
 
 class _PersonModel extends DatabaseModel {
     constructor (oData) {
@@ -26,6 +27,10 @@ class _PersonModel extends DatabaseModel {
 
         const aPath = ["persons", { ID: sId }];
         this.set(aPath, oEntry);
+    }
+
+    setDefault (iId) {
+        SettingsModel.setDefault(this.table, iId);
     }
 
     processCreate (oEvent, oData) {

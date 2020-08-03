@@ -2,13 +2,13 @@ import { Controller } from "../common/Controller.js";
 import { Detail } from "../../view/detail/Detail.js";
 import { EventBus } from "../../EventBus.js";
 import { AccountModel } from "../../model/AccountModel.js";
-import { StoreModel } from "../../model/database/StoreModel.js";
-import { PersonModel } from "../../model/database/PersonModel.js";
-import { TypeModel } from "../../model/database/TypeModel.js";
+import { StoreModel } from "../../model/StoreModel.js";
+import { PersonModel } from "../../model/PersonModel.js";
+import { TypeModel } from "../../model/TypeModel.js";
 import { DetailModel } from "../../model/DetailModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
-import { ReceiptModel } from "../../model/database/ReceiptModel.js";
-import { LineModel } from "../../model/database/LineModel.js";
+import { ReceiptModel } from "../../model/ReceiptModel.js";
+import { LineModel } from "../../model/LineModel.js";
 
 export class DetailController extends Controller {
     constructor (oDomRef) {

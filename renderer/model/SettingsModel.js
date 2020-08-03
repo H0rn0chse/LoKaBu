@@ -1,7 +1,14 @@
 /* eslint-disable quote-props */
-import { Model } from "../common/Model.js";
+import { LanguageModel } from "./LanguageModel.js";
+import { EventBus } from "../EventBus.js";
+import { DatabaseModel } from "./common/DatabaseModel.js";
 
-class _SettingsModel extends Model {
+class _SettingsModel extends DatabaseModel {
+    constructor (oData) {
+        super(oData, "settings");
+        this.updateLanguageModel = true;
+    }
+
     get (aPath, aBindingContextPath = []) {
         if (aPath.length === 1 && aPath[0] === "checked-id") {
             return this.getCheckedId();
@@ -23,6 +30,40 @@ class _SettingsModel extends Model {
     setDefault (sList, sId) {
         const aPath = ["lists", { "id": sList }, "default"];
         this.set(aPath, sId);
+    }
+
+    processRead (oEvent, oData) {
+        console.log("SettingsModel loaded");
+        this.mergeObjectIntoData(oData);
+
+        if (this.updateLanguageModel) {
+            this.updateLanguageModel = false;
+            LanguageModel.update();
+        }
+    }
+
+    processUpdate (oEvent) {
+        this.update();
+
+        if (this.updateLanguageModel) {
+            this.updateLanguageModel = false;
+            LanguageModel.update();
+        }
+    }
+
+    setLanguage (sLanguage) {
+        this.updateLanguageModel = true;
+
+        EventBus.sendToDatabase("settings-update", this.get([]));
+
+        const aPath = ["Language"];
+        this.set(aPath, sLanguage, true);
+    }
+
+    setDefaultDatabase () {
+        EventBus.sendToDatabase("settings-update", this.get([]));
+        const sPath = this.get(["CurrentDir"]);
+        this.set(["DefaultDir"], sPath);
     }
 }
 

@@ -1,9 +1,9 @@
 /* eslint-disable quote-props */
-import { DatabaseModel } from "../common/DatabaseModel.js";
-import { UnixToInput } from "../../common/DateUtils.js";
-import { ReceiptModel } from "../database/ReceiptModel.js";
-import { EventBus } from "../../EventBus.js";
-import { LineModel } from "../database/LineModel.js";
+import { DatabaseModel } from "./common/DatabaseModel.js";
+import { UnixToInput } from "../common/DateUtils.js";
+import { ReceiptModel } from "./ReceiptModel.js";
+import { EventBus } from "../EventBus.js";
+import { LineModel } from "./LineModel.js";
 
 class _HistoryModel extends DatabaseModel {
     constructor (oData) {

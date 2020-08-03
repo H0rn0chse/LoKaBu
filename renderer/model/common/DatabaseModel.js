@@ -1,6 +1,5 @@
 import { Model } from "./Model.js";
 import { EventBus } from "../../EventBus.js";
-import { SettingsModel } from "../view/SettingsModel.js";
 
 export class DatabaseModel extends Model {
     constructor (oData, sTable, bSkipInitialRead = false) {
@@ -28,10 +27,6 @@ export class DatabaseModel extends Model {
     updateEntry () {
         // to be implemented in the explicit model
         throw new Error(`the method updateEntry was not implemented for this model`, this);
-    }
-
-    setDefault (iId) {
-        SettingsModel.setDefault(this.table, iId);
     }
 
     processCreate (oEvent) {

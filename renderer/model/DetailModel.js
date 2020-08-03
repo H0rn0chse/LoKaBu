@@ -1,7 +1,7 @@
 /* eslint-disable quote-props */
 import { Model } from "./common/Model.js";
-import { LineModel } from "./database/LineModel.js";
-import { ReceiptModel } from "./database/ReceiptModel.js";
+import { LineModel } from "./LineModel.js";
+import { ReceiptModel } from "./ReceiptModel.js";
 import { EventBus } from "../EventBus.js";
 
 class _DetailModel extends Model {

@@ -1,5 +1,6 @@
 import { EventBus } from "../EventBus.js";
 import { DatabaseModel } from "./common/DatabaseModel.js";
+import { SettingsModel } from "./SettingsModel.js";
 
 class _AccountModel extends DatabaseModel {
     constructor (oData) {
@@ -28,6 +29,10 @@ class _AccountModel extends DatabaseModel {
 
         const aPath = ["accounts", { ID: sId }];
         this.set(aPath, oEntry);
+    }
+
+    setDefault (iId) {
+        SettingsModel.setDefault(this.table, iId);
     }
 
     processCreate (oEvent, oData) {

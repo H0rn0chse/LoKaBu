@@ -1,8 +1,8 @@
 /* eslint-disable quote-props */
-import { Model } from "../common/Model.js";
-import { EventBus } from "../../EventBus.js";
-import { deepClone } from "../../common/Utils.js";
-import { SettingModel } from "./SettingModel.js";
+import { Model } from "./common/Model.js";
+import { EventBus } from "../EventBus.js";
+import { deepClone } from "../common/Utils.js";
+import { SettingsModel } from "./SettingsModel.js";
 
 const aReservedPaths = [
     "languages",
@@ -57,7 +57,7 @@ class _LanguageModel extends Model {
             return super.get(aPath, aBindingContextPath);
         }
         // get translation values
-        const sCurrentLanguage = SettingModel.get(["Language"]) || "en_GB";
+        const sCurrentLanguage = SettingsModel.get(["Language"]) || "en_GB";
         aContextPath = ["translations", { scriptCode: aPath[0] }, sCurrentLanguage];
         return super.get(aContextPath);
     }

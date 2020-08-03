@@ -1,7 +1,7 @@
-import { EventBus } from "../../EventBus.js";
-import { DatabaseModel } from "../common/DatabaseModel.js";
-import { UnixToInput, InputToUnix } from "../../common/DateUtils.js";
-import { deepClone } from "../../common/Utils.js";
+import { EventBus } from "../EventBus.js";
+import { DatabaseModel } from "./common/DatabaseModel.js";
+import { UnixToInput, InputToUnix } from "../common/DateUtils.js";
+import { deepClone } from "../common/Utils.js";
 
 class _ReceiptModel extends DatabaseModel {
     constructor (oData) {

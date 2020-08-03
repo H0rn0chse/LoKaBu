@@ -2,7 +2,7 @@ import { DomElement } from "./DomElement.js";
 import { BindingManager } from "../../common/BindingManager.js";
 import { EventManager } from "../../common/EventManager.js";
 import { MultiClass } from "../../common/MultiClass.js";
-import { LanguageModel } from "../../model/database/LanguageModel.js";
+import { LanguageModel } from "../../model/LanguageModel.js";
 
 export class View extends MultiClass(BindingManager, EventManager) {
     constructor () {

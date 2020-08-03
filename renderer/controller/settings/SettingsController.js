@@ -2,13 +2,12 @@ import { Controller } from "../common/Controller.js";
 import { Settings } from "../../view/settings/Settings.js";
 import { EventBus } from "../../EventBus.js";
 import { AccountModel } from "../../model/AccountModel.js";
-import { StoreModel } from "../../model/database/StoreModel.js";
-import { PersonModel } from "../../model/database/PersonModel.js";
-import { TypeModel } from "../../model/database/TypeModel.js";
-import { SettingsModel } from "../../model/view/SettingsModel.js";
+import { StoreModel } from "../../model/StoreModel.js";
+import { PersonModel } from "../../model/PersonModel.js";
+import { TypeModel } from "../../model/TypeModel.js";
+import { SettingsModel } from "../../model/SettingsModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { DialogManager } from "../../common/DialogManager.js";
-import { SettingModel } from "../../model/database/SettingModel.js";
 
 export class SettingsController extends Controller {
     constructor (oDomRef) {
@@ -20,7 +19,6 @@ export class SettingsController extends Controller {
 
         oSettings.setParent(oSettingsContainer.getNode())
             .addModel(SettingsModel, "viewModel")
-            .addModel(SettingModel, "settings")
             .addModel(AccountModel, "account")
             .addModel(StoreModel, "store")
             .addModel(PersonModel, "person")
@@ -30,7 +28,7 @@ export class SettingsController extends Controller {
         oSettings
             .bindProperty("database-section-i18n", "viewModel", ["database-section-i18n"])
             .bindProperty("current-database-i18n", "viewModel", ["current-database-i18n"])
-            .bindProperty("database-path", "settings", ["CurrentDir"])
+            .bindProperty("database-path", "viewModel", ["CurrentDir"])
             .bindProperty("database-create-i18n", "viewModel", ["database-create-i18n"])
             .bindProperty("database-open-i18n", "viewModel", ["database-open-i18n"])
             .bindProperty("database-open-user-i18n", "viewModel", ["database-open-user-i18n"])
@@ -44,7 +42,7 @@ export class SettingsController extends Controller {
                 .bindProperty("text", "lang", ["value"])
                 .bindProperty("value", "lang", ["value"])
             )
-            .bindProperty("language", "settings", ["Language"]);
+            .bindProperty("language", "viewModel", ["Language"]);
 
         // default settings
         oSettings
@@ -133,7 +131,7 @@ export class SettingsController extends Controller {
     }
 
     onDatabaseDefault (oEvent) {
-        SettingModel.setDefaultDatabase();
+        SettingsModel.setDefaultDatabase();
     }
 
     onListChange (oEvent) {
@@ -158,6 +156,6 @@ export class SettingsController extends Controller {
 
     onLanguageChange (oEvent) {
         const sLanguage = oEvent.customData.language;
-        SettingModel.setLanguage(sLanguage);
+        SettingsModel.setLanguage(sLanguage);
     }
 };

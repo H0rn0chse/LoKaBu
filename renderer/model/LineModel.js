@@ -1,6 +1,6 @@
-import { EventBus } from "../../EventBus.js";
-import { DatabaseModel } from "../common/DatabaseModel.js";
-import { deepClone } from "../../common/Utils.js";
+import { EventBus } from "../EventBus.js";
+import { DatabaseModel } from "./common/DatabaseModel.js";
+import { deepClone } from "../common/Utils.js";
 
 class _LineModel extends DatabaseModel {
     constructor (oData) {

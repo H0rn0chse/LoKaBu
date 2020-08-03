@@ -1,7 +1,7 @@
 import { Controller } from "../common/Controller.js";
 import { History } from "../../view/history/History.js";
 import { EventBus } from "../../EventBus.js";
-import { HistoryModel } from "../../model/view/HistoryModel.js";
+import { HistoryModel } from "../../model/HistoryModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { AccountModel } from "../../model/AccountModel.js";
 import { DetailModel } from "../../model/DetailModel.js";

@@ -1,6 +1,6 @@
 import { Controller } from "../common/Controller.js";
 import { Header } from "../../view/header/Header.js";
-import { HeaderModel } from "../../model/view/HeaderModel.js";
+import { HeaderModel } from "../../model/HeaderModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { EventBus } from "../../EventBus.js";
 
