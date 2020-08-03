@@ -1,5 +1,5 @@
-import { EventBus } from "../../EventBus.js";
-import { DatabaseModel } from "../common/DatabaseModel.js";
+import { EventBus } from "../EventBus.js";
+import { DatabaseModel } from "./common/DatabaseModel.js";
 
 class _AccountModel extends DatabaseModel {
     constructor (oData) {

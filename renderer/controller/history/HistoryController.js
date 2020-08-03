@@ -3,8 +3,8 @@ import { History } from "../../view/history/History.js";
 import { EventBus } from "../../EventBus.js";
 import { HistoryModel } from "../../model/view/HistoryModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
-import { AccountModel } from "../../model/database/AccountModel.js";
-import { DetailModel } from "../../model/view/DetailModel.js";
+import { AccountModel } from "../../model/AccountModel.js";
+import { DetailModel } from "../../model/DetailModel.js";
 
 export class HistoryController extends Controller {
     constructor (oDomRef) {

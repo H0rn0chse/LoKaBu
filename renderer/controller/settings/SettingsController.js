@@ -1,7 +1,7 @@
 import { Controller } from "../common/Controller.js";
 import { Settings } from "../../view/settings/Settings.js";
 import { EventBus } from "../../EventBus.js";
-import { AccountModel } from "../../model/database/AccountModel.js";
+import { AccountModel } from "../../model/AccountModel.js";
 import { StoreModel } from "../../model/database/StoreModel.js";
 import { PersonModel } from "../../model/database/PersonModel.js";
 import { TypeModel } from "../../model/database/TypeModel.js";
