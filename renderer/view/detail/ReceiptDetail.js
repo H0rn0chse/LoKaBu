@@ -9,6 +9,8 @@ load.css("/renderer/view/detail/ReceiptDetail.css");
 export class ReceiptDetail extends View {
     constructor () {
         super();
+        this.name = "ReceiptDetailView";
+
         this.addEvents([
             "accountChange",
             "dateChange",

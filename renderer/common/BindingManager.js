@@ -2,26 +2,27 @@ import { deepClone } from "./Utils.js";
 
 export class BindingManager {
     constructor () {
-        this.propertyBindings = {};
-        this.aggregationBindings = {};
+        this.propertyBindings = new Map();
+        this.aggregationBindings = new Map();
         this.bindingContext = {};
     }
 
     bindProperty (sProperty, sModel, aPath) {
-        this.propertyBindings[sProperty] = {
+        const oBinding = {
             path: aPath,
             model: sModel
         };
+        this.propertyBindings.set(sProperty, oBinding);
         return this;
     }
 
     bindAggregation (sProperty, oAggregation) {
-        this.aggregationBindings[sProperty] = oAggregation;
+        this.aggregationBindings.set(sProperty, oAggregation);
         return this;
     }
 
     getAggregationBinding (sAggregation) {
-        return this.aggregationBindings[sAggregation];
+        return this.aggregationBindings.get(sAggregation);
     }
 
     getBindingContext () {
@@ -29,7 +30,7 @@ export class BindingManager {
     }
 
     getPropertyBinding (sProperty) {
-        return this.propertyBindings[sProperty];
+        return this.propertyBindings.get(sProperty);
     }
 
     getPropertyBindings () {
@@ -46,7 +47,7 @@ export class BindingManager {
     }
 
     setBindings (oBinding) {
-        this.propertyBindings = oBinding.propertyBindings;
-        this.aggregationBindings = oBinding.aggregationBindings;
+        this.propertyBindings = new Map(oBinding.propertyBindings);
+        this.aggregationBindings = new Map(oBinding.aggregationBindings);
     }
 };

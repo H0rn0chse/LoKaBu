@@ -8,6 +8,8 @@ load.css("/renderer/view/common/Text.css");
 export class HeaderItem extends View {
     constructor () {
         super();
+        this.name = "HeaderItemView";
+
         this.addEvents([
             "click"
         ]);

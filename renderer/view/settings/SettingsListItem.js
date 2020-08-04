@@ -6,6 +6,8 @@ import { DropdownItem } from "../common/DropdownItem.js";
 export class SettingsListItem extends View {
     constructor () {
         super();
+        this.name = "SettingsListItemView";
+
         this.addEvents([
             "listEntryChange"
         ]);

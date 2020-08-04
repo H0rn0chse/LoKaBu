@@ -40,12 +40,13 @@ const tempTranslations = [
 class _LanguageModel extends Model {
     constructor (...args) {
         super(...args);
+        this.name = "LanguageModel";
 
         EventBus.sendToDatabase("i18n-read");
         EventBus.listen("i18n-read", (oEvent, aData) => {
-            console.log("LanguageModel loaded");
             aData = aData.concat(tempTranslations);
             this.set(["translations"], aData);
+            console.log("LanguageModel loaded");
         });
     }
 

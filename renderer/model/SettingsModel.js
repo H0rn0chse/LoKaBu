@@ -6,6 +6,8 @@ import { DatabaseModel } from "./common/DatabaseModel.js";
 class _SettingsModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "settings");
+        this.name = "SettingsModel";
+
         this.updateLanguageModel = true;
     }
 
@@ -33,13 +35,13 @@ class _SettingsModel extends DatabaseModel {
     }
 
     processRead (oEvent, oData) {
-        console.log("SettingsModel loaded");
         this.mergeObjectIntoData(oData);
 
         if (this.updateLanguageModel) {
             this.updateLanguageModel = false;
             LanguageModel.update();
         }
+        console.log("SettingsModel loaded");
     }
 
     processUpdate (oEvent) {
@@ -49,6 +51,7 @@ class _SettingsModel extends DatabaseModel {
             this.updateLanguageModel = false;
             LanguageModel.update();
         }
+        console.log("SettingsModel updated");
     }
 
     setLanguage (sLanguage) {

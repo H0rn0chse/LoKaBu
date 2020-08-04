@@ -5,6 +5,7 @@ import { HistoryModel } from "../../model/HistoryModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { AccountModel } from "../../model/AccountModel.js";
 import { DetailModel } from "../../model/DetailModel.js";
+import { objectGet } from "../../common/Utils.js";
 
 export class HistoryController extends Controller {
     constructor (oDomRef) {
@@ -22,6 +23,10 @@ export class HistoryController extends Controller {
         oHistory
             .bindProperty("currentPage", "viewModel", ["CurrentPage"])
             .bindProperty("pageCount", "viewModel", ["PageCount"]);
+
+        // FilterBox
+        oHistory
+            .bindAggregation("filter", new Aggregation("viewModel", ["filter"]));
 
         // SortBar
         oHistory
@@ -48,7 +53,10 @@ export class HistoryController extends Controller {
             .addEventListener("editLine", this.onEditLine, this)
             .addEventListener("navBefore", this.onPaging.bind(this, "before"))
             .addEventListener("navNext", this.onPaging.bind(this, "next"))
-            .addEventListener("sort", this.onSort, this);
+            .addEventListener("sort", this.onSort, this)
+            .addEventListener("addFilter", this.onAddFilter, this)
+            .addEventListener("updateFilter", this.onUpdateFilter, this)
+            .addEventListener("deleteFilter", this.onDeleteFilter, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
     }
@@ -76,5 +84,22 @@ export class HistoryController extends Controller {
     onEditLine (oEvent) {
         DetailModel.readReceipt(oEvent.customData.id);
         EventBus.sendToCurrentWindow("navigation", "detail");
+    }
+
+    onAddFilter (oEvent) {
+        HistoryModel.addFilter();
+    }
+
+    onUpdateFilter (oEvent) {
+        const oCustomData = objectGet(oEvent, ["customData"]);
+        if (oCustomData) {
+            HistoryModel.setFilterColumn(oCustomData.filter, oCustomData.column);
+        }
+        HistoryModel.read();
+    }
+
+    onDeleteFilter (oEvent) {
+        HistoryModel.deleteFilter(oEvent.customData.id);
+        HistoryModel.read();
     }
 };

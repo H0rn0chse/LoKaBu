@@ -7,6 +7,7 @@ import { LanguageModel } from "../../model/LanguageModel.js";
 export class View extends MultiClass(BindingManager, EventManager) {
     constructor () {
         super();
+        this.name = "";
         this.parent = null;
         this.models = {};
         this.visibilty = true;
@@ -104,10 +105,14 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return this.getPropertyDefault(sProperty);
     }
 
-    getTranslation (sProperty) {
-        const aPath = this.getProperty(sProperty);
+    getTranslation (vProperty) {
+        let aPath = vProperty;
+        if (!Array.isArray(vProperty)) {
+            aPath = this.getProperty(vProperty);
+        }
+
         const oModel = this.getModel("lang");
-        return oModel.get(aPath) || "";
+        return oModel.get(aPath) || aPath[aPath.length - 1];
     }
 
     getPropertyDefault (sProperty) {
@@ -141,6 +146,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
             oChild.setModels(this.getModels());
             oChild.setBindings(oBinding);
             oChild.setBindingContext(oBinding, iIndex);
+            oChild.bindProperty(undefined, oBinding.model, []);
             oChild.setParent(oDomRef);
             fnAfterBinding(oChild);
             oChild.update();
@@ -160,6 +166,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
 
     update () {
         if (this.parent) {
+            console.debug(`${this.getName()} was rendered`);
             if (this.node) {
                 this.clearContent();
             } else {
@@ -183,5 +190,9 @@ export class View extends MultiClass(BindingManager, EventManager) {
             this.parent.appendChild(this.node);
         }
         return this;
+    }
+
+    getName () {
+        return this.name;
     }
 };

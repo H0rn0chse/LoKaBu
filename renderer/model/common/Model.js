@@ -4,10 +4,18 @@ import { EventManager } from "../../common/EventManager.js";
 export class Model extends EventManager {
     constructor (oData) {
         super();
+        this.name = "";
         this._data = oData;
         this.addEvents([
             "update"
         ]);
+    }
+
+    push (aPath, vValue, bSuppressUpdate) {
+        const aValue = this.get(aPath);
+        if (Array.isArray(aValue)) {
+            this.set([...aPath, aValue.length], vValue, bSuppressUpdate);
+        }
     }
 
     _evaluatePath (aPath) {
@@ -66,5 +74,9 @@ export class Model extends EventManager {
     addEntry (aPath, vEntry, bSuppressUpdate) {
         const aList = this.get(aPath);
         this.set(aPath.concat(aList.length), vEntry, bSuppressUpdate);
+    }
+
+    getName () {
+        return this.name;
     }
 };

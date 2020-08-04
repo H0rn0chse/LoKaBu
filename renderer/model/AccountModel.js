@@ -5,6 +5,7 @@ import { SettingsModel } from "./SettingsModel.js";
 class _AccountModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "accounts");
+        this.name = "AccountModel";
     }
 
     addEntry () {
@@ -14,9 +15,7 @@ class _AccountModel extends DatabaseModel {
         };
         EventBus.sendToDatabase("accounts-create", oEntry);
 
-        const iIndex = this.get(["accounts"]).length;
-        const aPath = ["accounts", iIndex];
-        this.set(aPath, oEntry);
+        this.push(["accounts"], oEntry);
     }
 
     updateEntry (sId, sDisplayName, iOwner) {
@@ -42,10 +41,12 @@ class _AccountModel extends DatabaseModel {
 
     processRead (...args) {
         super.processRead(...args);
-        console.log("AccountsModel loaded");
+        console.log("AccountModel loaded");
     }
 
-    processUpdate () {}
+    processUpdate () {
+        console.log("AccountModel updated");
+    }
 }
 
 export const AccountModel = new _AccountModel({

@@ -4,6 +4,8 @@ import { DomElement } from "../common/DomElement.js";
 export class SortBarItem extends View {
     constructor () {
         super();
+        this.name = "SortBarItemView";
+
         this.addEvents([
             "sort"
         ]);

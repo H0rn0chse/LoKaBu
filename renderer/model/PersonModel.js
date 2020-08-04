@@ -5,6 +5,7 @@ import { SettingsModel } from "./SettingsModel.js";
 class _PersonModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "persons");
+        this.name = "PersonModel";
     }
 
     addEntry () {
@@ -13,9 +14,7 @@ class _PersonModel extends DatabaseModel {
         };
         EventBus.sendToDatabase("persons-create", oEntry);
 
-        const iIndex = this.get(["persons"]).length;
-        const aPath = ["persons", iIndex];
-        this.set(aPath, oEntry);
+        this.push(["persons"], oEntry);
     }
 
     updateEntry (sId, sDisplayName) {
@@ -40,10 +39,12 @@ class _PersonModel extends DatabaseModel {
 
     processRead (...args) {
         super.processRead(...args);
-        console.log("PersonsModel loaded");
+        console.log("PersonModel loaded");
     }
 
-    processUpdate () {}
+    processUpdate () {
+        console.log("PersonModel updated");
+    }
 }
 
 export const PersonModel = new _PersonModel({

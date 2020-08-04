@@ -6,6 +6,8 @@ import { DropdownItem } from "../common/DropdownItem.js";
 export class LineDetailLine extends View {
     constructor () {
         super();
+        this.name = "LineDetailLineView";
+
         this.addEvents([
             "lineRemove",
             "lineChange"

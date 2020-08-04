@@ -20,17 +20,18 @@ export class SqlStatement {
 
     addFilterOption (oFilterOption) {
         if (!oFilterOption.hasEmptyValue()) {
+            oFilterOption.setTable(this.tableName);
             if (this.sql !== "") {
                 this.sql += "INTERSECT\n";
             }
             const sFromClause = oFilterOption.getFromClause();
             const sWhereClause = oFilterOption.getWhereClause();
-            const sHavingClause = oFilterOption.getHavingClause(this.controlColumn);
+            const sHavingClause = oFilterOption.getHavingClause(`${this.tableName}.${this.controlColumn}`);
 
             this.sql += "SELECT $SelectClause\n";
-            this.sql += "FROM " + this.tableName + sFromClause;
+            this.sql += `FROM ${this.tableName} ${sFromClause}`;
             this.sql += sWhereClause;
-            this.sql += "GROUP BY " + this.controlColumn + "\n";
+            this.sql += `GROUP BY ${this.tableName}.${this.controlColumn}\n`;
             this.sql += sHavingClause;
         }
         return this;
@@ -42,7 +43,7 @@ export class SqlStatement {
             sSql = this.default;
         }
         if (this.sortColumn !== undefined && this.sortDirection !== undefined) {
-            sSql += "ORDER BY " + this.sortColumn + " " + this.sortDirection + "\n";
+            sSql += `ORDER BY ${this.sortColumn} ${this.sortDirection}\n`;
         }
         return sSql.replace(/\$SelectClause/g, this.tableName + ".*");
     }
@@ -66,7 +67,7 @@ export class SqlStatement {
             .replace(/\$Data/g, sSql.replace(/\$SelectClause/g, this.tableName + ".*"))
             .replace(/\$PageNumber/g, sPage);
         if (this.sortColumn !== undefined && this.sortDirection !== undefined) {
-            sSqlResult = sSqlResult.replace(/\$Sort/g, "ORDER BY " + this.sortColumn + " " + this.sortDirection);
+            sSqlResult = sSqlResult.replace(/\$Sort/g, `ORDER BY ${this.sortColumn} ${this.sortDirection}`);
         } else {
             sSqlResult = sSqlResult.replace(/\$Sort/g, "");
         }

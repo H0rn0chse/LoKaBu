@@ -6,6 +6,11 @@ import { HeaderItem } from "./HeaderItem.js";
 load.css("/renderer/view/header/Header.css");
 
 export class Header extends View {
+    constructor (...args) {
+        super(...args);
+        this.name = "HeaderView";
+    }
+
     render () {
         const oNode = new DomElement("nav")
             .addClass("Header")

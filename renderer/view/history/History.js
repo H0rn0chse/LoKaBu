@@ -3,21 +3,28 @@ import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { SortBarItem } from "./SortBarItem.js";
 import { HistoryLineItem } from "./HistoryLineItem.js";
+import { FilterView } from "../../filter/common/FilterView.js";
 
 export class History extends View {
     constructor () {
         super();
+        this.name = "HistoryView";
+
         this.addEvents([
             "navBefore",
-            "navNext"
+            "navNext",
+            "addFilter"
         ]);
     }
 
     render () {
         const oNode = new DomElement("section")
             .addClass("history")
+            .insertAggregation(this, "filter", FilterView, this.addGenericListenerToChild.bind(this))
             .appendNode(new DomElement("div")
-                .setText("FilterBox")
+                .setText("+")
+                .addClass("buttonCircle")
+                .addEventListener("click", this.handleEvent.bind(this, "addFilter"))
             )
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
                 .insertAggregation(this, "sort", SortBarItem, this.addGenericListenerToChild.bind(this))

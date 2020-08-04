@@ -7,6 +7,8 @@ import { SettingsListItem } from "./SettingsListItem.js";
 export class Settings extends View {
     constructor () {
         super();
+        this.name = "SettingsView";
+
         this.addEvents([
             "addListItem",
             "databaseCreate",

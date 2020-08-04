@@ -11,6 +11,8 @@ load.css("/renderer/view/Detail/Detail.css");
 export class Detail extends MultiView {
     constructor () {
         super();
+        this.name = "DetailView";
+
         this.addEvents([
             "new",
             "delete"

@@ -8,6 +8,8 @@ load.css("/renderer/view/history/HistoryLineItem.css");
 export class HistoryLineItem extends View {
     constructor () {
         super();
+        this.name = "HistoryLineItemView";
+
         this.addEvents([
             "editLine"
         ]);

@@ -55,6 +55,11 @@ export class DomElement {
         return this;
     }
 
+    insertTemplate (fnTemplate, vData) {
+        fnTemplate(this, vData);
+        return this;
+    }
+
     setChildView (oView) {
         oView.setParent(this.getNode());
         return this;

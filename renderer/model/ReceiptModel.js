@@ -1,11 +1,12 @@
 import { EventBus } from "../EventBus.js";
 import { DatabaseModel } from "./common/DatabaseModel.js";
-import { UnixToInput, InputToUnix } from "../common/DateUtils.js";
+import { UnixToInput, InputToUnix, DateToUnix } from "../common/DateUtils.js";
 import { deepClone } from "../common/Utils.js";
 
 class _ReceiptModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "receipts", true);
+        this.name = "ReceiptModel";
     }
 
     read (iId) {
@@ -17,13 +18,14 @@ class _ReceiptModel extends DatabaseModel {
 
     addEntry () {
         const oEntry = {
-            Date: "",
+            Date: DateToUnix(new Date()),
             Account: 1,
             Comment: "",
             Store: 1
         };
-        EventBus.sendToDatabase("receipts-create", oEntry);
+        EventBus.sendToDatabase("receipts-create", deepClone(oEntry));
 
+        oEntry.Date = UnixToInput(oEntry.Date);
         this.mergeObjectIntoData(oEntry);
     }
 
@@ -41,10 +43,12 @@ class _ReceiptModel extends DatabaseModel {
     processRead (oEvent, oData) {
         oData.Date = UnixToInput(oData.Date);
         this.mergeObjectIntoData(oData);
-        console.log("ReceiptsModel loaded");
+        console.log("ReceiptModel loaded");
     }
 
-    processUpdate () {}
+    processUpdate () {
+        console.log("ReceiptModel updated");
+    }
 
     setDate (sDate) {
         this.set(["Date"], sDate, true);

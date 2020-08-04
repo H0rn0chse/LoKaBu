@@ -1,6 +1,11 @@
 import { Model } from "./common/Model.js";
 
 class _HeaderModel extends Model {
+    constructor (...args) {
+        super(...args);
+        this.name = "HeaderModel";
+    }
+
     setSelectedSection (sSection) {
         this.get(["items"]).forEach(oElement => {
             oElement.selected = oElement.section === sSection;

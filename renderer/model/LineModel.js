@@ -5,6 +5,7 @@ import { deepClone } from "../common/Utils.js";
 class _LineModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "lines", true);
+        this.name = "LineModel";
     }
 
     readReceiptLines (iReceiptId) {
@@ -23,9 +24,7 @@ class _LineModel extends DatabaseModel {
         };
         EventBus.sendToDatabase("lines-create", oEntry);
 
-        const iIndex = this.get(["lines"]).length;
-        const aPath = ["lines", iIndex];
-        this.set(aPath, oEntry);
+        this.push(["lines"], oEntry);
     }
 
     updateEntry (iId, iReceipt, fValue, sBilling, sType) {
@@ -84,7 +83,9 @@ class _LineModel extends DatabaseModel {
         console.log("LinesModel loaded");
     }
 
-    processUpdate () {}
+    processUpdate () {
+        console.log("LinesModel updated");
+    }
 }
 
 export const LineModel = new _LineModel({

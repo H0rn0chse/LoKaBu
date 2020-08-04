@@ -7,6 +7,7 @@ import { EventBus } from "../EventBus.js";
 class _DetailModel extends Model {
     constructor (...args) {
         super(...args);
+        this.name = "DetailModel";
 
         EventBus.listen("database-open", (oEvent) => {
             this.readReceipt(1);
