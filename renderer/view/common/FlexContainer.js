@@ -1,5 +1,5 @@
 import { DomElement } from "./DomElement.js";
-import { load } from "../../common/Load2.js";
+import { load } from "../../common/Load.js";
 
 load.css("/renderer/view/common/FlexContainer.css");
 

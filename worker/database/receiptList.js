@@ -1,5 +1,5 @@
 import { db } from "./databaseConnection.js";
-import { SqlStatement } from "../common/SqlStatement2.js";
+import { SqlStatement } from "../common/SqlStatement.js";
 import { Table } from "../common/Table.js";
 import { SqlFilterOption } from "../common/SqlFilterOption.js";
 
