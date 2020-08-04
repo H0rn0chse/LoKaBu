@@ -1,7 +1,7 @@
 import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
-import { load } from "../../common/load.js";
+import { load } from "../../common/Load2.js";
 
 load.css("/renderer/view/history/HistoryLineItem.css");
 

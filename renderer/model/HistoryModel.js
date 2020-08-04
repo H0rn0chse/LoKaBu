@@ -11,8 +11,12 @@ class _HistoryModel extends DatabaseModel {
         super(oData, "receiptList");
         this.name = "HistoryModel";
 
-        ReceiptModel.addEventListener("update", this.read, this);
-        LineModel.addEventListener("update", this.read, this);
+        ReceiptModel.addEventListener("update", this.onModelUpdate, this);
+        LineModel.addEventListener("update", this.onModelUpdate, this);
+    }
+
+    onModelUpdate (oEvent) {
+        this.read();
     }
 
     addFilter () {
