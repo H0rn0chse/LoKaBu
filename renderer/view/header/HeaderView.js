@@ -5,7 +5,7 @@ import { HeaderItem } from "./HeaderItem.js";
 
 load.css("/renderer/view/header/Header.css");
 
-export class Header extends View {
+export class HeaderView extends View {
     constructor (...args) {
         super(...args);
         this.name = "HeaderView";

@@ -1,5 +1,5 @@
 import { Controller } from "../common/Controller.js";
-import { Settings } from "../../view/settings/Settings.js";
+import { SettingsView } from "../../view/settings/SettingsView.js";
 import { EventBus } from "../../EventBus.js";
 import { AccountModel } from "../../model/AccountModel.js";
 import { StoreModel } from "../../model/StoreModel.js";
@@ -13,7 +13,7 @@ export class SettingsController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oSettings = new Settings();
+        const oSettings = new SettingsView();
         const oSettingsContainer = this.createContainer("settings")
             .setContent(oSettings);
 

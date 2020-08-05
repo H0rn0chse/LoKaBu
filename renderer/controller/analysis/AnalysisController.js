@@ -1,12 +1,12 @@
 import { Controller } from "../common/Controller.js";
-import { Analysis } from "../../view/analysis/Analysis.js";
+import { AnalysisView } from "../../view/analysis/AnalysisView.js";
 import { EventBus } from "../../EventBus.js";
 
 export class AnalysisController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oAnalysis = new Analysis();
+        const oAnalysis = new AnalysisView();
         const oAnalysisContainer = this.createContainer("analysis")
             .setContent(oAnalysis);
 

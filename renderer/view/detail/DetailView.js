@@ -8,7 +8,7 @@ import { FlexContainer } from "../common/FlexContainer.js";
 
 load.css("/renderer/view/Detail/Detail.css");
 
-export class Detail extends MultiView {
+export class DetailView extends MultiView {
     constructor () {
         super();
         this.name = "DetailView";

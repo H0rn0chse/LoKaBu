@@ -5,7 +5,7 @@ import { SortBarItem } from "./SortBarItem.js";
 import { HistoryLineItem } from "./HistoryLineItem.js";
 import { FilterView } from "../../filter/common/FilterView.js";
 
-export class History extends View {
+export class HistoryView extends View {
     constructor () {
         super();
         this.name = "HistoryView";

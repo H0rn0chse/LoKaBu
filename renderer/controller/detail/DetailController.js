@@ -1,5 +1,5 @@
 import { Controller } from "../common/Controller.js";
-import { Detail } from "../../view/detail/Detail.js";
+import { DetailView } from "../../view/detail/DetailView.js";
 import { EventBus } from "../../EventBus.js";
 import { AccountModel } from "../../model/AccountModel.js";
 import { StoreModel } from "../../model/StoreModel.js";
@@ -14,7 +14,7 @@ export class DetailController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oDetail = new Detail();
+        const oDetail = new DetailView();
         const oDetailContainer = this.createContainer("detail")
             .setContent(oDetail);
 

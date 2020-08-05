@@ -1,5 +1,5 @@
 import { Controller } from "../common/Controller.js";
-import { History } from "../../view/history/History.js";
+import { HistoryView } from "../../view/history/HistoryView.js";
 import { EventBus } from "../../EventBus.js";
 import { HistoryModel } from "../../model/HistoryModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
@@ -11,7 +11,7 @@ export class HistoryController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oHistory = new History();
+        const oHistory = new HistoryView();
         const oHistoryContainer = this.createContainer("history")
             .setContent(oHistory);
 

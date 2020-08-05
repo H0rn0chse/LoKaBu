@@ -1,5 +1,5 @@
 import { Controller } from "../common/Controller.js";
-import { Header } from "../../view/header/Header.js";
+import { HeaderView } from "../../view/header/HeaderView.js";
 import { HeaderModel } from "../../model/HeaderModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { EventBus } from "../../EventBus.js";
@@ -8,7 +8,7 @@ export class HeaderController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oHeader = new Header();
+        const oHeader = new HeaderView();
         const oHeaderContainer = this.createContainer("header")
             .setContent(oHeader);
 

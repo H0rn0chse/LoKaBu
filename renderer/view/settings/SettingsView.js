@@ -4,7 +4,7 @@ import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
 import { SettingsListItem } from "./SettingsListItem.js";
 
-export class Settings extends View {
+export class SettingsView extends View {
     constructor () {
         super();
         this.name = "SettingsView";
