@@ -19,19 +19,21 @@ class _SettingsModel extends DatabaseModel {
     }
 
     getCheckedId () {
-        const oCurrentList = {
-            id: this.get(["current-list"])
-        };
-        return this.get(["lists", oCurrentList, "default"]);
+        const sId = this.get(["current-list"]);
+        return this.get([sId]);
     }
 
     updateList (sList) {
         this.set(["current-list"], sList);
     }
 
-    setDefault (sList, sId) {
-        const aPath = ["lists", { "id": sList }, "default"];
-        this.set(aPath, sId);
+    setDefault (sTable, sId) {
+        this.set([sTable], sId);
+        this.save();
+    }
+
+    getDefault (sTable) {
+        return this.get([sTable]) || 1;
     }
 
     processRead (oEvent, oData) {
@@ -56,17 +58,20 @@ class _SettingsModel extends DatabaseModel {
 
     setLanguage (sLanguage) {
         this.updateLanguageModel = true;
-
-        EventBus.sendToDatabase("settings-update", this.get([]));
-
         const aPath = ["Language"];
         this.set(aPath, sLanguage, true);
+
+        this.save();
     }
 
     setDefaultDatabase () {
-        EventBus.sendToDatabase("settings-update", this.get([]));
         const sPath = this.get(["CurrentDir"]);
         this.set(["DefaultDir"], sPath);
+        this.save();
+    }
+
+    save () {
+        EventBus.sendToDatabase("settings-update", this.get([]));
     }
 }
 
@@ -82,21 +87,17 @@ export const SettingsModel = new _SettingsModel({
     "list-section-i18n": ["settings.lists"],
     "default-i18n": ["common.default"],
     "lists": [{
-        "id": "persons",
-        "i18n": ["common.persons"],
-        "default": 1
+        "id": "Person",
+        "i18n": ["common.persons"]
     }, {
-        "id": "accounts",
-        "i18n": ["common.accounts"],
-        "default": 2
+        "id": "Account",
+        "i18n": ["common.accounts"]
     }, {
-        "id": "types",
-        "i18n": ["common.types"],
-        "default": 3
+        "id": "Type",
+        "i18n": ["common.types"]
     }, {
-        "id": "stores",
-        "i18n": ["common.stores"],
-        "default": 1
+        "id": "Store",
+        "i18n": ["common.stores"]
     }],
-    "current-list": "persons"
+    "current-list": "Person"
 });

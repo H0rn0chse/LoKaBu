@@ -29,7 +29,7 @@ class _PersonModel extends DatabaseModel {
     }
 
     setDefault (iId) {
-        SettingsModel.setDefault(this.table, iId);
+        SettingsModel.setDefault("Person", iId);
     }
 
     processCreate (oEvent, oData) {

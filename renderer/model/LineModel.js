@@ -1,6 +1,7 @@
 import { EventBus } from "../EventBus.js";
 import { DatabaseModel } from "./common/DatabaseModel.js";
 import { deepClone } from "../common/Utils.js";
+import { SettingsModel } from "./SettingsModel.js";
 
 class _LineModel extends DatabaseModel {
     constructor (oData) {
@@ -19,8 +20,8 @@ class _LineModel extends DatabaseModel {
         const oEntry = {
             Receipt: iId,
             Value: 0,
-            Billing: 1,
-            Type: 1
+            Billing: SettingsModel.getDefault("Person"),
+            Type: SettingsModel.getDefault("Type")
         };
         EventBus.sendToDatabase("lines-create", oEntry);
 

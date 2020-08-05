@@ -29,7 +29,7 @@ class _TypeModel extends DatabaseModel {
     }
 
     setDefault (iId) {
-        SettingsModel.setDefault(this.table, iId);
+        SettingsModel.setDefault("Type", iId);
     }
 
     processCreate (oEvent, oData) {

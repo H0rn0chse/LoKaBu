@@ -11,7 +11,7 @@ class _AccountModel extends DatabaseModel {
     addEntry () {
         const oEntry = {
             DisplayName: "",
-            Owner: 1
+            Owner: SettingsModel.getDefault("Person")
         };
         EventBus.sendToDatabase("accounts-create", oEntry);
 
@@ -31,7 +31,7 @@ class _AccountModel extends DatabaseModel {
     }
 
     setDefault (iId) {
-        SettingsModel.setDefault(this.table, iId);
+        SettingsModel.setDefault("Account", iId);
     }
 
     processCreate (oEvent, oData) {

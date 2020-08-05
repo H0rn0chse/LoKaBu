@@ -32,31 +32,25 @@ class _SettingsTable extends Table {
     }
 
     updateSqlAction (oSettings) {
-        let oParams = {
-            Person: oSettings.Person,
-            Type: oSettings.Type,
-            Language: oSettings.Language
-        };
         let sSql = `
         UPDATE Settings
         SET Person = $Person,
             Type = $Type,
+            Account = $Account,
+            Store = $Store,
             Language = $Language
         `;
         db.get()
             .prepare(sSql)
-            .run(oParams);
+            .run(oSettings);
         // User specific defaults
-        oParams = {
-            DefaultDir: oSettings.DefaultDir
-        };
         sSql = `
         UPDATE Settings
         SET DefaultDir = $DefaultDir
         `;
         db.get("user")
             .prepare(sSql)
-            .run(oParams);
+            .run(oSettings);
     }
 }
 

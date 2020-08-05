@@ -29,7 +29,7 @@ class _StoreModel extends DatabaseModel {
     }
 
     setDefault (iId) {
-        SettingsModel.setDefault(this.table, iId);
+        SettingsModel.setDefault("Store", iId);
     }
 
     processCreate (oEvent, oData) {

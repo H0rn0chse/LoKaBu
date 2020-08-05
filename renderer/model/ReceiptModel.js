@@ -2,6 +2,7 @@ import { EventBus } from "../EventBus.js";
 import { DatabaseModel } from "./common/DatabaseModel.js";
 import { UnixToInput, InputToUnix, DateToUnix } from "../common/DateUtils.js";
 import { deepClone } from "../common/Utils.js";
+import { SettingsModel } from "./SettingsModel.js";
 
 class _ReceiptModel extends DatabaseModel {
     constructor (oData) {
@@ -19,9 +20,9 @@ class _ReceiptModel extends DatabaseModel {
     addEntry () {
         const oEntry = {
             Date: DateToUnix(new Date()),
-            Account: 1,
+            Account: SettingsModel.getDefault("Account"),
             Comment: "",
-            Store: 1
+            Store: SettingsModel.getDefault("Store")
         };
         EventBus.sendToDatabase("receipts-create", deepClone(oEntry));
 
