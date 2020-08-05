@@ -18,7 +18,7 @@ let oSharedDatabase;
 const pSettings = new Deferred();
 
 EventBus.listen("database-open", (oEvent, sMessage) => {
-    // user default
+    // open user database as default
     if (!sMessage) {
         close();
         open(true);

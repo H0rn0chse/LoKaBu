@@ -5,6 +5,7 @@ import { SettingsController } from "./controller/settings/SettingsController.js"
 import { AnalysisController } from "./controller/analysis/AnalysisController.js";
 import { HistoryController } from "./controller/history/HistoryController.js";
 import { EventBus } from "./EventBus.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 export class AppController extends Controller {
     constructor (oDomRef) {
