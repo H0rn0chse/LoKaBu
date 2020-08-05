@@ -34,6 +34,11 @@ const tempTranslations = [
         scriptCode: "detail.deleteReceipt",
         en_GB: "Delete Receipt...",
         de: "Beleg löschen..."
+    },
+    {
+        scriptCode: "detail.noReceipt",
+        en_GB: "There are no receipts to edit",
+        de: "Es gibt keine Belege zum bearbeiten"
     }
 ];
 
@@ -42,7 +47,10 @@ class _LanguageModel extends Model {
         super(...args);
         this.name = "LanguageModel";
 
-        EventBus.sendToDatabase("i18n-read");
+        EventBus.listen("database-open", (oEvent) => {
+            EventBus.sendToDatabase("i18n-read");
+        });
+
         EventBus.listen("i18n-read", (oEvent, aData) => {
             aData = aData.concat(tempTranslations);
             this.set(["translations"], aData);

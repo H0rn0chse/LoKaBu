@@ -30,7 +30,9 @@ export class DetailController extends Controller {
         // detail base view
         oDetail
             .bindProperty("new-i18n", "viewModel", ["new-i18n"])
-            .bindProperty("delete-i18n", "viewModel", ["delete-i18n"]);
+            .bindProperty("delete-i18n", "viewModel", ["delete-i18n"])
+            .bindProperty("no-receipt", "viewModel", ["no-receipt"])
+            .bindProperty("no-receipt-i18n", "viewModel", ["no-receipt-i18n"]);
 
         // ReceiptDetail
         oDetail

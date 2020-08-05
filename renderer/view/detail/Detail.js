@@ -29,7 +29,7 @@ export class Detail extends MultiView {
 
     render () {
         // base DOM element
-        const oNode = new DomElement("section")
+        const oElement = new DomElement("section")
             .addClass("detail")
             .appendNode(new FlexContainer("div", { flexDirection: "row" })
                 .addClass("user-actions")
@@ -43,8 +43,10 @@ export class Detail extends MultiView {
                     .setText(this.getTranslation("delete-i18n"))
                     .addEventListener("click", this.onDelete, this)
                 )
-            )
-            .appendNode(new FlexContainer("div", { flexDirection: "row" })
+            );
+
+        if (!this.getProperty("no-receipt")) {
+            oElement.appendNode(new FlexContainer("div", { flexDirection: "row" })
                 .appendNode(new DomElement("div", { flexBasis: "100%" })
                     .setChildView(this.getView("receiptDetail"))
                 )
@@ -54,10 +56,14 @@ export class Detail extends MultiView {
                 .appendNode(new DomElement("div", { flexBasis: "100%" })
                     .setChildView(this.getView("scanner"))
                 )
-            )
-            .getNode();
+            );
+        } else {
+            oElement.appendNode(new DomElement("div")
+                .setText(this.getTranslation("no-receipt-i18n"))
+            );
+        }
 
-        return oNode;
+        return oElement.getNode();
     }
 
     onNew (oEvent) {

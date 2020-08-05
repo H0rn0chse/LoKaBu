@@ -10,16 +10,30 @@ class _DetailModel extends Model {
         this.name = "DetailModel";
 
         EventBus.listen("database-open", (oEvent) => {
-            this.readReceipt(1);
+            this.bOpenReceipt = true;
+            EventBus.sendToDatabase("helper-firstReceipt");
+        });
+
+        EventBus.listen("helper-firstReceipt", (oEvent, iReceipt) => {
+            if (this.bOpenReceipt) {
+                this.bOpenReceipt = false;
+                if (Number.isInteger(iReceipt)) {
+                    this.readReceipt(iReceipt);
+                } else {
+                    this.set(["no-receipt"], true);
+                }
+            }
         });
     }
 
     readReceipt (iId) {
+        this.set(["no-receipt"], false);
         ReceiptModel.read(iId);
         LineModel.readReceiptLines(iId);
     }
 
     newReceipt () {
+        this.set(["no-receipt"], false);
         ReceiptModel.addEntry();
         LineModel.emptyList();
     }
@@ -27,8 +41,9 @@ class _DetailModel extends Model {
     deleteReceipt (iId) {
         ReceiptModel.deleteEntry(iId);
         LineModel.deleteReceipt(iId);
-        ReceiptModel.read(1);
-        LineModel.readReceiptLines(1);
+
+        this.bOpenReceipt = true;
+        EventBus.sendToDatabase("helper-firstReceipt");
     }
 }
 
@@ -39,5 +54,7 @@ export const DetailModel = new _DetailModel({
     "id-i18n": ["receipt.id"],
     "account-i18n": ["common.account"],
     "date-i18n": ["common.date"],
-    "store-i18n": ["common.store"]
+    "store-i18n": ["common.store"],
+    "no-receipt": false,
+    "no-receipt-i18n": ["detail.noReceipt"]
 });
