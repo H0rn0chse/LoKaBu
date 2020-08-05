@@ -14,6 +14,7 @@ export class SortBarItem extends View {
     render () {
         const oNode = new DomElement("div")
             .appendNode(new DomElement("div")
+                .addClass("button")
                 .setText(this.getProperty("text"))
                 .addClass(this.getProperty("selected") ? "selected" : "")
                 .addClass(this.getProperty("direction") ? this.getProperty("direction") : "")

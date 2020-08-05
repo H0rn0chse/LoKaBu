@@ -78,7 +78,9 @@ export class HistoryController extends Controller {
     }
 
     onSort (oEvent) {
-        console.log("sort", oEvent.customData);
+        const oData = oEvent.customData;
+        HistoryModel.setSort(oData.id, oData.direction);
+        HistoryModel.read();
     }
 
     onEditLine (oEvent) {

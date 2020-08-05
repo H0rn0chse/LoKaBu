@@ -35,10 +35,24 @@ class _HistoryModel extends DatabaseModel {
         });
     }
 
+    _getCurrentSort () {
+        const oSort = this.get(["sort"]).find(oItem => {
+            return oItem.direction !== "";
+        });
+
+        if (oSort !== undefined) {
+            return [
+                oSort.id,
+                oSort.direction
+            ];
+        }
+    }
+
     read (iId) {
         const aArgs = [
             this._getCurrentFilter(),
-            iId || this.get(["CurrentPage"]) || 1
+            iId || this.get(["CurrentPage"]) || 1,
+            ...this._getCurrentSort()
         ];
         EventBus.sendToDatabase("receiptList-read", ...aArgs);
     }
@@ -48,7 +62,8 @@ class _HistoryModel extends DatabaseModel {
         const iMax = parseInt(this.get(["PageCount"]), 10);
         const aArgs = [
             this._getCurrentFilter(),
-            iCurrent < iMax ? iCurrent + 1 : null
+            iCurrent < iMax ? iCurrent + 1 : null,
+            ...this._getCurrentSort()
         ];
         if (!aArgs.includes(null)) {
             EventBus.sendToDatabase("receiptList-read", ...aArgs);
@@ -59,7 +74,8 @@ class _HistoryModel extends DatabaseModel {
         const iCurrent = parseInt(this.get(["CurrentPage"]), 10);
         const aArgs = [
             this._getCurrentFilter(),
-            iCurrent > 1 ? iCurrent - 1 : null
+            iCurrent > 1 ? iCurrent - 1 : null,
+            ...this._getCurrentSort()
         ];
         if (!aArgs.includes(null)) {
             EventBus.sendToDatabase("receiptList-read", ...aArgs);
@@ -76,6 +92,19 @@ class _HistoryModel extends DatabaseModel {
 
     setFilterColumn (iFilter, iColumn) {
         this.set(["filter", iFilter, "value"], iColumn);
+    }
+
+    setSort (sId, sDirection) {
+        const aSort = this.get(["sort"]);
+
+        aSort.forEach((oItem) => {
+            if (oItem.id === sId) {
+                oItem.direction = sDirection === "ASC" ? "DESC" : "ASC";
+            } else {
+                oItem.direction = "";
+            }
+        });
+        this.set(["sort"], aSort);
     }
 
     processRead (oEvent, oData) {
@@ -102,22 +131,22 @@ class _HistoryModel extends DatabaseModel {
 export const HistoryModel = new _HistoryModel({
     "filter": [],
     "sort": [{
-        "id": "id",
+        "id": "ID",
         "text-i18n": ["receipt.id"],
         "selected": true,
-        "direction": "asc"
+        "direction": "ASC"
     }, {
-        "id": "date",
+        "id": "Date",
         "text-i18n": ["common.date"],
         "selected": false,
         "direction": ""
     }, {
-        "id": "account",
+        "id": "Account",
         "text-i18n": ["common.account"],
         "selected": false,
         "direction": ""
     }, {
-        "id": "value",
+        "id": "ReceiptSum",
         "text-i18n": ["common.value"],
         "selected": false,
         "direction": ""
