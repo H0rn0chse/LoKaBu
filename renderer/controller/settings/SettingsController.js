@@ -34,9 +34,9 @@ export class SettingsController extends Controller {
             .bindProperty("database-open-user-i18n", "viewModel", ["database-open-user-i18n"])
             .bindProperty("database-default-i18n", "viewModel", ["database-default-i18n"]);
 
-        // default settings
+        // language settings
         oSettings
-            .bindProperty("default-section-i18n", "viewModel", ["default-section-i18n"])
+            .bindProperty("language-section-i18n", "viewModel", ["language-section-i18n"])
             .bindProperty("language-i18n", "viewModel", ["language-i18n"])
             .bindAggregation("languages", new Aggregation("lang", ["languages"])
                 .bindProperty("text", "lang", ["value"])

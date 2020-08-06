@@ -16,7 +16,7 @@ export class HistoryLineItem extends View {
     }
 
     render () {
-        const oNode = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
+        const oNode = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", justifyContent: "space-around" })
             .appendNode(new DomElement("div")
                 .addClass("historyLineProperty")
                 .setText(this.getProperty("id"))

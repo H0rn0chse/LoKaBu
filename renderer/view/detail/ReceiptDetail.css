@@ -1,3 +1,8 @@
 .receipt-detail textarea{
     resize: none;
 }
+
+.receipt-detail > .flexItem {
+    padding: 2px;
+    min-height: 1.5em;
+}

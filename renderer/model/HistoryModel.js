@@ -99,8 +99,10 @@ class _HistoryModel extends DatabaseModel {
 
         aSort.forEach((oItem) => {
             if (oItem.id === sId) {
+                oItem.selected = true;
                 oItem.direction = sDirection === "ASC" ? "DESC" : "ASC";
             } else {
+                oItem.selected = false;
                 oItem.direction = "";
             }
         });

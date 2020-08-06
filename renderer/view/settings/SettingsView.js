@@ -3,7 +3,9 @@ import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
 import { SettingsListItem } from "./SettingsListItem.js";
+import { loadCss } from "../../common/Utils.js";
 
+loadCss("/renderer/view/settings/SettingsView.css");
 export class SettingsView extends View {
     constructor () {
         super();
@@ -27,6 +29,7 @@ export class SettingsView extends View {
             .appendNode(new FlexContainer("div", { flexDirection: "column", flexWrap: "nowrap" })
                 // database settings
                 .appendNode(new DomElement("div")
+                    .addClass("group-header")
                     .setText(this.getTranslation("database-section-i18n"))
                 )
                 .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
@@ -35,6 +38,7 @@ export class SettingsView extends View {
                     )
                     .appendNode(new DomElement("div")
                         .setText(this.getProperty("database-path"))
+                        .addEventListener("click", this.copyCurrentPath, this)
                     )
                 )
                 .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
@@ -59,9 +63,10 @@ export class SettingsView extends View {
                         .addEventListener("click", this.onDatabaseDefault, this)
                     )
                 )
-                // default values
+                // LanguageSettings
                 .appendNode(new DomElement("div")
-                    .setText(this.getTranslation("default-section-i18n"))
+                    .addClass("group-header")
+                    .setText(this.getTranslation("language-section-i18n"))
                 )
                 .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
                     .appendNode(new DomElement("div")
@@ -76,16 +81,22 @@ export class SettingsView extends View {
                 )
                 // list values
                 .appendNode(new DomElement("div")
+                    .addClass("group-header")
                     .setText(this.getTranslation("list-section-i18n"))
                 )
                 .appendNode(new DomElement("select")
+                    .addClass("settings-lists-select")
                     .insertAggregation(this, "lists", DropdownItem)
                     .setValue(this.getProperty("current-list"))
                     .sortChildren()
                     .addEventListener("change", this.onListChange, this)
                 )
                 .appendNode(new FlexContainer("div", { flexDirection: "column", flexWrap: "nowrap" })
-                    .insertAggregation(this, this.getProperty("current-list"), SettingsListItem, this._addSettingListItemEventHandler.bind(this))
+                    .addClass("settings-lists-list")
+                    .appendNode(new DomElement("div")
+                        .addClass("settings-lists-scroll")
+                        .insertAggregation(this, this.getProperty("current-list"), SettingsListItem, this._addSettingListItemEventHandler.bind(this))
+                    )
                     .appendNode(new DomElement("div")
                         .addClass("buttonCircle")
                         .setText("+")
@@ -148,5 +159,10 @@ export class SettingsView extends View {
             language: oEvent.target.value
         };
         this.handleEvent("languageChange", oEvent);
+    }
+
+    copyCurrentPath (oEvent) {
+        const sText = this.getProperty("database-path");
+        navigator.clipboard.writeText(sText);
     }
 };

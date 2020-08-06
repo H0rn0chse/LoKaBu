@@ -39,6 +39,11 @@ const tempTranslations = [
         scriptCode: "detail.noReceipt",
         en_GB: "There are no receipts to edit",
         de: "Es gibt keine Belege zum bearbeiten"
+    },
+    {
+        scriptCode: "settings.language",
+        en_GB: "Language Settings",
+        de: "Spracheinstellungen"
     }
 ];
 

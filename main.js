@@ -37,7 +37,7 @@ function createWindow () {
     oMainWindow.maximize();
     oMainWindow.show();
     oMainWindow.loadFile('index.html');
-    // oMainWindow.setMenuBarVisibility(false);
+    oMainWindow.setMenuBarVisibility(false);
     if (!app.isPackaged) {
         oMainWindow.webContents.openDevTools();
     }

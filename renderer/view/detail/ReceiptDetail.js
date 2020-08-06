@@ -23,13 +23,13 @@ export class ReceiptDetail extends View {
         const oBase = new FlexContainer("div", { flexDirection: "column", flexWrap: "nowrap" })
             .addClass("receipt-detail")
             // ID
-            .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
+            .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", alignItems: "center" })
                 .appendNode(new DomElement("span")
                     .setText(`${this.getTranslation("id-i18n")}: ${this.getProperty("id")}`)
                 )
             )
             // Date
-            .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
+            .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", alignItems: "center" })
                 .appendNode(new DomElement("span")
                     .setText(`${this.getTranslation("date-i18n")}: `)
                 )
@@ -40,7 +40,7 @@ export class ReceiptDetail extends View {
                 )
             )
             // Store
-            .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
+            .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", alignItems: "center" })
                 .appendNode(new DomElement("span")
                     .setText(`${this.getTranslation("store-i18n")}: `)
                 )
@@ -52,7 +52,7 @@ export class ReceiptDetail extends View {
                 )
             )
             // Account
-            .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
+            .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", alignItems: "center" })
                 .appendNode(new DomElement("span")
                     .setText(`${this.getTranslation("account-i18n")}: `)
                 )

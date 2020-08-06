@@ -82,7 +82,7 @@ export const SettingsModel = new _SettingsModel({
     "database-open-i18n": ["settings.openDatabase"],
     "database-open-user-i18n": ["settings.openUserDatabase"],
     "database-default-i18n": ["settings.setDefaultDatabase"],
-    "default-section-i18n": ["settings.defaultValues"],
+    "language-section-i18n": ["settings.language"],
     "language-i18n": ["common.language"],
     "list-section-i18n": ["settings.lists"],
     "default-i18n": ["common.default"],

@@ -6,7 +6,7 @@ import { LineDetail } from "./LineDetail.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { loadCss } from "../../common/Utils.js";
 
-loadCss("/renderer/view/Detail/Detail.css");
+loadCss("/renderer/view/Detail/DetailView.css");
 
 export class DetailView extends MultiView {
     constructor () {
@@ -32,7 +32,7 @@ export class DetailView extends MultiView {
         const oElement = new DomElement("section")
             .addClass("detail")
             .appendNode(new FlexContainer("div", { flexDirection: "row" })
-                .addClass("user-actions")
+                .addClass("detailActions")
                 .appendNode(new DomElement("div")
                     .addClass("button")
                     .setText(this.getTranslation("new-i18n"))
@@ -48,12 +48,15 @@ export class DetailView extends MultiView {
         if (!this.getProperty("no-receipt")) {
             oElement.appendNode(new FlexContainer("div", { flexDirection: "row" })
                 .appendNode(new DomElement("div", { flexBasis: "100%" })
+                    .addClass("detailColumn")
                     .setChildView(this.getView("receiptDetail"))
                 )
                 .appendNode(new DomElement("div", { flexBasis: "100%" })
+                    .addClass("detailColumn")
                     .setChildView(this.getView("lineDetail"))
                 )
                 .appendNode(new DomElement("div", { flexBasis: "100%" })
+                    .addClass("detailColumn")
                     .setChildView(this.getView("scanner"))
                 )
             );

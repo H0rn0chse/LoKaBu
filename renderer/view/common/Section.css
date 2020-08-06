@@ -1,4 +1,7 @@
 section {
     margin-left: 2em;
     margin-top: 2em;
+
+    max-height: calc(100vh - var(--header-height));
+    overflow: scroll;
 }

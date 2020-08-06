@@ -4,7 +4,9 @@ import { FlexContainer } from "../common/FlexContainer.js";
 import { SortBarItem } from "./SortBarItem.js";
 import { HistoryLineItem } from "./HistoryLineItem.js";
 import { FilterView } from "../../filter/common/FilterView.js";
+import { loadCss } from "../../common/Utils.js";
 
+loadCss("/renderer/view/history/HistoryView.css");
 export class HistoryView extends View {
     constructor () {
         super();
@@ -20,16 +22,24 @@ export class HistoryView extends View {
     render () {
         const oNode = new DomElement("section")
             .addClass("history")
-            .insertAggregation(this, "filter", FilterView, this.addGenericListenerToChild.bind(this))
             .appendNode(new DomElement("div")
-                .setText("+")
-                .addClass("buttonCircle")
-                .addEventListener("click", this.handleEvent.bind(this, "addFilter"))
+                .addClass("history-filter")
+                .appendNode(new DomElement("div")
+                    .addClass("history-filter-scroll")
+                    .insertAggregation(this, "filter", FilterView, this.addGenericListenerToChild.bind(this))
+                )
+                .appendNode(new DomElement("div")
+                    .setText("+")
+                    .addClass("buttonCircle")
+                    .addEventListener("click", this.handleEvent.bind(this, "addFilter"))
+                )
             )
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
+                .addClass("history-sort")
                 .insertAggregation(this, "sort", SortBarItem, this.addGenericListenerToChild.bind(this))
             )
             .appendNode(new FlexContainer("div", { flexDirection: "column", flexWrap: "nowrap" })
+                .addClass("history-lines")
                 .insertAggregation(this, "entries", HistoryLineItem, this.addGenericListenerToChild.bind(this))
             )
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", alignItems: "center" })

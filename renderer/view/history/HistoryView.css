@@ -1,0 +1,30 @@
+.history-lines {
+    width: 32em;
+    height: 32em;
+}
+
+.history-filter {
+    max-width: 32em;
+    min-width: min-content;
+    padding: 0.5em;
+    border: 0.5pt solid black;
+    border-radius: 5px;
+}
+
+.history-filter-scroll {
+    max-height: 7.5em;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.history-sort .selected {
+    background-color: var(--bg-element-light);
+}
+
+.history-sort .ASC::after{
+	content: " ↑";
+}
+
+.history-sort .DESC::after{
+	content: " ↓";
+}

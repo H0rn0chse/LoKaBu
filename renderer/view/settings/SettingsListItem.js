@@ -14,7 +14,8 @@ export class SettingsListItem extends View {
     }
 
     render () {
-        const oDomElement = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
+        const oDomElement = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", justifyContent: "space-around" })
+            .addClass("settingsListItem")
             .appendNode(new DomElement("div")
                 .setText(this.getProperty("id"))
             )
