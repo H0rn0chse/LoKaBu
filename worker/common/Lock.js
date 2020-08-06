@@ -12,12 +12,7 @@ export class Lock {
     }
 
     close (sDir) {
-        try {
-            fs.lstatSync("/some/path").isDirectory();
-            this.sLockFilePath = path.join(sDir, "lock");
-        } catch (err) {
-            this.sLockFilePath = sDir + ".lock";
-        }
+        this.sLockFilePath = sDir + ".lock";
 
         if (!fs.existsSync(this.sLockFilePath)) {
             this.bLocked = true;

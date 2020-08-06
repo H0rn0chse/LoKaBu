@@ -61,7 +61,7 @@ function open (bSupressShared = false) {
         return pSettings.promise
             .then(oSettings => {
                 const sDefaultDatabasePath = oSettings._readDefaultDir();
-                if (JSON.stringify(path.parse(sDatabasePath)) !== JSON.stringify(path.parse(sDefaultDatabasePath))) {
+                if (JSON.stringify(path.parse(sDatabasePath)) !== JSON.stringify(path.parse(sDefaultDatabasePath)) && sDefaultDatabasePath !== "") {
                     openOrCreateShared(sDefaultDatabasePath);
                 }
             });
@@ -107,7 +107,7 @@ function openOrCreateShared (sPath) {
             EventBus.sendToBrowser("database-open");
         }
     });
-    console.log(sPath);
+    console.log("try to close lock: ", sPath);
     if (oLock.close(sPath)) {
         console.log("lock was successfully closed");
 
