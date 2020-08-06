@@ -57,3 +57,11 @@ export function isConstructor (O) {
     }
     return true;
 }
+
+const aCssFiles = [];
+export function loadCss (sPath) {
+    if (!aCssFiles.includes(sPath)) {
+        document.head.innerHTML += `<link type="text/css" rel="stylesheet" href=.${sPath}>`;
+        aCssFiles.push(aCssFiles);
+    }
+}

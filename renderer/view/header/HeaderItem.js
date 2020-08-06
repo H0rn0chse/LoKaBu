@@ -1,9 +1,9 @@
-import { load } from "../../common/Load.js";
 import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
+import { loadCss } from "../../common/Utils.js";
 
-load.css("/renderer/view/header/HeaderItem.css");
-load.css("/renderer/view/common/Text.css");
+loadCss("/renderer/view/header/HeaderItem.css");
+loadCss("/renderer/view/common/Text.css");
 
 export class HeaderItem extends View {
     constructor () {

@@ -1,7 +1,7 @@
 import { DomElement } from "./DomElement.js";
-import { load } from "../../common/Load.js";
+import { loadCss } from "../../common/Utils.js";
 
-load.css("/renderer/view/common/FlexContainer.css");
+loadCss("/renderer/view/common/FlexContainer.css");
 
 export class FlexContainer extends DomElement {
     constructor (sTag, oInlineStyles) {

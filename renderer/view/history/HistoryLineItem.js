@@ -1,9 +1,9 @@
 import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
-import { load } from "../../common/Load.js";
+import { loadCss } from "../../common/Utils.js";
 
-load.css("/renderer/view/history/HistoryLineItem.css");
+loadCss("/renderer/view/history/HistoryLineItem.css");
 
 export class HistoryLineItem extends View {
     constructor () {

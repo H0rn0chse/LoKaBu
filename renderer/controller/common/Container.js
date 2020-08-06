@@ -1,7 +1,7 @@
-import { load } from "../../common/Load.js";
 import { DomElement } from "../../view/common/DomElement.js";
+import { loadCss } from "../../common/Utils.js";
 
-load.css("/renderer/controller/common/Container.css");
+loadCss("/renderer/controller/common/Container.css");
 
 export class Container {
     constructor (oRoot) {

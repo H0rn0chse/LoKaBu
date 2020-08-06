@@ -1,12 +1,12 @@
-import { load } from "../../common/Load.js";
 import { DomElement } from "../common/DomElement.js";
 import { ReceiptDetail } from "./ReceiptDetail.js";
 import { MultiView } from "../common/MultiView.js";
 import { Scanner } from "./Scanner.js";
 import { LineDetail } from "./LineDetail.js";
 import { FlexContainer } from "../common/FlexContainer.js";
+import { loadCss } from "../../common/Utils.js";
 
-load.css("/renderer/view/Detail/Detail.css");
+loadCss("/renderer/view/Detail/Detail.css");
 
 export class DetailView extends MultiView {
     constructor () {

@@ -1,10 +1,10 @@
-import { load } from "../../common/Load.js";
 import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
+import { loadCss } from "../../common/Utils.js";
 
-load.css("/renderer/view/detail/ReceiptDetail.css");
+loadCss("/renderer/view/detail/ReceiptDetail.css");
 
 export class ReceiptDetail extends View {
     constructor () {

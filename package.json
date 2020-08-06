@@ -29,7 +29,6 @@
   "dependencies": {
     "better-sqlite3": "^5.4.3",
     "d3": "^5.15.0",
-    "glob": "^7.1.6",
     "string-math": "^1.2.1"
   },
   "devDependencies": {
