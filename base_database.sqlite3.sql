@@ -1,22 +1,13 @@
 BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "Settings" (
-	"Person"	INTEGER NOT NULL,
-	"Type"	INTEGER NOT NULL,
-	"Version"	TEXT NOT NULL,
-	"PageItems"	INTEGER NOT NULL,
-	"Language"	TEXT,
-	"DefaultDir"	TEXT,
-	FOREIGN KEY("Person") REFERENCES "Persons"("ID"),
-	FOREIGN KEY("Type") REFERENCES "Types"("ID")
-);
-CREATE TABLE IF NOT EXISTS "Lines" (
+CREATE TABLE IF NOT EXISTS "Receipts" (
 	"ID"	INTEGER NOT NULL UNIQUE,
-	"Receipt"	INTEGER NOT NULL,
-	"Value"	INTEGER NOT NULL,
-	"Billing"	INTEGER NOT NULL,
-	"Type"	INTEGER NOT NULL,
-	PRIMARY KEY("ID"),
-	FOREIGN KEY("Type") REFERENCES "Types"("ID")
+	"Date"	INTEGER NOT NULL,
+	"Account"	INTEGER NOT NULL,
+	"Comment"	TEXT,
+	"Store"	INTEGER,
+	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
+	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
+	PRIMARY KEY("ID")
 );
 CREATE TABLE IF NOT EXISTS "i18n" (
 	"scriptCode"	TEXT NOT NULL,
@@ -24,40 +15,52 @@ CREATE TABLE IF NOT EXISTS "i18n" (
 	"en_GB"	TEXT,
 	PRIMARY KEY("scriptCode")
 );
-CREATE TABLE IF NOT EXISTS "Receipts" (
+CREATE TABLE IF NOT EXISTS "Lines" (
 	"ID"	INTEGER NOT NULL UNIQUE,
-	"Date"	INTEGER NOT NULL,
-	"Account"	INTEGER NOT NULL,
-	"Comment"	TEXT,
-	"Store"	INTEGER,
-	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
-	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "Stores" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL UNIQUE,
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "Types" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL UNIQUE,
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "Persons" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL UNIQUE,
+	"Receipt"	INTEGER NOT NULL,
+	"Value"	INTEGER NOT NULL,
+	"Billing"	INTEGER NOT NULL,
+	"Type"	INTEGER NOT NULL,
+	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
 	PRIMARY KEY("ID")
 );
 CREATE TABLE IF NOT EXISTS "Accounts" (
 	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL UNIQUE,
+	"DisplayName"	TEXT NOT NULL,
 	"Owner"	INTEGER NOT NULL,
-	PRIMARY KEY("ID"),
-	FOREIGN KEY("Owner") REFERENCES "Persons"("ID")
+	FOREIGN KEY("Owner") REFERENCES "Persons"("ID"),
+	PRIMARY KEY("ID")
 );
-INSERT INTO "Settings" VALUES (1,1,'1.2',10,'en_GB','');
-INSERT INTO "Lines" VALUES (1,1,4200,1,1);
+CREATE TABLE IF NOT EXISTS "Persons" (
+	"ID"	INTEGER NOT NULL UNIQUE,
+	"DisplayName"	TEXT NOT NULL,
+	PRIMARY KEY("ID")
+);
+CREATE TABLE IF NOT EXISTS "Settings" (
+	"Person"	INTEGER NOT NULL,
+	"Type"	INTEGER NOT NULL,
+	"Account"	INTEGER NOT NULL,
+	"Store"	INTEGER NOT NULL,
+	"Version"	TEXT NOT NULL,
+	"PageItems"	INTEGER NOT NULL,
+	"Language"	INTEGER,
+	"DefaultDir"	TEXT,
+	FOREIGN KEY("Person") REFERENCES "Persons"("ID"),
+	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
+	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
+	FOREIGN KEY("Store") REFERENCES "Stores"("ID")
+);
+CREATE TABLE IF NOT EXISTS "Stores" (
+	"ID"	INTEGER NOT NULL UNIQUE,
+	"DisplayName"	TEXT NOT NULL,
+	PRIMARY KEY("ID")
+);
+CREATE TABLE IF NOT EXISTS "Types" (
+	"ID"	INTEGER NOT NULL UNIQUE,
+	"DisplayName"	TEXT NOT NULL,
+	PRIMARY KEY("ID")
+);
+INSERT INTO "Receipts" VALUES (1,1582156800,1,'This Receipts is here for test purposes',1);
 INSERT INTO "i18n" VALUES ('detail.section.title','Beleg Details','Receipt details');
 INSERT INTO "i18n" VALUES ('analysis.section.title','Auswertung','Analysis');
 INSERT INTO "i18n" VALUES ('history.section.title','Verlauf','History');
@@ -120,13 +123,54 @@ INSERT INTO "i18n" VALUES ('common.confirm','Bestätigen','Confirm');
 INSERT INTO "i18n" VALUES ('database.openDefault','Öffne Nutzerdatenbank','Open user database');
 INSERT INTO "i18n" VALUES ('settings.databaseSettings','Datenbankeinstellungen','Database settings');
 INSERT INTO "i18n" VALUES ('settings.currentDatabase','Aktuelle Datenbank','Current database');
-INSERT INTO "Receipts" VALUES (1,1582156800,1,'This Receipts is here for test purposes',1);
+INSERT INTO "Lines" VALUES (1,1,4200,1,1);
+INSERT INTO "Accounts" VALUES (1,'TestAccount',1);
+INSERT INTO "Persons" VALUES (1,'TestPerson');
+INSERT INTO "Settings" VALUES (1,1,1,1,'1.3',10,'en_GB','');
 INSERT INTO "Stores" VALUES (1,'TestStore');
 INSERT INTO "Types" VALUES (1,'TestType');
-INSERT INTO "Persons" VALUES (1,'TestPerson');
-INSERT INTO "Accounts" VALUES (1,'TestAccount',1);
-CREATE VIEW view_databaseInfo as SELECT count(DISTINCT r.ID) AS ReceiptCount, json_group_array(DISTINCT l.ID) AS LineIdList, json_group_array(DISTINCT r.ID) AS ReceiptIdList from Receipts r LEFT JOIN Lines l;
-CREATE VIEW view_ReceiptList AS SELECT r.ID as ReceiptID, r.Date as ReceiptDate, a.DisplayName as ReceiptAccount, s.DisplayName as ReceiptStore, r.Comment as ReceiptComment, aggLines.ReceiptValue as ReceiptValue, aggLines.LineTypes, aggLines.LinePersons, aggLines.LineValues FROM Receipts r LEFT JOIN Accounts a ON a.ID = r.Account LEFT Join Stores s ON s.ID = r.Store LEFT JOIN (SELECT l.Receipt as ReceiptID, json_group_array(DISTINCT t.DisplayName) as LineTypes, json_group_array(DISTINCT p.DisplayName) as LinePersons, json_group_array(DISTINCT l.Value) as LineValues, SUM(Value) as ReceiptValue FROM Lines l LEFT JOIN Types t ON t.ID = l.Type LEFT JOIN Persons p ON p.ID = l.Billing GROUP BY l.Receipt) aggLines ON aggLines.ReceiptID = r.ID;
-CREATE VIEW view_ReceiptDetail AS SELECT l.ID as LineID, r.ID as ReceiptID, r.Date as ReceiptDate, r.Account as ReceiptAccount, r.Store as ReceiptStore, r.Comment as ReceiptComment, l.Value as LineValue, l.Billing as LineBilling, l.Type as LineType FROM Lines l LEFT JOIN Receipts r ON l.Receipt = r.ID;
-CREATE VIEW view_ReceiptAnalysis as SELECT r.Date as sortDate, r.ID as yID, l.Value as yValue, strftime('%m-%Y', datetime(r.Date, 'unixepoch')) as xTime, a.DisplayName as xAccount, s.DisplayName as xStore, t.DisplayName as xType, p.DisplayName as xBilling FROM Lines l LEFT JOIN Receipts r ON r.ID = l.Receipt LEFT JOIN Persons p ON p.ID = l.Billing LEFT JOIN Types t ON t.ID = l.Type LEFT JOIN Stores s ON s.ID = r.Store LEFT JOIN Accounts a on a.ID = r.Account;
+CREATE VIEW view_ReceiptList AS
+	SELECT
+		r.ID as ID,
+		r.Date as Date,
+		r.Account as Account,
+		r.Store as Store,
+		r.Comment as Comment,
+		aggLines.ReceiptSum as ReceiptSum,
+		aggLines.Types,
+		aggLines.Persons,
+		aggLines.LineValues
+	FROM Receipts r
+		LEFT JOIN (
+			SELECT
+				l.Receipt as ReceiptID,
+				json_group_array(DISTINCT l.Type) as Types,
+				json_group_array(DISTINCT l.Billing) as Persons,
+				json_group_array(DISTINCT l.Value) as LineValues,
+				SUM(Value) as ReceiptSum
+			FROM Lines l
+			GROUP BY l.Receipt
+		) as aggLines
+			ON aggLines.ReceiptID = r.ID;
+CREATE VIEW view_ReceiptAnalysis as
+	SELECT
+		r.Date as sortDate,
+		r.ID as yID,
+		l.Value as yValue,
+		strftime('%m-%Y', datetime(r.Date, 'unixepoch')) as xTime,
+		a.DisplayName as xAccount,
+		s.DisplayName as xStore,
+		t.DisplayName as xType,
+		p.DisplayName as xBilling
+	FROM Lines l
+		LEFT JOIN Receipts r
+			ON r.ID = l.Receipt
+		LEFT JOIN Persons p
+			ON p.ID = l.Billing
+		LEFT JOIN Types t
+			ON t.ID = l.Type
+		LEFT JOIN Stores s
+			ON s.ID = r.Store
+		LEFT JOIN Accounts a
+			on a.ID = r.Account;
 COMMIT;

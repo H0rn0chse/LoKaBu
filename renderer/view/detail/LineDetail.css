@@ -1,0 +1,11 @@
+.line-detail {
+    padding: 0.5em;
+    border: 0.5pt solid black;
+    border-radius: 5px;
+}
+
+.line-detail-scroll {
+    max-height: calc(80vh - var(--header-height) - 2em);
+    overflow: scroll;
+    overflow-x: hidden;
+}

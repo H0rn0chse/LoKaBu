@@ -6,25 +6,19 @@
 		<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 	</head>
 	<body>
-		<script type="text/javascript">
+		<script type="module">
 			const { ipcRenderer } = require('electron');
-			window.ipcRenderer = ipcRenderer;
+			import { main } from "./worker/database/main.js";
+			import { EventBus } from './renderer/EventBus.js'
+			import { db } from './worker/database/databaseConnection.js'
 
-			ipcRenderer.once("rendererChannel", (oEvent, sMessage) => {
-				window.iRendererId = sMessage;
-
-				const load = require('./assets/load');
-				load.workerScripts("database");
-				require("./renderer-process/worker/database/databaseConnection").open();
-			})
-			ipcRenderer.send("windowLoaded");
-
-			ipcRenderer.on("shutdownApp", () => {
-				require("./renderer-process/worker/database/databaseConnection").close();
-				ipcRenderer.send("windowProcessClosed");
+			EventBus.setIpcRenderer(ipcRenderer);
+			EventBus.sendToMain("windowLoaded");
+			EventBus.listen("shutdownApp", () => {
+				db.close();
+				console.log("shutdown");
+				EventBus.sendToMain("windowProcessClosed");
 			});
-
-			
 		</script>
 	</body>
 </html>

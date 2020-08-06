@@ -27,7 +27,7 @@ function createWindow () {
         return;
     }
 
-    require("./main-process/checkDatabase");
+    require("./main/checkDatabase");
     oMainWindow = new BrowserWindow({
         show: false,
         webPreferences: {
@@ -37,10 +37,9 @@ function createWindow () {
     oMainWindow.maximize();
     oMainWindow.show();
     oMainWindow.loadFile('index.html');
+    oMainWindow.setMenuBarVisibility(false);
     if (!app.isPackaged) {
         oMainWindow.webContents.openDevTools();
-    } else {
-        oMainWindow.removeMenu();
     }
 
     oDatabaseWindow = new BrowserWindow({
@@ -85,8 +84,8 @@ function createWindow () {
             oMainWindow.setTitle(app.name);
             oDatabaseWindow.setTitle(app.name + " - Database worker");
             oMainWindow.webContents.send("log", oMainWindow.webContents.id + "/" + oDatabaseWindow.webContents.id);
-            oMainWindow.webContents.send("databaseChannel", oDatabaseWindow.webContents.id);
-            oDatabaseWindow.webContents.send("rendererChannel", oMainWindow.webContents.id);
+            oMainWindow.webContents.send("workerChannel", oDatabaseWindow.webContents.id);
+            oDatabaseWindow.webContents.send("workerChannel", oMainWindow.webContents.id);
         }
     });
 

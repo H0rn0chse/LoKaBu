@@ -1,0 +1,22 @@
+.group-header:first-of-type {
+    padding-top: 0;
+}
+
+.settings-lists-scroll {
+    max-height: 32em;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.settings-lists-select {
+    width: 20em;
+    margin: 1em;
+}
+
+.settings-lists-list {
+    width: 32em;
+
+    padding: 0.5em;
+    border: 0.5pt solid black;
+    border-radius: 5px;
+}

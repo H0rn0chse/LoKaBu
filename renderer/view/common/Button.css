@@ -1,0 +1,24 @@
+.button, .buttonCircle {
+    width: fit-content;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    background-color: var(--bg-element-base);
+    color: var(--element-font);
+    border-radius:10px;
+	transition: 0.3s;
+}
+
+.buttonCircle {
+    border-radius: 50%;
+	margin: 5px;
+	padding: 0;
+	width: 1.2em;
+	height: 1.2em;
+    text-align: center;
+}
+
+.button:hover, .buttonCircle:hover {
+	background-color: var(--bg-element-light);
+	cursor: pointer;
+}
+
