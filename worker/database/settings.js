@@ -18,7 +18,12 @@ class _SettingsTable extends Table {
 
     readSqlAction () {
         const sSql = `
-        SELECT *
+        SELECT
+            Person,
+            Type,
+            Account,
+            Store,
+            Language
         FROM Settings
         `;
         const oResult = db.get()
@@ -32,7 +37,15 @@ class _SettingsTable extends Table {
     }
 
     updateSqlAction (oSettings) {
+        // User specific defaults
         let sSql = `
+        UPDATE Settings
+        SET DefaultDir = $DefaultDir
+        `;
+        db.get("user")
+            .prepare(sSql)
+            .run(oSettings);
+        sSql = `
         UPDATE Settings
         SET Person = $Person,
             Type = $Type,
@@ -40,15 +53,7 @@ class _SettingsTable extends Table {
             Store = $Store,
             Language = $Language
         `;
-        db.get()
-            .prepare(sSql)
-            .run(oSettings);
-        // User specific defaults
-        sSql = `
-        UPDATE Settings
-        SET DefaultDir = $DefaultDir
-        `;
-        db.get("user")
+        return db.get()
             .prepare(sSql)
             .run(oSettings);
     }
