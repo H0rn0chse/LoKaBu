@@ -6,6 +6,17 @@ class _Helper {
         EventBus.listen("helper-firstReceipt", this.getFirstReceipt, this);
     }
 
+    getVersion (oDb) {
+        const sSql = `
+        SELECT
+            Version
+        FROM Settings
+        `;
+        const oResult = oDb.prepare(sSql)
+            .get();
+        return oResult.Version;
+    }
+
     getFirstReceipt () {
         const sSql = `
         SELECT ID

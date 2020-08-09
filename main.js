@@ -1,3 +1,4 @@
+const { AppVersion } = require("./main/AppVersion.js");
 const { app, BrowserWindow, nativeTheme, ipcMain } = require('electron');
 
 let oMainWindow;
