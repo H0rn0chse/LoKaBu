@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
-    "buildLocal": "electron-builder --windows",
+    "buildLocal": "electron-builder --windows --publish never",
     "release": "electron-builder --windows --publish always",
     "test": "qunit \"test/**/*qunit.js\"",
     "eslint": "eslint \"**/*.js\""
