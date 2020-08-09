@@ -42,11 +42,11 @@ accounts-create | { \<number>lastInsertRowid } | Confirms the creation of a new 
 accounts-read | { \<number>ID, \<string>DisplayName, \<number>Owner }[] | List of all accounts.
 accounts-update | - | Confirms the update of a account.
 database-abort | - | Signals the browser that the lock of database was opened by another process.
-database-locked | - | Signals the browser that the database it was trying opened is locked.
+database-locked | \<string>LockTimestamp | Signals the browser that the database it was trying opened is locked.
 database-open | - | Signals a browser that a new database was successfully opened.
 database-error | \<error>Error | Signals the browser that some database error occurred.
 helper-firstReceipt | \<number>ID | Value of the first receipt.
-i18n-read | { \<string>scriptCode, \<string>de, \<string>en_GB []} | List of all translations.
+i18n-read | { \<string>scriptCode, \<string>de, \<string>en_GB }[] | List of all translations.
 lines-create | { \<number>lastInsertRowid } | Confirms the creation of a new line.
 lines-delete | - | Confirms the deletion of a line.
 lines-read | { \<number>ID, \<number>Receipt, \<number>Value, \<number>Billing, \<number>Type }[] | List of all lines of a specific receipt.
@@ -59,7 +59,7 @@ receipts-delete | - | Confirms the deletion of a receipt.
 receipts-read | {\<number>ID , \<number>Date, \<number>Account, \<string>Comment, \<number>Store } | Value of the requested receipt.
 receipts-update | - | Confirms the update of a receipt.
 receiptList-read |  { \<number>ID, \<number>Date, \<number>Account, \<number>Store, \<string>Comment, \<number>ReceiptSum, \<number>Types[], \<number>Persons[], \<number>LineValues[] }[] | List of all receipts which matched the search. Note: The amount of results is limited by the paging mechanism.
-settings-read | { \<number>Person, \<number>Type, \<number>Account, \<number>Store, \<string>Language} | Object with all settings values.
+settings-read | { \<number>Person, \<number>Type, \<number>Account, \<number>Store, \<string>Language, \<string>DefaultDir, \<string>CurrentDir } | Object with all settings values.
 settings-update | - | Confirms the update of the settings.
 stores-create | { \<number>lastInsertRowid } |Confirms the creation of a new store.
 stores-read | { \<number>ID, \<string>DisplayName }[] | List of all stores.
