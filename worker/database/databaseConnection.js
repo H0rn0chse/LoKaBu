@@ -1,6 +1,7 @@
 import { Lock } from "../common/Lock.js";
 import { EventBus } from "../../renderer/EventBus.js";
 import { Deferred } from "../../renderer/common/Deferred.js";
+import { MigrationManager } from "../migration/MigrationManager.js";
 const BetterSqlite3 = require("better-sqlite3");
 const path = require("path");
 const fs = require("fs");
@@ -50,7 +51,12 @@ function _openOrCreateDatabase (sPath, sBasePath) {
 
         EventBus.sendToMain("log", "database was created", sPath);
     }
-    EventBus.sendToBrowser("database-open");
+    MigrationManager.checkCompatibility(oRef)
+        .then(() => {
+            EventBus.sendToBrowser("database-open");
+        }).catch(() => {
+            //todo do some error handling
+        });
     return oRef;
 }
 

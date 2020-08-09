@@ -1,5 +1,8 @@
 import { View } from "../view/common/View.js";
 import { DateToFull } from "./DateUtils.js";
+import { Deferred } from "./Deferred.js";
+import { LanguageModel } from "../model/LanguageModel.js";
+import { EventBus } from "../EventBus.js";
 const { dialog } = require('electron').remote;
 
 class _DialogManager extends View {
@@ -7,15 +10,27 @@ class _DialogManager extends View {
         super(...args);
 
         this._initTranslations();
+        this.Model = new Deferred();
+        LanguageModel.addEventListener("update", this.Model.resolve);
+    }
+
+    getProperty (...args) {
+        return super.getProperty(...args) || "";
     }
 
     _initTranslations () {
-        this
-            .bindProperty("locked-trans", "lang", ["database.locked"])
-            .bindProperty("confirm-trans", "lang", ["common.confirm"])
-            .bindProperty("cancel-trans", "lang", ["common.cancel"])
-            .bindProperty("openDefault-trans", "lang", ["database.openDefault"])
-            .bindProperty("abortText-trans", "lang", ["database.abort"]);
+        const oBindings = {
+            "locked-trans": ["database.locked"],
+            "confirm-trans": ["common.confirm"],
+            "cancel-trans": ["common.cancel"],
+            "openDefault-trans": ["database.openDefault"],
+            "abortText-trans": ["database.abort"],
+            "migrationUpgrade-trans": ["migration.upgrade"],
+            "dialogConfirm-trans": ["dialog.confirm"]
+        };
+        Object.keys(oBindings).forEach(sKey => {
+            this.bindProperty(sKey, "lang", oBindings[sKey]);
+        });
     }
 
     createDatabase () {
@@ -45,11 +60,10 @@ class _DialogManager extends View {
     }
 
     databaseAbort () {
-        const oDialogPromise = dialog.showMessageBox({
+        return dialog.showMessageBox({
             type: "warning",
             message: this.getProperty("abortText-trans")
         });
-        return this._cancelToReject(oDialogPromise);
     }
 
     databaseLocked (sMessage) {
@@ -62,28 +76,69 @@ class _DialogManager extends View {
             sText += " - " + sDate;
         }
 
-        return dialog.showMessageBox({
+        const oDialogPromise = dialog.showMessageBox({
             type: "warning",
             message: sText,
             buttons: [
-                this.getProperty("cancel-trans"),
+                this.getProperty("confirm-trans"),
                 this.getProperty("openDefault-trans"),
-                this.getProperty("confirm-trans")
-            ]
-        })
+                this.getProperty("cancel-trans")
+            ],
+            cancelId: 2
+        });
+        return this._cancelToReject(oDialogPromise, 2)
             .then((oResult) => {
-                if (oResult.response === 0) {
-                    throw new Error("");
-                }
                 const bForceOpen = oResult.response === 2;
                 return bForceOpen;
             });
     }
 
-    _cancelToReject (oPromise) {
+    migrationUpgrade (sAppVersion, sSourceVersion, sTargetVersion) {
+        EventBus.sendToCurrentWindow("blockApp");
+        return this.Model.promise
+            .then(() => {
+                let sText = this.getProperty("migrationUpgrade-trans");
+
+                sText = sText
+                    .replace(/\$AppVersion/g, sAppVersion)
+                    .replace(/\$SourceVersion/g, sSourceVersion)
+                    .replace(/\$TargetVersion/g, sTargetVersion);
+
+                const oDialogPromise = dialog.showMessageBox({
+                    type: "error",
+                    message: sText,
+                    buttons: this._getDefaultButtons(),
+                    cancelId: 1
+                });
+                return this._cancelToReject(oDialogPromise, 1)
+                    .then(this.confirm.bind(this));
+            })
+            .then(() => {
+                EventBus.sendToCurrentWindow("unblockApp");
+            });
+    }
+
+    confirm () {
+        const oDialogPromise = dialog.showMessageBox({
+            type: "warning",
+            message: this.getProperty("dialogConfirm-trans"),
+            buttons: this._getDefaultButtons(),
+            cancelId: 1
+        });
+        return this._cancelToReject(oDialogPromise, 1);
+    }
+
+    _getDefaultButtons () {
+        return [
+            this.getProperty("confirm-trans"),
+            this.getProperty("cancel-trans")
+        ];
+    }
+
+    _cancelToReject (oPromise, iCancel = -1) {
         return new Promise((resolve, reject) => {
             oPromise.then(oResult => {
-                if (oResult.canceled) {
+                if (oResult.canceled || oResult.response === iCancel) {
                     reject(oResult);
                 } else {
                     resolve(oResult);

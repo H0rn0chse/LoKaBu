@@ -44,6 +44,16 @@ const tempTranslations = [
         scriptCode: "settings.language",
         en_GB: "Language Settings",
         de: "Spracheinstellungen"
+    },
+    {
+        scriptCode: "migration.upgrade",
+        en_GB: "The database you opended does not have the required minimum version. If you want to proceed using the version $AppVersion of Lokabu, you need to do a database upgrade from $SourceVersion to $TargetVersion.",
+        de: "Die geöffnete Datenbank erfüllt die erforderte Mindestversion nicht. Um die Version $AppVersion von Lokabu weiter nutzen zu können, müssen sie ein Datenbankupgrade von $SourceVersion zu $TargetVersion vornehmen."
+    },
+    {
+        scriptCode: "dialog.confirm",
+        en_GB: "Are you sure you want to proceed? This action is not reversible and may affect other users.",
+        de: "Sind sie sicher, dass sie fortfahren wollen? Diese Aktion ist nicht umkehrbar und kann andere Nutzer beeinträchtigen."
     }
 ];
 
