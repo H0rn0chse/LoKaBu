@@ -1,5 +1,5 @@
-import { db } from "./databaseConnection.js";
 import { Table } from "../common/Table.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _StoresTable extends Table {
     constructor () {
@@ -11,7 +11,7 @@ class _StoresTable extends Table {
         INSERT INTO Stores
         (DisplayName) VALUES ($DisplayName)
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oStore);
     }
@@ -21,7 +21,7 @@ class _StoresTable extends Table {
         SELECT *
         FROM Stores
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .all();
     }
@@ -32,7 +32,7 @@ class _StoresTable extends Table {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oStore);
     }

@@ -1,5 +1,5 @@
 import { EventBus } from "../../renderer/EventBus.js";
-import { db } from "./databaseConnection.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _Helper {
     constructor () {
@@ -23,7 +23,7 @@ class _Helper {
         FROM Receipts
         LIMIT 1
         `;
-        const oResult = db.get()
+        const oResult = DatabaseManager.get()
             .prepare(sSql)
             .get();
         EventBus.sendToBrowser("helper-firstReceipt", oResult && oResult.ID);

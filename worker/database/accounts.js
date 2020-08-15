@@ -1,5 +1,5 @@
-import { db } from "./databaseConnection.js";
 import { Table } from "../common/Table.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _AccountTable extends Table {
     constructor () {
@@ -11,7 +11,7 @@ class _AccountTable extends Table {
         INSERT INTO Accounts
         (DisplayName, Owner) VALUES ($DisplayName, $Owner)
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oAccount);
     }
@@ -21,7 +21,7 @@ class _AccountTable extends Table {
         SELECT *
         FROM Accounts
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .all();
     }
@@ -33,7 +33,7 @@ class _AccountTable extends Table {
         Owner = $Owner
         WHERE ID = $ID
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oAccount);
     }

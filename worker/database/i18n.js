@@ -1,5 +1,5 @@
-import { db } from "./databaseConnection.js";
 import { Table } from "../common/Table.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _I18nTable extends Table {
     constructor () {
@@ -11,7 +11,7 @@ class _I18nTable extends Table {
         SELECT *
         FROM i18n
         `;
-        return db.get("user")
+        return DatabaseManager.get("user")
             .prepare(sSql)
             .all();
     }
