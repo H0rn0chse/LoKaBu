@@ -1,28 +1,19 @@
+import { EventPipeline } from "./EventPipeline.js";
+
 export class EventManager {
     constructor () {
-        this.eventHandler = {};
+        this.events = new EventPipeline();
+        this.eventsOnce = new EventPipeline();
         this.eventManager = [];
     }
 
-    addEvent (sEventName) {
-        this.eventHandler[sEventName] = [];
-        return this;
-    }
-
-    addEvents (aEventNames) {
-        aEventNames.forEach(sEventName => {
-            this.addEvent(sEventName);
-        });
-        return this;
-    }
-
     addEventListener (sEventName, fnHandler, oScope) {
-        const fnBoundHandler = oScope ? fnHandler.bind(oScope) : fnHandler;
+        this.events.on(sEventName, fnHandler, oScope);
+        return this;
+    }
 
-        if (!Array.isArray(this.eventHandler[sEventName])) {
-            this.eventHandler[sEventName] = [];
-        }
-        this.eventHandler[sEventName].push(fnBoundHandler);
+    addEventListenerOnce (sEventName, fnHandler, oScope) {
+        this.eventsOnce.on(sEventName, fnHandler, oScope);
         return this;
     }
 
@@ -32,15 +23,18 @@ export class EventManager {
     }
 
     handleEvent (sEventName, ...args) {
-        if (!this.eventHandler[sEventName]) {
-            this.addEvent(sEventName);
-        }
-        this.eventHandler[sEventName].forEach(fnHandler => {
-            fnHandler(...args);
-        });
+        this.events.handleEvent(sEventName, ...args);
+
+        this.eventsOnce.handleEvent(sEventName, ...args);
+        this.eventsOnce.removeEvent(sEventName);
+
         this.eventManager.forEach(oEventManager => {
             oEventManager.handleEvent(sEventName, ...args);
         });
         return this;
+    }
+
+    removeEventListener (sEventName, fnHandler, oScope) {
+        return this.events.removeListener(sEventName, fnHandler, oScope);
     }
 };

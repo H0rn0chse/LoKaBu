@@ -1,13 +1,13 @@
 {
   "name": "lokabu",
   "productName": "LoKaBu",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
-    "buildLocal": "electron-builder --windows",
+    "buildLocal": "electron-builder --windows --publish never",
     "release": "electron-builder --windows --publish always",
     "test": "qunit \"test/**/*qunit.js\"",
     "eslint": "eslint \"**/*.js\""
@@ -22,6 +22,15 @@
   },
   "license": "GPL-3.0",
   "build": {
+    "win": {
+      "extraFiles": [{
+        "from":  "build/win/LoKaBu.VisualElementsManifest.xml",
+        "to": "."
+      }],
+      "extraResources": [
+        "build/win/*"
+      ]
+    },
     "nsis": {
       "perMachine": true
     }

@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import { db } from "./databaseConnection.js";
 import { EventBus } from "../../renderer/EventBus.js";
+// import { DatabaseManager } from "./DatabaseManager.js";
 
 function read () {
     /* const sSql = `

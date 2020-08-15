@@ -1,60 +1,57 @@
 const fs = require("fs");
-const path = require("path");
 
 export class Lock {
-    constructor (fnAbort) {
+    constructor (sPath, fnAbort) {
         this.fnAbort = fnAbort;
-        this.bLocked = false;
+        this.locked = false;
+        this.lockFilePath = sPath + ".lock";
     }
 
     abort () {
         this.fnAbort();
     }
 
-    close (sDir) {
-        this.sLockFilePath = sDir + ".lock";
-
-        if (!fs.existsSync(this.sLockFilePath)) {
-            this.bLocked = true;
-            this.iSince = new Date().getTime();
-            fs.writeFileSync(this.sLockFilePath, this.iSince);
-            this.oWatcher = fs.watch(this.sLockFilePath, this.abort.bind(this));
+    close () {
+        if (!fs.existsSync(this.lockFilePath)) {
+            this.locked = true;
+            this.since = new Date().getTime();
+            fs.writeFileSync(this.lockFilePath, this.since);
+            this.oWatcher = fs.watch(this.lockFilePath, this.abort.bind(this));
             return true;
         }
         return false;
     }
 
-    forceClose (sPath) {
+    forceClose () {
         if (this.oWatcher) {
             this.oWatcher.close();
         }
-        this.sLockFilePath = sPath || this.sLockFilePath;
-        this.bLocked = true;
-        this.iSince = new Date().getTime();
-        fs.writeFileSync(this.sLockFilePath, this.iSince);
-        this.oWatcher = fs.watch(this.sLockFilePath, this.abort.bind(this));
+        this.locked = true;
+        this.since = new Date().getTime();
+        fs.writeFileSync(this.lockFilePath, this.since);
+        this.oWatcher = fs.watch(this.lockFilePath, this.abort.bind(this));
     }
 
     open () {
-        if (this.bLocked) {
-            this.bLocked = false;
+        if (this.locked) {
+            this.locked = false;
             this.oWatcher.close();
-            fs.unlinkSync(this.sLockFilePath);
+            fs.unlinkSync(this.lockFilePath);
             return true;
         }
         return false;
     }
 
     forceOpen () {
-        if (this.bLocked) {
-            this.bLocked = false;
+        if (this.locked) {
+            this.locked = false;
             this.oWatcher.close();
         }
     }
 
     getTimestamp () {
-        if (this.sLockFilePath) {
-            return fs.readFileSync(this.sLockFilePath, "utf8");
+        if (this.lockFilePath) {
+            return fs.readFileSync(this.lockFilePath, "utf8");
         }
         return 0;
     }

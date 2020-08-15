@@ -1,7 +1,7 @@
-import { db } from "./databaseConnection.js";
 import { SqlStatement } from "../common/SqlStatement.js";
 import { Table } from "../common/Table.js";
 import { SqlFilterOption } from "../common/SqlFilterOption.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _ReceiptListView extends Table {
     constructor () {
@@ -22,7 +22,7 @@ class _ReceiptListView extends Table {
             oSqlStatement.addFilterOption(new SqlFilterOption(oFilterOption));
         });
 
-        const aEntries = db.get()
+        const aEntries = DatabaseManager.get()
             .prepare(oSqlStatement.getPageSql(iPage))
             .all();
 

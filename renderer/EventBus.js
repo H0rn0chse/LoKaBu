@@ -1,22 +1,37 @@
 import { EventManager } from "./common/EventManager.js";
 import { Deferred } from "./common/Deferred.js";
+import { EventPipeline } from "./common/EventPipeline.js";
 
 class _EventBus extends EventManager {
     constructor () {
         super();
         this.ipc = new Deferred();
         this.database = new Deferred();
+        this.ipcEvents = new EventPipeline();
     }
 
-    listen (sChannel, fnCallback, oScope) {
+    listen (sChannel, fnHandler, oScope) {
+        const fnBoundHandler = this.ipcEvents.on(sChannel, fnHandler, oScope);
         this.ipc.promise.then(ipc => {
-            let fnBoundCallback = fnCallback;
-            if (oScope) {
-                fnBoundCallback = fnBoundCallback.bind(oScope);
-            }
-            ipc.on(sChannel, fnBoundCallback);
+            ipc.on(sChannel, fnBoundHandler);
         });
-        this.addEventListener(sChannel, fnCallback, oScope);
+        this.addEventListener(sChannel, fnHandler, oScope);
+    }
+
+    listenOnce (sChannel, fnHandler, oScope) {
+        const fnBoundHandler = oScope ? fnHandler.bind(oScope) : fnHandler;
+        this.ipc.promise.then(ipc => {
+            ipc.once(sChannel, fnBoundHandler);
+        });
+        this.addEventListenerOnce(sChannel, fnHandler, oScope);
+    }
+
+    removeHandler (sChannel, fnHandler, oScope) {
+        const fnBoundHandler = this.ipcEvents.removeListener(sChannel, fnHandler, oScope);
+        this.ipc.promise.then(ipc => {
+            ipc.removeListener(sChannel, fnBoundHandler);
+        });
+        this.removeEventListener(sChannel, fnHandler, oScope);
     }
 
     sendToDatabase (...args) {
@@ -45,7 +60,7 @@ class _EventBus extends EventManager {
     setIpcRenderer (oIpcRenderer) {
         this.ipc.resolve(oIpcRenderer);
 
-        oIpcRenderer.once("workerChannel", (oEvent, sMessage) => {
+        oIpcRenderer.once("eventBus", (oEvent, sMessage) => {
             this.database.resolve(sMessage);
         });
     }

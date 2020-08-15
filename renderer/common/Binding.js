@@ -13,7 +13,7 @@ export class Binding {
 
     get () {
         const vData = this.model.get(this.path);
-
+        // returns Array containing objects according to the bound properties
         if (Array.isArray(vData) && this.propertyBindings.size > 0) {
             return vData.map((oItem, iIndex) => {
                 const oData = {};
@@ -24,5 +24,10 @@ export class Binding {
             });
         }
         return vData;
+    }
+
+    getProperty (sProperty) {
+        const aPath = this.propertyBindings.get(sProperty);
+        return this.model.get(aPath, this.path);
     }
 }

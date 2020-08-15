@@ -1,5 +1,5 @@
-import { db } from "./databaseConnection.js";
 import { Table } from "../common/Table.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _ReceiptsTable extends Table {
     constructor () {
@@ -12,7 +12,7 @@ class _ReceiptsTable extends Table {
             (Date, Account, Comment, Store)
         Values ($Date, $Account, $Comment, $Store)
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oReceipt);
     }
@@ -23,7 +23,7 @@ class _ReceiptsTable extends Table {
         FROM Receipts
         WHERE ID = $ID
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .get(oReceipt);
     }
@@ -34,7 +34,7 @@ class _ReceiptsTable extends Table {
         SET Date=$Date, Account=$Account, Comment=$Comment, Store=$Store
         WHERE ID=$ID
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oReceipt);
     }
@@ -45,7 +45,7 @@ class _ReceiptsTable extends Table {
         FROM Receipts
         WHERE ID=$ID;
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oReceipt);
     }

@@ -1,5 +1,6 @@
-import { db } from "./databaseConnection.js";
+
 import { Table } from "../common/Table.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _TypesTable extends Table {
     constructor () {
@@ -11,7 +12,7 @@ class _TypesTable extends Table {
         INSERT INTO Types
         (DisplayName) VALUES ($DisplayName)
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oType);
     }
@@ -21,7 +22,7 @@ class _TypesTable extends Table {
         SELECT *
         FROM Types
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .all();
     }
@@ -32,7 +33,7 @@ class _TypesTable extends Table {
         SET DisplayName = $DisplayName
         WHERE ID = $ID
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oType);
     }

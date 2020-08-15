@@ -1,38 +1,51 @@
-import { db } from "./databaseConnection.js";
 import { Table } from "../common/Table.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _SettingsTable extends Table {
     constructor () {
         super("settings");
     }
 
-    _readDefaultDir () {
+    readDefaultDir () {
         const sSql = `
         SELECT DefaultDir
         FROM Settings
         `;
-        return db.get("user")
+        return DatabaseManager.get("user")
             .prepare(sSql)
             .get().DefaultDir;
     }
 
     readSqlAction () {
         const sSql = `
-        SELECT *
+        SELECT
+            Person,
+            Type,
+            Account,
+            Store,
+            Language
         FROM Settings
         `;
-        const oResult = db.get()
+        const oResult = DatabaseManager.get()
             .prepare(sSql)
             .get();
 
-        oResult.DefaultDir = this._readDefaultDir();
-        oResult.CurrentDir = db.get().name;
+        oResult.DefaultDir = this.readDefaultDir();
+        oResult.CurrentDir = DatabaseManager.getPath();
 
         return oResult;
     }
 
     updateSqlAction (oSettings) {
+        // User specific defaults
         let sSql = `
+        UPDATE Settings
+        SET DefaultDir = $DefaultDir
+        `;
+        DatabaseManager.get("user")
+            .prepare(sSql)
+            .run(oSettings);
+        sSql = `
         UPDATE Settings
         SET Person = $Person,
             Type = $Type,
@@ -40,15 +53,7 @@ class _SettingsTable extends Table {
             Store = $Store,
             Language = $Language
         `;
-        db.get()
-            .prepare(sSql)
-            .run(oSettings);
-        // User specific defaults
-        sSql = `
-        UPDATE Settings
-        SET DefaultDir = $DefaultDir
-        `;
-        db.get("user")
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oSettings);
     }

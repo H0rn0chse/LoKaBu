@@ -1,5 +1,5 @@
 import { Filter } from "./common/Filter.js";
-import { Enums } from "../common/Enums.js";
+import { Enums } from "../Enums.js";
 import { AccountModel } from "../model/AccountModel.js";
 import { StoreModel } from "../model/StoreModel.js";
 import { TypeModel } from "../model/TypeModel.js";
@@ -30,7 +30,7 @@ export class ReceiptListFilter extends Filter {
         this.addOption("Account", "filter.ReceiptAccount", Column.Value, Input.List, oAccountBinding);
         this.addOption("Store", "filter.ReceiptStore", Column.Value, Input.List, oStoreBinding);
         this.addOption("Comment", "filter.ReceiptComment", Column.Value, Input.Text);
-        this.addOption("ReceiptValue", "filter.ReceiptValue", Column.Value, Input.Number);
+        this.addOption("ReceiptSum", "filter.ReceiptValue", Column.Value, Input.Number);
         this.addOption("Types", "filter.LineTypes", Column.List, Input.List, oTypeBinding);
         this.addOption("Persons", "filter.LinePersons", Column.List, Input.List, oPersonBinding);
         this.addOption("LineValues", "filter.LineValues", Column.List, Input.Number);
@@ -43,5 +43,20 @@ export class ReceiptListFilter extends Filter {
             TypeModel,
             PersonModel
         ];
+    }
+
+    export () {
+        const oResult = super.export();
+        const oFilterOption = this.getSelectedOption();
+        switch (oFilterOption.column) {
+            case "LineValues":
+            case "ReceiptSum":
+                var fValue = (parseFloat(oResult.value) || 0).toFixed(2);
+                oResult.value = parseInt(fValue * 100, 10);
+                break;
+            default:
+        }
+
+        return oResult;
     }
 }

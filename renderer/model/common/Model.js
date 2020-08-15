@@ -6,9 +6,6 @@ export class Model extends EventManager {
         super();
         this.name = "";
         this._data = oData;
-        this.addEvents([
-            "update"
-        ]);
     }
 
     push (aPath, vValue, bSuppressUpdate) {
@@ -52,7 +49,7 @@ export class Model extends EventManager {
         this.handleEvent("update", oEvent);
     }
 
-    set (aPath, vValue, bSuppressUpdate) {
+    set (aPath, vValue, bSuppressUpdate = false) {
         objectSet(this._data, this._evaluatePath(aPath), vValue);
         if (!bSuppressUpdate) {
             this.onUpdate({});

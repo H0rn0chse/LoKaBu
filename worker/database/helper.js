@@ -1,9 +1,20 @@
 import { EventBus } from "../../renderer/EventBus.js";
-import { db } from "./databaseConnection.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _Helper {
     constructor () {
         EventBus.listen("helper-firstReceipt", this.getFirstReceipt, this);
+    }
+
+    getVersion (oDb) {
+        const sSql = `
+        SELECT
+            Version
+        FROM Settings
+        `;
+        const oResult = oDb.prepare(sSql)
+            .get();
+        return oResult.Version;
     }
 
     getFirstReceipt () {
@@ -12,7 +23,7 @@ class _Helper {
         FROM Receipts
         LIMIT 1
         `;
-        const oResult = db.get()
+        const oResult = DatabaseManager.get()
             .prepare(sSql)
             .get();
         EventBus.sendToBrowser("helper-firstReceipt", oResult && oResult.ID);

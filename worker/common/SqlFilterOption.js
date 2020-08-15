@@ -1,4 +1,4 @@
-import { Enums } from "../../renderer/common/Enums.js";
+import { Enums } from "../../renderer/Enums.js";
 
 export class SqlFilterOption {
     constructor (oInput) {

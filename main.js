@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+const { AppVersion } = require("./main/AppVersion.js");
 const { app, BrowserWindow, nativeTheme, ipcMain } = require('electron');
 
 let oMainWindow;
@@ -84,8 +86,8 @@ function createWindow () {
             oMainWindow.setTitle(app.name);
             oDatabaseWindow.setTitle(app.name + " - Database worker");
             oMainWindow.webContents.send("log", oMainWindow.webContents.id + "/" + oDatabaseWindow.webContents.id);
-            oMainWindow.webContents.send("workerChannel", oDatabaseWindow.webContents.id);
-            oDatabaseWindow.webContents.send("workerChannel", oMainWindow.webContents.id);
+            oMainWindow.webContents.send("eventBus", oDatabaseWindow.webContents.id);
+            oDatabaseWindow.webContents.send("eventBus", oMainWindow.webContents.id);
         }
     });
 
@@ -93,6 +95,14 @@ function createWindow () {
         oMainWindow.webContents.send("log", sMessage);
     });
 }
+
+app.on('before-quit', (oEvent) => {
+    if (!bAppIsClosing) {
+        oEvent.preventDefault();
+        oMainWindow.close();
+        oDatabaseWindow.close();
+    }
+});
 
 app.on('ready', createWindow);
 

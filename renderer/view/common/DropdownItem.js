@@ -5,6 +5,8 @@ export class DropdownItem extends View {
     constructor (...args) {
         super(...args);
         this.name = "DropDownItem";
+
+        this.removeModel("lang");
     }
 
     render () {

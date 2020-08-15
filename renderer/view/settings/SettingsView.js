@@ -10,17 +10,6 @@ export class SettingsView extends View {
     constructor () {
         super();
         this.name = "SettingsView";
-
-        this.addEvents([
-            "addListItem",
-            "databaseCreate",
-            "databaseOpen",
-            "databaseOpenUser",
-            "databaseDefault",
-            "listChange",
-            "languageChange",
-            "listEntryChange"
-        ]);
     }
 
     render () {
@@ -74,8 +63,8 @@ export class SettingsView extends View {
                     )
                     .appendNode(new DomElement("select")
                         .insertAggregation(this, "languages", DropdownItem)
-                        .setValue(this.getProperty("language"))
                         .sortChildren()
+                        .setValue(this.getProperty("language"))
                         .addEventListener("change", this.onLanguageChange, this)
                     )
                 )
@@ -87,8 +76,8 @@ export class SettingsView extends View {
                 .appendNode(new DomElement("select")
                     .addClass("settings-lists-select")
                     .insertAggregation(this, "lists", DropdownItem)
-                    .setValue(this.getProperty("current-list"))
                     .sortChildren()
+                    .setValue(this.getProperty("current-list"))
                     .addEventListener("change", this.onListChange, this)
                 )
                 .appendNode(new FlexContainer("div", { flexDirection: "column", flexWrap: "nowrap" })

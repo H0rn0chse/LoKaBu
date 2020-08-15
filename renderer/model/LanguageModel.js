@@ -10,47 +10,18 @@ const aReservedPaths = [
 ];
 
 const tempTranslations = [
-    {
+    /* {
         scriptCode: "settings.createDatabase",
-        en_GB: "Create Database...",
-        de: "Datenbank erstellen..."
-    },
-    {
-        scriptCode: "settings.openDatabase",
-        en_GB: "Open Database...",
-        de: "Datenbank öffnen"
-    },
-    {
-        scriptCode: "common.default",
-        en_GB: "Default",
-        de: "Standard"
-    },
-    {
-        scriptCode: "detail.newReceipt",
-        en_GB: "New Receipt...",
-        de: "Neuer Beleg..."
-    },
-    {
-        scriptCode: "detail.deleteReceipt",
-        en_GB: "Delete Receipt...",
-        de: "Beleg löschen..."
-    },
-    {
-        scriptCode: "detail.noReceipt",
-        en_GB: "There are no receipts to edit",
-        de: "Es gibt keine Belege zum bearbeiten"
-    },
-    {
-        scriptCode: "settings.language",
-        en_GB: "Language Settings",
-        de: "Spracheinstellungen"
-    }
+        en_GB: "",
+        de: ""
+    } */
 ];
 
 class _LanguageModel extends Model {
     constructor (...args) {
         super(...args);
         this.name = "LanguageModel";
+        this.loaded = false;
 
         EventBus.listen("database-open", (oEvent) => {
             EventBus.sendToDatabase("i18n-read");
@@ -74,6 +45,12 @@ class _LanguageModel extends Model {
         const sCurrentLanguage = SettingsModel.get(["Language"]) || "en_GB";
         aContextPath = ["translations", { scriptCode: aPath[0] }, sCurrentLanguage];
         return super.get(aContextPath);
+    }
+
+    // Allow components to be lazily loaded
+    update (...args) {
+        this.loaded = true;
+        return super.update(...args);
     }
 }
 

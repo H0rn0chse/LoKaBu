@@ -9,10 +9,6 @@ export class HistoryLineItem extends View {
     constructor () {
         super();
         this.name = "HistoryLineItemView";
-
-        this.addEvents([
-            "editLine"
-        ]);
     }
 
     render () {

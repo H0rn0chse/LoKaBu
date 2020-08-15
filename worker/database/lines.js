@@ -1,5 +1,5 @@
-import { db } from "./databaseConnection.js";
 import { Table } from "../common/Table.js";
+import { DatabaseManager } from "./DatabaseManager.js";
 
 class _LinesTable extends Table {
     constructor () {
@@ -12,7 +12,7 @@ class _LinesTable extends Table {
             (Receipt, Value, Billing, Type)
         Values ($Receipt, $Value, $Billing, $Type)
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oLine);
     }
@@ -32,7 +32,7 @@ class _LinesTable extends Table {
             WHERE Receipt = $Receipt
             `;
         }
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .all(oObject);
     }
@@ -43,7 +43,7 @@ class _LinesTable extends Table {
         SET Receipt=$Receipt, Value=$Value, Billing=$Billing, Type=$Type
         WHERE ID=$ID
         `;
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oLine);
     }
@@ -63,7 +63,7 @@ class _LinesTable extends Table {
             WHERE Receipt = $Receipt
             `;
         }
-        return db.get()
+        return DatabaseManager.get()
             .prepare(sSql)
             .run(oObject);
     }

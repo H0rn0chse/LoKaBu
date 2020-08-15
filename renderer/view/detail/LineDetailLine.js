@@ -7,11 +7,6 @@ export class LineDetailLine extends View {
     constructor () {
         super();
         this.name = "LineDetailLineView";
-
-        this.addEvents([
-            "lineRemove",
-            "lineChange"
-        ]);
     }
 
     render () {
@@ -20,15 +15,15 @@ export class LineDetailLine extends View {
             .appendNode(new DomElement("select")
                 .setId("person")
                 .insertAggregation(this, "persons", DropdownItem)
-                .setValue(this.getProperty("person"))
                 .sortChildren()
+                .setValue(this.getProperty("person"))
                 .addEventListener("change", this.onLineChange, this)
             )
             .appendNode(new DomElement("select")
                 .setId("type")
                 .insertAggregation(this, "types", DropdownItem)
-                .setValue(this.getProperty("type"))
                 .sortChildren()
+                .setValue(this.getProperty("type"))
                 .addEventListener("change", this.onLineChange, this)
             )
             .appendNode(new DomElement("input")
@@ -57,7 +52,7 @@ export class LineDetailLine extends View {
     onLineChange (oEvent) {
         oEvent.customData = {
             id: this.getProperty("id"),
-            value: this.getNodeById("value").valueAsNumber,
+            value: this.getNodeById("value").valueAsNumber || 0,
             type: this.getNodeById("type").value,
             person: this.getNodeById("person").value
         };
