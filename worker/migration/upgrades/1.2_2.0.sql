@@ -1,51 +1,85 @@
+PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "Receipts" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"Date"	INTEGER NOT NULL,
-	"Account"	INTEGER NOT NULL,
-	"Comment"	TEXT,
-	"Store"	INTEGER,
-	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
-	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "i18n" (
-	"scriptCode"	TEXT NOT NULL,
-	"de"	TEXT,
-	"en_GB"	TEXT,
-	PRIMARY KEY("scriptCode")
-);
-CREATE TABLE IF NOT EXISTS "Lines" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"Receipt"	INTEGER NOT NULL,
-	"Value"	INTEGER NOT NULL,
-	"Billing"	INTEGER NOT NULL,
-	"Type"	INTEGER NOT NULL,
-	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "Accounts" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL,
-	"Owner"	INTEGER NOT NULL,
-	FOREIGN KEY("Owner") REFERENCES "Persons"("ID"),
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "Persons" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL,
-	PRIMARY KEY("ID")
-);
+DROP VIEW view_ReceiptDetail;
+DROP VIEW view_ReceiptAnalysis;
+DROP VIEW view_ReceiptList;
+DROP VIEW view_databaseInfo;
+
+/*================================================================================
+    Schema of Stores table changed
+================================================================================*/
+ALTER TABLE "Stores" RENAME TO "Stores_temp";
+-- Apply schema of new Stores table
 CREATE TABLE IF NOT EXISTS "Stores" (
 	"ID"	INTEGER NOT NULL UNIQUE,
 	"DisplayName"	TEXT NOT NULL,
 	PRIMARY KEY("ID")
 );
+-- copy old data to new table
+INSERT INTO "Stores"("ID", "DisplayName")
+SELECT "ID", "DisplayName"
+FROM "Stores_temp";
+-- Delete temporary table
+DROP TABLE "Stores_temp";
+
+/*================================================================================
+    Schema of Types table changed
+================================================================================*/
+ALTER TABLE "Types" RENAME TO "Types_temp";
+-- Apply schema of new Types table
 CREATE TABLE IF NOT EXISTS "Types" (
 	"ID"	INTEGER NOT NULL UNIQUE,
 	"DisplayName"	TEXT NOT NULL,
 	PRIMARY KEY("ID")
 );
+-- copy old data to new table
+INSERT INTO "Types"("ID", "DisplayName")
+SELECT "ID", "DisplayName"
+FROM "Types_temp";
+-- Delete temporary table
+DROP TABLE "Types_temp";
+
+/*================================================================================
+    Schema of Persons table changed
+================================================================================*/
+ALTER TABLE "Persons" RENAME TO "Persons_temp";
+-- Apply schema of new Persons table
+CREATE TABLE IF NOT EXISTS "Persons" (
+	"ID"	INTEGER NOT NULL UNIQUE,
+	"DisplayName"	TEXT NOT NULL,
+	PRIMARY KEY("ID")
+);
+-- copy old data to new table
+INSERT INTO "Persons"("ID", "DisplayName")
+SELECT "ID", "DisplayName"
+FROM "Persons_temp";
+-- Delete temporary table
+DROP TABLE "Persons_temp";
+
+/*================================================================================
+    Schema of Accounts table changed
+================================================================================*/
+ALTER TABLE "Accounts" RENAME TO "Accounts_temp";
+-- Apply schema of new Accounts table
+CREATE TABLE IF NOT EXISTS "Accounts" (
+	"ID"	INTEGER NOT NULL UNIQUE,
+	"DisplayName"	TEXT NOT NULL,
+	"Owner"	INTEGER NOT NULL,
+	PRIMARY KEY("ID"),
+	FOREIGN KEY("Owner") REFERENCES "Persons"("ID")
+);
+-- copy old data to new table
+INSERT INTO "Accounts"("ID", "DisplayName", "Owner")
+SELECT "ID", "DisplayName", "Owner"
+FROM "Accounts_temp";
+-- Delete temporary table
+DROP TABLE "Accounts_temp";
+
+/*================================================================================
+    Schema of Settings table changed
+================================================================================*/
+ALTER TABLE "Settings" RENAME TO "Settings_temp";
+-- Apply schema of new Settings table
 CREATE TABLE IF NOT EXISTS "Settings" (
 	"Person"	INTEGER NOT NULL,
 	"Type"	INTEGER NOT NULL,
@@ -55,12 +89,28 @@ CREATE TABLE IF NOT EXISTS "Settings" (
 	"PageItems"	INTEGER NOT NULL,
 	"Language"	TEXT,
 	"DefaultDir"	TEXT,
-	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
 	FOREIGN KEY("Person") REFERENCES "Persons"("ID"),
-	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
-	FOREIGN KEY("Type") REFERENCES "Types"("ID")
+	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
+	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
+	FOREIGN KEY("Store") REFERENCES "Stores"("ID")
 );
-INSERT INTO "Receipts" VALUES (1,1582156800,1,'This Receipts is here for test purposes',1);
+-- copy old data to new table
+INSERT INTO "Settings"("Person", "Type", "Account", "Store", "Version", "PageItems", "Language", "DefaultDir")
+SELECT "Person", "Type", 1, 1, "Version", "PageItems", "Language", "DefaultDir"
+FROM "Settings_temp";
+-- Delete temporary table
+DROP TABLE "Settings_temp";
+-- Update version
+UPDATE "Settings"
+SET "Version" = "2.0";
+
+/*================================================================================
+    Update translations
+================================================================================*/
+-- drop all old values
+DELETE
+FROM i18n;
+-- insert new values
 INSERT INTO "i18n" VALUES ('detail.section.title','Beleg Details','Receipt details');
 INSERT INTO "i18n" VALUES ('analysis.section.title','Auswertung','Analysis');
 INSERT INTO "i18n" VALUES ('history.section.title','Verlauf','History');
@@ -135,12 +185,10 @@ INSERT INTO "i18n" VALUES ('database.success','Die Datenbank  Operation war erfo
 INSERT INTO "i18n" VALUES ('database.failure','Die Datenbank  Operation ist fehlgheschlagen.','The database operation failed');
 INSERT INTO "i18n" VALUES ('database.error','Es ist ein unerwarteter Datenbankfehler aufgetreten:','An unexpected database error occurred:');
 INSERT INTO "i18n" VALUES ('dialog.confirm','Sind sie sicher, dass sie fortfahren wollen? Diese Aktion ist nicht umkehrbar und kann andere Nutzer beeinträchtigen.','Are you sure you want to proceed? This action is not reversible and may affect other users.');
-INSERT INTO "Lines" VALUES (1,1,4200,1,1);
-INSERT INTO "Accounts" VALUES (1,'TestAccount',1);
-INSERT INTO "Persons" VALUES (1,'TestPerson');
-INSERT INTO "Stores" VALUES (1,'TestStore');
-INSERT INTO "Types" VALUES (1,'TestType');
-INSERT INTO "Settings" VALUES (1,1,1,1,'2.0',10,'en_GB','');
+
+/*================================================================================
+    Restore Views
+================================================================================*/
 CREATE VIEW view_ReceiptList AS
 	SELECT
 		r.ID as ID,
@@ -164,4 +212,6 @@ CREATE VIEW view_ReceiptList AS
 			GROUP BY l.Receipt
 		) as aggLines
 			ON aggLines.ReceiptID = r.ID;
+
 COMMIT;
+PRAGMA foreign_keys=on;

@@ -1,66 +1,69 @@
+PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "Receipts" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"Date"	INTEGER NOT NULL,
-	"Account"	INTEGER NOT NULL,
-	"Comment"	TEXT,
-	"Store"	INTEGER,
-	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
-	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "i18n" (
-	"scriptCode"	TEXT NOT NULL,
-	"de"	TEXT,
-	"en_GB"	TEXT,
-	PRIMARY KEY("scriptCode")
-);
-CREATE TABLE IF NOT EXISTS "Lines" (
+DROP VIEW view_ReceiptDetail;
+DROP VIEW view_ReceiptAnalysis;
+DROP VIEW view_ReceiptList;
+DROP VIEW view_databaseInfo;
+
+/*================================================================================
+    Schema of Lines table changed
+================================================================================*/
+ALTER TABLE "Lines" RENAME TO "Lines_temp";
+-- Apply schema of new Lines table
+CREATE TABLE "Lines" (
 	"ID"	INTEGER NOT NULL UNIQUE,
 	"Receipt"	INTEGER NOT NULL,
 	"Value"	INTEGER NOT NULL,
 	"Billing"	INTEGER NOT NULL,
 	"Type"	INTEGER NOT NULL,
-	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
-	PRIMARY KEY("ID")
+	PRIMARY KEY("ID"),
+	FOREIGN KEY("Type") REFERENCES "Types"("ID")
 );
-CREATE TABLE IF NOT EXISTS "Accounts" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL,
-	"Owner"	INTEGER NOT NULL,
-	FOREIGN KEY("Owner") REFERENCES "Persons"("ID"),
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "Persons" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL,
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "Stores" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL,
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "Types" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"DisplayName"	TEXT NOT NULL,
-	PRIMARY KEY("ID")
-);
-CREATE TABLE IF NOT EXISTS "Settings" (
+-- copy old data to new table
+INSERT INTO "Lines"("ID", "Receipt", "Value", "Billing", "Type")
+SELECT "ID", "Receipt", "Value", "Billing", "Typ"
+FROM "Lines_temp";
+-- Delete temporary table
+DROP TABLE "Lines_temp";
+
+/*================================================================================
+    Schema of Settings table changed
+================================================================================*/
+ALTER TABLE "Settings" RENAME TO "Settings_temp";
+-- Apply schema of new Settings table
+CREATE TABLE "Settings" (
 	"Person"	INTEGER NOT NULL,
 	"Type"	INTEGER NOT NULL,
-	"Account"	INTEGER NOT NULL,
-	"Store"	INTEGER NOT NULL,
 	"Version"	TEXT NOT NULL,
 	"PageItems"	INTEGER NOT NULL,
 	"Language"	TEXT,
 	"DefaultDir"	TEXT,
-	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
-	FOREIGN KEY("Person") REFERENCES "Persons"("ID"),
-	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
-	FOREIGN KEY("Type") REFERENCES "Types"("ID")
+	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
+	FOREIGN KEY("Person") REFERENCES "Persons"("ID")
 );
-INSERT INTO "Receipts" VALUES (1,1582156800,1,'This Receipts is here for test purposes',1);
+-- copy old data to new table
+INSERT INTO "Settings"("Person", "Type", "Version", "PageItems")
+SELECT "Person", "Typ", "Version", "PageItems"
+FROM "Settings_temp";
+-- Delete temporary table
+DROP TABLE "Settings_temp";
+-- Provide default values
+UPDATE "Settings"
+SET "Version" = "1.2",
+    "Language" = "en_GB",
+    "DefaultDir" = "",
+    "PageItems" = 10;
+
+/*================================================================================
+    I18n Table was added
+================================================================================*/
+CREATE TABLE "i18n" (
+	"scriptCode"	TEXT NOT NULL,
+	"de"	TEXT,
+	"en_GB"	TEXT,
+	PRIMARY KEY("scriptCode")
+);
+-- insert translation data
 INSERT INTO "i18n" VALUES ('detail.section.title','Beleg Details','Receipt details');
 INSERT INTO "i18n" VALUES ('analysis.section.title','Auswertung','Analysis');
 INSERT INTO "i18n" VALUES ('history.section.title','Verlauf','History');
@@ -113,8 +116,8 @@ INSERT INTO "i18n" VALUES ('filter.all','Alle','All');
 INSERT INTO "i18n" VALUES ('filter.none','Keiner','None');
 INSERT INTO "i18n" VALUES ('filter.atLeastOne','Zumindest einer','At least one');
 INSERT INTO "i18n" VALUES ('detail.message.override','Möchtest du noch nicht gespeicherten Belegdaten verwerfen?','Do you want to deny the unsaved changes to the receipt?');
-INSERT INTO "i18n" VALUES ('database.locked','Die Datenbank die du gerade öffnen möchtest ist seit $ gesperrt. Bitte bestätige, dass du die Sperrung aufheben möchtest. Bedenke aber, dass dies Andere und ihre Arbeit beeinträchtigen könnte.','The database you''re trying to access is locked since $. Please confirm that you want to unlock it. But keep in mind that this might affect others and their work.');
-INSERT INTO "i18n" VALUES ('database.abort','Die geteilte Datenbank wurde von einer anderen Person bearbeitet. Bitte öffne die geteilte Datenbank erneut oder starte das Programm neu.','Your open database was opened by another person. Please reopen the shared database or restart the program.');
+INSERT INTO "i18n" VALUES ('database.locked','Die Datenbank die du gerade öffnen möchtest ist seit $ gesperrt. Bitte bestätige, dass du die Sperrung aufheben möchtest. Bedenke aber, dass dies Andere und ihre Arbeit beeinträchtigen könnte.','The database you''re trying to access is locked since $. Pease confirm that you want to unlock it. But keep in mind that this might affect other and their work.');
+INSERT INTO "i18n" VALUES ('database.abort','Die geteilte Datenbank wurde von einer anderen Person bearbeitet. Bitte öffne die geteilte Datenbank erneut oder starte das Programm neu.','The shared databas opened by another person. Please reopen the shared database or restart the program.');
 INSERT INTO "i18n" VALUES ('settings.createSharedDatabase','Erstelle Datenbank','Create database');
 INSERT INTO "i18n" VALUES ('settings.openSharedDatabase','Öffne Datenbank','Open database');
 INSERT INTO "i18n" VALUES ('settings.openUserDatabase','Öffne Nutzerdatenbank','Open user database');
@@ -123,45 +126,91 @@ INSERT INTO "i18n" VALUES ('common.confirm','Bestätigen','Confirm');
 INSERT INTO "i18n" VALUES ('database.openDefault','Öffne Nutzerdatenbank','Open user database');
 INSERT INTO "i18n" VALUES ('settings.databaseSettings','Datenbankeinstellungen','Database settings');
 INSERT INTO "i18n" VALUES ('settings.currentDatabase','Aktuelle Datenbank','Current database');
-INSERT INTO "i18n" VALUES ('settings.createDatabase','Datenbank erstellen...','Create Database...');
-INSERT INTO "i18n" VALUES ('settings.openDatabase','Datenbank öffnen...','Open Database...');
-INSERT INTO "i18n" VALUES ('common.default','Standard','Default');
-INSERT INTO "i18n" VALUES ('detail.newReceipt','Neuer Beleg...','New Receipt...');
-INSERT INTO "i18n" VALUES ('detail.deleteReceipt','Beleg löschen...','Delete Receipt...');
-INSERT INTO "i18n" VALUES ('detail.noReceipt','Es gibt keine Belege zum bearbeiten','There are no receipts to edit');
-INSERT INTO "i18n" VALUES ('settings.language','Spracheinstellungen','Language Settings');
-INSERT INTO "i18n" VALUES ('database.upgrade','Die geöffnete Datenbank erfüllt die erforderte Mindestversion nicht. Um die Version $AppVersion von Lokabu weiter nutzen zu können, müssen sie ein Datenbankupgrade von $SourceVersion zu $TargetVersion vornehmen.','The database you opended does not have the required minimum version. If you want to proceed using the version $AppVersion of Lokabu, you need to do a database upgrade from $SourceVersion to $TargetVersion.');
-INSERT INTO "i18n" VALUES ('database.success','Die Datenbank  Operation war erfolgreich.','The database operation was successful');
-INSERT INTO "i18n" VALUES ('database.failure','Die Datenbank  Operation ist fehlgheschlagen.','The database operation failed');
-INSERT INTO "i18n" VALUES ('database.error','Es ist ein unerwarteter Datenbankfehler aufgetreten:','An unexpected database error occurred:');
-INSERT INTO "i18n" VALUES ('dialog.confirm','Sind sie sicher, dass sie fortfahren wollen? Diese Aktion ist nicht umkehrbar und kann andere Nutzer beeinträchtigen.','Are you sure you want to proceed? This action is not reversible and may affect other users.');
-INSERT INTO "Lines" VALUES (1,1,4200,1,1);
-INSERT INTO "Accounts" VALUES (1,'TestAccount',1);
-INSERT INTO "Persons" VALUES (1,'TestPerson');
-INSERT INTO "Stores" VALUES (1,'TestStore');
-INSERT INTO "Types" VALUES (1,'TestType');
-INSERT INTO "Settings" VALUES (1,1,1,1,'2.0',10,'en_GB','');
+
+/*================================================================================
+    Restore Views
+================================================================================*/
+CREATE VIEW view_ReceiptDetail AS
+	SELECT
+		l.ID as LineID,
+		r.ID as ReceiptID,
+		r.Date as ReceiptDate,
+		r.Account as ReceiptAccount,
+		r.Store as ReceiptStore,
+		r.Comment as ReceiptComment,
+
+		l.Value as LineValue,
+		l.Billing as LineBilling,
+		l.Type as LineType
+
+
+	FROM Lines l
+	LEFT JOIN Receipts r
+		ON l.Receipt = r.ID;
+CREATE VIEW view_ReceiptAnalysis as
+	SELECT
+		r.Date as sortDate,
+
+		r.ID as yID,
+		l.Value as yValue,
+
+		strftime('%m-%Y', datetime(r.Date, 'unixepoch')) as xTime,
+		a.DisplayName as xAccount,
+		s.DisplayName as xStore,
+		t.DisplayName as xType,
+		p.DisplayName as xBilling
+
+	FROM Lines l
+		LEFT JOIN Receipts r
+			ON r.ID = l.Receipt
+		LEFT JOIN Persons p
+			ON p.ID = l.Billing
+		LEFT JOIN Types t
+			ON t.ID = l.Type
+		LEFT JOIN Stores s
+			ON s.ID = r.Store
+		LEFT JOIN Accounts a
+			on a.ID = r.Account;
 CREATE VIEW view_ReceiptList AS
 	SELECT
-		r.ID as ID,
-		r.Date as Date,
-		r.Account as Account,
-		r.Store as Store,
-		r.Comment as Comment,
-		aggLines.ReceiptSum as ReceiptSum,
-		aggLines.Types,
-		aggLines.Persons,
+		r.ID as ReceiptID,
+		r.Date as ReceiptDate,
+		a.DisplayName as ReceiptAccount,
+		s.DisplayName as ReceiptStore,
+		r.Comment as ReceiptComment,
+
+		aggLines.ReceiptValue as ReceiptValue,
+		aggLines.LineTypes,
+		aggLines.LinePersons,
 		aggLines.LineValues
+
+
 	FROM Receipts r
-		LEFT JOIN (
-			SELECT
-				l.Receipt as ReceiptID,
-				json_group_array(DISTINCT l.Type) as Types,
-				json_group_array(DISTINCT l.Billing) as Persons,
-				json_group_array(DISTINCT l.Value) as LineValues,
-				SUM(Value) as ReceiptSum
-			FROM Lines l
-			GROUP BY l.Receipt
-		) as aggLines
-			ON aggLines.ReceiptID = r.ID;
+	LEFT JOIN Accounts a
+		ON a.ID = r.Account
+	LEFT Join Stores s
+		ON s.ID = r.Store
+	LEFT JOIN (SELECT
+		l.Receipt as ReceiptID,
+		json_group_array(DISTINCT t.DisplayName) as LineTypes,
+		json_group_array(DISTINCT p.DisplayName) as LinePersons,
+		json_group_array(DISTINCT l.Value) as LineValues,
+		SUM(Value) as ReceiptValue
+	FROM Lines l
+	LEFT JOIN Types t
+		ON t.ID = l.Type
+	LEFT JOIN Persons p
+		ON p.ID = l.Billing
+	GROUP BY l.Receipt) aggLines
+		ON aggLines.ReceiptID = r.ID;
+CREATE VIEW view_databaseInfo
+as
+SELECT
+	count(DISTINCT r.ID) AS ReceiptCount,
+	json_group_array(DISTINCT l.ID) AS LineIdList,
+	json_group_array(DISTINCT r.ID) AS ReceiptIdList
+from Receipts r
+LEFT JOIN Lines l;
+
 COMMIT;
+PRAGMA foreign_keys=on;
