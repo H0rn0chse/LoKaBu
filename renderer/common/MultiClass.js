@@ -6,7 +6,7 @@ export const MultiClass = (BaseClass, ...Mixins) => {
             if (propertyName.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) {
                 return;
             }
-            Object.defineProperty(target, propertyName, Object.getOwnPropertyDescriptor(source, propertyName))
+            Object.defineProperty(target, propertyName, Object.getOwnPropertyDescriptor(source, propertyName));
         });
     }
 
