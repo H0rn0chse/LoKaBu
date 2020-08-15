@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+const { AppVersion } = require("./main/AppVersion.js");
 const { app, BrowserWindow, nativeTheme, ipcMain } = require('electron');
 
 let oMainWindow;
@@ -27,7 +29,7 @@ function createWindow () {
         return;
     }
 
-    require("./main-process/checkDatabase");
+    require("./main/checkDatabase");
     oMainWindow = new BrowserWindow({
         show: false,
         webPreferences: {
@@ -37,10 +39,9 @@ function createWindow () {
     oMainWindow.maximize();
     oMainWindow.show();
     oMainWindow.loadFile('index.html');
+    oMainWindow.setMenuBarVisibility(false);
     if (!app.isPackaged) {
         oMainWindow.webContents.openDevTools();
-    } else {
-        oMainWindow.removeMenu();
     }
 
     oDatabaseWindow = new BrowserWindow({
@@ -85,8 +86,8 @@ function createWindow () {
             oMainWindow.setTitle(app.name);
             oDatabaseWindow.setTitle(app.name + " - Database worker");
             oMainWindow.webContents.send("log", oMainWindow.webContents.id + "/" + oDatabaseWindow.webContents.id);
-            oMainWindow.webContents.send("databaseChannel", oDatabaseWindow.webContents.id);
-            oDatabaseWindow.webContents.send("rendererChannel", oMainWindow.webContents.id);
+            oMainWindow.webContents.send("eventBus", oDatabaseWindow.webContents.id);
+            oDatabaseWindow.webContents.send("eventBus", oMainWindow.webContents.id);
         }
     });
 
@@ -94,6 +95,14 @@ function createWindow () {
         oMainWindow.webContents.send("log", sMessage);
     });
 }
+
+app.on('before-quit', (oEvent) => {
+    if (!bAppIsClosing) {
+        oEvent.preventDefault();
+        oMainWindow.close();
+        oDatabaseWindow.close();
+    }
+});
 
 app.on('ready', createWindow);
 

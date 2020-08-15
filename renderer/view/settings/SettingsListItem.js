@@ -1,0 +1,67 @@
+import { View } from "../common/View.js";
+import { DomElement } from "../common/DomElement.js";
+import { FlexContainer } from "../common/FlexContainer.js";
+import { DropdownItem } from "../common/DropdownItem.js";
+
+export class SettingsListItem extends View {
+    constructor () {
+        super();
+        this.name = "SettingsListItemView";
+    }
+
+    render () {
+        const oDomElement = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", justifyContent: "space-around" })
+            .addClass("settingsListItem")
+            .appendNode(new DomElement("div")
+                .setText(this.getProperty("id"))
+            )
+            .appendNode(new DomElement("input")
+                .setId("text")
+                .setType("text")
+                .setValue(this.getProperty("text"))
+                .addEventListener("change", this.onListEntryChange, this)
+            );
+
+        if (this.getProperty("select-value", true) !== null) {
+            oDomElement.appendNode(new DomElement("select")
+                .setId("select")
+                .insertAggregation(this, "select", DropdownItem)
+                .sortChildren()
+                .setValue(this.getProperty("select-value"))
+                .addEventListener("change", this.onListEntryChange, this)
+            );
+        }
+
+        oDomElement
+            .appendNode(new DomElement("div")
+                .setText(`${this.getTranslation("default-i18n")}: `)
+            )
+            .appendNode(new DomElement("input")
+                .setId("default")
+                .setType("radio")
+                .setName("settings-select")
+                .setChecked(this.getProperty("id") === this.getProperty("checked-id"))
+                .addEventListener("change", this.onListEntryChange, this)
+            );
+        return oDomElement.getNode();
+    }
+
+    getPropertyDefault (sProperty) {
+        switch (sProperty) {
+            case "select-value":
+                return null;
+            default:
+                return "";
+        }
+    }
+
+    onListEntryChange (oEvent) {
+        oEvent.customData = {
+            id: this.getProperty("id"),
+            name: this.getNodeById("text").value,
+            select: this.getNodeById("select").value,
+            default: this.getNodeById("default").checked
+        };
+        this.handleEvent("listEntryChange", oEvent);
+    }
+};

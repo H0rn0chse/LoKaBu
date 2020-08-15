@@ -40,6 +40,6 @@ Du musst deinen plattformabhängigen Build selber bauen (und signieren) oder nut
   ![history][history]
   ![settings][settings]
 
-[details]: ./screenshots/details_de.png "Beleg Details"
-[history]: ./screenshots/history_de.png "Belegverlauf"
-[settings]: ./screenshots/settings_de.png "Einstellungen"
+[details]: ./docu/screenshots/details_de.png "Beleg Details"
+[history]: ./docu/screenshots/history_de.png "Belegverlauf"
+[settings]: ./docu/screenshots/settings_de.png "Einstellungen"
