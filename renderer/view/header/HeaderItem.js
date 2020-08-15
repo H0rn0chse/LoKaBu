@@ -9,10 +9,6 @@ export class HeaderItem extends View {
     constructor () {
         super();
         this.name = "HeaderItemView";
-
-        this.addEvents([
-            "click"
-        ]);
     }
 
     getPropertyDefault (sProperty) {

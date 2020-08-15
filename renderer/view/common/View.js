@@ -11,6 +11,7 @@ export class View extends MultiClass(BindingManager, EventManager) {
         this.parent = null;
         this.models = {};
         this.visibilty = true;
+        this.childs = [];
 
         this.addModel(LanguageModel, "lang");
     }
@@ -25,11 +26,25 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return this;
     }
 
+    removeModel (sModel) {
+        const oModel = this.models[sModel];
+        if (oModel) {
+            oModel.removeEventListener("update", this.update, this);
+            delete this.models[sModel];
+        }
+        return this;
+    }
+
     getModel (sName) {
         return this.models[sName];
     }
 
     clearContent () {
+        this.childs.forEach(oChild => {
+            oChild.destroy();
+        });
+        this.childs = [];
+
         this.node.innerHTML = "";
         return this;
     }
@@ -143,6 +158,9 @@ export class View extends MultiClass(BindingManager, EventManager) {
 
         aItems.forEach((oItem, iIndex) => {
             const oChild = new Constructor();
+            // add child for later cleanup
+            this.childs.push(oChild);
+
             oChild.setModels(this.getModels());
             oChild.setBindings(oBinding);
             oChild.setBindingContext(oBinding, iIndex);
@@ -194,5 +212,16 @@ export class View extends MultiClass(BindingManager, EventManager) {
 
     getName () {
         return this.name;
+    }
+
+    destroy () {
+        // remove all childs
+        this.childs.forEach(oChild => {
+            oChild.destroy();
+        });
+        // remove all model update listener
+        Object.keys(this.models).forEach(sModel => {
+            this.models[sModel].removeEventListener("update", this.update, this);
+        });
     }
 };

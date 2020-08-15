@@ -11,12 +11,6 @@ export class HistoryView extends View {
     constructor () {
         super();
         this.name = "HistoryView";
-
-        this.addEvents([
-            "navBefore",
-            "navNext",
-            "addFilter"
-        ]);
     }
 
     render () {

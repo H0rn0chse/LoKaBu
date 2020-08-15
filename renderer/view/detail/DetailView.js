@@ -13,10 +13,6 @@ export class DetailView extends MultiView {
         super();
         this.name = "DetailView";
 
-        this.addEvents([
-            "new",
-            "delete"
-        ]);
         this.addView("receiptDetail", new ReceiptDetail()
             .addGenericListener(this));
 

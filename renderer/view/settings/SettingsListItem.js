@@ -7,10 +7,6 @@ export class SettingsListItem extends View {
     constructor () {
         super();
         this.name = "SettingsListItemView";
-
-        this.addEvents([
-            "listEntryChange"
-        ]);
     }
 
     render () {
@@ -30,8 +26,8 @@ export class SettingsListItem extends View {
             oDomElement.appendNode(new DomElement("select")
                 .setId("select")
                 .insertAggregation(this, "select", DropdownItem)
-                .setValue(this.getProperty("select-value"))
                 .sortChildren()
+                .setValue(this.getProperty("select-value"))
                 .addEventListener("change", this.onListEntryChange, this)
             );
         }

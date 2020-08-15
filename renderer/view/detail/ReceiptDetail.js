@@ -10,13 +10,6 @@ export class ReceiptDetail extends View {
     constructor () {
         super();
         this.name = "ReceiptDetailView";
-
-        this.addEvents([
-            "accountChange",
-            "dateChange",
-            "storeChange",
-            "commentChange"
-        ]);
     }
 
     render () {
@@ -46,8 +39,8 @@ export class ReceiptDetail extends View {
                 )
                 .appendNode(new DomElement("select")
                     .insertAggregation(this, "stores", DropdownItem)
-                    .setValue(this.getProperty("store"))
                     .sortChildren()
+                    .setValue(this.getProperty("store"))
                     .addEventListener("change", this.onStoreChange, this)
                 )
             )
@@ -58,8 +51,8 @@ export class ReceiptDetail extends View {
                 )
                 .appendNode(new DomElement("select")
                     .insertAggregation(this, "accounts", DropdownItem)
-                    .setValue(this.getProperty("account"))
                     .sortChildren()
+                    .setValue(this.getProperty("account"))
                     .addEventListener("change", this.onAccountChange, this)
                 )
             )

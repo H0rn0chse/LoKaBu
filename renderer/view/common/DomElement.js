@@ -55,6 +55,7 @@ export class DomElement {
         return this;
     }
 
+    // keep in mind to avoid memory leaks
     insertTemplate (fnTemplate, vData) {
         fnTemplate(this, vData);
         return this;

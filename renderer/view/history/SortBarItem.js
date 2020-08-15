@@ -5,10 +5,6 @@ export class SortBarItem extends View {
     constructor () {
         super();
         this.name = "SortBarItemView";
-
-        this.addEvents([
-            "sort"
-        ]);
     }
 
     render () {

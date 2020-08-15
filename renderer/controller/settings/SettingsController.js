@@ -7,7 +7,8 @@ import { PersonModel } from "../../model/PersonModel.js";
 import { TypeModel } from "../../model/TypeModel.js";
 import { SettingsModel } from "../../model/SettingsModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
-import { DialogManager } from "../../common/DialogManager.js";
+import { CreateDatabaseDialog } from "../../dialogs/CreateDatabaseDialog.js";
+import { OpenDatabaseDialog } from "../../dialogs/OpenDatabaseDialog.js";
 
 export class SettingsController extends Controller {
     constructor (oDomRef) {
@@ -105,25 +106,19 @@ export class SettingsController extends Controller {
     }
 
     onDatabaseCreate (oEvent) {
-        DialogManager.createDatabase()
+        CreateDatabaseDialog.show()
             .then(oResult => {
-                console.log("databaseCreate", oResult.filePath);
                 EventBus.sendToDatabase("database-create", oResult.filePath);
             })
-            .catch(() => {
-                console.log("createDatabase was canceled");
-            });
+            .catch(() => {});
     }
 
     onDatabaseOpen (oEvent) {
-        DialogManager.openDatabase()
+        OpenDatabaseDialog.show()
             .then(oResult => {
-                console.log("databaseOpen", oResult.filePaths[0]);
                 EventBus.sendToDatabase("database-open", oResult.filePaths[0]);
             })
-            .catch(() => {
-                console.log("openDatabase was canceled");
-            });
+            .catch(() => {});
     }
 
     onDatabaseOpenUser (oEvent) {

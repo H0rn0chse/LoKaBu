@@ -58,8 +58,7 @@ class _SettingsModel extends DatabaseModel {
 
     setLanguage (sLanguage) {
         this.updateLanguageModel = true;
-        const aPath = ["Language"];
-        this.set(aPath, sLanguage, true);
+        this.set(["Language"], sLanguage, true);
 
         this.save();
     }

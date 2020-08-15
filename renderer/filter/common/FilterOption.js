@@ -1,4 +1,4 @@
-import { Enums } from "../../common/Enums.js";
+import { Enums } from "../../Enums.js";
 import { objectGet } from "../../common/Utils.js";
 
 export class FilterOption {

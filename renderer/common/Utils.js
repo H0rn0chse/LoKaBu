@@ -58,6 +58,26 @@ export function isConstructor (O) {
     return true;
 }
 
+export function destroyObject (oObject) {
+    oObject = typeof oObject === "object" ? oObject : {};
+    Object.keys(oObject).forEach(sKey => {
+        oObject[sKey] = null;
+    });
+}
+
+export function findKeysInMap (mMap, fnCheck) {
+    const aKeys = [];
+    const it = mMap.keys();
+    let oKey = it.next();
+    while (!oKey.done) {
+        if (fnCheck(oKey.value)) {
+            aKeys.push(oKey.value);
+        }
+        oKey = it.next();
+    }
+    return aKeys;
+}
+
 const aCssFiles = [];
 export function loadCss (sPath) {
     if (!aCssFiles.includes(sPath)) {

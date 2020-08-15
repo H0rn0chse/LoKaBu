@@ -1,17 +1,12 @@
 import { View } from "../../view/common/View.js";
 import { FlexContainer } from "../../view/common/FlexContainer.js";
 import { DomElement } from "../../view/common/DomElement.js";
-import { Enums } from "../../common/Enums.js";
+import { Enums } from "../../Enums.js";
 
 export class FilterView extends View {
     constructor (...args) {
         super(...args);
         this.name = "FilterView";
-
-        this.addEvents([
-            "updateFilter",
-            "deleteFilter"
-        ]);
     }
 
     render () {

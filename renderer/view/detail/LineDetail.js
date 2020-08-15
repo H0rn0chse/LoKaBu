@@ -8,11 +8,6 @@ export class LineDetail extends View {
     constructor () {
         super();
         this.name = "LineDetailView";
-
-        this.addEvents([
-            "lineAdd",
-            "lineChange"
-        ]);
     }
 
     render () {

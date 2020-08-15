@@ -6,12 +6,14 @@ import { SettingsController } from "./controller/settings/SettingsController.js"
 import { AnalysisController } from "./controller/analysis/AnalysisController.js";
 import { HistoryController } from "./controller/history/HistoryController.js";
 import { EventBus } from "./EventBus.js";
-import { DatabaseManager } from "./DatabaseManager.js";
+import { DialogImports } from "./DialogImports.js";
 const { remote } = require("electron");
 
 export class AppController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
+
+        this.blockApp();
 
         const oHeader = this.createContainer("header");
         oHeader.setContent(new HeaderController(oHeader.getNode()));
@@ -30,6 +32,8 @@ export class AppController extends Controller {
 
         EventBus.listen("blockApp", this.blockApp, this);
         EventBus.listen("unblockApp", this.unblockApp, this);
+        EventBus.listen("database-abort", this.onAbort, this);
+        EventBus.listenOnce("database-open", this.unblockApp, this);
     }
 
     start () {
@@ -43,5 +47,15 @@ export class AppController extends Controller {
 
     unblockApp () {
         remote.getCurrentWindow().setEnabled(true);
+    }
+
+    onAbort (oEvent, bShutdown) {
+        if (bShutdown) {
+            this.shutdown();
+        }
+    }
+
+    shutdown () {
+        remote.getCurrentWindow().close();
     }
 };
