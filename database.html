@@ -8,14 +8,14 @@
 	<body>
 		<script type="module">
 			const { ipcRenderer } = require('electron');
-			import { main } from "./worker/database/main.js";
+			import { database } from "./worker/database.js";
 			import { EventBus } from './renderer/EventBus.js'
-			import { db } from './worker/database/databaseConnection.js'
+			import { DatabaseManager } from "./worker/database/DatabaseManager.js";
 
 			EventBus.setIpcRenderer(ipcRenderer);
 			EventBus.sendToMain("windowLoaded");
 			EventBus.listen("shutdownApp", () => {
-				db.close();
+				DatabaseManager.close();
 				console.log("shutdown");
 				EventBus.sendToMain("windowProcessClosed");
 			});
