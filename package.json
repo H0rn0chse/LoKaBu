@@ -43,7 +43,7 @@
     "string-math": "^1.2.1"
   },
   "devDependencies": {
-    "electron": "^7.1.11",
+    "electron": "^7.3.2",
     "electron-builder": "^22.3.2",
     "electron-rebuild": "^1.10.0",
     "eslint": "^6.8.0",
