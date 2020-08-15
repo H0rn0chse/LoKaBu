@@ -23,10 +23,12 @@
   "license": "GPL-3.0",
   "build": {
     "win": {
-      "extraFiles": [{
-        "from":  "build/win/LoKaBu.VisualElementsManifest.xml",
-        "to": "."
-      }],
+      "extraFiles": [
+        {
+          "from": "build/win/LoKaBu.VisualElementsManifest.xml",
+          "to": "."
+        }
+      ],
       "extraResources": [
         "build/win/*"
       ]
