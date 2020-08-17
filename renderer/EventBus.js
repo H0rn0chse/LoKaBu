@@ -1,13 +1,13 @@
 import { EventManager } from "./common/EventManager.js";
 import { Deferred } from "./common/Deferred.js";
-import { EventPipeline } from "./common/EventPipeline.js";
+import { EventWrapper } from "./common/EventWrapper.js";
 
 class _EventBus extends EventManager {
     constructor () {
         super();
         this.ipc = new Deferred();
         this.database = new Deferred();
-        this.ipcEvents = new EventPipeline();
+        this.ipcEvents = new EventWrapper();
     }
 
     listen (sChannel, fnHandler, oScope) {
