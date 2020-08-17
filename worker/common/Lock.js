@@ -7,8 +7,10 @@ export class Lock {
         this.lockFilePath = sPath + ".lock";
     }
 
-    abort () {
-        this.fnAbort();
+    abort (oEvent, sFileName) {
+        if (this.getTimestamp() !== this.since) {
+            this.fnAbort();
+        }
     }
 
     close () {
@@ -51,7 +53,7 @@ export class Lock {
 
     getTimestamp () {
         if (this.lockFilePath) {
-            return fs.readFileSync(this.lockFilePath, "utf8");
+            return parseInt(fs.readFileSync(this.lockFilePath, "utf8"));
         }
         return 0;
     }
