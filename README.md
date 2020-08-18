@@ -1,4 +1,4 @@
-<sub><sup>Available Languages: [Deutsch](./README_DE.md), [English](./README.md)<sub><sup>
+<sub><sup>This document is available in: [Deutsch](./README_DE.md), [English](./README.md)<sub><sup>
 # <img src="./build/icon.png" title="LoKaBu" width="70px"/> LoKaBu [![Latest Release][releaseBadge]][releaseLink] [![Release status][buildBadge]][buildLink] [![GitHub Actions status][testBadge]][testLink]
 
 This project realizes a cash book for the normal household. The core idea of the project is to have full control over the data that is stored. This Project is based on the combination of the framework Electron and the file based database SQLite3

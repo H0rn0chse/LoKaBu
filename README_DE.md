@@ -1,4 +1,4 @@
-Available Languages: [Deutsch](./README_DE.md), [English](./README.md)
+<sub><sup>This document is available in: [Deutsch](./README_DE.md), [English](./README.md)<sub><sup>
 # <img src="./build/icon.png" title="LoKaBu" width="70px"/> LoKaBu [![Latest Release][releaseBadge]][releaseLink] [![Release status][buildBadge]][buildLink] [![GitHub Actions status][testBadge]][testLink]
 
 Dieses Projekt realisiert ein Kassenbuch für den normalen Haushalt. Die Grundidee des Projektes ist über die abgespeicherten Daten volle Kontrolle zu haben. Das Projekt basiert auf der Kombination aus dem Framework Electron und der dateibasierten Datenbank SQLite3.
