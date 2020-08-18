@@ -1,5 +1,5 @@
 Available Languages: [Deutsch](./README_DE.md), [English](./README.md)
-# LoKaBu [![Latest Release](https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg)](https://github.com/H0rn0chse/LoKaBu/releases/latest) [![Release status](https://github.com/H0rn0chse/LoKaBu/workflows/Release/badge.svg?branch=feature%2FelectronTransformation)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ARelease) [![GitHub Actions status](https://github.com/H0rn0chse/LoKaBu/workflows/Test/badge.svg?branch=feature%2FelectronTransformation)](https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ATest)
+# <img src="./build/icon.png" title="LoKaBu" width="70px"/> LoKaBu [![Latest Release][releaseBadge]][releaseLink] [![Release status][buildBadge]][buildLink] [![GitHub Actions status][testBadge]][testLink]
 
 Dieses Projekt realisiert ein Kassenbuch für den normalen Haushalt. Die Grundidee des Projektes ist über die abgespeicherten Daten volle Kontrolle zu haben. Das Projekt basiert auf der Kombination aus dem Framework Electron und der dateibasierten Datenbank SQLite3.
 ## Funktionalitäten
@@ -41,3 +41,10 @@ Du musst deinen plattformabhängigen Build selber bauen (und signieren) oder nut
   <img src="./docu/screenshots/details_de.png" title="Beleg Details" />
   <img src="./docu/screenshots/history_de.png" title="Belegverlauf" />
   <img src="./docu/screenshots/settings_de.png" title="SettEinstellungenings" />
+
+[releaseBadge]: https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg
+[releaseLink]: https://github.com/H0rn0chse/LoKaBu/releases/latest
+[buildBadge]: https://github.com/H0rn0chse/LoKaBu/workflows/Release/badge.svg?branch=feature%2FelectronTransformation
+[buildLink]: https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ARelease
+[testBadge]: https://github.com/H0rn0chse/LoKaBu/workflows/Test/badge.svg?branch=feature%2FelectronTransformation
+[testLink]: https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ATest
