@@ -1,127 +1,38 @@
 // eslint-disable-next-line no-unused-vars
 const { AppVersion } = require("./main/AppVersion.js");
-const { app, BrowserWindow, nativeTheme, ipcMain } = require('electron');
+const { app, nativeTheme } = require('electron');
+const { enforceSingleInstance } = require("./main/Utils.js");
+const { WindowManager } = require("./main/WindowManager.js");
 
-let oMainWindow;
-let oDatabaseWindow;
-let bAppIsClosing = false;
-
-function shutdownApp () {
-    oMainWindow.webContents.send("shutdownApp");
-    oDatabaseWindow.webContents.send("shutdownApp");
-
-    let iCount = 2;
-    ipcMain.on("windowProcessClosed", () => {
-        iCount--;
-        if (iCount === 0) {
-            bAppIsClosing = true;
-            oMainWindow.close();
-            oDatabaseWindow.close();
-        }
-    });
-}
-
-function createWindow () {
-    const bSingleInstanceLock = app.requestSingleInstanceLock();
-
-    if (!bSingleInstanceLock) {
-        app.quit();
+function init () {
+    if (enforceSingleInstance()) {
         return;
     }
 
-    require("./main/checkDatabase");
-    oMainWindow = new BrowserWindow({
-        show: false,
-        webPreferences: {
-            nodeIntegration: true
-        }
-    });
-    oMainWindow.maximize();
-    oMainWindow.show();
-    oMainWindow.loadFile('index.html');
-    oMainWindow.setMenuBarVisibility(false);
-    if (!app.isPackaged) {
-        oMainWindow.webContents.openDevTools();
-    }
-
-    oDatabaseWindow = new BrowserWindow({
-        show: false,
-        webPreferences: {
-            nodeIntegration: true
-        }
-    });
-    if (!app.isPackaged) {
-        oDatabaseWindow.maximize();
-        oDatabaseWindow.show();
-    }
-    oDatabaseWindow.loadFile('database.html');
-    oDatabaseWindow.webContents.openDevTools();
-
-    oMainWindow.on('close', (oEvent) => {
-        if (!bAppIsClosing) {
-            oEvent.preventDefault();
-            shutdownApp();
-        }
-    });
-
-    oMainWindow.on('closed', (oEvent) => {
-        oMainWindow = null;
-    });
-
-    oDatabaseWindow.on('close', (oEvent) => {
-        if (!bAppIsClosing) {
-            oEvent.preventDefault();
-            shutdownApp();
-        }
-    });
-
-    oDatabaseWindow.on('closed', (oEvent) => {
-        oDatabaseWindow = null;
-    });
-
-    let iCount = 2;
-    ipcMain.on("windowLoaded", (oEvent, sMessage) => {
-        iCount--;
-        if (iCount === 0) {
-            oMainWindow.setTitle(app.name);
-            oDatabaseWindow.setTitle(app.name + " - Database worker");
-            oMainWindow.webContents.send("log", oMainWindow.webContents.id + "/" + oDatabaseWindow.webContents.id);
-            oMainWindow.webContents.send("eventBus", oDatabaseWindow.webContents.id);
-            oDatabaseWindow.webContents.send("eventBus", oMainWindow.webContents.id);
-        }
-    });
-
-    ipcMain.on("log", (oEvent, sMessage) => {
-        oMainWindow.webContents.send("log", sMessage);
-    });
+    WindowManager.addMain('index.html');
+    WindowManager.addWorker('database.html');
 }
 
-app.on('before-quit', (oEvent) => {
-    if (!bAppIsClosing) {
-        oEvent.preventDefault();
-        oMainWindow.close();
-        oDatabaseWindow.close();
+app.on('ready', init.bind(this));
+
+app.on('second-instance', () => {
+    WindowManager.focusMain();
+});
+
+app.on('activate', () => {
+    if (WindowManager.mainLoaded()) {
+        init();
     }
 });
 
-app.on('ready', createWindow);
-
-app.on('second-instance', (oEvent, aArgv, sWorkingDir) => {
-    if (oMainWindow) {
-        oMainWindow.focus();
-    }
+app.on('before-quit', (oEvent) => {
+    WindowManager.close(oEvent);
 });
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
     };
-});
-
-app.on('activate', () => {
-    if (oMainWindow === null) {
-        createWindow();
-    }
 });
 
 nativeTheme.themeSource = 'light';
