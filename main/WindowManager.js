@@ -27,7 +27,6 @@ class _WindowManager {
         const oMain = this._addWindow(sPath);
         oMain.maximize();
         oMain.show();
-        oMain.setTitle(app.name);
         this.main = oMain;
     }
 
@@ -37,7 +36,6 @@ class _WindowManager {
             oWorker.maximize();
             oWorker.show();
         }
-        oWorker.setTitle(`worker for ${app.name}: ${sPath}`);
         this.worker.push(oWorker);
     }
 

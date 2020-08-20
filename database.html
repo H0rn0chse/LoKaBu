@@ -4,8 +4,8 @@
 		<meta charset="UTF-8">
 		<!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
 		<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-	</head>
-	<body>
+		<title>Database Worker for LoKaBu</title>
+
 		<script type="module">
 			const { ipcRenderer } = require('electron');
 			import { database } from "./worker/database.js";
@@ -20,5 +20,7 @@
 				EventBus.sendToMain("windowProcessClosed");
 			});
 		</script>
+	</head>
+	<body>
 	</body>
 </html>
