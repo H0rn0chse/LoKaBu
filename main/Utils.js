@@ -10,6 +10,19 @@ function enforceSingleInstance () {
     return false;
 }
 
+
+function findKeyByValue (oObject, vValue) {
+    let sReturnKey;
+    Object.keys(oObject).forEach((sKey) => {
+        if (oObject[sKey] === vValue) {
+            sReturnKey = sKey;
+        }
+    });
+
+    return sReturnKey;
+}
+
 module.exports = {
-    enforceSingleInstance
+    enforceSingleInstance,
+    findKeyByValue
 };

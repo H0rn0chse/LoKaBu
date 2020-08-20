@@ -70,6 +70,12 @@ class _EventBus extends EventManager {
             Object.keys(oIpcMap).forEach((sKey) => {
                 this.resolve(sKey, oIpcMap[sKey]);
             });
+            // cleanup of closed windows
+            Object.keys(this.windows).forEach((sWindow) => {
+                if (!this.windows[sWindow].isPending && oIpcMap[sWindow] === undefined) {
+                    delete this.windows[sWindow];
+                }
+            });
         });
     }
 

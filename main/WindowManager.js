@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+const { findKeyByValue } = require("./Utils.js");
 
 class _WindowManager {
     constructor () {
@@ -12,9 +13,7 @@ class _WindowManager {
             this.windowsLoaded++;
             this.ipcMap[sWindow] = oEvent.sender.webContents.id;
 
-            this.getAllWindows().forEach(oWindow => {
-                oWindow.webContents.send("eventBus", this.ipcMap);
-            });
+            this.updateIpcMap();
         });
 
         ipcMain.on("openDialog", (oEvent, sPath, ...args) => {
@@ -28,6 +27,13 @@ class _WindowManager {
         ipcMain.on("windowProcessClosed", () => {
             this.windowsLoaded--;
             this.close();
+        });
+    }
+
+    updateIpcMap () {
+        const astuff = this.getAllWindows()
+        astuff.forEach(oWindow => {
+            oWindow.webContents.send("eventBus", this.ipcMap);
         });
     }
 
@@ -68,10 +74,13 @@ class _WindowManager {
         oDialog.setMenuBarVisibility(false);
         oDialog.loadFile(sPath);
         oDialog.on("close", (oEvent) => {
-            if (this.windowsLoaded > 0) {
-                oEvent.preventDefault();
-                oDialog.hide();
-            }
+            this.windowsLoaded--;
+            const sWindow = findKeyByValue(this.ipcMap, oDialog.webContents.id);
+
+            delete this.ipcMap[sWindow];
+            delete this.dialogs[sPath];
+
+            this.updateIpcMap();
         });
         oDialog.on("closed", () => {
             oDialog = null;
