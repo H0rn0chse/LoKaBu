@@ -19,6 +19,9 @@ class _WindowManager {
 
         ipcMain.on("openDialog", (oEvent, sPath, ...args) => {
             if (this.dialogs[sPath]) {
+                this.dialogs[sPath].show();
+            } else {
+                this.dialogs[sPath] = this.addDialog(sPath, ...args);
             }
         });
 
@@ -50,6 +53,30 @@ class _WindowManager {
             oWorker.show();
         }
         this.worker.push(oWorker);
+    }
+
+    addDialog (sPath, width = 300, height = 300) {
+        let oDialog = new BrowserWindow({
+            parent: this.main,
+            modal: true,
+            width: width,
+            height: height,
+            webPreferences: {
+                nodeIntegration: true
+            }
+        });
+        oDialog.setMenuBarVisibility(false);
+        oDialog.loadFile(sPath);
+        oDialog.on("close", (oEvent) => {
+            if (this.windowsLoaded > 0) {
+                oEvent.preventDefault();
+                oDialog.hide();
+            }
+        });
+        oDialog.on("closed", () => {
+            oDialog = null;
+        });
+        return oDialog;
     }
 
     _addWindow (sPath) {
