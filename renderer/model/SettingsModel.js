@@ -75,6 +75,7 @@ class _SettingsModel extends DatabaseModel {
 }
 
 export const SettingsModel = new _SettingsModel({
+    "aboutDialog-i18n": ["about.link"],
     "database-section-i18n": ["settings.databaseSettings"],
     "current-database-i18n": ["settings.currentDatabase"],
     "database-create-i18n": ["settings.createDatabase"],

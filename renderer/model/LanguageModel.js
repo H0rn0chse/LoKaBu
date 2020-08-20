@@ -10,11 +10,46 @@ const aReservedPaths = [
 ];
 
 const tempTranslations = [
-    /* {
-        scriptCode: "settings.createDatabase",
-        en_GB: "",
-        de: ""
-    } */
+    {
+        scriptCode: "about.link",
+        en_GB: "About this Version",
+        de: "Über diese Version"
+    },
+    {
+        scriptCode: "about.title",
+        en_GB: "About LoKaBu",
+        de: "Über LoKaBu"
+    },
+    {
+        scriptCode: "about.appVersion",
+        en_GB: "App version:",
+        de: "Appversion:"
+    },
+    {
+        scriptCode: "about.userDatabaseVersion",
+        en_GB: "Version of user database:",
+        de: "Version der Nutzerdatenbank:"
+    },
+    {
+        scriptCode: "about.sharedDatabaseVersion",
+        en_GB: "Version of shared database:",
+        de: "Version der geteilten Datenbank:"
+    },
+    {
+        scriptCode: "about.license",
+        en_GB: "License",
+        de: "Lizenz"
+    },
+    {
+        scriptCode: "about.contributions",
+        en_GB: "Contributions",
+        de: "Mitwirkende"
+    },
+    {
+        scriptCode: "about.close",
+        en_GB: "Close",
+        de: "Schließen"
+    }
 ];
 
 class _LanguageModel extends Model {
@@ -45,6 +80,19 @@ class _LanguageModel extends Model {
         const sCurrentLanguage = SettingsModel.get(["Language"]) || "en_GB";
         aContextPath = ["translations", { scriptCode: aPath[0] }, sCurrentLanguage];
         return super.get(aContextPath);
+    }
+
+    getNameSpace (sStartsWith) {
+        const aTranslations = this.get(["translations"]).filter(oTrans => {
+            return oTrans.scriptCode.startsWith(sStartsWith);
+        });
+        return aTranslations.map(oTrans => {
+            const sCurrentLanguage = SettingsModel.get(["Language"]) || "en_GB";
+            return {
+                scriptCode: oTrans.scriptCode,
+                trans: oTrans[sCurrentLanguage]
+            };
+        });
     }
 
     // Allow components to be lazily loaded

@@ -43,7 +43,8 @@ class _DatabaseManager {
     }
 
     get (sDatabase) {
-        return this.getInstance(sDatabase).db;
+        const oDb = this.getInstance(sDatabase);
+        return oDb && oDb.db;
     }
 
     getPath (sDatabase) {
