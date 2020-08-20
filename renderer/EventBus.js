@@ -5,8 +5,10 @@ import { EventWrapper } from "./common/EventWrapper.js";
 class _EventBus extends EventManager {
     constructor () {
         super();
+
         this.ipc = new Deferred();
-        this.database = new Deferred();
+        this.windows = {};
+
         this.ipcEvents = new EventWrapper();
     }
 
@@ -34,17 +36,21 @@ class _EventBus extends EventManager {
         this.removeEventListener(sChannel, fnHandler, oScope);
     }
 
-    sendToDatabase (...args) {
+    sendTo (sWindow, ...args) {
         Promise.all([
-            this.database.promise,
+            this.waitFor(sWindow),
             this.ipc.promise
-        ]).then(([database, ipc]) => {
-            ipc.sendTo(database, ...args);
+        ]).then(([id, ipc]) => {
+            ipc.sendTo(id, ...args);
         });
     }
 
+    sendToDatabase (...args) {
+        this.sendTo("database", ...args);
+    }
+
     sendToBrowser (...args) {
-        this.sendToDatabase(...args);
+        this.sendTo("browser", ...args);
     }
 
     sendToCurrentWindow (sEventName, ...args) {
@@ -60,9 +66,26 @@ class _EventBus extends EventManager {
     setIpcRenderer (oIpcRenderer) {
         this.ipc.resolve(oIpcRenderer);
 
-        oIpcRenderer.once("eventBus", (oEvent, sMessage) => {
-            this.database.resolve(sMessage);
+        oIpcRenderer.on("eventBus", (oEvent, oIpcMap) => {
+            Object.keys(oIpcMap).forEach((sKey) => {
+                this.resolve(sKey, oIpcMap[sKey]);
+            });
         });
+    }
+
+    resolve (sWindow, iId) {
+        this._waitFor(sWindow).resolve(iId);
+    }
+
+    _waitFor (sWindow) {
+        if (!this.windows[sWindow]) {
+            this.windows[sWindow] = new Deferred();
+        }
+        return this.windows[sWindow];
+    }
+
+    waitFor (sWindow) {
+        return this._waitFor(sWindow).promise;
     }
 };
 

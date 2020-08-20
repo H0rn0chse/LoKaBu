@@ -16,7 +16,7 @@
 			const oRootDomRef = document.body
 			const oApp = new AppController(oRootDomRef);
 			EventBus.setIpcRenderer(ipcRenderer);
-			EventBus.sendToMain("windowLoaded");
+			EventBus.sendToMain("windowLoaded", "browser");
 			EventBus.listen("shutdownApp", () => {
 				console.log("shutdown");
 				EventBus.sendToMain("windowProcessClosed");

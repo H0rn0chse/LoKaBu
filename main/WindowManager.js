@@ -3,13 +3,22 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 class _WindowManager {
     constructor () {
         this.worker = [];
+        this.dialogs = {};
+
+        this.ipcMap = {};
 
         this.windowsLoaded = 0;
-        ipcMain.on("windowLoaded", () => {
+        ipcMain.on("windowLoaded", (oEvent, sWindow) => {
             this.windowsLoaded++;
-            if (this.windowsLoaded === this._getWindowCount()) {
-                this.main.webContents.send("eventBus", this.worker[0].webContents.id);
-                this.worker[0].webContents.send("eventBus", this.main.webContents.id);
+            this.ipcMap[sWindow] = oEvent.sender.webContents.id;
+
+            this.getAllWindows().forEach(oWindow => {
+                oWindow.webContents.send("eventBus", this.ipcMap);
+            });
+        });
+
+        ipcMain.on("openDialog", (oEvent, sPath, ...args) => {
+            if (this.dialogs[sPath]) {
             }
         });
 
@@ -20,7 +29,11 @@ class _WindowManager {
     }
 
     _getWindowCount () {
-        return this.worker.length + 1;
+        return this.getAllWindows().length;
+    }
+
+    getAllWindows () {
+        return [this.main, ...this.worker, ...Object.values(this.dialogs)];
     }
 
     addMain (sPath) {
@@ -78,16 +91,16 @@ class _WindowManager {
         }
 
         if (bAllWindowsLoaded) {
-            this.main.webContents.send("shutdownApp");
-            this.worker.forEach(window => {
-                window.webContents.send("shutdownApp");
+            this.getAllWindows().forEach(oWindow => {
+                oWindow.webContents.send("shutdownApp");
             });
         }
 
         if (bNoWindowLoaded && !oEvent) {
-            this.main.close();
-            this.worker.forEach(window => {
-                window.close();
+            this.getAllWindows().forEach(oWindow => {
+                if (!oWindow.isDestroyed()) {
+                    oWindow.close();
+                }
             });
         }
     }

@@ -13,7 +13,7 @@
 			import { DatabaseManager } from "./worker/database/DatabaseManager.js";
 
 			EventBus.setIpcRenderer(ipcRenderer);
-			EventBus.sendToMain("windowLoaded");
+			EventBus.sendToMain("windowLoaded", "database");
 			EventBus.listen("shutdownApp", () => {
 				DatabaseManager.close();
 				console.log("shutdown");
