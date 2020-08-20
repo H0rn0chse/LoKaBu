@@ -4,6 +4,7 @@
 @import "Button.css";
 @import "Scrollbar.css";
 @import "Headings.css";
+@import "Text.css";
 
 body, html {
     border: 0;

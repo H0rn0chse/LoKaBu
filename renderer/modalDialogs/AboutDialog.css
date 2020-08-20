@@ -1,0 +1,19 @@
+#aboutDialog {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#aboutDialog p {
+    margin: 0;
+    padding: 0;
+}
+
+#aboutDialog button {
+    margin: 10px;
+}
+
+#aboutDialog button:first-of-type {
+    margin-top: 30px;
+}
