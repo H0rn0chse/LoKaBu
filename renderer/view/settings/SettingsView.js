@@ -17,7 +17,8 @@ export class SettingsView extends View {
             .addClass("settings")
             .appendNode(new FlexContainer("div", { flexDirection: "column", flexWrap: "nowrap" })
                 // about dialog
-                .appendNode(new DomElement("a")
+                .appendNode(new DomElement("div")
+                    .addClass("settings-aboutLink")
                     .setText(this.getTranslation("aboutDialog-i18n"))
                     .addEventListener("click", this.onOpenAbout, this)
                 )
