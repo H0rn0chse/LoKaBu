@@ -8,9 +8,9 @@
 
 		<script type="module">
 			const { ipcRenderer } = require('electron');
-			import { database } from "./worker/database.js";
-			import { EventBus } from './renderer/EventBus.js'
-			import { DatabaseManager } from "./worker/database/DatabaseManager.js";
+			import { database } from "./database.js";
+			import { EventBus } from '../renderer/EventBus.js'
+			import { DatabaseManager } from "./database/DatabaseManager.js";
 
 			EventBus.setIpcRenderer(ipcRenderer);
 			EventBus.sendToMain("windowLoaded", "database");

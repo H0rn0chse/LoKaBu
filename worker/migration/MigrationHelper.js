@@ -10,7 +10,7 @@ const { readFile } = require('fs').promises;
 const sUserData = remote.app.getPath("userData");
 const sBackup = path.join(sUserData, "backup.sqlite3");
 
-const versionInfo = require("./worker/migration/versionInfo.json");
+const versionInfo = require("./migration/versionInfo.json");
 
 class _MigrationHelper {
     constructor () {

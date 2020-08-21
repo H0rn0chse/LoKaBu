@@ -10,7 +10,7 @@ function init () {
     }
 
     WindowManager.addMain('index.html');
-    WindowManager.addWorker('database.html');
+    WindowManager.addWorker('./worker/database.html');
 }
 
 app.on('ready', init.bind(this));
