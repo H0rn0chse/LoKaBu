@@ -7,10 +7,15 @@
         "0.1.0": {
             "base": "2",
             "min": "2.0"
+        },
+        "0.2.0": {
+            "base": "3",
+            "min": "3.0"
         }
     },
     "upgrades": {
-        "1.1": "./worker/migration/upgrades/1.1_1.2.sql",
-        "1.2": "./worker/migration/upgrades/1.2_2.0.sql"
+        "1.1": "./migration/upgrades/1.1_1.2.sql",
+        "1.2": "./migration/upgrades/1.2_2.0.sql",
+        "2.0": "./migration/upgrades/2.0_3.0.sql"
     }
 }
