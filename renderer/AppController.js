@@ -42,7 +42,7 @@ export class AppController extends Controller {
     }
 
     blockApp () {
-        // remote.getCurrentWindow().setEnabled(false);
+        remote.getCurrentWindow().setEnabled(false);
     }
 
     unblockApp () {
