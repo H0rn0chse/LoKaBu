@@ -31,8 +31,7 @@ class _WindowManager {
     }
 
     updateIpcMap () {
-        const astuff = this.getAllWindows()
-        astuff.forEach(oWindow => {
+        this.getAllWindows().forEach(oWindow => {
             oWindow.webContents.send("eventBus", this.ipcMap);
         });
     }

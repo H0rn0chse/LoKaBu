@@ -10,7 +10,6 @@ function enforceSingleInstance () {
     return false;
 }
 
-
 function findKeyByValue (oObject, vValue) {
     let sReturnKey;
     Object.keys(oObject).forEach((sKey) => {
