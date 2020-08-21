@@ -1,6 +1,6 @@
 import { findKeysInMap } from "./Utils.js";
 
-export class EventPipeline {
+export class EventWrapper {
     constructor () {
         this.handler = new Map();
     }

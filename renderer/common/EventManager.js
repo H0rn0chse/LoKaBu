@@ -1,9 +1,9 @@
-import { EventPipeline } from "./EventPipeline.js";
+import { EventWrapper } from "./EventWrapper.js";
 
 export class EventManager {
     constructor () {
-        this.events = new EventPipeline();
-        this.eventsOnce = new EventPipeline();
+        this.events = new EventWrapper();
+        this.eventsOnce = new EventWrapper();
         this.eventManager = [];
     }
 

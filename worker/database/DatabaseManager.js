@@ -43,7 +43,8 @@ class _DatabaseManager {
     }
 
     get (sDatabase) {
-        return this.getInstance(sDatabase).db;
+        const oDb = this.getInstance(sDatabase);
+        return oDb && oDb.db;
     }
 
     getPath (sDatabase) {
@@ -67,7 +68,6 @@ class _DatabaseManager {
     }
 
     _openDatabase (oDb, sType) {
-        EventBus.sendToCurrentWindow("i18n-read");
         return oDb.closeLock()
             // Lock is closed and checking for upgrades
             .then(() => {

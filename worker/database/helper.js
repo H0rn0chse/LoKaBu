@@ -4,17 +4,27 @@ import { DatabaseManager } from "./DatabaseManager.js";
 class _Helper {
     constructor () {
         EventBus.listen("helper-firstReceipt", this.getFirstReceipt, this);
+        EventBus.listen("helper-version", this.handleGetVersion.bind(this));
     }
 
     getVersion (oDb) {
-        const sSql = `
-        SELECT
-            Version
-        FROM Settings
-        `;
-        const oResult = oDb.prepare(sSql)
-            .get();
-        return oResult.Version;
+        if (oDb) {
+            const sSql = `
+            SELECT
+                Version
+            FROM Settings
+            `;
+            const oResult = oDb.prepare(sSql)
+                .get();
+            return oResult.Version;
+        }
+    }
+
+    handleGetVersion (oEvent) {
+        const oData = {};
+        oData.user = this.getVersion(DatabaseManager.get("user"));
+        oData.shared = this.getVersion(DatabaseManager.get("shared"));
+        EventBus.sendToBrowser("helper-version", oData);
     }
 
     getFirstReceipt () {

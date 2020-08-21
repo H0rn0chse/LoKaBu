@@ -17,4 +17,4 @@ class _AppVersion {
 }
 
 const AppVersion = new _AppVersion();
-module.exports = AppVersion;
+module.exports = { AppVersion };

@@ -4,6 +4,7 @@
 		<meta charset="UTF-8">
 		<!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
 		<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+		<title>LoKaBu</title>
 
 		<link rel="stylesheet" href="./renderer/view/common/Main.css">
 
@@ -15,7 +16,7 @@
 			const oRootDomRef = document.body
 			const oApp = new AppController(oRootDomRef);
 			EventBus.setIpcRenderer(ipcRenderer);
-			EventBus.sendToMain("windowLoaded");
+			EventBus.sendToMain("windowLoaded", "browser");
 			EventBus.listen("shutdownApp", () => {
 				console.log("shutdown");
 				EventBus.sendToMain("windowProcessClosed");

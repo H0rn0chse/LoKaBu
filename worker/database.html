@@ -4,21 +4,23 @@
 		<meta charset="UTF-8">
 		<!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
 		<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-	</head>
-	<body>
+		<title>Database Worker for LoKaBu</title>
+
 		<script type="module">
 			const { ipcRenderer } = require('electron');
-			import { database } from "./worker/database.js";
-			import { EventBus } from './renderer/EventBus.js'
-			import { DatabaseManager } from "./worker/database/DatabaseManager.js";
+			import { database } from "./database.js";
+			import { EventBus } from '../renderer/EventBus.js'
+			import { DatabaseManager } from "./database/DatabaseManager.js";
 
 			EventBus.setIpcRenderer(ipcRenderer);
-			EventBus.sendToMain("windowLoaded");
+			EventBus.sendToMain("windowLoaded", "database");
 			EventBus.listen("shutdownApp", () => {
 				DatabaseManager.close();
 				console.log("shutdown");
 				EventBus.sendToMain("windowProcessClosed");
 			});
 		</script>
+	</head>
+	<body>
 	</body>
 </html>

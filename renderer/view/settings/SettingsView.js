@@ -16,6 +16,12 @@ export class SettingsView extends View {
         const oNode = new DomElement("section")
             .addClass("settings")
             .appendNode(new FlexContainer("div", { flexDirection: "column", flexWrap: "nowrap" })
+                // about dialog
+                .appendNode(new DomElement("div")
+                    .addClass("settings-aboutLink")
+                    .setText(this.getTranslation("aboutDialog-i18n"))
+                    .addEventListener("click", this.onOpenAbout, this)
+                )
                 // database settings
                 .appendNode(new DomElement("div")
                     .addClass("group-header")
@@ -153,5 +159,9 @@ export class SettingsView extends View {
     copyCurrentPath (oEvent) {
         const sText = this.getProperty("database-path");
         navigator.clipboard.writeText(sText);
+    }
+
+    onOpenAbout (oEvent) {
+        this.handleEvent("openAbout", oEvent);
     }
 };

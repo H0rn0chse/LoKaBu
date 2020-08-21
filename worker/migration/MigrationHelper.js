@@ -10,7 +10,7 @@ const { readFile } = require('fs').promises;
 const sUserData = remote.app.getPath("userData");
 const sBackup = path.join(sUserData, "backup.sqlite3");
 
-const versionInfo = require("./worker/migration/versionInfo.json");
+const versionInfo = require("./migration/versionInfo.json");
 
 class _MigrationHelper {
     constructor () {
@@ -86,9 +86,16 @@ class _MigrationHelper {
     checkCompatibility (oDb) {
         return this.appVersion.promise.then(oAppVersion => {
             return new Promise((resolve, reject) => {
+                let oMin;
                 const oDbVersion = new Version(Helper.getVersion(oDb.db));
 
-                const oMin = new Version(versionInfo.compatibility[oAppVersion.toString()].min);
+                // catch development use case
+                try {
+                    oMin = new Version(versionInfo.compatibility[oAppVersion.toString()].min);
+                } catch (oErr) {
+                    console.error(oErr);
+                    oMin = oDbVersion;
+                }
 
                 // database needs upgrade
                 if (oDbVersion.isSmaller(oMin)) {

@@ -9,6 +9,7 @@ import { SettingsModel } from "../../model/SettingsModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { CreateDatabaseDialog } from "../../dialogs/CreateDatabaseDialog.js";
 import { OpenDatabaseDialog } from "../../dialogs/OpenDatabaseDialog.js";
+import { AboutDialog } from "../../dialogs/AboutDialog.js";
 
 export class SettingsController extends Controller {
     constructor (oDomRef) {
@@ -24,6 +25,10 @@ export class SettingsController extends Controller {
             .addModel(StoreModel, "store")
             .addModel(PersonModel, "person")
             .addModel(TypeModel, "type");
+
+        // about dialog link
+        oSettings
+            .bindProperty("aboutDialog-i18n", "viewModel", ["aboutDialog-i18n"]);
 
         // database settings
         oSettings
@@ -96,7 +101,8 @@ export class SettingsController extends Controller {
             .addEventListener("databaseDefault", this.onDatabaseDefault, this)
             .addEventListener("listChange", this.onListChange, this)
             .addEventListener("listEntryChange", this.onListEntryChange, this)
-            .addEventListener("languageChange", this.onLanguageChange, this);
+            .addEventListener("languageChange", this.onLanguageChange, this)
+            .addEventListener("openAbout", this.onOpenAbout, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
     }
@@ -152,5 +158,9 @@ export class SettingsController extends Controller {
     onLanguageChange (oEvent) {
         const sLanguage = oEvent.customData.language;
         SettingsModel.setLanguage(sLanguage);
+    }
+
+    onOpenAbout (oEvent) {
+        AboutDialog.show();
     }
 };

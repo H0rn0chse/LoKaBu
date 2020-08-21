@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+		<link rel="stylesheet" href="../view/common/Main.css">
+		<link rel="stylesheet" href="./AboutDialog.css">
+
+		<script type="module">
+            const { ipcRenderer } = require('electron');
+			import { EventBus } from '../EventBus.js'
+			import { applyTranslations, openUrl } from './common/Utils.js'
+
+            EventBus.setIpcRenderer(ipcRenderer);
+			EventBus.sendToMain("windowLoaded", "aboutDialog");
+			EventBus.listen("shutdownApp", () => {
+				console.log("shutdown");
+				EventBus.sendToMain("windowProcessClosed");
+			});
+
+			EventBus.listen("appVersion", (oEvent, sData) => {
+				const oItem = document.getElementById("appVersion");
+				oItem.innerText = sData;
+			});
+
+			EventBus.listen("databaseVersion", (oEvent, oData) => {
+				let oItem = document.getElementById("userDatabaseVersion");
+				oItem.innerText = oData.user;
+				oItem = document.getElementById("sharedDatabaseVersion");
+				oItem.innerText = oData.shared || "-";
+			});
+
+			EventBus.listen("translations", (oEvent, oData) => {
+				console.log(oData)
+				applyTranslations(oData);
+				document.title = oData["about.title"];
+			});
+
+			window.openUrl = openUrl;
+		</script>
+	</head>
+	<body id="aboutDialog">
+		<img src="../../build/icon.png" width="250px">
+		<h1 class="unselectable">LoKaBu</h1>
+		<p>
+			<span class="unselectable" data-trans="about.appVersion"></span>
+			<span class="unselectable" id="appVersion"></span>
+		</p>
+		<p>
+			<span class="unselectable" data-trans="about.userDatabaseVersion"></span>
+			<span class="unselectable" id="userDatabaseVersion"></span>
+		</p>
+		<p>
+			<span class="unselectable" data-trans="about.sharedDatabaseVersion"></span>
+			<span class="unselectable" id="sharedDatabaseVersion"></span>
+		</p>
+		<button class="unselectable" data-trans="about.license" onclick="openUrl('https://github.com/H0rn0chse/LoKaBu/blob/master/LICENSE')"></button>
+		<button class="unselectable" data-trans="about.contributions" onclick="openUrl('https://github.com/H0rn0chse/LoKaBu#contributions')"></button>
+		<button class="unselectable" data-trans="about.close" onclick="window.close()"></button>
+	</body>
+</html>

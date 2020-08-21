@@ -3,6 +3,7 @@ import { Model } from "./common/Model.js";
 import { EventBus } from "../EventBus.js";
 import { deepClone } from "../common/Utils.js";
 import { SettingsModel } from "./SettingsModel.js";
+import { Deferred } from "../common/Deferred.js";
 
 const aReservedPaths = [
     "languages",
@@ -21,17 +22,36 @@ class _LanguageModel extends Model {
     constructor (...args) {
         super(...args);
         this.name = "LanguageModel";
-        this.loaded = false;
 
-        EventBus.listen("database-open", (oEvent) => {
-            EventBus.sendToDatabase("i18n-read");
-        });
+        this.languages = new Deferred();
+        this.translations = new Deferred();
 
-        EventBus.listen("i18n-read", (oEvent, aData) => {
+        EventBus.sendToDatabase("i18n-languages");
+        EventBus.sendToDatabase("i18n-translations");
+
+        EventBus.listen("i18n-translations", (oEvent, aData) => {
             aData = aData.concat(tempTranslations);
             this.set(["translations"], aData);
-            console.log("LanguageModel loaded");
+
+            console.log("LanguageModel translations loaded");
+            this.translations.resolve();
         });
+
+        EventBus.listen("i18n-languages", (oEvent, aData) => {
+            aData = aData.map(sLang => {
+                return {
+                    value: sLang
+                };
+            });
+            this.set(["languages"], aData);
+
+            console.log("LanguageModel languages loaded");
+            this.languages.resolve();
+        });
+    }
+
+    waitForInit () {
+        return Promise.all([this.languages.promise, this.translations.promise]);
     }
 
     get (aPath, aBindingContextPath = []) {
@@ -47,20 +67,21 @@ class _LanguageModel extends Model {
         return super.get(aContextPath);
     }
 
-    // Allow components to be lazily loaded
-    update (...args) {
-        this.loaded = true;
-        return super.update(...args);
+    getNameSpace (sStartsWith) {
+        const aTranslations = this.get(["translations"]).filter(oTrans => {
+            return oTrans.scriptCode.startsWith(sStartsWith);
+        });
+        return aTranslations.map(oTrans => {
+            const sCurrentLanguage = SettingsModel.get(["Language"]) || "en_GB";
+            return {
+                scriptCode: oTrans.scriptCode,
+                trans: oTrans[sCurrentLanguage]
+            };
+        });
     }
 }
 
 export const LanguageModel = new _LanguageModel({
-    "languages": [
-        {
-            value: "de"
-        }, {
-            value: "en_GB"
-        }
-    ],
+    "languages": [],
     "translations": []
 });

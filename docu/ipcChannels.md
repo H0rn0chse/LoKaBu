@@ -12,7 +12,9 @@ database-create | \<string>>Path | Signals to create a database at the described
 database-force | \<bool>Force, \<string>Path | Signals whether the user wants to override the lock of the requested database.
 database-open | \<string>Path (optional) | Signals to open a specific database described by path or the user database by default.
 helper-firstReceipt | - | Signals to retrieve the id of the first receipt.
-i18n-read | - | Signals to retrieve all translations.
+helper-version | - | Signals to retrieve the version of the user and shared database.
+i18n-languages | - | Signals to retrieve all languages.
+i18n-translations | - | Signals to retrieve all translations.
 lines-create | { \<number>Receipt, \<number>Value, \<number>Billing, \<number>Type } | Signals to create a new line with given data.
 lines-delete | { \<number>ID } or { \<number>Receipt } | Signals to delete the given line (or the all the lines which belong to the given receipt).
 lines-read | { \<number>Receipt } | Signals to retrieve all lines of the given receipt.
@@ -49,7 +51,9 @@ database-upgrade | \<string>AppVersion, \<string>SourceVersion, \<string>TargetV
 database-upgrade-success | - | Signals that the database upgrade was successful.
 database-upgrade-failure | - | Signals that the database upgrade failed.
 helper-firstReceipt | \<number>ID | Value of the first receipt.
-i18n-read | { \<string>scriptCode, \<string>de, \<string>en_GB }[] | List of all translations.
+helper-version | { \<string>shared, \<string>user } | Version of the user and shared database.
+i18n-languages | \<string>sLang[] | List of all languages.
+i18n-translations | { \<string>scriptCode, \<string>de, \<string>en_GB }[] | List of all translations.
 lines-create | { \<number>lastInsertRowid } | Confirms the creation of a new line.
 lines-delete | - | Confirms the deletion of a line.
 lines-read | { \<number>ID, \<number>Receipt, \<number>Value, \<number>Billing, \<number>Type }[] | List of all lines of a specific receipt.
@@ -76,7 +80,7 @@ types-update | - | Confirms the update of a store.
 Channel | Value | Description
 --- | --- | ---
 appVersion | \<string>AppVersion | The Version of the app according to the package.json.
-eventBus | \<number>Id | The webContents id of the other window.
+eventBus | \<object>ipcMap | A Object containing all current registered windows with their webContent id.
 shutdown | - | Signals that the app is about to get closed.
 
 ## From Window To Main
@@ -84,5 +88,5 @@ shutdown | - | Signals that the app is about to get closed.
 Channel | Value | Description
 --- | --- | ---
 appVersion | - | Signals to retrieve the app version.
-windowLoaded | - | Signals that the sending window is done with the initial loading.
+windowLoaded | \<string>windowName | Signals that the sending window is done with the initial loading.
 windowProcessClosed | - | Signals that the sending window has all cleanup done.
