@@ -5,7 +5,7 @@ const BetterSqlite3 = require("better-sqlite3");
 const path = require("path");
 const fs = require("fs");
 
-const sBasePath = path.join(__dirname, "./base_database.sqlite3.sql");
+const sBasePath = path.join(__dirname, "../base_database.sqlite3.sql");
 
 export class Database {
     constructor (sPath, fnAbort) {

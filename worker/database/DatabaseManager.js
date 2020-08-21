@@ -68,7 +68,6 @@ class _DatabaseManager {
     }
 
     _openDatabase (oDb, sType) {
-        EventBus.sendToCurrentWindow("i18n-read");
         return oDb.closeLock()
             // Lock is closed and checking for upgrades
             .then(() => {

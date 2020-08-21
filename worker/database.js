@@ -2,7 +2,7 @@
 
 import { DatabaseManager } from "./database/DatabaseManager.js";
 import { AccountTable } from "./database/accounts.js";
-import { I18nTable } from "./database/i18n.js";
+import { I18n } from "./database/i18n.js";
 import { LinesTable } from "./database/lines.js";
 import { PersonsTable } from "./database/persons.js";
 import { receiptAnalysis } from "./database/receiptAnalysis.js";

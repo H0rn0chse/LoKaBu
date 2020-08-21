@@ -1,19 +1,11 @@
-import { Deferred } from "./Deferred.js";
 import { Binding } from "./Binding.js";
 import { LanguageModel } from "../model/LanguageModel.js";
 import { EventBus } from "../EventBus.js";
 
 export class Dialog {
     constructor () {
-        this.Model = new Deferred();
         this.binding = new Binding(LanguageModel, []);
         this._initTranslations();
-
-        if (LanguageModel.loaded) {
-            this.Model.resolve();
-        } else {
-            LanguageModel.addEventListener("update", this.Model.resolve, this);
-        }
     }
 
     getProperty (sProperty) {
@@ -31,7 +23,7 @@ export class Dialog {
 
     show (...args) {
         EventBus.sendToCurrentWindow("blockApp");
-        return this.Model.promise
+        return LanguageModel.waitForInit()
             .then(() => {
                 return this._show(...args);
             })

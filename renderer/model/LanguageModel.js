@@ -3,6 +3,7 @@ import { Model } from "./common/Model.js";
 import { EventBus } from "../EventBus.js";
 import { deepClone } from "../common/Utils.js";
 import { SettingsModel } from "./SettingsModel.js";
+import { Deferred } from "../common/Deferred.js";
 
 const aReservedPaths = [
     "languages",
@@ -10,63 +11,47 @@ const aReservedPaths = [
 ];
 
 const tempTranslations = [
-    {
-        scriptCode: "about.link",
-        en_GB: "About this Version",
-        de: "Über diese Version"
-    },
-    {
-        scriptCode: "about.title",
-        en_GB: "About LoKaBu",
-        de: "Über LoKaBu"
-    },
-    {
-        scriptCode: "about.appVersion",
-        en_GB: "App version:",
-        de: "Appversion:"
-    },
-    {
-        scriptCode: "about.userDatabaseVersion",
-        en_GB: "Version of user database:",
-        de: "Version der Nutzerdatenbank:"
-    },
-    {
-        scriptCode: "about.sharedDatabaseVersion",
-        en_GB: "Version of shared database:",
-        de: "Version der geteilten Datenbank:"
-    },
-    {
-        scriptCode: "about.license",
-        en_GB: "License",
-        de: "Lizenz"
-    },
-    {
-        scriptCode: "about.contributions",
-        en_GB: "Contributions",
-        de: "Mitwirkende"
-    },
-    {
-        scriptCode: "about.close",
-        en_GB: "Close",
-        de: "Schließen"
-    }
+    /* {
+        scriptCode: "settings.createDatabase",
+        en_GB: "",
+        de: ""
+    } */
 ];
 
 class _LanguageModel extends Model {
     constructor (...args) {
         super(...args);
         this.name = "LanguageModel";
-        this.loaded = false;
 
-        EventBus.listen("database-open", (oEvent) => {
-            EventBus.sendToDatabase("i18n-read");
-        });
+        this.languages = new Deferred();
+        this.translations = new Deferred();
 
-        EventBus.listen("i18n-read", (oEvent, aData) => {
+        EventBus.sendToDatabase("i18n-languages");
+        EventBus.sendToDatabase("i18n-translations");
+
+        EventBus.listen("i18n-translations", (oEvent, aData) => {
             aData = aData.concat(tempTranslations);
             this.set(["translations"], aData);
-            console.log("LanguageModel loaded");
+
+            console.log("LanguageModel translations loaded");
+            this.translations.resolve();
         });
+
+        EventBus.listen("i18n-languages", (oEvent, aData) => {
+            aData = aData.map(sLang => {
+                return {
+                    value: sLang
+                };
+            });
+            this.set(["languages"], aData);
+
+            console.log("LanguageModel languages loaded");
+            this.languages.resolve();
+        });
+    }
+
+    waitForInit () {
+        return Promise.all([this.languages.promise, this.translations.promise]);
     }
 
     get (aPath, aBindingContextPath = []) {
@@ -94,21 +79,9 @@ class _LanguageModel extends Model {
             };
         });
     }
-
-    // Allow components to be lazily loaded
-    update (...args) {
-        this.loaded = true;
-        return super.update(...args);
-    }
 }
 
 export const LanguageModel = new _LanguageModel({
-    "languages": [
-        {
-            value: "de"
-        }, {
-            value: "en_GB"
-        }
-    ],
+    "languages": [],
     "translations": []
 });
