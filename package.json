@@ -22,15 +22,33 @@
   },
   "license": "GPL-3.0",
   "build": {
+    "files": [
+      "**/*",
+      "!**/.github/*",
+      "!**/.vscode/*",
+      "!**/docu/*",
+      "!**test/*",
+      "!.eslintignore",
+      "!.eslintrc.js",
+      "!jsconfig.json",
+      "!README*",
+      {
+        "from": "build",
+        "to": "build",
+        "filter": ["icon.png"]
+      }
+    ],
     "win": {
       "extraFiles": [
         {
-          "from": "build/win/LoKaBu.VisualElementsManifest.xml",
-          "to": "."
+          "from": "build/win/",
+          "to": ".",
+          "filter": ["LoKaBu.VisualElementsManifest.xml"]
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE.LoKaBu.txt"
         }
-      ],
-      "extraResources": [
-        "build/win/*"
       ]
     },
     "nsis": {
