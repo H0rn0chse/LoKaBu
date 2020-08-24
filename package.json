@@ -36,6 +36,10 @@
         "from": "build",
         "to": "build",
         "filter": ["icon.png"]
+      },
+      {
+        "from": "LICENSE",
+        "to": "LICENSE.LoKaBu.txt"
       }
     ],
     "win": {
@@ -44,11 +48,10 @@
           "from": "build/win/",
           "to": ".",
           "filter": ["LoKaBu.VisualElementsManifest.xml"]
-        },
-        {
-          "from": "LICENSE",
-          "to": "LICENSE.LoKaBu.txt"
         }
+      ],
+      "extraResources": [
+        "build/win/*"
       ]
     },
     "nsis": {
