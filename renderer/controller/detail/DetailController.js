@@ -9,6 +9,7 @@ import { DetailModel } from "../../model/DetailModel.js";
 import { Aggregation } from "../../common/Aggregation.js";
 import { ReceiptModel } from "../../model/ReceiptModel.js";
 import { LineModel } from "../../model/LineModel.js";
+import { OpenImageDialog } from "../../dialogs/OpenImageDialog.js";
 
 export class DetailController extends Controller {
     constructor (oDomRef) {
@@ -71,6 +72,13 @@ export class DetailController extends Controller {
                 .bindProperty("value", "lines", ["Value"])
             );
 
+        // Scanner
+        oDetail
+            .bindProperty("imageSrc", "viewModel", ["imageSrc"])
+            .bindProperty("load-i18n", "viewModel", ["load-i18n"])
+            .bindProperty("start-i18n", "viewModel", ["start-i18n"])
+            .bindProperty("dnd-i18n", "viewModel", ["dnd-i18n"]);
+
         oDetail
             .addEventListener("accountChange", this.onAccountChange, this)
             .addEventListener("dateChange", this.onDateChange, this)
@@ -80,13 +88,27 @@ export class DetailController extends Controller {
             .addEventListener("lineRemove", this.onLineRemove, this)
             .addEventListener("storeChange", this.onStoreChange, this)
             .addEventListener("new", this.onNew, this)
-            .addEventListener("delete", this.onDelete, this);
+            .addEventListener("delete", this.onDelete, this)
+            .addEventListener("loadImage", this.onLoadImage, this)
+            .addEventListener("startScanner", this.onStartScanner, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
     }
 
     onNavigation (sSection) {
         this.getContainer("detail").setVisibilty(sSection === "detail");
+    }
+
+    onStartScanner (oEvent) {
+        console.log("startScanner", oEvent);
+    }
+
+    onLoadImage (oEvent) {
+        OpenImageDialog.show().then(sPath => {
+            if (sPath) {
+                DetailModel.setImageSrc(sPath);
+            }
+        });
     }
 
     onAccountChange (oEvent) {

@@ -1,0 +1,6 @@
+.imgSelection {
+    position: absolute;
+    background-color: red;
+    opacity: 0.5;
+    z-index: 2;
+}

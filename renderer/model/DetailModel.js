@@ -45,6 +45,10 @@ class _DetailModel extends Model {
         this.bOpenReceipt = true;
         EventBus.sendToDatabase("helper-firstReceipt");
     }
+
+    setImageSrc (sPath) {
+        this.set(["imageSrc"], sPath);
+    }
 }
 
 export const DetailModel = new _DetailModel({
@@ -56,5 +60,9 @@ export const DetailModel = new _DetailModel({
     "date-i18n": ["common.date"],
     "store-i18n": ["common.store"],
     "no-receipt": false,
-    "no-receipt-i18n": ["detail.noReceipt"]
+    "no-receipt-i18n": ["detail.noReceipt"],
+    "load-i18n": ["scanner.load"],
+    "start-i18n": ["scanner.start"],
+    "dnd-i18n": ["scanner.dnd"],
+    "imageSrc": ""
 });

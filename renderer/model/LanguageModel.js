@@ -16,6 +16,21 @@ const tempTranslations = [
         en_GB: "",
         de: ""
     } */
+    {
+        scriptCode: "scanner.load",
+        en_GB: "Load Image",
+        de: "Bild laden"
+    },
+    {
+        scriptCode: "scanner.start",
+        en_GB: "Start Scanner",
+        de: "Scanner starten"
+    },
+    {
+        scriptCode: "scanner.dnd",
+        en_GB: "Drop you Image here",
+        de: "Bild hier ablegen"
+    }
 ];
 
 class _LanguageModel extends Model {

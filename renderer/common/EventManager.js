@@ -34,6 +34,12 @@ export class EventManager {
         return this;
     }
 
+    preventDefault (oEvent) {
+        if (oEvent && oEvent.preventDefault) {
+            oEvent.preventDefault();
+        }
+    }
+
     removeEventListener (sEventName, fnHandler, oScope) {
         return this.events.removeListener(sEventName, fnHandler, oScope);
     }

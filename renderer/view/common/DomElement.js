@@ -118,6 +118,11 @@ export class DomElement {
         return this;
     }
 
+    setSrc (sValue) {
+        this.node.setAttribute('src', sValue);
+        return this;
+    }
+
     sortChildren (sDir = "ASC") {
         switch (sDir) {
             case "ASC":
