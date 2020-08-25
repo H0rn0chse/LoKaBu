@@ -1,3 +1,19 @@
+.scanner {
+    height: calc(100% - 2em);
+    width: calc(100% - 2em);
+}
+
+.scanner-buttonArea {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+}
+
 .scanner img{
-    max-width:100%;
+    height: calc(100% - 0.5em);
+    width: calc(100% - 0.5em);
+}
+
+.scanner canvas{
+    position: absolute;
+    z-index: -1;
 }
