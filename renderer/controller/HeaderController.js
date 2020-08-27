@@ -1,8 +1,8 @@
-import { Controller } from "../common/Controller.js";
-import { HeaderView } from "../../view/header/HeaderView.js";
-import { HeaderModel } from "../../model/HeaderModel.js";
-import { Aggregation } from "../../common/Aggregation.js";
-import { EventBus } from "../../EventBus.js";
+import { Controller } from "./common/Controller.js";
+import { HeaderView } from "../view/header/HeaderView.js";
+import { HeaderModel } from "../model/HeaderModel.js";
+import { Aggregation } from "../common/Aggregation.js";
+import { EventBus } from "../EventBus.js";
 
 export class HeaderController extends Controller {
     constructor (oDomRef) {

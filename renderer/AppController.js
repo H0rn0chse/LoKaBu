@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { HeaderController } from "./controller/header/HeaderController.js";
+import { HeaderController } from "./controller/HeaderController.js";
 import { Controller } from "./controller/common/Controller.js";
-import { DetailController } from "./controller/detail/DetailController.js";
-import { SettingsController } from "./controller/settings/SettingsController.js";
-import { AnalysisController } from "./controller/analysis/AnalysisController.js";
-import { HistoryController } from "./controller/history/HistoryController.js";
+import { DetailController } from "./controller/DetailController.js";
+import { SettingsController } from "./controller/SettingsController.js";
+import { AnalysisController } from "./controller/AnalysisController.js";
+import { HistoryController } from "./controller/HistoryController.js";
 import { EventBus } from "./EventBus.js";
 import { DialogImports } from "./DialogImports.js";
 const { remote } = require("electron");

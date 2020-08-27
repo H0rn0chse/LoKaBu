@@ -1,15 +1,15 @@
-import { Controller } from "../common/Controller.js";
-import { DetailView } from "../../view/detail/DetailView.js";
-import { EventBus } from "../../EventBus.js";
-import { AccountModel } from "../../model/AccountModel.js";
-import { StoreModel } from "../../model/StoreModel.js";
-import { PersonModel } from "../../model/PersonModel.js";
-import { TypeModel } from "../../model/TypeModel.js";
-import { DetailModel } from "../../model/DetailModel.js";
-import { Aggregation } from "../../common/Aggregation.js";
-import { ReceiptModel } from "../../model/ReceiptModel.js";
-import { LineModel } from "../../model/LineModel.js";
-import { OpenImageDialog } from "../../dialogs/OpenImageDialog.js";
+import { Controller } from "./common/Controller.js";
+import { DetailView } from "../view/detail/DetailView.js";
+import { EventBus } from "../EventBus.js";
+import { AccountModel } from "../model/AccountModel.js";
+import { StoreModel } from "../model/StoreModel.js";
+import { PersonModel } from "../model/PersonModel.js";
+import { TypeModel } from "../model/TypeModel.js";
+import { DetailModel } from "../model/DetailModel.js";
+import { Aggregation } from "../common/Aggregation.js";
+import { ReceiptModel } from "../model/ReceiptModel.js";
+import { LineModel } from "../model/LineModel.js";
+import { OpenImageDialog } from "../dialogs/OpenImageDialog.js";
 
 export class DetailController extends Controller {
     constructor (oDomRef) {
@@ -100,7 +100,8 @@ export class DetailController extends Controller {
     }
 
     onStartScanner (oEvent) {
-        console.log("startScanner", oEvent);
+        const oData = oEvent.customData;
+        EventBus.sendToCurrentWindow("tesseract-start", oData.image, oData.selection);
     }
 
     onLoadImage (oEvent) {
