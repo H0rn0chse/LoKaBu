@@ -37,9 +37,6 @@ export class Scanner extends View {
                     .setId("image")
                     .addEventListener("dragstart", this.preventDefault, this)
                     .addEventListener("drag", this.preventDefault, this)
-                )
-                .appendNode(new DomElement("canvas")
-                    .setId("canvas")
                 );
         }
 
@@ -51,6 +48,10 @@ export class Scanner extends View {
     }
 
     onStartScanner (oEvent) {
+        oEvent.customData = {
+            image: this.getNodeById("image"),
+            selection: this.getNodeById("selection")
+        };
         this.handleEvent("startScanner", oEvent);
     }
 };

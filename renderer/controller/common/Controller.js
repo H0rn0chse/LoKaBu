@@ -19,6 +19,10 @@ export class Controller {
         return this.container[sName];
     }
 
+    getContainerContent (sName) {
+        return this.container[sName] && this.container[sName].getContent();
+    }
+
     update () {
         this.getAllContainer().forEach(oContainer => {
             oContainer.getContent().update();
