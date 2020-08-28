@@ -7,6 +7,7 @@ import { AnalysisController } from "./controller/AnalysisController.js";
 import { HistoryController } from "./controller/HistoryController.js";
 import { EventBus } from "./EventBus.js";
 import { DialogImports } from "./DialogImports.js";
+import { TesseractController } from "./controller/TesseractController.js";
 const { remote } = require("electron");
 
 export class AppController extends Controller {
@@ -29,6 +30,9 @@ export class AppController extends Controller {
 
         const oSettings = this.createContainer("settings");
         oSettings.setContent(new SettingsController(oSettings.getNode()));
+
+        const oTesseract = this.createContainer("tesseract");
+        oTesseract.setContent(new TesseractController(oTesseract.getNode()));
 
         EventBus.listen("blockApp", this.blockApp, this);
         EventBus.listen("unblockApp", this.unblockApp, this);

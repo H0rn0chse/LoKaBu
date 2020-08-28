@@ -10,6 +10,7 @@ import { Aggregation } from "../common/Aggregation.js";
 import { ReceiptModel } from "../model/ReceiptModel.js";
 import { LineModel } from "../model/LineModel.js";
 import { OpenImageDialog } from "../dialogs/OpenImageDialog.js";
+import { ScannerResultDialog } from "../dialogs/ScannerResultDialog.js";
 
 export class DetailController extends Controller {
     constructor (oDomRef) {
@@ -93,10 +94,21 @@ export class DetailController extends Controller {
             .addEventListener("startScanner", this.onStartScanner, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
+        EventBus.listen("tesseract-result", this.onScannerResults, this);
     }
 
     onNavigation (sSection) {
         this.getContainer("detail").setVisibilty(sSection === "detail");
+    }
+
+    onScannerResults (aResult) {
+        ScannerResultDialog.show().then(oResult => {
+            if (oResult.response === 0) { // replace
+                DetailModel.replaceReceiptLines(aResult);
+            } else if (oResult.response === 1) { // append
+                DetailModel.appendReceiptLines(aResult);
+            }
+        });
     }
 
     onStartScanner (oEvent) {
