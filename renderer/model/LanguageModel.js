@@ -30,6 +30,21 @@ const tempTranslations = [
         scriptCode: "scanner.dnd",
         en_GB: "Drop you Image here",
         de: "Bild hier ablegen"
+    },
+    {
+        scriptCode: "scanner.result",
+        en_GB: "The scanning process was successfull",
+        de: "Der Scanprozess war erfolgreich"
+    },
+    {
+        scriptCode: "scanner.append",
+        en_GB: "Append to receipt lines",
+        de: "An Belegpositionen anfügen"
+    },
+    {
+        scriptCode: "scanner.replace",
+        en_GB: "Replace all receipt lines",
+        de: "Alle Belegpositionen ersetzen"
     }
 ];
 
