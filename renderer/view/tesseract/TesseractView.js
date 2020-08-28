@@ -5,8 +5,9 @@ export class TesseractView extends View {
     render () {
         const oNode = new DomElement("section")
             .addClass("tesseract")
-            .appendNode(new DomElement("canvas", {position: "fixed"})
+            .appendNode(new DomElement("canvas")
                 .setId("canvas")
+                .addClass("hidden")
             )
             .getNode();
 
