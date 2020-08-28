@@ -10,6 +10,10 @@ class _ReceiptModel extends DatabaseModel {
         this.name = "ReceiptModel";
     }
 
+    getId () {
+        return this.get(["ID"]);
+    }
+
     read (iId) {
         const oData = {
             ID: iId

@@ -26,6 +26,21 @@ class _DetailModel extends Model {
         });
     }
 
+    replaceReceiptLines (aResult) {
+        const iId = ReceiptModel.getId();
+        LineModel.deleteReceipt(iId);
+
+        this.appendReceiptLines(aResult);
+    }
+
+    appendReceiptLines (aResult) {
+        const iId = ReceiptModel.getId();
+
+        aResult.forEach(fValue => {
+            LineModel.addEntry(iId, fValue);
+        });
+    }
+
     readReceipt (iId) {
         this.set(["no-receipt"], false);
         ReceiptModel.read(iId);
