@@ -64,6 +64,10 @@ class _DetailModel extends Model {
     setImageSrc (sPath) {
         this.set(["imageSrc"], sPath);
     }
+
+    setBusy (bBusy) {
+        this.set(["busy"], bBusy);
+    }
 }
 
 export const DetailModel = new _DetailModel({
@@ -79,5 +83,6 @@ export const DetailModel = new _DetailModel({
     "load-i18n": ["scanner.load"],
     "start-i18n": ["scanner.start"],
     "dnd-i18n": ["scanner.dnd"],
-    "imageSrc": ""
+    "imageSrc": "",
+    "busy": false
 });

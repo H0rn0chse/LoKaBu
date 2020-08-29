@@ -2,6 +2,7 @@ import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { loadCss } from "../../common/Utils.js";
 import { ImageSelection } from "../common/ImageSelection.js";
+import { BusyIndicator } from "../common/BusyIndicator.js";
 
 loadCss("/renderer/view/detail/Scanner.css");
 
@@ -40,18 +41,29 @@ export class Scanner extends View {
                 );
         }
 
+        if (this.getProperty("busy")) {
+            oElement.appendNode(new DomElement("div")
+                .addClass("scanner-busyArea")
+                .appendNode(new BusyIndicator())
+            );
+        }
+
         return oElement.getNode();
     }
 
     onLoadImage (oEvent) {
-        this.handleEvent("loadImage", oEvent);
+        if (!this.getProperty("busy")) {
+            this.handleEvent("loadImage", oEvent);
+        }
     }
 
     onStartScanner (oEvent) {
-        oEvent.customData = {
-            image: this.getNodeById("image"),
-            selection: this.getNodeById("selection")
-        };
-        this.handleEvent("startScanner", oEvent);
+        if (!this.getProperty("busy")) {
+            oEvent.customData = {
+                image: this.getNodeById("image"),
+                selection: this.getNodeById("selection")
+            };
+            this.handleEvent("startScanner", oEvent);
+        }
     }
 };

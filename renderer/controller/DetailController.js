@@ -76,6 +76,7 @@ export class DetailController extends Controller {
         // Scanner
         oDetail
             .bindProperty("imageSrc", "viewModel", ["imageSrc"])
+            .bindProperty("busy", "viewModel", ["busy"])
             .bindProperty("load-i18n", "viewModel", ["load-i18n"])
             .bindProperty("start-i18n", "viewModel", ["start-i18n"])
             .bindProperty("dnd-i18n", "viewModel", ["dnd-i18n"]);
@@ -102,18 +103,20 @@ export class DetailController extends Controller {
     }
 
     onScannerResults (aResult) {
+        DetailModel.setBusy(false);
         ScannerResultDialog.show().then(oResult => {
             if (oResult.response === 0) { // replace
                 DetailModel.replaceReceiptLines(aResult);
             } else if (oResult.response === 1) { // append
                 DetailModel.appendReceiptLines(aResult);
             }
-        });
+        }).catch(() => {});
     }
 
     onStartScanner (oEvent) {
         const oData = oEvent.customData;
         EventBus.sendToCurrentWindow("tesseract-start", oData.image, oData.selection);
+        DetailModel.setBusy(true);
     }
 
     onLoadImage (oEvent) {
@@ -121,7 +124,7 @@ export class DetailController extends Controller {
             if (sPath) {
                 DetailModel.setImageSrc(sPath);
             }
-        });
+        }).catch(() => {});
     }
 
     onAccountChange (oEvent) {
