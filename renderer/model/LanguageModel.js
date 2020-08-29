@@ -28,7 +28,7 @@ const tempTranslations = [
     },
     {
         scriptCode: "scanner.dnd",
-        en_GB: "Drop you Image here",
+        en_GB: "Drop your Image here",
         de: "Bild hier ablegen"
     },
     {

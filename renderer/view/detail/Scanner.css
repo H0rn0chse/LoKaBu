@@ -23,6 +23,19 @@
     justify-content: center
 }
 
+.scanner-dropArea {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 0.5em);
+    height: calc(100% - 0.5em);
+    background: rgba(255, 255, 255, 0.8);
+
+    align-items: center;
+    justify-content: center
+}
+
 .scanner img{
     height: calc(100% - 0.5em);
     width: calc(100% - 0.5em);

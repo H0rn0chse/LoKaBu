@@ -10,6 +10,30 @@ export class Scanner extends View {
     constructor (...args) {
         super(...args);
         this.name = "ScannerView";
+
+        this.outerDragLevel = 0;
+        this.innerDragLevel = 0;
+
+        this.bodyListener = [{
+            event: "dragenter",
+            handler: this.onAppDragEnter.bind(this)
+        }, {
+            event: "dragend",
+            handler: this.onDragEnd.bind(this)
+        }, {
+            event: "dragleave",
+            handler: this.onAppDragLeave.bind(this)
+        }, {
+            event: "drop",
+            handler: this.onDragEnd.bind(this)
+        }, {
+            event: "dragover",
+            handler: this.onDragOver.bind(this)
+        }];
+
+        this.bodyListener.forEach(handler => {
+            document.body.addEventListener(handler.event, handler.handler, true);
+        });
     }
 
     render () {
@@ -27,6 +51,17 @@ export class Scanner extends View {
                     .setText(this.getTranslation("start-i18n"))
                     .addEventListener("click", this.onStartScanner, this)
                 )
+            )
+            .appendNode(new DomElement("div")
+                .setId("scanner-dropArea")
+                .addClass("scanner-dropArea")
+                .appendNode(new DomElement("div")
+                    .setText(this.getTranslation("dnd-i18n"))
+                )
+                .addEventListener("dragenter", this.onDragEnter, this)
+                .addEventListener("dragleave", this.onDragLeave, this)
+                .addEventListener("dragover", this.onDragOver, this)
+                .addEventListener("drop", this.onDrop, this)
             );
         if (this.getProperty("imageSrc")) {
             oElement
@@ -51,6 +86,77 @@ export class Scanner extends View {
         return oElement.getNode();
     }
 
+    onDragEnd () {
+        this.getNodeById("scanner-dropArea").style.display = "none";
+        this.outerDragLevel = 0;
+    }
+
+    onAppDragEnter (oEvent) {
+        this.getNodeById("scanner-dropArea").style.display = "flex";
+        this.outerDragLevel++;
+    }
+
+    onAppDragLeave () {
+        this.outerDragLevel--;
+        if (this.outerDragLevel === 0) {
+            this.getNodeById("scanner-dropArea").style.display = "none";
+        }
+    }
+
+    onDragOver (oEvent) {
+        oEvent.preventDefault();
+    }
+
+    onDragEnter (oEvent) {
+        this.getNodeById("scanner-dropArea").style.background = "rgba(var(--bg-element-base_rgb), 0.8)";
+        this.getNodeById("scanner-dropArea").style.color = "var(--element-font)";
+        this.innerDragLevel++;
+    }
+
+    onDragLeave () {
+        this.innerDragLevel--;
+
+        if (this.innerDragLevel === 0) {
+            this.getNodeById("scanner-dropArea").style.background = "";
+            this.getNodeById("scanner-dropArea").style.color = "";
+        }
+    }
+
+    onDrop (oEvent) {
+        oEvent.stopPropagation();
+        oEvent.preventDefault();
+
+        this.outerDragLevel = 0;
+        this.innerDragLevel = 0;
+        this.getNodeById("scanner-dropArea").style.background = "";
+        this.getNodeById("scanner-dropArea").style.color = "";
+        const aFiles = Array.from(oEvent.dataTransfer.items)
+            .filter(oItem => {
+                return oItem.kind === "file";
+            })
+            .map(oItem => {
+                return oItem.getAsFile();
+            })
+            .filter(oItem => {
+                const sFile = oItem.path.toUpperCase();
+                return sFile.endsWith(".PNG") || sFile.endsWith(".JPG") || sFile.endsWith(".JPEG");
+            });
+        if (aFiles.length) {
+            aFiles.sort();
+            oEvent.customData = {
+                file: aFiles[0].path
+            };
+            this.handleEvent("loadImage", oEvent);
+        }
+    }
+
+    destroy () {
+        this.bodyListener.forEach(handler => {
+            document.body.removeEventListener(handler.event, handler.handler);
+        });
+        super.destroy();
+    }
+
     onLoadImage (oEvent) {
         if (!this.getProperty("busy")) {
             this.handleEvent("loadImage", oEvent);
@@ -58,10 +164,14 @@ export class Scanner extends View {
     }
 
     onStartScanner (oEvent) {
-        if (!this.getProperty("busy")) {
+        const oSelection = this.getNodeById("selection");
+        const oImage = this.getNodeById("image");
+        const bBusy = this.getProperty("busy");
+
+        if (!bBusy && this.getProperty("imageSrc") && oSelection.style.width !== "" && oImage.src !== "") {
             oEvent.customData = {
-                image: this.getNodeById("image"),
-                selection: this.getNodeById("selection")
+                image: oImage,
+                selection: oSelection
             };
             this.handleEvent("startScanner", oEvent);
         }

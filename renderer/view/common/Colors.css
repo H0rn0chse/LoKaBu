@@ -1,8 +1,14 @@
 :root {
     --bg-element-base: #08559F;
+    --bg-element-base_rgb: 8, 85, 159;
     --bg-element-light2: #3D81C2;
+    --bg-element-light2_rgb: 61, 129, 194;
     --bg-element-light: #156CC0;
+    --bg-element-light_rgb: 21, 108, 192;
     --bg-element-dark: #064480;
+    --bg-element-dark_rgb: 6, 68, 128;
     --bg: white;
+    --bg_rgb: 255, 255, 255;
     --element-font: white;
+    --element-font_rgb: 255, 255, 255;
 }

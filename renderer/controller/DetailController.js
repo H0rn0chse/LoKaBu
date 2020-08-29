@@ -120,11 +120,16 @@ export class DetailController extends Controller {
     }
 
     onLoadImage (oEvent) {
-        OpenImageDialog.show().then(sPath => {
-            if (sPath) {
-                DetailModel.setImageSrc(sPath);
-            }
-        }).catch(() => {});
+        const sFile = oEvent.customData.file;
+        if (sFile) {
+            DetailModel.setImageSrc(sFile);
+        } else {
+            OpenImageDialog.show().then(sPath => {
+                if (sPath) {
+                    DetailModel.setImageSrc(sPath);
+                }
+            }).catch(() => {});
+        }
     }
 
     onAccountChange (oEvent) {
