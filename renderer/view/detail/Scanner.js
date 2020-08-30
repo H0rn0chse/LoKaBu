@@ -152,6 +152,7 @@ export class Scanner extends View {
 
     onLoadImage (oEvent) {
         if (!this.getProperty("busy")) {
+            oEvent.customData = {};
             this.handleEvent("loadImageOrFragment", oEvent);
         }
     }
