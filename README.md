@@ -29,10 +29,8 @@ You have to build (and sign) your platform-dependent build yourself or just use 
 
 ## Roadmap
   * Implementation of the analyitcal view
-  * Scanner for adding receipts
   * Unit tests and E2E tests
   * Automatic updates
-  * Documentation
 
 ## Contributions
   * The Logo was made by [Kirschdrache](https://www.deviantart.com/kirschdrache)

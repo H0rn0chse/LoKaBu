@@ -29,10 +29,8 @@ Du musst deinen plattformabhängigen Build selber bauen (und signieren) oder nut
 
 ## Weitere Pläne
   * Implementierung des Analysesicht
-  * Scanner zur Unterstützung beim Anlegen neuer Belege
   * Unit Tests und E2E Tests
   * Automatische Updates
-  * Dokumentation
 
 ## Mitwirkende
   * Das Logo wurde von [Kirschdrache](https://www.deviantart.com/kirschdrache) erstellt
