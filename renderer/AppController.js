@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { HeaderController } from "./controller/header/HeaderController.js";
+import { HeaderController } from "./controller/HeaderController.js";
 import { Controller } from "./controller/common/Controller.js";
-import { DetailController } from "./controller/detail/DetailController.js";
-import { SettingsController } from "./controller/settings/SettingsController.js";
-import { AnalysisController } from "./controller/analysis/AnalysisController.js";
-import { HistoryController } from "./controller/history/HistoryController.js";
+import { DetailController } from "./controller/DetailController.js";
+import { SettingsController } from "./controller/SettingsController.js";
+import { AnalysisController } from "./controller/AnalysisController.js";
+import { HistoryController } from "./controller/HistoryController.js";
 import { EventBus } from "./EventBus.js";
 import { DialogImports } from "./DialogImports.js";
+import { TesseractController } from "./controller/TesseractController.js";
 const { remote } = require("electron");
 
 export class AppController extends Controller {
@@ -29,6 +30,9 @@ export class AppController extends Controller {
 
         const oSettings = this.createContainer("settings");
         oSettings.setContent(new SettingsController(oSettings.getNode()));
+
+        const oTesseract = this.createContainer("tesseract");
+        oTesseract.setContent(new TesseractController(oTesseract.getNode()));
 
         EventBus.listen("blockApp", this.blockApp, this);
         EventBus.listen("unblockApp", this.unblockApp, this);

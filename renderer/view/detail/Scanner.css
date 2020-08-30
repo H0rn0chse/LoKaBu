@@ -1,0 +1,47 @@
+.scanner {
+    position: relative;
+    margin-top: 0;
+    height: calc(100% - 2em);
+    width: calc(100% - 2em);
+}
+
+.scanner-buttonArea {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.scanner-busyArea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(192,192,192, 0.8);
+    width: calc(100% - 0.5em);
+    height: calc(100% - 0.5em);
+
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.scanner-dropArea {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 0.5em);
+    height: calc(100% - 0.5em);
+    background: rgba(255, 255, 255, 0.8);
+
+    align-items: center;
+    justify-content: center
+}
+
+.scanner img{
+    height: calc(100% - 0.5em);
+    width: calc(100% - 0.5em);
+}
+
+.scanner canvas{
+    position: absolute;
+    z-index: -1;
+}

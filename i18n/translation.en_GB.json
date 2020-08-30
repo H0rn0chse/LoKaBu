@@ -80,5 +80,13 @@
     "about.sharedDatabaseVersion": "Version of shared database:",
     "about.license": "License",
     "about.contributions": "Contributions",
-    "about.close": "Close"
+    "about.close": "Close",
+    "scanner.load": "Load Image",
+    "scanner.start": "Start Scanner",
+    "scanner.dnd": "Drop your Image here",
+    "scanner.result": "The scanning process was successfull",
+    "scanner.append": "Append to receipt lines",
+    "scanner.replace": "Replace all receipt lines",
+    "scanner.import": "You are tyring to import $count receipts.\nDo you want to proceed?",
+    "scanner.import.success": "The import of the receipt fragments was successful."
 }

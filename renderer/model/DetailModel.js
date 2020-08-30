@@ -26,6 +26,21 @@ class _DetailModel extends Model {
         });
     }
 
+    replaceReceiptLines (aResult) {
+        const iId = ReceiptModel.getId();
+        LineModel.deleteReceipt(iId);
+
+        this.appendReceiptLines(aResult);
+    }
+
+    appendReceiptLines (aResult) {
+        const iId = ReceiptModel.getId();
+
+        aResult.forEach(fValue => {
+            LineModel.addEntry(iId, fValue);
+        });
+    }
+
     readReceipt (iId) {
         this.set(["no-receipt"], false);
         ReceiptModel.read(iId);
@@ -45,6 +60,18 @@ class _DetailModel extends Model {
         this.bOpenReceipt = true;
         EventBus.sendToDatabase("helper-firstReceipt");
     }
+
+    setImageSrc (sPath) {
+        this.set(["imageSrc"], sPath);
+    }
+
+    setBusy (bBusy) {
+        this.set(["busy"], bBusy);
+    }
+
+    importFragments (aFiles) {
+        EventBus.sendToDatabase("fragment-import", aFiles);
+    }
 }
 
 export const DetailModel = new _DetailModel({
@@ -56,5 +83,10 @@ export const DetailModel = new _DetailModel({
     "date-i18n": ["common.date"],
     "store-i18n": ["common.store"],
     "no-receipt": false,
-    "no-receipt-i18n": ["detail.noReceipt"]
+    "no-receipt-i18n": ["detail.noReceipt"],
+    "load-i18n": ["scanner.load"],
+    "start-i18n": ["scanner.start"],
+    "dnd-i18n": ["scanner.dnd"],
+    "imageSrc": "",
+    "busy": false
 });

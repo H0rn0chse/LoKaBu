@@ -1,6 +1,6 @@
-import { Controller } from "../common/Controller.js";
-import { AnalysisView } from "../../view/analysis/AnalysisView.js";
-import { EventBus } from "../../EventBus.js";
+import { Controller } from "./common/Controller.js";
+import { AnalysisView } from "../view/analysis/AnalysisView.js";
+import { EventBus } from "../EventBus.js";
 
 export class AnalysisController extends Controller {
     constructor (oDomRef) {

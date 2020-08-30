@@ -7,10 +7,11 @@ class _LinesTable extends Table {
     }
 
     createSqlAction (oLine) {
+        oLine.Account = oLine.Account === undefined ? null : oLine.Account;
         const sSql = `
         INSERT INTO Lines
-            (Receipt, Value, Billing, Type)
-        Values ($Receipt, $Value, $Billing, $Type)
+            (Receipt, Value, Billing, Type, Account)
+        Values ($Receipt, $Value, $Billing, $Type, $Account)
         `;
         return DatabaseManager.get()
             .prepare(sSql)

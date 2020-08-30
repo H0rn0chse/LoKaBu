@@ -16,16 +16,17 @@ class _LineModel extends DatabaseModel {
         EventBus.sendToDatabase(`${this.table}-read`, oData);
     }
 
-    addEntry (iId) {
+    addEntry (iId, fValue = 0) {
         const oEntry = {
             Receipt: iId,
-            Value: 0,
+            Value: fValue.toFixed(2),
             Billing: SettingsModel.getDefault("Person"),
             Type: SettingsModel.getDefault("Type")
         };
-        EventBus.sendToDatabase("lines-create", oEntry);
+        this.push(["lines"], deepClone(oEntry));
 
-        this.push(["lines"], oEntry);
+        oEntry.Value = parseInt(oEntry.Value * 100, 10);
+        EventBus.sendToDatabase("lines-create", oEntry);
     }
 
     updateEntry (iId, iReceipt, fValue, sBilling, sType) {

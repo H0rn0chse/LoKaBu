@@ -6,6 +6,26 @@ class _AccountTable extends Table {
         super("accounts");
     }
 
+    getOrCreate (sAccount) {
+        const sSql = `
+        SELECT ID
+        FROM Accounts
+        WHERE DisplayName = '${sAccount}'
+        `;
+        let oResult = DatabaseManager.get()
+            .prepare(sSql)
+            .get();
+        if (oResult) {
+            return oResult.ID;
+        }
+        const oAccount = {
+            DisplayName: sAccount,
+            Owner: 1
+        };
+        oResult = this.createSqlAction(oAccount);
+        return oResult.lastInsertRowid;
+    }
+
     createSqlAction (oAccount) {
         const sSql = `
         INSERT INTO Accounts

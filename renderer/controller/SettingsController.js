@@ -1,15 +1,15 @@
-import { Controller } from "../common/Controller.js";
-import { SettingsView } from "../../view/settings/SettingsView.js";
-import { EventBus } from "../../EventBus.js";
-import { AccountModel } from "../../model/AccountModel.js";
-import { StoreModel } from "../../model/StoreModel.js";
-import { PersonModel } from "../../model/PersonModel.js";
-import { TypeModel } from "../../model/TypeModel.js";
-import { SettingsModel } from "../../model/SettingsModel.js";
-import { Aggregation } from "../../common/Aggregation.js";
-import { CreateDatabaseDialog } from "../../dialogs/CreateDatabaseDialog.js";
-import { OpenDatabaseDialog } from "../../dialogs/OpenDatabaseDialog.js";
-import { AboutDialog } from "../../dialogs/AboutDialog.js";
+import { Controller } from "./common/Controller.js";
+import { SettingsView } from "../view/settings/SettingsView.js";
+import { EventBus } from "../EventBus.js";
+import { AccountModel } from "../model/AccountModel.js";
+import { StoreModel } from "../model/StoreModel.js";
+import { PersonModel } from "../model/PersonModel.js";
+import { TypeModel } from "../model/TypeModel.js";
+import { SettingsModel } from "../model/SettingsModel.js";
+import { Aggregation } from "../common/Aggregation.js";
+import { CreateDatabaseDialog } from "../dialogs/CreateDatabaseDialog.js";
+import { OpenDatabaseDialog } from "../dialogs/OpenDatabaseDialog.js";
+import { AboutDialog } from "../dialogs/AboutDialog.js";
 
 export class SettingsController extends Controller {
     constructor (oDomRef) {

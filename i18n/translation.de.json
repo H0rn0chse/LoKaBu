@@ -80,5 +80,13 @@
     "about.sharedDatabaseVersion": "Version der geteilten Datenbank:",
     "about.license": "Lizenz",
     "about.contributions": "Mitwirkende",
-    "about.close": "Schließen"
+    "about.close": "Schließen",
+    "scanner.load": "Bild laden",
+    "scanner.start": "Scanner starten",
+    "scanner.dnd": "Bild hier ablegen",
+    "scanner.result": "Der Scanprozess war erfolgreich",
+    "scanner.append": "An Belegpositionen anfügen",
+    "scanner.replace": "Alle Belegpositionen ersetzen",
+    "scanner.import": "Du versuchst $count Belege zu importieren.\nMöchtest du fortfahren?",
+    "scanner.import.success": "Der Import der Belegfragmente war erfolgreich."
 }
