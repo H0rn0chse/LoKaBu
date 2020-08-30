@@ -135,19 +135,12 @@ export class Scanner extends View {
                 return oItem.kind === "file";
             })
             .map(oItem => {
-                return oItem.getAsFile();
-            })
-            .filter(oItem => {
-                const sFile = oItem.path.toUpperCase();
-                return sFile.endsWith(".PNG") || sFile.endsWith(".JPG") || sFile.endsWith(".JPEG");
+                return oItem.getAsFile().path;
             });
-        if (aFiles.length) {
-            aFiles.sort();
-            oEvent.customData = {
-                file: aFiles[0].path
-            };
-            this.handleEvent("loadImage", oEvent);
-        }
+        oEvent.customData = {
+            files: aFiles
+        };
+        this.handleEvent("loadImageOrFragment", oEvent);
     }
 
     destroy () {
@@ -159,7 +152,7 @@ export class Scanner extends View {
 
     onLoadImage (oEvent) {
         if (!this.getProperty("busy")) {
-            this.handleEvent("loadImage", oEvent);
+            this.handleEvent("loadImageOrFragment", oEvent);
         }
     }
 

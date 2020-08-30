@@ -11,6 +11,8 @@ import { ReceiptModel } from "../model/ReceiptModel.js";
 import { LineModel } from "../model/LineModel.js";
 import { OpenImageDialog } from "../dialogs/OpenImageDialog.js";
 import { ScannerResultDialog } from "../dialogs/ScannerResultDialog.js";
+import { ImportFragmentDialog } from "../dialogs/ImportFragmentDialog.js";
+import { ImportFragmentSuccessDialog } from "../dialogs/ImportFragmentSuccessDialog.js";
 
 export class DetailController extends Controller {
     constructor (oDomRef) {
@@ -91,11 +93,12 @@ export class DetailController extends Controller {
             .addEventListener("storeChange", this.onStoreChange, this)
             .addEventListener("new", this.onNew, this)
             .addEventListener("delete", this.onDelete, this)
-            .addEventListener("loadImage", this.onLoadImage, this)
+            .addEventListener("loadImageOrFragment", this.onLoadImageOrFragment, this)
             .addEventListener("startScanner", this.onStartScanner, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
         EventBus.listen("tesseract-result", this.onScannerResults, this);
+        EventBus.listen("fragment-succuess", this.onFragmentSuccess, this);
     }
 
     onNavigation (sSection) {
@@ -119,10 +122,26 @@ export class DetailController extends Controller {
         DetailModel.setBusy(true);
     }
 
-    onLoadImage (oEvent) {
-        const sFile = oEvent.customData.file;
-        if (sFile) {
-            DetailModel.setImageSrc(sFile);
+    onLoadImageOrFragment (oEvent) {
+        const aFiles = oEvent.customData.files;
+        if (Array.isArray(aFiles)) {
+            const aImageFiles = aFiles.filter(sItem => {
+                const sFile = sItem.toUpperCase();
+                return sFile.endsWith(".PNG") || sFile.endsWith(".JPG") || sFile.endsWith(".JPEG");
+            });
+            const aImportFiles = aFiles.filter(sItem => {
+                const sFile = sItem.toUpperCase();
+                return sFile.endsWith(".FRAGMENT.XML");
+            });
+
+            if (aImageFiles.length) {
+                aImageFiles.sort();
+                DetailModel.setImageSrc(aImageFiles[0]);
+            } else if (aImportFiles.length) {
+                ImportFragmentDialog.show(aImportFiles.length).then(() => {
+                    DetailModel.importFragments(aImportFiles);
+                }).catch(() => {});
+            }
         } else {
             OpenImageDialog.show().then(sPath => {
                 if (sPath) {
@@ -130,6 +149,10 @@ export class DetailController extends Controller {
                 }
             }).catch(() => {});
         }
+    }
+
+    onFragmentSuccess (oEvent) {
+        ImportFragmentSuccessDialog.show().catch(() => {});
     }
 
     onAccountChange (oEvent) {

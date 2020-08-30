@@ -68,6 +68,10 @@ class _DetailModel extends Model {
     setBusy (bBusy) {
         this.set(["busy"], bBusy);
     }
+
+    importFragments (aFiles) {
+        EventBus.sendToDatabase("fragment-import", aFiles);
+    }
 }
 
 export const DetailModel = new _DetailModel({
