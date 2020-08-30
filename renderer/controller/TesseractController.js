@@ -6,8 +6,10 @@ import { Deferred } from "../common/Deferred.js";
 
 const { createWorker, PSM, OEM } = require('tesseract.js');
 const path = require("path");
+const { remote } = require('electron');
 
-const sTrainedData = path.join(__dirname, "./traineddata");
+const sUserData = remote.app.getPath("userData");
+const sTrainedData = path.join(sUserData, "./traineddata");
 
 export class TesseractController extends Controller {
     constructor (oDomRef) {
