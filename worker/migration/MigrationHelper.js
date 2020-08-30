@@ -97,6 +97,8 @@ class _MigrationHelper {
                     oMin = oDbVersion;
                 }
 
+                console.log("Minimum:", oMin.toString(), "Current:", oDbVersion.toString());
+
                 // database needs upgrade
                 if (oDbVersion.isSmaller(oMin)) {
                     const oVersions = {

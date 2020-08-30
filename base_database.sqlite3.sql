@@ -5,25 +5,16 @@ CREATE TABLE IF NOT EXISTS "Receipts" (
 	"Account"	INTEGER NOT NULL,
 	"Comment"	TEXT,
 	"Store"	INTEGER,
-	PRIMARY KEY("ID"),
+	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
 	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
-	FOREIGN KEY("Account") REFERENCES "Accounts"("ID")
-);
-CREATE TABLE IF NOT EXISTS "Lines" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"Receipt"	INTEGER NOT NULL,
-	"Value"	INTEGER NOT NULL,
-	"Billing"	INTEGER NOT NULL,
-	"Type"	INTEGER NOT NULL,
-	PRIMARY KEY("ID"),
-	FOREIGN KEY("Type") REFERENCES "Types"("ID")
+	PRIMARY KEY("ID")
 );
 CREATE TABLE IF NOT EXISTS "Accounts" (
 	"ID"	INTEGER NOT NULL UNIQUE,
 	"DisplayName"	TEXT NOT NULL,
 	"Owner"	INTEGER NOT NULL,
-	PRIMARY KEY("ID"),
-	FOREIGN KEY("Owner") REFERENCES "Persons"("ID")
+	FOREIGN KEY("Owner") REFERENCES "Persons"("ID"),
+	PRIMARY KEY("ID")
 );
 CREATE TABLE IF NOT EXISTS "Persons" (
 	"ID"	INTEGER NOT NULL UNIQUE,
@@ -49,18 +40,29 @@ CREATE TABLE IF NOT EXISTS "Settings" (
 	"PageItems"	INTEGER NOT NULL,
 	"Language"	TEXT,
 	"DefaultDir"	TEXT,
-	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
-	FOREIGN KEY("Person") REFERENCES "Persons"("ID"),
 	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
-	FOREIGN KEY("Store") REFERENCES "Stores"("ID")
+	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
+	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
+	FOREIGN KEY("Person") REFERENCES "Persons"("ID")
+);
+CREATE TABLE IF NOT EXISTS "Lines" (
+	"ID"	INTEGER NOT NULL UNIQUE,
+	"Receipt"	INTEGER NOT NULL,
+	"Value"	INTEGER NOT NULL,
+	"Billing"	INTEGER NOT NULL,
+	"Type"	INTEGER NOT NULL,
+	"Account"	INTEGER,
+	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
+	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
+	PRIMARY KEY("ID")
 );
 INSERT INTO "Receipts" VALUES (1,1582156800,1,'This Receipts is here for test purposes',1);
-INSERT INTO "Lines" VALUES (1,1,4200,1,1);
 INSERT INTO "Accounts" VALUES (1,'TestAccount',1);
 INSERT INTO "Persons" VALUES (1,'TestPerson');
 INSERT INTO "Stores" VALUES (1,'TestStore');
 INSERT INTO "Types" VALUES (1,'TestType');
-INSERT INTO "Settings" VALUES (1,1,1,1,'3.0',10,'en_GB','');
+INSERT INTO "Settings" VALUES (1,1,1,1,'3.1',10,'en_GB','');
+INSERT INTO "Lines" VALUES (1,1,4200,1,1,NULL);
 CREATE VIEW view_ReceiptList AS
 	SELECT
 		r.ID as ID,

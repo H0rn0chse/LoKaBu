@@ -11,14 +11,14 @@ export class Version {
 
     isGreater (oVersion) {
         return this.major > oVersion.major ||
-        (this.major > oVersion.major && this.minor > oVersion.minor) ||
-        (this.major > oVersion.major && this.minor > oVersion.minor && this.patch > oVersion.patch);
+        (this.major >= oVersion.major && this.minor > oVersion.minor) ||
+        (this.major >= oVersion.major && this.minor >= oVersion.minor && this.patch > oVersion.patch);
     }
 
     isSmaller (oVersion) {
         return this.major < oVersion.major ||
-        (this.major < oVersion.major && this.minor < oVersion.minor) ||
-        (this.major < oVersion.major && this.minor < oVersion.minor && this.patch < oVersion.patch);
+        (this.major <= oVersion.major && this.minor < oVersion.minor) ||
+        (this.major <= oVersion.major && this.minor <= oVersion.minor && this.patch < oVersion.patch);
     }
 
     isEqual (oVersion) {
