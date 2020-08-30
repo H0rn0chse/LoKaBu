@@ -16,36 +16,6 @@ const tempTranslations = [
         en_GB: "",
         de: ""
     } */
-    {
-        scriptCode: "scanner.load",
-        en_GB: "Load Image",
-        de: "Bild laden"
-    },
-    {
-        scriptCode: "scanner.start",
-        en_GB: "Start Scanner",
-        de: "Scanner starten"
-    },
-    {
-        scriptCode: "scanner.dnd",
-        en_GB: "Drop your Image here",
-        de: "Bild hier ablegen"
-    },
-    {
-        scriptCode: "scanner.result",
-        en_GB: "The scanning process was successfull",
-        de: "Der Scanprozess war erfolgreich"
-    },
-    {
-        scriptCode: "scanner.append",
-        en_GB: "Append to receipt lines",
-        de: "An Belegpositionen anfügen"
-    },
-    {
-        scriptCode: "scanner.replace",
-        en_GB: "Replace all receipt lines",
-        de: "Alle Belegpositionen ersetzen"
-    }
 ];
 
 class _LanguageModel extends Model {
