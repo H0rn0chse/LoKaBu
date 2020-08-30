@@ -6,6 +6,25 @@ class _PersonsTable extends Table {
         super("persons");
     }
 
+    getOrCreate (sPerson) {
+        const sSql = `
+        SELECT ID
+        FROM Persons
+        WHERE DisplayName = '${sPerson}'
+        `;
+        let oResult = DatabaseManager.get()
+            .prepare(sSql)
+            .get();
+        if (oResult) {
+            return oResult.ID;
+        }
+        const oPerson = {
+            DisplayName: sPerson
+        };
+        oResult = this.createSqlAction(oPerson);
+        return oResult.lastInsertRowid;
+    }
+
     createSqlAction (oPerson) {
         const sSql = `
         INSERT INTO Persons

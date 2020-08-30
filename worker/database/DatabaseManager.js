@@ -1,5 +1,6 @@
 import { EventBus } from "../../renderer/EventBus.js";
 import { MigrationHelper } from "../migration/MigrationHelper.js";
+import { FragmentHelper } from "../migration/FragmentHelper.js";
 import { Database } from "../common/Database.js";
 
 const path = require("path");
@@ -14,6 +15,7 @@ class _DatabaseManager {
 
         EventBus.listen("database-open", this.handleOpen, this);
         EventBus.listen("database-create", this.handleOpen, this);
+        EventBus.listen("fragment-import", FragmentHelper.import, FragmentHelper);
     }
 
     init () {

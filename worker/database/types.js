@@ -7,6 +7,25 @@ class _TypesTable extends Table {
         super("types");
     }
 
+    getOrCreate (sType) {
+        const sSql = `
+        SELECT ID
+        FROM Types
+        WHERE DisplayName = '${sType}'
+        `;
+        let oResult = DatabaseManager.get()
+            .prepare(sSql)
+            .get();
+        if (oResult) {
+            return oResult.ID;
+        }
+        const oType = {
+            DisplayName: sType
+        };
+        oResult = this.createSqlAction(oType);
+        return oResult.lastInsertRowid;
+    }
+
     createSqlAction (oType) {
         const sSql = `
         INSERT INTO Types

@@ -6,6 +6,25 @@ class _StoresTable extends Table {
         super("stores");
     }
 
+    getOrCreate (sStore) {
+        const sSql = `
+        SELECT ID
+        FROM Stores
+        WHERE DisplayName = '${sStore}'
+        `;
+        let oResult = DatabaseManager.get()
+            .prepare(sSql)
+            .get();
+        if (oResult) {
+            return oResult.ID;
+        }
+        const oStore = {
+            DisplayName: sStore
+        };
+        oResult = this.createSqlAction(oStore);
+        return oResult.lastInsertRowid;
+    }
+
     createSqlAction (oStore) {
         const sSql = `
         INSERT INTO Stores
