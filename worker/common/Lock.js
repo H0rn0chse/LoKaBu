@@ -8,6 +8,9 @@ export class Lock {
     }
 
     abort (oEvent, sFileName) {
+        if (!fs.existsSync(this.lockFilePath)) {
+            return this.fnAbort();
+        }
         if (this.getTimestamp() !== this.since) {
             this.fnAbort();
         }
