@@ -5,29 +5,29 @@ DROP VIEW view_ReceiptList;
 /*================================================================================
     Schema of Lines table changed
 ================================================================================*/
-ALTER TABLE "Lines" RENAME TO "Lines_temp";
+ALTER TABLE Lines RENAME TO Lines_temp;
 -- Apply schema of new Lines table
-CREATE TABLE "Lines" (
-	"ID"	INTEGER NOT NULL UNIQUE,
-	"Receipt"	INTEGER NOT NULL,
-	"Value"	INTEGER NOT NULL,
-	"Billing"	INTEGER NOT NULL,
-	"Type"	INTEGER NOT NULL,
-	"Account"	INTEGER,
-	PRIMARY KEY("ID"),
-	FOREIGN KEY("Type") REFERENCES "Types"("ID")
-	FOREIGN KEY("Account") REFERENCES "Accounts"("ID")
+CREATE TABLE Lines (
+	ID	INTEGER NOT NULL UNIQUE,
+	Receipt	INTEGER NOT NULL,
+	Value	INTEGER NOT NULL,
+	Billing	INTEGER NOT NULL,
+	Type	INTEGER NOT NULL,
+	Account	INTEGER,
+	PRIMARY KEY(ID),
+	FOREIGN KEY(Type) REFERENCES Types(ID)
+	FOREIGN KEY(Account) REFERENCES Accounts(ID)
 );
 -- copy old data to new table
-INSERT INTO "Lines"("ID", "Receipt", "Value", "Billing", "Type")
-SELECT "ID", "Receipt", "Value", "Billing", "Type"
-FROM "Lines_temp";
+INSERT INTO Lines(ID, Receipt, Value, Billing, Type)
+SELECT ID, Receipt, Value, Billing, Type
+FROM Lines_temp;
 -- Delete temporary table
-DROP TABLE "Lines_temp";
+DROP TABLE Lines_temp;
 
 -- Update version
-UPDATE "Settings"
-SET "Version" = "3.1";
+UPDATE Settings
+SET Version = '3.1';
 
 /*================================================================================
     Restore Views

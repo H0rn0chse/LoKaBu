@@ -3,13 +3,13 @@ BEGIN TRANSACTION;
 DROP VIEW view_ReceiptList;
 
 -- Update version
-UPDATE "Settings"
-SET "Version" = "3.0";
+UPDATE Settings
+SET Version = '3.0';
 
 /*================================================================================
     Translations got removed from table
 ================================================================================*/
-DROP TABLE "i18n";
+DROP TABLE i18n;
 
 /*================================================================================
     Restore Views
