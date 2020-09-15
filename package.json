@@ -64,8 +64,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^7.1.0",
-    "d3": "^5.15.0",
-    "string-math": "^1.2.1",
+    "chart.js": "^2.9.3",
     "tesseract.js": "^2.1.1"
   },
   "devDependencies": {
