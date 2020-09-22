@@ -57,7 +57,7 @@ export class BarChart extends DomElement {
                                     return label;
                                 }
                                 const sTranslation = this.translateMonth(aMonth[0]);
-                                return label.replace(aMonth[0], sTranslation, 'g' );
+                                return label.replace(aMonth[0], sTranslation, "g");
                             }.bind(this)
                         }
                     }]

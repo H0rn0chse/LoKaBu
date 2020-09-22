@@ -16,6 +16,15 @@ const tempTranslations = [
         en_GB: "",
         de: ""
     } */
+    {
+        scriptCode: "analysis.chart.line",
+        en_GB: "Line chart",
+        de: "Liniendiagramm"
+    }, {
+        scriptCode: "analysis.chart.bar",
+        en_GB: "Bar chart",
+        de: "Balkendiagramm"
+    }
 ];
 
 class _LanguageModel extends Model {
