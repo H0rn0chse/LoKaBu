@@ -21,6 +21,7 @@ CREATE VIEW view_Analysis AS
     FROM Lines l
         LEFT JOIN Receipts r
             ON r.ID = l.Receipt
+    ORDER BY r.Date;
 
 COMMIT;
 PRAGMA foreign_keys=on;
