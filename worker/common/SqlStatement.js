@@ -42,7 +42,7 @@ export class SqlStatement {
         if (sSql === "") {
             sSql = this.default;
         }
-        if (this.sortColumn !== undefined && this.sortDirection !== undefined) {
+        if (this.sortColumn) {
             sSql += `ORDER BY ${this.sortColumn} ${this.sortDirection}\n`;
         }
         return sSql.replace(/\$SelectClause/g, this.tableName + ".*");
@@ -66,7 +66,7 @@ export class SqlStatement {
         `
             .replace(/\$Data/g, sSql.replace(/\$SelectClause/g, this.tableName + ".*"))
             .replace(/\$PageNumber/g, sPage);
-        if (this.sortColumn !== undefined && this.sortDirection !== undefined) {
+        if (this.sortColumn) {
             sSqlResult = sSqlResult.replace(/\$Sort/g, `ORDER BY ${this.sortColumn} ${this.sortDirection}`);
         } else {
             sSqlResult = sSqlResult.replace(/\$Sort/g, "");
