@@ -10,6 +10,7 @@ SET Version = '3.2';
 ================================================================================*/
 CREATE VIEW view_Analysis AS
     SELECT
+        l.ID as ID,
         strftime('%Y-%m', r.Date, 'unixepoch') as Date,
         r.Account as SourceAccount,
         r.Comment as Comment,
