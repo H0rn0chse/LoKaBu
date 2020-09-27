@@ -1,31 +1,44 @@
-// eslint-disable-next-line no-unused-vars
-import { EventBus } from "../../renderer/EventBus.js";
-// import { DatabaseManager } from "./DatabaseManager.js";
+import { Table } from "../common/Table.js";
+import { DatabaseManager } from "./DatabaseManager.js";
+import { SqlStatement } from "../common/SqlStatement.js";
+import { SqlFilterOption } from "../common/SqlFilterOption.js";
 
-function read () {
-    /* const sSql = `
-    SELECT *
-    FROM *
-    `;
-    return oDb.get().get(sSql); */
-};
+class _AnalysisView extends Table {
+    constructor () {
+        super("receiptAnalysis");
 
-EventBus.listen("receiptAnalysis-create", (oEvent, sMessage) => {
-    // todo error handling
-});
+        this.baseSelect = `
+        SELECT *
+        FROM view_Analysis
+        `;
+    }
 
-EventBus.listen("receiptAnalysis-read", (oEvent, sMessage) => {
-    EventBus.sendToBrowser("receiptAnalysis-read", read());
-});
+    readSqlAction (aFilter = [], sGroupColumn = "Type") {
+        const oSqlStatement = new SqlStatement("view_Analysis", "ID")
+            .setDefaultSql(this.baseSelect);
 
-EventBus.listen("receiptAnalysis-update", (oEvent, sMessage) => {
-    // todo error handling
-});
+        aFilter.forEach((oFilterOption) => {
+            oSqlStatement.addFilterOption(new SqlFilterOption(oFilterOption));
+        });
 
-EventBus.listen("receiptAnalysis-delete", (oEvent, sMessage) => {
-    // todo error handling
-});
+        const sSql = `
+        SELECT
+            Date as Date,
+            sum(Value) as Value,
+            ${sGroupColumn} as GroupValue,
+            '${sGroupColumn}' as GroupColumn
+        FROM (${oSqlStatement.getSql()})
+        GROUP BY Date, ${sGroupColumn}
+        `;
 
-export const receiptAnalysis = {
-    read
-};
+        const aEntries = DatabaseManager.get()
+            .prepare(sSql)
+            .all();
+
+        return {
+            data: aEntries
+        };
+    }
+}
+
+export const AnalysisView = new _AnalysisView();
