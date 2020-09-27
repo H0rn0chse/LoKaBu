@@ -17,13 +17,9 @@ const tempTranslations = [
         de: ""
     } */
     {
-        scriptCode: "analysis.chart.line",
-        en_GB: "Line chart",
-        de: "Liniendiagramm"
-    }, {
-        scriptCode: "analysis.chart.bar",
-        en_GB: "Bar chart",
-        de: "Balkendiagramm"
+        scriptCode: "common.account.transfer",
+        en_GB: "Transfer account",
+        de: "Transferkonto"
     }
 ];
 

@@ -5,37 +5,11 @@ const Chart = require("chart.js");
 export class BarChart extends DomElement {
     constructor () {
         super("canvas");
+
         this.chart = new Chart(this.getNode(), {
             type: "line",
             data: {
-                datasets: [
-                    {
-                        label: "Ernährung",
-                        data: [
-                            {
-                                x: 1577836800000, // "01.01.2020",
-                                y: 12
-                            }, {
-                                x: 1585785600000, // "02.04.2020",
-                                y: 19
-                            }, {
-                                x: 1588464000000, // "03.05.2020",
-                                y: 3
-                            }, {
-                                x: 1589241600000, // "12.05.2020",
-                                y: 5
-                            }, {
-                                x: 1593993600000, // "06.07.2020",
-                                y: -12
-                            }, {
-                                x: 1598745600000, // "30.08.2020",
-                                y: 3
-                            }
-                        ],
-                        backgroundColor: "lightgreen",
-                        borderColor: "green"
-                    }
-                ]
+                datasets: []
             },
             options: {
                 scales: {
@@ -75,6 +49,12 @@ export class BarChart extends DomElement {
                 }
             }
         });
+    }
+
+    setData (aData) {
+        this.chart.data.datasets = aData;
+        this.chart.update();
+        return this;
     }
 
     translateMonth (sMonth) {

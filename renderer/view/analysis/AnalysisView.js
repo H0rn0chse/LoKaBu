@@ -4,6 +4,7 @@ import { BarChart } from "./BarChart.js";
 import { loadCss } from "../../common/Utils.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
+import { FilterView } from "../../filter/common/FilterView.js";
 
 loadCss("/renderer/view/Analysis/AnalysisView.css");
 
@@ -15,17 +16,28 @@ export class AnalysisView extends View {
                 .appendNode(new DomElement("div")
                     .addClass("analysis-settings")
                     .appendNode(new DomElement("select")
-                        .insertAggregation(this, "chartTypes", DropdownItem)
-                        .addEventListener("change", this.onTypeChange, this)
+                        .insertAggregation(this, "groupItems", DropdownItem)
+                        .addEventListener("change", this.onGroupChange, this)
+                        .setValue(this.getProperty("selectedGroup"))
                     )
-                    .appendNode(new DomElement("p")
+                    .appendNode(new DomElement("div")
                         .addClass("analysis-filter")
-                        .setText("analysis-filter")
+                        .appendNode(new DomElement("div")
+                            .addClass("analysis-filter-scroll")
+                            .insertAggregation(this, "filter", FilterView, this.addGenericListenerToChild.bind(this))
+                        )
+                        .appendNode(new DomElement("div")
+                            .setText("+")
+                            .addClass("buttonCircle")
+                            .addEventListener("click", this.handleEvent.bind(this, "addFilter"))
+                        )
                     )
                 )
                 .appendNode(new DomElement("div")
                     .addClass("analysis-chart")
-                    .appendNode(new BarChart())
+                    .appendNode(new BarChart()
+                        .setData(this.getProperty("data"))
+                    )
                 )
             )
             .getNode();
@@ -33,7 +45,10 @@ export class AnalysisView extends View {
         return oNode;
     }
 
-    onTypeChange (oEvent) {
-        this.handleEvent("typeChange", oEvent);
+    onGroupChange (oEvent) {
+        oEvent.customData = {
+            group: oEvent.target.value
+        };
+        this.handleEvent("groupChange", oEvent);
     }
 };
