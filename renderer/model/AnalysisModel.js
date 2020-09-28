@@ -88,6 +88,7 @@ class _AnalysisModel extends DatabaseModel {
 }
 
 export const AnalysisModel = new _AnalysisModel({
+    "group-i18n": ["analysis.grouping"],
     filter: [],
     group: [{
         id: 0,

@@ -18,6 +18,7 @@ export class AnalysisController extends Controller {
 
         // settings
         oAnalysis
+            .bindProperty("group-i18n", "viewModel", ["group-i18n"])
             .bindAggregation("groupItems", new Aggregation("viewModel", ["group"])
                 .bindProperty("value", "viewModel", ["id"])
                 .bindProperty("i18n", "viewModel", ["i18n"])

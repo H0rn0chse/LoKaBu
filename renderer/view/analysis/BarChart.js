@@ -48,7 +48,7 @@ export class BarChart extends DomElement {
                         title: (tooltipItems, data) => {
                             const oDataset = data.datasets[tooltipItems[0].datasetIndex];
                             const dDate = new Date(oDataset.data[tooltipItems[0].index].x);
-                            return `${oDataset.label} ${dDate.getFullYear()}-${dDate.getMonth().toString().padStart(2, "0")}:`;
+                            return `${oDataset.label} ${dDate.getFullYear()}-${(dDate.getMonth() + 1).toString().padStart(2, "0")}:`;
                         },
                         label: (tooltipItem, data) => {
                             var iCount = parseFloat(tooltipItem.value, 10);

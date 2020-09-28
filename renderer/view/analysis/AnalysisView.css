@@ -3,11 +3,17 @@
 }
 
 .analysis-settings {
+    margin-top: 2em;
     width: 30%;
 }
 
+.analysis-settings > *{
+    margin: 0.5em;
+}
+
 .analysis-chart {
-    width: 70%;
+    width: 65%;
+    padding: 2em;
 }
 
 .analysis-filter {
@@ -19,7 +25,7 @@
 }
 
 .analysis-filter-scroll {
-    max-height: 7.5em;
+    max-height: 20em;
     overflow: scroll;
     overflow-x: hidden;
 }
