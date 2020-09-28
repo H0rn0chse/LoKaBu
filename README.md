@@ -27,11 +27,6 @@ There is the possibilty to add new languages. Currently the following languages 
 ## Usage on other Platforms then Windows
 You have to build (and sign) your platform-dependent build yourself or just use this repository locally.
 
-## Roadmap
-  * Implementation of the analyitcal view
-  * Unit tests and E2E tests
-  * Automatic updates
-
 ## Contributions
   * The Logo was made by [Kirschdrache](https://www.deviantart.com/kirschdrache)
   * The busy indicator was made available by loading.io/css/
@@ -39,6 +34,7 @@ You have to build (and sign) your platform-dependent build yourself or just use 
 ## Screenshots
   <img src="./docu/screenshots/details.png" title="Receipt details" />
   <img src="./docu/screenshots/history.png" title="Receipt history" />
+  <img src="./docu/screenshots/analysis.png" title="Analysis" />
   <img src="./docu/screenshots/settings.png" title="Settings" />
 
 [releaseBadge]: https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg
