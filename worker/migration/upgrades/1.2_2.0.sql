@@ -76,6 +76,47 @@ FROM Accounts_temp;
 DROP TABLE Accounts_temp;
 
 /*================================================================================
+    Update References
+================================================================================*/
+ALTER TABLE Receipts RENAME TO Receipts_temp;
+-- Recreate Receipts table
+CREATE TABLE Receipts (
+	ID	INTEGER NOT NULL UNIQUE,
+	Date	INTEGER NOT NULL,
+	Account	INTEGER NOT NULL,
+	Comment	TEXT,
+	Store	INTEGER,
+	FOREIGN KEY(Account) REFERENCES Accounts(ID),
+	FOREIGN KEY(Store) REFERENCES Stores(ID),
+	PRIMARY KEY(ID)
+);
+-- copy old data to new table
+INSERT INTO Receipts(ID, Date, Account, Comment, Store)
+SELECT ID, Date, Account, Comment, Store
+FROM Receipts_temp;
+-- Delete temporary table
+DROP TABLE Receipts_temp;
+
+ALTER TABLE Lines RENAME TO Lines_temp;
+-- Recreate Lines table
+CREATE TABLE Lines (
+	ID	INTEGER NOT NULL UNIQUE,
+	Receipt	INTEGER NOT NULL,
+	Value	INTEGER NOT NULL,
+	Billing	INTEGER NOT NULL,
+	Type	INTEGER NOT NULL,
+	PRIMARY KEY(ID),
+	FOREIGN KEY(Type) REFERENCES Types(ID)
+);
+-- copy old data to new table
+INSERT INTO Lines(ID, Receipt, Value, Billing, Type)
+SELECT ID, Receipt, Value, Billing, Type
+FROM Lines_temp;
+-- Delete temporary table
+DROP TABLE Lines_temp;
+
+
+/*================================================================================
     Schema of Settings table changed
 ================================================================================*/
 ALTER TABLE Settings RENAME TO Settings_temp;
