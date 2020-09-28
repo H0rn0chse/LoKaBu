@@ -45,12 +45,14 @@ class _DetailModel extends Model {
         this.set(["no-receipt"], false);
         ReceiptModel.read(iId);
         LineModel.readReceiptLines(iId);
+        this.setImageSrc("");
     }
 
     newReceipt () {
         this.set(["no-receipt"], false);
         ReceiptModel.addEntry();
         LineModel.emptyList();
+        this.setImageSrc("");
     }
 
     deleteReceipt (iId) {
