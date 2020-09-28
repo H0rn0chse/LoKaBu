@@ -28,6 +28,7 @@ class _AnalysisView extends Table {
             ${sGroupColumn} as GroupValue,
             '${sGroupColumn}' as GroupColumn
         FROM (${oSqlStatement.getSql()})
+        WHERE ${sGroupColumn} IS NOT NULL
         GROUP BY Date, ${sGroupColumn}
         `;
 
