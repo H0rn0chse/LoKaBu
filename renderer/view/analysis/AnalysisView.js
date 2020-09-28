@@ -9,6 +9,11 @@ import { FilterView } from "../../filter/common/FilterView.js";
 loadCss("/renderer/view/Analysis/AnalysisView.css");
 
 export class AnalysisView extends View {
+    constructor (...args) {
+        super(...args);
+        this.chart = new BarChart();
+    }
+
     render () {
         const oNode = new DomElement("section")
             .addClass("analysis")
@@ -35,7 +40,7 @@ export class AnalysisView extends View {
                 )
                 .appendNode(new DomElement("div")
                     .addClass("analysis-chart")
-                    .appendNode(new BarChart()
+                    .appendNode(this.chart
                         .setData(this.getProperty("data"))
                     )
                 )
