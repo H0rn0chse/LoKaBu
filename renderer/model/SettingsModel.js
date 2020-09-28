@@ -37,10 +37,10 @@ class _SettingsModel extends DatabaseModel {
     }
 
     processRead (oEvent, oData) {
+        const bLanguageChanged = this._hasLanguageChanged(oData);
         this.mergeObjectIntoData(oData);
 
-        if (this.updateLanguageModel) {
-            this.updateLanguageModel = false;
+        if (bLanguageChanged) {
             LanguageModel.update();
         }
         console.log("SettingsModel loaded");
@@ -54,6 +54,11 @@ class _SettingsModel extends DatabaseModel {
             LanguageModel.update();
         }
         console.log("SettingsModel updated");
+    }
+
+    _hasLanguageChanged (oData) {
+        const sLanguage = this.get(["Language"]);
+        return sLanguage !== oData.Language;
     }
 
     setLanguage (sLanguage) {

@@ -6,7 +6,7 @@ import { LineDetail } from "./LineDetail.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { loadCss } from "../../common/Utils.js";
 
-loadCss("/renderer/view/Detail/DetailView.css");
+loadCss("/renderer/view/detail/DetailView.css");
 
 export class DetailView extends MultiView {
     constructor () {

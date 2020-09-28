@@ -27,18 +27,14 @@ Es gibt die Möglichkeit die Übersetzungen um weitere Sprachen zu erweitern. De
 ## Nutzung auf anderen Platformen als Windows
 Du musst deinen plattformabhängigen Build selber bauen (und signieren) oder nutzt dieses Repository einfach lokal.
 
-## Weitere Pläne
-  * Implementierung des Analysesicht
-  * Unit Tests und E2E Tests
-  * Automatische Updates
-
 ## Mitwirkende
   * Das Logo wurde von [Kirschdrache](https://www.deviantart.com/kirschdrache) erstellt
   * Die Ladeanimation ist auf loading.io/css/ verfügbar
 
-## Bildschirmfots
+## Bildschirmaufnahmen
   <img src="./docu/screenshots/details_de.png" title="Beleg Details" />
   <img src="./docu/screenshots/history_de.png" title="Belegverlauf" />
+  <img src="./docu/screenshots/analysis_de.png" title="Auswertung" />
   <img src="./docu/screenshots/settings_de.png" title="SettEinstellungenings" />
 
 [releaseBadge]: https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg

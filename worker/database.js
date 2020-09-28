@@ -5,7 +5,7 @@ import { AccountTable } from "./database/accounts.js";
 import { I18n } from "./database/i18n.js";
 import { LinesTable } from "./database/lines.js";
 import { PersonsTable } from "./database/persons.js";
-import { receiptAnalysis } from "./database/receiptAnalysis.js";
+import { AnalysisView } from "./database/receiptAnalysis.js";
 import { ReceiptListView } from "./database/receiptList.js";
 import { ReceiptsTable } from "./database/receipts.js";
 import { SettingsTable } from "./database/settings.js";

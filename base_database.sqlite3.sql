@@ -40,9 +40,9 @@ CREATE TABLE IF NOT EXISTS "Settings" (
 	"PageItems"	INTEGER NOT NULL,
 	"Language"	TEXT,
 	"DefaultDir"	TEXT,
+	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
 	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
 	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
-	FOREIGN KEY("Store") REFERENCES "Stores"("ID"),
 	FOREIGN KEY("Person") REFERENCES "Persons"("ID")
 );
 CREATE TABLE IF NOT EXISTS "Lines" (
@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS "Lines" (
 	"Billing"	INTEGER NOT NULL,
 	"Type"	INTEGER NOT NULL,
 	"Account"	INTEGER,
-	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
 	FOREIGN KEY("Account") REFERENCES "Accounts"("ID"),
+	FOREIGN KEY("Type") REFERENCES "Types"("ID"),
 	PRIMARY KEY("ID")
 );
 INSERT INTO "Receipts" VALUES (1,1582156800,1,'This Receipts is here for test purposes',1);
@@ -61,7 +61,7 @@ INSERT INTO "Accounts" VALUES (1,'TestAccount',1);
 INSERT INTO "Persons" VALUES (1,'TestPerson');
 INSERT INTO "Stores" VALUES (1,'TestStore');
 INSERT INTO "Types" VALUES (1,'TestType');
-INSERT INTO "Settings" VALUES (1,1,1,1,'3.1',10,'en_GB','');
+INSERT INTO "Settings" VALUES (1,1,1,1,'3.2',10,'en_GB','');
 INSERT INTO "Lines" VALUES (1,1,4200,1,1,NULL);
 CREATE VIEW view_ReceiptList AS
 	SELECT
@@ -86,4 +86,19 @@ CREATE VIEW view_ReceiptList AS
 			GROUP BY l.Receipt
 		) as aggLines
 			ON aggLines.ReceiptID = r.ID;
+CREATE VIEW view_Analysis AS
+    SELECT
+		l.ID as ID,
+        strftime('%Y-%m', r.Date, 'unixepoch') as Date,
+        r.Account as SourceAccount,
+        r.Comment as Comment,
+        r.Store as Store,
+        l.Value as Value,
+        l.Account as TargetAccount,
+        l.Type as Type,
+        l.Billing as Person
+    FROM Lines l
+        LEFT JOIN Receipts r
+            ON r.ID = l.Receipt
+    ORDER BY r.Date;
 COMMIT;
