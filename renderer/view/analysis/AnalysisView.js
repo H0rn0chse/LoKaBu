@@ -6,7 +6,7 @@ import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
 import { FilterView } from "../../filter/common/FilterView.js";
 
-loadCss("/renderer/view/Analysis/AnalysisView.css");
+loadCss("/renderer/view/analysis/AnalysisView.css");
 
 export class AnalysisView extends View {
     constructor (...args) {
