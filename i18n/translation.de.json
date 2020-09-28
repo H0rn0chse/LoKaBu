@@ -88,5 +88,18 @@
     "scanner.append": "An Belegpositionen anfügen",
     "scanner.replace": "Alle Belegpositionen ersetzen",
     "scanner.import": "Du versuchst $count Belege zu importieren.\nMöchtest du fortfahren?",
-    "scanner.import.success": "Der Import der Belegfragmente war erfolgreich."
+    "scanner.import.success": "Der Import der Belegfragmente war erfolgreich.",
+    "common.account.transfer": "Transferkonto",
+    "time.month.Jan": "Jan",
+    "time.month.Feb": "Feb",
+    "time.month.Mar": "Mar",
+    "time.month.Apr": "Apr",
+    "time.month.May": "Mai",
+    "time.month.Jun": "Jun",
+    "time.month.Jul": "Jul",
+    "time.month.Aug": "Aug",
+    "time.month.Sep": "Sep",
+    "time.month.Oct": "Okt",
+    "time.month.Nov": "Nov",
+    "time.month.Dec": "Dez"
 }

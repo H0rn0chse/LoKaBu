@@ -88,5 +88,18 @@
     "scanner.append": "Append to receipt lines",
     "scanner.replace": "Replace all receipt lines",
     "scanner.import": "You are tyring to import $count receipts.\nDo you want to proceed?",
-    "scanner.import.success": "The import of the receipt fragments was successful."
+    "scanner.import.success": "The import of the receipt fragments was successful.",
+    "common.account.transfer": "Transfer account",
+    "time.month.Jan": "Jan",
+    "time.month.Feb": "Feb",
+    "time.month.Mar": "Mar",
+    "time.month.Apr": "Apr",
+    "time.month.May": "May",
+    "time.month.Jun": "Jun",
+    "time.month.Jul": "Jul",
+    "time.month.Aug": "Aug",
+    "time.month.Sep": "Sep",
+    "time.month.Oct": "Oct",
+    "time.month.Nov": "Nov",
+    "time.month.Dec": "Dec"
 }
