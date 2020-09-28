@@ -46,7 +46,7 @@ class _WindowManager {
 
     addMain (sPath) {
         const oMain = this._addWindow(sPath);
-        oMain.setMinimumSize(1316, 839); // with this the window takes 1300x800 in windows
+        oMain.setMinimumSize(1416, 939); // with this the window takes 1400x900 in windows
         oMain.maximize();
         oMain.show();
         this.main = oMain;
