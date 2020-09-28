@@ -22,11 +22,12 @@ lines-update | { \<number>ID, \<number>Receipt, \<number>Value, \<number>Billing
 persons-create | { \<string>DisplayName } | Signals to create a new person with the given object.
 persons-read | - | Signals to retrieve all persons.
 persons-update | { \<number>ID, \<string>DisplayName } | Signals to update a person with the given object.
+receiptAnalysis-read | \<ReceiptAnalysisFilter>[], \<string>GroupColumn | Signals to retrieve all receiptAnalysis entries.
+receiptList-read |  \<ReceiptListFilter>[], \<number>Page, \<string>SortColumn, \<string>SortDirection | Signals to retrieve a list of receipts according to the given parameters.
 receipts-create | { \<number>Date, \<number>Account, \<string>Comment, \<number>Store } | Signals to create a new receipt with the given data.
 receipts-delete | { \<number>ID } | Signals to delete the given receipt.
 receipts-read | { \<number>ID } | Signals to read the data of the given receipt.
 receipts-update | { \<number>ID, \<number>Date, \<number>Account, \<string>Comment, \<number>Store } | Signals to update a receipt with the given data.
-receiptList-read |  \<ReceiptListFilter>[], \<number>Page, \<string>SortColumn, \<string>SortDirection | Signals to retrieve a list of receipts according to the given parameters.
 settings-read | - | Signals to retrieve all settings.
 settings-update | { \<number>Person, \<number>Type, \<number>Account, \<number>Store, \<string>Language, \<string>DefaultDir } | Signals to update settings. Note settings are saved by database and not by user, except `DefaultDir` which is only saved for the current user.
 stores-create | { \<string>DisplayName } | Signals to create a new store with the given object.
@@ -61,11 +62,12 @@ lines-update | - |  Confirms the update of a new line.
 persons-create | { \<number>lastInsertRowid } | Confirms the creation of a new person.
 persons-read | { \<number>ID, \<string>DisplayName }[] | List of all persons.
 persons-update | - | Confirms the update of a person.
+receiptAnalysis-read |  { \<string>Date, \<number>Value, \<number>GroupValue, \<string>GroupColumn }[] | List of all receipts analysis entries which matched the search.
+receiptList-read |  { \<number>ID, \<number>Date, \<number>Account, \<number>Store, \<string>Comment, \<number>ReceiptSum, \<number>Types[], \<number>Persons[], \<number>LineValues[] }[] | List of all receipts which matched the search. Note: The amount of results is limited by the paging mechanism.
 receipts-create | { \<number>lastInsertRowid } | Confirms the creation of a new receipt.
 receipts-delete | - | Confirms the deletion of a receipt.
 receipts-read | {\<number>ID , \<number>Date, \<number>Account, \<string>Comment, \<number>Store } | Value of the requested receipt.
 receipts-update | - | Confirms the update of a receipt.
-receiptList-read |  { \<number>ID, \<number>Date, \<number>Account, \<number>Store, \<string>Comment, \<number>ReceiptSum, \<number>Types[], \<number>Persons[], \<number>LineValues[] }[] | List of all receipts which matched the search. Note: The amount of results is limited by the paging mechanism.
 settings-read | { \<number>Person, \<number>Type, \<number>Account, \<number>Store, \<string>Language, \<string>DefaultDir, \<string>CurrentDir } | Object with all settings values.
 settings-update | - | Confirms the update of the settings.
 stores-create | { \<number>lastInsertRowid } |Confirms the creation of a new store.
