@@ -1,5 +1,6 @@
 import { getColor } from "../../common/ColorUtils.js";
 import { deepClone } from "../../common/Utils.js";
+import { translateMonth } from "../../common/DateUtils.js";
 import { DomElement } from "../common/DomElement.js";
 
 const Chart = require("chart.js");
@@ -32,9 +33,9 @@ export class BarChart extends DomElement {
                                 if (!aMonth) {
                                     return label;
                                 }
-                                const sTranslation = this.translateMonth(aMonth[0]);
+                                const sTranslation = translateMonth(aMonth[0]);
                                 return label.replace(aMonth[0], sTranslation, "g");
-                            }.bind(this)
+                            }
                         }
                     }]
                 },
@@ -75,51 +76,5 @@ export class BarChart extends DomElement {
         this.chart.update();
 
         return this;
-    }
-
-    translateMonth (sMonth) {
-        let sResult;
-        switch (sMonth) {
-            case "Jan":
-                sResult = "Jan";
-                break;
-            case "Feb":
-                sResult = "Feb";
-                break;
-            case "Mar":
-                sResult = "Mar";
-                break;
-            case "Apr":
-                sResult = "Apr";
-                break;
-            case "May":
-                sResult = "Mai";
-                break;
-            case "Jun":
-                sResult = "Jun";
-                break;
-            case "Jul":
-                sResult = "Jul";
-                break;
-            case "Aug":
-                sResult = "Aug";
-                break;
-            case "Sep":
-                sResult = "Set";
-                break;
-            case "Oct":
-                sResult = "Okt";
-                break;
-            case "Nov":
-                sResult = "Nov";
-                break;
-            case "Dec":
-                sResult = "Dez";
-                break;
-            default:
-                sResult = sMonth;
-        }
-
-        return sResult;
     }
 };

@@ -20,6 +20,54 @@ const tempTranslations = [
         scriptCode: "common.account.transfer",
         en_GB: "Transfer account",
         de: "Transferkonto"
+    }, {
+        scriptCode: "time.month.Jan",
+        en_GB: "Jan",
+        de: "Jan"
+    }, {
+        scriptCode: "time.month.Feb",
+        en_GB: "Feb",
+        de: "Feb"
+    }, {
+        scriptCode: "time.month.Mar",
+        en_GB: "Mar",
+        de: "Mar"
+    }, {
+        scriptCode: "time.month.Apr",
+        en_GB: "Apr",
+        de: "Apr"
+    }, {
+        scriptCode: "time.month.May",
+        en_GB: "May",
+        de: "Mai"
+    }, {
+        scriptCode: "time.month.Jun",
+        en_GB: "Jun",
+        de: "Jun"
+    }, {
+        scriptCode: "time.month.Jul",
+        en_GB: "Jul",
+        de: "Jul"
+    }, {
+        scriptCode: "time.month.Aug",
+        en_GB: "Aug",
+        de: "Aug"
+    }, {
+        scriptCode: "time.month.Sep",
+        en_GB: "Sep",
+        de: "Sep"
+    }, {
+        scriptCode: "time.month.Oct",
+        en_GB: "Oct",
+        de: "Okt"
+    }, {
+        scriptCode: "time.month.Nov",
+        en_GB: "Nov",
+        de: "Nov"
+    }, {
+        scriptCode: "time.month.Dec",
+        en_GB: "Dec",
+        de: "Dez"
     }
 ];
 

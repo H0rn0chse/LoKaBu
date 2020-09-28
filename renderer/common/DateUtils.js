@@ -1,3 +1,5 @@
+import { LanguageModel } from "../model/LanguageModel.js";
+
 export function UnixToDate (sUnixTimestamp) {
     return new Date(parseInt(sUnixTimestamp, 10) * 1000);
 }
@@ -24,4 +26,12 @@ export function DateToUnix (dDate) {
 
 export function InputToUnix (sInputValue) {
     return DateToUnix(InputToDate(sInputValue));
+}
+
+/**
+ * Translates the month based on the current language
+ * @param {string} sMonthKey MMM eg: Jan
+ */
+export function translateMonth (sMonthKey) {
+    return LanguageModel.get([`time.month.${sMonthKey}`]) || "";
 }
