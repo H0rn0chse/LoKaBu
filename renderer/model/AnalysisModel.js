@@ -5,11 +5,16 @@ import { AccountModel } from "./AccountModel.js";
 import { StoreModel } from "./StoreModel.js";
 import { TypeModel } from "./TypeModel.js";
 import { PersonModel } from "./PersonModel.js";
+import { SettingsModel } from "./SettingsModel.js";
+import { HistoryModel } from "./HistoryModel.js";
 
 class _AnalysisModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "receiptAnalysis");
         this.name = "AnalysisModel";
+
+        SettingsModel.addEventListener("update", this.read, this);
+        HistoryModel.addEventListener("update", this.read, this);
     }
 
     addFilter () {
