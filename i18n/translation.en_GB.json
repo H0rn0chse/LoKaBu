@@ -101,5 +101,12 @@
     "time.month.Sep": "Sep",
     "time.month.Oct": "Oct",
     "time.month.Nov": "Nov",
-    "time.month.Dec": "Dec"
+    "time.month.Dec": "Dec",
+    "detail.bulk": "Bulk Action",
+    "bulk.title": "Bulk Action",
+    "bulk.close": "Close",
+    "bulk.apply": "Apply",
+    "bulk.keep": "<Keep>",
+    "bulk.person": "Line person: ",
+    "bulk.type": "Line type: "
 }

@@ -1,0 +1,29 @@
+#bulkDialog {
+    justify-content: space-between;
+    align-items: center;
+}
+
+#bulkDataArea {
+    width: 100%;
+    padding-top: 1em;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#bulkDataArea > * {
+    padding-bottom: 0.5em;
+}
+
+#bulkDataArea .flexContainerRow {
+    width: 100%;
+    justify-content: space-between;
+}
+
+#bulkDataArea .flexContainerRow > * {
+    margin: 0px 2em;
+}
+
+#bulkButtonArea {
+    justify-content: center;
+    padding: 1em;
+}

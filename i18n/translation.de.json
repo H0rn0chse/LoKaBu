@@ -101,5 +101,12 @@
     "time.month.Sep": "Sep",
     "time.month.Oct": "Okt",
     "time.month.Nov": "Nov",
-    "time.month.Dec": "Dez"
+    "time.month.Dec": "Dez",
+    "detail.bulk": "Sammelaktion",
+    "bulk.title": "Sammelaktion",
+    "bulk.close": "Schließen",
+    "bulk.apply": "Anwenden",
+    "bulk.keep": "<Beibehalten>",
+    "bulk.person": "Abrechnungsperson: ",
+    "bulk.type": "Abrechnungstyp: "
 }
