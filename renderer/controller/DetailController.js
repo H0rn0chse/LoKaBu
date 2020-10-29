@@ -13,6 +13,7 @@ import { OpenImageDialog } from "../dialogs/OpenImageDialog.js";
 import { ScannerResultDialog } from "../dialogs/ScannerResultDialog.js";
 import { ImportFragmentDialog } from "../dialogs/ImportFragmentDialog.js";
 import { ImportFragmentSuccessDialog } from "../dialogs/ImportFragmentSuccessDialog.js";
+import { BulkDialog } from "../dialogs/BulkDialog.js";
 
 export class DetailController extends Controller {
     constructor (oDomRef) {
@@ -61,6 +62,7 @@ export class DetailController extends Controller {
 
         // ReceiptLines
         oDetail
+            .bindProperty("bulk-i18n", "viewModel", ["bulk-i18n"])
             .bindAggregation("receiptLines", new Aggregation("lines", ["lines"])
                 .bindAggregation("persons", new Aggregation("person", ["persons"])
                     .bindProperty("text", "person", ["DisplayName"])
@@ -74,6 +76,7 @@ export class DetailController extends Controller {
                 .bindProperty("person", "lines", ["Billing"])
                 .bindProperty("type", "lines", ["Type"])
                 .bindProperty("value", "lines", ["Value"])
+                .bindProperty("selected", "lines", ["Selected"])
             );
 
         // Scanner
@@ -91,11 +94,15 @@ export class DetailController extends Controller {
             .addEventListener("lineChange", this.onLineChange, this)
             .addEventListener("lineAdd", this.onLineAdd, this)
             .addEventListener("lineRemove", this.onLineRemove, this)
+            .addEventListener("lineSelect", this.onLineSelect, this)
             .addEventListener("storeChange", this.onStoreChange, this)
             .addEventListener("new", this.onNew, this)
             .addEventListener("delete", this.onDelete, this)
             .addEventListener("loadImageOrFragment", this.onLoadImageOrFragment, this)
-            .addEventListener("startScanner", this.onStartScanner, this);
+            .addEventListener("startScanner", this.onStartScanner, this)
+            .addEventListener("selectAll", this.onSelectAll, this)
+            .addEventListener("unselectAll", this.onUnselectAll, this)
+            .addEventListener("bulkAction", this.onBulkAction, this);
 
         EventBus.listen("navigation", this.onNavigation, this);
         EventBus.listen("tesseract-result", this.onScannerResults, this);
@@ -181,6 +188,11 @@ export class DetailController extends Controller {
         LineModel.updateEntry(oData.id, oData.receipt, oData.value, oData.person, oData.type);
     }
 
+    onLineSelect (oEvent) {
+        const oData = oEvent.customData;
+        LineModel.selectEntry(oData.id, oData.selected);
+    }
+
     onLineRemove (oEvent) {
         LineModel.deleteEntry(oEvent.customData.id);
     }
@@ -191,5 +203,21 @@ export class DetailController extends Controller {
 
     onDelete (oEvent) {
         DetailModel.deleteReceipt(oEvent.customData.id);
+    }
+
+    onSelectAll (oEvent) {
+        LineModel.selectAll();
+    }
+
+    onUnselectAll (oEvent) {
+        LineModel.unselectAll();
+    }
+
+    onBulkAction (oEvent) {
+        BulkDialog.show()
+            .then(oResult => {
+                LineModel.updateBulk(oResult.person, oResult.type);
+            })
+            .catch(() => {});
     }
 }

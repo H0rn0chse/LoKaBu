@@ -13,6 +13,12 @@ export class LineDetailLine extends View {
     render () {
         const oNode = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
             .addClass("line-detail-line")
+            .appendNode(new DomElement("input")
+                .setId("selected")
+                .setType("checkbox")
+                .setChecked(this.getProperty("selected"))
+                .addEventListener("change", this.onLineSelect, this)
+            )
             .appendNode(new DomElement("select")
                 .setId("person")
                 .insertAggregation(this, "persons", DropdownItem)
@@ -57,5 +63,13 @@ export class LineDetailLine extends View {
             person: this.getNodeById("person").value
         };
         this.handleEvent("lineChange", oEvent);
+    }
+
+    onLineSelect (oEvent) {
+        oEvent.customData = {
+            id: this.getProperty("id"),
+            selected: this.getNodeById("selected").checked
+        };
+        this.handleEvent("lineSelect", oEvent);
     }
 };

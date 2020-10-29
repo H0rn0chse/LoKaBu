@@ -99,6 +99,7 @@ export const DetailModel = new _DetailModel({
     "load-i18n": ["scanner.load"],
     "start-i18n": ["scanner.start"],
     "dnd-i18n": ["scanner.dnd"],
+    "bulk-i18n": ["detail.bulk"],
     "imageSrc": "",
     "busy": false
 });
