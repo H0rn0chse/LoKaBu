@@ -33,7 +33,6 @@
 			});
 
 			EventBus.listen("translations", (oEvent, oData) => {
-				console.log(oData)
 				applyTranslations(oData);
 				document.title = oData["about.title"];
 			});

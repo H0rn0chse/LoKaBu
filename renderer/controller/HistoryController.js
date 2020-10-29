@@ -6,6 +6,7 @@ import { Aggregation } from "../common/Aggregation.js";
 import { AccountModel } from "../model/AccountModel.js";
 import { DetailModel } from "../model/DetailModel.js";
 import { objectGet } from "../common/Utils.js";
+import { ConfirmDialog } from "../dialogs/ConfirmDialog.js";
 
 export class HistoryController extends Controller {
     constructor (oDomRef) {
@@ -90,7 +91,11 @@ export class HistoryController extends Controller {
     }
 
     onDeleteLine (oEvent) {
-        DetailModel.deleteReceipt(oEvent.customData.id);
+        ConfirmDialog.show()
+            .then(() => {
+                DetailModel.deleteReceipt(oEvent.customData.id);
+            })
+            .catch(() => {});
     }
 
     onAddFilter (oEvent) {

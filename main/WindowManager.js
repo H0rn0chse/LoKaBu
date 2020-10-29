@@ -74,6 +74,9 @@ class _WindowManager {
                 nodeIntegration: true
             }
         });
+        if (!app.isPackaged) {
+            oDialog.webContents.openDevTools();
+        }
         oDialog.setMenuBarVisibility(false);
         oDialog.loadFile(sPath);
         oDialog.once('ready-to-show', () => {
