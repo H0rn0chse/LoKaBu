@@ -51,6 +51,7 @@ export class HistoryController extends Controller {
 
         oHistory
             .addEventListener("editLine", this.onEditLine, this)
+            .addEventListener("deleteLine", this.onDeleteLine, this)
             .addEventListener("navBefore", this.onPaging.bind(this, "before"))
             .addEventListener("navNext", this.onPaging.bind(this, "next"))
             .addEventListener("sort", this.onSort, this)
@@ -86,6 +87,10 @@ export class HistoryController extends Controller {
     onEditLine (oEvent) {
         DetailModel.readReceipt(oEvent.customData.id);
         EventBus.sendToCurrentWindow("navigation", "detail");
+    }
+
+    onDeleteLine (oEvent) {
+        DetailModel.deleteReceipt(oEvent.customData.id);
     }
 
     onAddFilter (oEvent) {

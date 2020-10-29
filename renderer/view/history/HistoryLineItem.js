@@ -34,9 +34,20 @@ export class HistoryLineItem extends View {
                 .addClass("cursorPointer")
                 .addEventListener("click", this.onEditLine, this)
             )
+            .appendNode(new Icon("trash-2")
+                .addClass("cursorPointer")
+                .addEventListener("click", this.onDeleteLine, this)
+            )
             .getNode();
 
         return oNode;
+    }
+
+    onDeleteLine (oEvent) {
+        oEvent.customData = {
+            id: this.getProperty("id")
+        };
+        this.handleEvent("deleteLine", oEvent);
     }
 
     onEditLine (oEvent) {
