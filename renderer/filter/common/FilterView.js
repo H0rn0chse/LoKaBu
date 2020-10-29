@@ -2,6 +2,7 @@ import { View } from "../../view/common/View.js";
 import { FlexContainer } from "../../view/common/FlexContainer.js";
 import { DomElement } from "../../view/common/DomElement.js";
 import { Enums } from "../../Enums.js";
+import { Icon } from "../../view/common/Icon.js";
 
 export class FilterView extends View {
     constructor (...args) {
@@ -50,9 +51,8 @@ export class FilterView extends View {
             );
         }
 
-        oElement.appendNode(new DomElement("div")
-            .addClass("buttonCircle")
-            .setText("-")
+        oElement.appendNode(new Icon("minus-circle")
+            .addClass("cursorPointer")
             .addEventListener("click", this.onDeleteFilter, this)
         );
 

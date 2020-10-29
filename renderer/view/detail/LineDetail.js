@@ -2,6 +2,7 @@ import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { LineDetailLine } from "./LineDetailLine.js";
 import { loadCss } from "../../common/Utils.js";
+import { Icon } from "../common/Icon.js";
 
 loadCss("/renderer/view/detail/LineDetail.css");
 export class LineDetail extends View {
@@ -14,13 +15,21 @@ export class LineDetail extends View {
         const oNode = new DomElement("div")
             .addClass("line-detail")
             .appendNode(new DomElement("div")
-                .addClass("line-detail-scroll")
-                .insertAggregation(this, "receiptLines", LineDetailLine, this._addLineItemEventHandler.bind(this))
+                .addClass("line-bulk-actions")
+                .appendNode(new Icon("check-square")
+                    .addClass("cursorPointer")
+                )
             )
             .appendNode(new DomElement("div")
-                .addClass("buttonCircle")
-                .setText("+")
-                .addEventListener("click", this.onLineAdd, this)
+                .addClass("line-box")
+                .appendNode(new DomElement("div")
+                    .addClass("line-detail-scroll")
+                    .insertAggregation(this, "receiptLines", LineDetailLine, this._addLineItemEventHandler.bind(this))
+                )
+                .appendNode(new Icon("plus-circle")
+                    .addClass("cursorPointer")
+                    .addEventListener("click", this.onLineAdd, this)
+                )
             )
             .getNode();
 

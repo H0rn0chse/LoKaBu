@@ -34,7 +34,8 @@ You have to build (and sign) your platform-dependent build yourself or just use 
 
 ## Contributions
   * The Logo was made by [Kirschdrache](https://www.deviantart.com/kirschdrache)
-  * The busy indicator was made available by [loading.io/css/](loading.io/css/)
+  * The busy indicator is available on [loading.io/css/](loading.io/css/)
+  * The icons are available on [feathericons.com/](feathericons.com/)
 
 ## Screenshots
   <img src="./docu/screenshots/details.png" title="Receipt details" />

@@ -2,6 +2,7 @@ import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
+import { Icon } from "../common/Icon.js";
 
 export class LineDetailLine extends View {
     constructor () {
@@ -32,9 +33,8 @@ export class LineDetailLine extends View {
                 .setValue(this.getProperty("value"))
                 .addEventListener("change", this.onLineChange, this)
             )
-            .appendNode(new DomElement("div")
-                .addClass("buttonCircle")
-                .setText("-")
+            .appendNode(new Icon("minus-circle")
+                .addClass("cursorPointer")
                 .addEventListener("click", this.onLineRemove, this)
             )
             .getNode();

@@ -85,3 +85,9 @@ export function loadCss (sPath) {
         aCssFiles.push(aCssFiles);
     }
 }
+
+export function textToHtml (sText) {
+    var oTemplate = document.createElement('template');
+    oTemplate.innerHTML = sText;
+    return oTemplate.content.childNodes[0];
+}

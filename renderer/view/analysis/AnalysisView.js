@@ -5,6 +5,7 @@ import { loadCss } from "../../common/Utils.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
 import { FilterView } from "../../filter/common/FilterView.js";
+import { Icon } from "../common/Icon.js";
 
 loadCss("/renderer/view/analysis/AnalysisView.css");
 
@@ -36,9 +37,8 @@ export class AnalysisView extends View {
                             .addClass("analysis-filter-scroll")
                             .insertAggregation(this, "filter", FilterView, this.addGenericListenerToChild.bind(this))
                         )
-                        .appendNode(new DomElement("div")
-                            .setText("+")
-                            .addClass("buttonCircle")
+                        .appendNode(new Icon("plus-circle")
+                            .addClass("cursorPointer")
                             .addEventListener("click", this.handleEvent.bind(this, "addFilter"))
                         )
                     )
