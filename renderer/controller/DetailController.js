@@ -56,7 +56,8 @@ export class DetailController extends Controller {
             .bindProperty("date", "receipt", ["Date"])
             .bindProperty("store", "receipt", ["Store"])
             .bindProperty("account", "receipt", ["Account"])
-            .bindProperty("comment", "receipt", ["Comment"]);
+            .bindProperty("comment", "receipt", ["Comment"])
+            .bindProperty("sum", "viewModel", ["Sum"]);
 
         // ReceiptLines
         oDetail
