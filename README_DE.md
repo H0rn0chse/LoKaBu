@@ -27,9 +27,14 @@ Es gibt die Möglichkeit die Übersetzungen um weitere Sprachen zu erweitern. De
 ## Nutzung auf anderen Platformen als Windows
 Du musst deinen plattformabhängigen Build selber bauen (und signieren) oder nutzt dieses Repository einfach lokal.
 
+## Bekannte Probleme
+  * Problem: Die initale Installation erfordert ein Datenbankupgrade, welches fehlschlägt.
+    * Neustart der Applikation
+    * Lösche alle Dateien in `%APPDATA%/LoKaBu`
+
 ## Mitwirkende
   * Das Logo wurde von [Kirschdrache](https://www.deviantart.com/kirschdrache) erstellt
-  * Die Ladeanimation ist auf loading.io/css/ verfügbar
+  * Die Ladeanimation ist auf [loading.io/css/](loading.io/css/) verfügbar
 
 ## Bildschirmaufnahmen
   <img src="./docu/screenshots/details_de.png" title="Beleg Details" />

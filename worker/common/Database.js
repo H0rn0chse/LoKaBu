@@ -5,7 +5,7 @@ const BetterSqlite3 = require("better-sqlite3");
 const path = require("path");
 const fs = require("fs");
 
-const sBasePath = path.join(__dirname, "../base_database.sqlite3.sql");
+const sBasePath = path.join(__dirname, "../base_database.sqlite3");
 
 export class Database {
     constructor (sPath, fnAbort) {
@@ -17,13 +17,22 @@ export class Database {
 
     _openOrCreate (sPath) {
         this.lock = new Lock(sPath, this.abort.bind(this));
-        const bNewFile = !fs.existsSync(sPath);
-        this.db = new BetterSqlite3(sPath, { verbose: console.log });
+        let bNewFile = !fs.existsSync(sPath);
+
+        // It might happen that the initial installation/ upgrade fails
+        // Therefore the empty file gets removed and replaced with the template database
+        if (!bNewFile) {
+            const oStats = fs.statSync(sPath);
+            if (oStats.size === 0) {
+                fs.unlinkSync(sPath);
+                bNewFile = true;
+            }
+        }
 
         if (bNewFile) {
-            const sSql = fs.readFileSync(sBasePath, "utf8");
-            this.db.exec(`PRAGMA foreign_keys = OFF; ${sSql} PRAGMA foreign_keys = ON;`);
+            fs.copyFileSync(sBasePath, sPath);
         }
+        this.db = new BetterSqlite3(sPath, { verbose: console.log });
     }
 
     abort () {
