@@ -16,7 +16,8 @@ class _LineModel extends DatabaseModel {
         EventBus.sendToDatabase(`${this.table}-read`, oData);
     }
 
-    addEntry (iId, fValue = 0) {
+    addEntry (iId, fValue) {
+        fValue = fValue || 0;
         const oEntry = {
             Selected: false,
             Receipt: iId,
