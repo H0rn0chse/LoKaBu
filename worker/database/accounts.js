@@ -61,6 +61,16 @@ class _AccountTable extends Table {
             .prepare(sSql)
             .run(oAccount);
     }
+
+    deleteSqlAction (oAccount) {
+        const sSql = `
+        DELETE FROM Accounts
+        WHERE ID = $ID
+        `;
+        return DatabaseManager.get()
+            .prepare(sSql)
+            .run(oAccount);
+    }
 };
 
 export const AccountTable = new _AccountTable();

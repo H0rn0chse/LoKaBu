@@ -56,6 +56,16 @@ class _TypesTable extends Table {
             .prepare(sSql)
             .run(oType);
     }
+
+    deleteSqlAction (oType) {
+        const sSql = `
+        DELETE FROM Types
+        WHERE ID = $ID
+        `;
+        return DatabaseManager.get()
+            .prepare(sSql)
+            .run(oType);
+    }
 }
 
 export const TypesTable = new _TypesTable();
