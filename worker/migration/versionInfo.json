@@ -1,36 +1,28 @@
 {
     "compatibility": {
         "0.0.2": {
-            "base": "1",
             "min": "1.2"
         },
         "0.1.0": {
-            "base": "2",
             "min": "2.0"
         },
         "0.2.0": {
-            "base": "3",
             "min": "3.0"
         },
         "0.3.0": {
-            "base": "3",
             "min": "3.1"
         },
         "0.3.1": {
-            "base": "3",
             "min": "3.1"
         },
         "0.3.2": {
-            "base": "3",
             "min": "3.1"
         },
         "0.4.0": {
-            "base": "3",
             "min": "3.2"
         },
         "0.5.0": {
-            "base": "3",
-            "min": "3.2"
+            "min": "3.3"
         }
     },
     "upgrades": {
@@ -38,6 +30,7 @@
         "1.2": "./migration/upgrades/1.2_2.0.sql",
         "2.0": "./migration/upgrades/2.0_3.0.sql",
         "3.0": "./migration/upgrades/3.0_3.1.sql",
-        "3.1": "./migration/upgrades/3.1_3.2.sql"
+        "3.1": "./migration/upgrades/3.1_3.2.sql",
+        "3.2": "./migration/upgrades/3.2_3.3.sql"
     }
 }
