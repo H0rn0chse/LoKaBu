@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus.js";
 import { DatabaseModel } from "./common/DatabaseModel.js";
-import { deepClone } from "../common/Utils.js";
+import { deepClone, findAndSplice } from "../common/Utils.js";
 import { SettingsModel } from "./SettingsModel.js";
 
 class _LineModel extends DatabaseModel {
@@ -83,11 +83,7 @@ class _LineModel extends DatabaseModel {
             ID: iId
         };
         const aList = this.get(["lines"]);
-        const iIndex = aList.findIndex(oLine => {
-            return oLine.ID === iId;
-        });
-        if (iIndex > -1) {
-            aList.splice(iIndex, 1);
+        if (findAndSplice(aList, "ID", iId)) {
             EventBus.sendToDatabase("lines-delete", oEntry);
         }
     }
