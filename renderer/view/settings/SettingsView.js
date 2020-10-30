@@ -106,7 +106,8 @@ export class SettingsView extends View {
 
     _addSettingListItemEventHandler (oItem) {
         oItem
-            .addEventListener("listEntryChange", this.onListEntryChange, this);
+            .addEventListener("listEntryChange", this.onListEntryChange, this)
+            .addEventListener("listEntryDelete", this.onListEntryDelete, this);
     }
 
     _getListModel () {
@@ -117,6 +118,11 @@ export class SettingsView extends View {
     onListEntryChange (oEvent) {
         oEvent.customData.model = this._getListModel();
         this.handleEvent("listEntryChange", oEvent);
+    }
+
+    onListEntryDelete (oEvent) {
+        oEvent.customData.model = this._getListModel();
+        this.handleEvent("listEntryDelete", oEvent);
     }
 
     onAddListItem (oEvent) {

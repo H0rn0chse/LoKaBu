@@ -10,6 +10,7 @@ import { Aggregation } from "../common/Aggregation.js";
 import { CreateDatabaseDialog } from "../dialogs/CreateDatabaseDialog.js";
 import { OpenDatabaseDialog } from "../dialogs/OpenDatabaseDialog.js";
 import { AboutDialog } from "../dialogs/AboutDialog.js";
+import { ReplaceDialog } from "../dialogs/ReplaceDialog.js";
 
 export class SettingsController extends Controller {
     constructor (oDomRef) {
@@ -101,6 +102,7 @@ export class SettingsController extends Controller {
             .addEventListener("databaseDefault", this.onDatabaseDefault, this)
             .addEventListener("listChange", this.onListChange, this)
             .addEventListener("listEntryChange", this.onListEntryChange, this)
+            .addEventListener("listEntryDelete", this.onListEntryDelete, this)
             .addEventListener("languageChange", this.onLanguageChange, this)
             .addEventListener("openAbout", this.onOpenAbout, this);
 
@@ -153,6 +155,21 @@ export class SettingsController extends Controller {
         if (oData.default) {
             oModel.setDefault(oData.id);
         }
+    }
+
+    onListEntryDelete (oEvent) {
+        const oData = oEvent.customData;
+        const oModel = this.getContainer("settings").getContent().getModel(oData.model);
+
+        ReplaceDialog.show(oModel, oData.id)
+            .then((oResult) => {
+                // eslint-disable-next-line eqeqeq
+                if (oData.id != oResult.id) {
+                    oModel.replaceEntry(oData.id, oResult.id);
+                    oModel.deleteEntry(oData.id);
+                }
+            })
+            .catch(() => {});
     }
 
     onLanguageChange (oEvent) {

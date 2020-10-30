@@ -2,6 +2,7 @@ import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
+import { Icon } from "../common/Icon.js";
 
 export class SettingsListItem extends View {
     constructor () {
@@ -42,6 +43,10 @@ export class SettingsListItem extends View {
                 .setName("settings-select")
                 .setChecked(this.getProperty("id") === this.getProperty("checked-id"))
                 .addEventListener("change", this.onListEntryChange, this)
+            )
+            .appendNode(new Icon("trash-2")
+                .addClass("cursorPointer")
+                .addEventListener("click", this.onListEntryDelete, this)
             );
         return oDomElement.getNode();
     }
@@ -63,5 +68,12 @@ export class SettingsListItem extends View {
             default: this.getNodeById("default").checked
         };
         this.handleEvent("listEntryChange", oEvent);
+    }
+
+    onListEntryDelete (oEvent) {
+        oEvent.customData = {
+            id: this.getProperty("id")
+        };
+        this.handleEvent("listEntryDelete", oEvent);
     }
 };
