@@ -41,7 +41,7 @@ export class FilterView extends View {
             oElement.appendNode(new DomElement("input")
                 .setType(oFilter.getValueType())
                 .setValue(oFilter.getValue())
-                .addEventListener("change", this.onUpdateValue, this)
+                .addEventListener("focusout", this.onUpdateValue, this)
             );
         } else {
             oElement.appendNode(new DomElement("select")
