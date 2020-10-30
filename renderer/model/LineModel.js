@@ -9,6 +9,13 @@ class _LineModel extends DatabaseModel {
         this.name = "LineModel";
     }
 
+    getReceiptId () {
+        const aList = this.get(["lines"]);
+        if (aList.length) {
+            return aList[0].Receipt;
+        }
+    }
+
     readReceiptLines (iReceiptId) {
         const oData = {
             Receipt: iReceiptId
@@ -133,6 +140,10 @@ class _LineModel extends DatabaseModel {
 
     processUpdate () {
         console.log("LinesModel updated");
+    }
+
+    processReplace () {
+        this.readReceiptLines(this.getReceiptId());
     }
 }
 
