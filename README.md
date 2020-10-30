@@ -27,15 +27,14 @@ There is the possibilty to add new languages. Currently the following languages 
 ## Usage on other Platforms then Windows
 You have to build (and sign) your platform-dependent build yourself or just use this repository locally.
 
+## Contributions
+  * The Logo was made by [Kirschdrache](https://www.deviantart.com/kirschdrache)
+  * The busy indicator is available on [loading.io](https://www.loading.io/css/)
+
 ## Known Issues
   * Problem: The initial installation requires a database upgrade which fails.
     * Restart the application
     * Delete all files in `%APPDATA%/LoKaBu`
-
-## Contributions
-  * The Logo was made by [Kirschdrache](https://www.deviantart.com/kirschdrache)
-  * The busy indicator is available on [loading.io/css/](loading.io/css/)
-  * The icons are available on [feathericons.com/](feathericons.com/)
 
 ## Screenshots
   <img src="./docu/screenshots/details.png" title="Receipt details" />
