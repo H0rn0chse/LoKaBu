@@ -1,0 +1,22 @@
+#replaceDialog {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.replaceText {
+    padding: 1em;
+    text-align: justify;
+}
+
+.replaceText:first-of-type {
+    font-style: italic;
+}
+
+#replaceEntry {
+    font-weight: bold;
+}
+
+#replaceButtonArea {
+    justify-content: center;
+    padding: 1em;
+}

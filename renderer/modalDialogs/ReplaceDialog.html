@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+		<link rel="stylesheet" href="../view/common/Main.css">
+		<link rel="stylesheet" href="./ReplaceDialog.css">
+
+		<script type="module">
+            const { ipcRenderer } = require('electron');
+			import { EventBus } from '../EventBus.js';
+			import { applyTranslations } from './common/Utils.js';
+			import { Deferred } from '../common/Deferred.js';
+
+            EventBus.setIpcRenderer(ipcRenderer);
+			EventBus.sendToMain("windowLoaded", "replaceDialog");
+			EventBus.listen("shutdownApp", () => {
+				console.log("shutdown");
+				EventBus.sendToMain("windowProcessClosed");
+			});
+
+			EventBus.listen("translations", (oEvent, oData) => {
+				applyTranslations(oData);
+				document.title = oData["replace.title"];
+            });
+
+            EventBus.listen("data", (oEvent, oData) => {
+                let oNode = document.getElementById("replaceSelect");
+                _addOptions(oNode, oData.list);
+
+                const iIndex = oData.list.findIndex(oEntry => {
+                    return oEntry.ID === oData.id;
+                })
+                oNode = document.getElementById("replaceEntry");
+                oNode.innerText = oData.list[iIndex].DisplayName;
+			});
+
+            function _addOptions(oParent, aList) {
+				aList.forEach(oEntry => {
+					const oNode = document.createElement("option");
+					oNode.value = oEntry.ID;
+					oNode.innerText = oEntry.DisplayName;
+					oParent.appendChild(oNode);
+				});
+            }
+
+            window.sendAndExit = function (bSend) {
+				const oData = {};
+
+				if (bSend) {
+					oData.id = document.getElementById("replaceSelect").value;
+				}
+
+				EventBus.sendToBrowser("replaceDialog.result", oData);
+				setTimeout(window.close, 0);
+			}
+		</script>
+	</head>
+	<body id="replaceDialog" class="unselectable flexContainerColumn">
+        <div class="unselectable replaceText" data-trans="replace.text"></div>
+        <div id="replaceEntry" class="unselectable"></div>
+        <div class="unselectable replaceText" data-trans="replace.text2"></div>
+        <select id="replaceSelect" class="unselectable"></select>
+        <div id="replaceButtonArea" class="unselectable flexContainerRow">
+			<div class="button unselectable" data-trans="replace.apply" onclick="sendAndExit(true)"></div>
+			<div class="button unselectable" data-trans="replace.close" onclick="sendAndExit(false)"></div>
+		</div>
+	</body>
+</html>
