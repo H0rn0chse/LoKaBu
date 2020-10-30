@@ -72,18 +72,18 @@
 			}
 		</script>
 	</head>
-	<body class="flexContainerColumn" id="bulkDialog">
-		<div class="flexContainerColumn" id="bulkDataArea">
-			<div class="flexContainerRow">
-				<div data-trans="bulk.person"></div>
-				<select id="bulkPersonSelect"></select>
+	<body id="bulkDialog" class="unselectable flexContainerColumn">
+		<div id="bulkDataArea" class="unselectable flexContainerColumn">
+			<div class="unselectable flexContainerRow">
+				<div class="unselectable" data-trans="bulk.person"></div>
+				<select id="bulkPersonSelect" class="unselectable"></select>
 			</div>
-			<div class="flexContainerRow">
-				<div data-trans="bulk.type"></div>
-				<select id="bulkTypeSelect"></select>
+			<div class="unselectable flexContainerRow">
+				<div class="unselectable" data-trans="bulk.type"></div>
+				<select id="bulkTypeSelect" class="unselectable"></select>
 			</div>
 		</div>
-		<div class="flexContainerRow" id="bulkButtonArea">
+		<div class="unselectable flexContainerRow" id="bulkButtonArea">
 			<div class="button unselectable" data-trans="bulk.apply" onclick="sendAndExit(true)"></div>
 			<div class="button unselectable" data-trans="bulk.close" onclick="sendAndExit(false)"></div>
 		</div>
