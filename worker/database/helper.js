@@ -4,7 +4,7 @@ import { DatabaseManager } from "./DatabaseManager.js";
 class _Helper {
     constructor () {
         EventBus.listen("helper-firstReceipt", this.getFirstReceipt, this);
-        EventBus.listen("helper-version", this.handleGetVersion.bind(this));
+        EventBus.listen("helper-version", this.handleGetVersion, this);
     }
 
     getVersion (oDb) {

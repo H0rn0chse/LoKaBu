@@ -4,6 +4,10 @@ import { DatabaseManager } from "./DatabaseManager.js";
 class _AccountTable extends Table {
     constructor () {
         super("accounts");
+
+        this.references = {
+            persons: "Owner"
+        };
     }
 
     getOrCreate (sAccount) {

@@ -4,6 +4,12 @@ import { DatabaseManager } from "./DatabaseManager.js";
 class _LinesTable extends Table {
     constructor () {
         super("lines");
+
+        this.references = {
+            persons: "Billing",
+            types: "Type",
+            accounts: "Account"
+        };
     }
 
     createSqlAction (oLine) {

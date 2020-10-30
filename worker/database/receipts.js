@@ -4,6 +4,11 @@ import { DatabaseManager } from "./DatabaseManager.js";
 class _ReceiptsTable extends Table {
     constructor () {
         super("receipts");
+
+        this.references = {
+            accounts: "Account",
+            stores: "Store"
+        };
     }
 
     createSqlAction (oReceipt) {
