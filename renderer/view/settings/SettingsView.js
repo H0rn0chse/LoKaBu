@@ -4,6 +4,7 @@ import { FlexContainer } from "../common/FlexContainer.js";
 import { DropdownItem } from "../common/DropdownItem.js";
 import { SettingsListItem } from "./SettingsListItem.js";
 import { loadCss } from "../../common/Utils.js";
+import { Icon } from "../common/Icon.js";
 
 loadCss("/renderer/view/settings/SettingsView.css");
 export class SettingsView extends View {
@@ -92,9 +93,8 @@ export class SettingsView extends View {
                         .addClass("settings-lists-scroll")
                         .insertAggregation(this, this.getProperty("current-list"), SettingsListItem, this._addSettingListItemEventHandler.bind(this))
                     )
-                    .appendNode(new DomElement("div")
-                        .addClass("buttonCircle")
-                        .setText("+")
+                    .appendNode(new Icon("plus-circle")
+                        .addClass("cursorPointer")
                         .addEventListener("click", this.onAddListItem, this)
                     )
                 )
@@ -106,7 +106,8 @@ export class SettingsView extends View {
 
     _addSettingListItemEventHandler (oItem) {
         oItem
-            .addEventListener("listEntryChange", this.onListEntryChange, this);
+            .addEventListener("listEntryChange", this.onListEntryChange, this)
+            .addEventListener("listEntryDelete", this.onListEntryDelete, this);
     }
 
     _getListModel () {
@@ -117,6 +118,11 @@ export class SettingsView extends View {
     onListEntryChange (oEvent) {
         oEvent.customData.model = this._getListModel();
         this.handleEvent("listEntryChange", oEvent);
+    }
+
+    onListEntryDelete (oEvent) {
+        oEvent.customData.model = this._getListModel();
+        this.handleEvent("listEntryDelete", oEvent);
     }
 
     onAddListItem (oEvent) {

@@ -55,6 +55,16 @@ class _PersonsTable extends Table {
             .prepare(sSql)
             .run(oPerson);
     }
+
+    deleteSqlAction (oPerson) {
+        const sSql = `
+        DELETE FROM Persons
+        WHERE ID = $ID
+        `;
+        return DatabaseManager.get()
+            .prepare(sSql)
+            .run(oPerson);
+    }
 }
 
 export const PersonsTable = new _PersonsTable();

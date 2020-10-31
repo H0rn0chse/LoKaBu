@@ -1,3 +1,4 @@
+import { findAndSplice } from "../common/Utils.js";
 import { EventBus } from "../EventBus.js";
 import { DatabaseModel } from "./common/DatabaseModel.js";
 import { SettingsModel } from "./SettingsModel.js";
@@ -6,6 +7,10 @@ class _PersonModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "persons");
         this.name = "PersonModel";
+    }
+
+    getEntries () {
+        return this.get(["persons"]);
     }
 
     addEntry () {
@@ -26,6 +31,16 @@ class _PersonModel extends DatabaseModel {
 
         const aPath = ["persons", { ID: sId }];
         this.set(aPath, oEntry);
+    }
+
+    deleteEntry (vId) {
+        const oEntry = {
+            ID: vId
+        };
+        const aList = this.getEntries();
+        if (findAndSplice(aList, "ID", vId)) {
+            EventBus.sendToDatabase("persons-delete", oEntry);
+        }
     }
 
     setDefault (iId) {

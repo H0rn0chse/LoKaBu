@@ -41,7 +41,7 @@ class _FragmentHelper {
             const oFirstLine = oObject.lines[0];
 
             // Receipt properties
-            oReceipt.Date = parseInt(oFirstLine.ID.slice(0, -3), 10);
+            oReceipt.Date = parseInt(oFirstLine.Date.slice(0, -3), 10);
             oReceipt.Account = AccountTable.getOrCreate(oFirstLine.SourceAccount);
             oReceipt.Comment = "";
             oReceipt.Store = StoresTable.getOrCreate(oFirstLine.Store);

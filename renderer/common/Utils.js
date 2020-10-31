@@ -85,3 +85,18 @@ export function loadCss (sPath) {
         aCssFiles.push(aCssFiles);
     }
 }
+
+export function textToHtml (sText) {
+    var oTemplate = document.createElement('template');
+    oTemplate.innerHTML = sText;
+    return oTemplate.content.childNodes[0];
+}
+
+export function findAndSplice (aList, sIdentifier, vValue) {
+    const iIndex = aList.findIndex(oEntry => {
+        return oEntry[sIdentifier] === vValue;
+    });
+    if (iIndex > -1) {
+        return aList.splice(iIndex, 1);
+    }
+}

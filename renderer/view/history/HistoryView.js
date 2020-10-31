@@ -5,6 +5,7 @@ import { SortBarItem } from "./SortBarItem.js";
 import { HistoryLineItem } from "./HistoryLineItem.js";
 import { FilterView } from "../../filter/common/FilterView.js";
 import { loadCss } from "../../common/Utils.js";
+import { Icon } from "../common/Icon.js";
 
 loadCss("/renderer/view/history/HistoryView.css");
 export class HistoryView extends View {
@@ -22,9 +23,8 @@ export class HistoryView extends View {
                     .addClass("history-filter-scroll")
                     .insertAggregation(this, "filter", FilterView, this.addGenericListenerToChild.bind(this))
                 )
-                .appendNode(new DomElement("div")
-                    .setText("+")
-                    .addClass("buttonCircle")
+                .appendNode(new Icon("plus-circle")
+                    .addClass("cursorPointer")
                     .addEventListener("click", this.handleEvent.bind(this, "addFilter"))
                 )
             )
@@ -37,9 +37,8 @@ export class HistoryView extends View {
                 .insertAggregation(this, "entries", HistoryLineItem, this.addGenericListenerToChild.bind(this))
             )
             .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", alignItems: "center" })
-                .appendNode(new DomElement("div")
-                    .addClass("button")
-                    .setText("<")
+                .appendNode(new Icon("chevron-left", { size: 36 })
+                    .addClass("cursorPointer")
                     .addEventListener("click", this.handleEvent.bind(this, "navBefore"))
                 )
                 .appendNode(new DomElement("div")
@@ -51,9 +50,8 @@ export class HistoryView extends View {
                 .appendNode(new DomElement("div")
                     .setText(this.getProperty("pageCount"))
                 )
-                .appendNode(new DomElement("div")
-                    .addClass("button")
-                    .setText(">")
+                .appendNode(new Icon("chevron-right", { size: 36 })
+                    .addClass("cursorPointer")
                     .addEventListener("click", this.handleEvent.bind(this, "navNext"))
                 )
             )

@@ -48,7 +48,9 @@ class _WindowManager {
         const oMain = this._addWindow(sPath);
         oMain.setMinimumSize(1416, 939); // with this the window takes 1400x900 in windows
         oMain.maximize();
-        oMain.show();
+        oMain.once('ready-to-show', () => {
+            oMain.show();
+        });
         this.main = oMain;
     }
 
@@ -63,6 +65,7 @@ class _WindowManager {
 
     addDialog (sPath, width = 300, height = 300) {
         let oDialog = new BrowserWindow({
+            show: false,
             parent: this.main,
             modal: true,
             width: width,
@@ -71,8 +74,14 @@ class _WindowManager {
                 nodeIntegration: true
             }
         });
+        if (!app.isPackaged) {
+            oDialog.webContents.openDevTools();
+        }
         oDialog.setMenuBarVisibility(false);
         oDialog.loadFile(sPath);
+        oDialog.once('ready-to-show', () => {
+            oDialog.show();
+        });
         oDialog.on("close", (oEvent) => {
             this.windowsLoaded--;
             const sWindow = findKeyByValue(this.ipcMap, oDialog.webContents.id);

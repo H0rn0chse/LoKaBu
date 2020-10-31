@@ -1,3 +1,15 @@
 .flexContainer {
     display: flex;
 }
+
+.flexContainerColumn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.flexContainerRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}

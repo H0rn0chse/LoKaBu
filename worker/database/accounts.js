@@ -4,6 +4,10 @@ import { DatabaseManager } from "./DatabaseManager.js";
 class _AccountTable extends Table {
     constructor () {
         super("accounts");
+
+        this.references = {
+            persons: "Owner"
+        };
     }
 
     getOrCreate (sAccount) {
@@ -51,6 +55,16 @@ class _AccountTable extends Table {
         UPDATE Accounts
         SET DisplayName = $DisplayName,
         Owner = $Owner
+        WHERE ID = $ID
+        `;
+        return DatabaseManager.get()
+            .prepare(sSql)
+            .run(oAccount);
+    }
+
+    deleteSqlAction (oAccount) {
+        const sSql = `
+        DELETE FROM Accounts
         WHERE ID = $ID
         `;
         return DatabaseManager.get()

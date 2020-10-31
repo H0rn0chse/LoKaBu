@@ -55,6 +55,10 @@ class _ReceiptModel extends DatabaseModel {
         console.log("ReceiptModel updated");
     }
 
+    processReplace () {
+        this.read(this.getId());
+    }
+
     setDate (sDate) {
         this.set(["Date"], sDate, true);
         this.save();

@@ -55,6 +55,16 @@ class _StoresTable extends Table {
             .prepare(sSql)
             .run(oStore);
     }
+
+    deleteSqlAction (oStore) {
+        const sSql = `
+        DELETE FROM Stores
+        WHERE ID = $ID
+        `;
+        return DatabaseManager.get()
+            .prepare(sSql)
+            .run(oStore);
+    }
 }
 
 export const StoresTable = new _StoresTable();

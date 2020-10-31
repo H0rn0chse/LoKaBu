@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 const { AppVersion } = require("./main/AppVersion.js");
 const { app, nativeTheme } = require('electron');
+const { autoUpdater } = require("electron-updater");
 const { enforceSingleInstance } = require("./main/Utils.js");
 const { WindowManager } = require("./main/WindowManager.js");
 
@@ -8,6 +9,7 @@ const fs = require("fs");
 const path = require("path");
 
 function init () {
+    autoUpdater.checkForUpdatesAndNotify();
     if (enforceSingleInstance()) {
         return;
     }

@@ -4,6 +4,13 @@ import { DatabaseManager } from "./DatabaseManager.js";
 class _SettingsTable extends Table {
     constructor () {
         super("settings");
+
+        this.references = {
+            persons: "Person",
+            types: "Type",
+            accounts: "Account",
+            stores: "Store"
+        };
     }
 
     readDefaultDir () {

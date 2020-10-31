@@ -101,5 +101,17 @@
     "time.month.Sep": "Sep",
     "time.month.Oct": "Oct",
     "time.month.Nov": "Nov",
-    "time.month.Dec": "Dec"
+    "time.month.Dec": "Dec",
+    "detail.bulk": "Bulk Action",
+    "bulk.title": "Bulk Action",
+    "bulk.close": "Close",
+    "bulk.apply": "Apply",
+    "bulk.keep": "<Keep>",
+    "bulk.person": "Line person: ",
+    "bulk.type": "Line type: ",
+    "replace.title": "Ersetzen",
+    "replace.close": "Close",
+    "replace.apply": "Apply",
+    "replace.text": "This list entry cannot be deleted due to consistency issues. It needs to be replaced by another entry.",
+    "replace.text2": "Will be replaced with this entry:"
 }

@@ -2,6 +2,7 @@ import { View } from "../common/View.js";
 import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { loadCss } from "../../common/Utils.js";
+import { Icon } from "../common/Icon.js";
 
 loadCss("/renderer/view/history/HistoryLineItem.css");
 
@@ -12,7 +13,7 @@ export class HistoryLineItem extends View {
     }
 
     render () {
-        const oNode = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", justifyContent: "space-around" })
+        const oNode = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap", justifyContent: "space-around", alignItems: "baseline" })
             .appendNode(new DomElement("div")
                 .addClass("historyLineProperty")
                 .setText(this.getProperty("id"))
@@ -29,14 +30,24 @@ export class HistoryLineItem extends View {
                 .addClass("historyLineProperty")
                 .setText(this.getProperty("value"))
             )
-            .appendNode(new DomElement("div")
-                .addClass("button")
-                .setText(this.getProperty("edit"))
+            .appendNode(new Icon("edit")
+                .addClass("cursorPointer")
                 .addEventListener("click", this.onEditLine, this)
+            )
+            .appendNode(new Icon("trash-2")
+                .addClass("cursorPointer")
+                .addEventListener("click", this.onDeleteLine, this)
             )
             .getNode();
 
         return oNode;
+    }
+
+    onDeleteLine (oEvent) {
+        oEvent.customData = {
+            id: this.getProperty("id")
+        };
+        this.handleEvent("deleteLine", oEvent);
     }
 
     onEditLine (oEvent) {

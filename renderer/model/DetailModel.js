@@ -26,6 +26,16 @@ class _DetailModel extends Model {
         });
     }
 
+    get (aPath, aBindingContextPath) {
+        if (aPath[0] === "Sum") {
+            return LineModel.get(["lines"]).reduce((fAcc, oLine) => {
+                return fAcc + parseFloat(oLine.Value);
+            }, 0).toFixed(2);
+        } else {
+            return super.get(aPath, aBindingContextPath);
+        }
+    }
+
     replaceReceiptLines (aResult) {
         const iId = ReceiptModel.getId();
         LineModel.deleteReceipt(iId);
@@ -89,6 +99,7 @@ export const DetailModel = new _DetailModel({
     "load-i18n": ["scanner.load"],
     "start-i18n": ["scanner.start"],
     "dnd-i18n": ["scanner.dnd"],
+    "bulk-i18n": ["detail.bulk"],
     "imageSrc": "",
     "busy": false
 });

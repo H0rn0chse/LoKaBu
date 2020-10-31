@@ -15,7 +15,8 @@ class _DatabaseErrorDialog extends Dialog {
         };
     }
 
-    _show (oEvent, sError) {
+    _show (oEvent, oData) {
+        const sError = oData.error;
         return dialog.showMessageBox({
             type: "error",
             message: `${this.getProperty("error-trans")}\n${sError}`
