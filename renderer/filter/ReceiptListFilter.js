@@ -51,8 +51,9 @@ export class ReceiptListFilter extends Filter {
         switch (oFilterOption.column) {
             case "LineValues":
             case "ReceiptSum":
-                var fValue = (parseFloat(oResult.value) || 0).toFixed(2);
-                oResult.value = parseInt(fValue * 100, 10);
+                var fValue = parseFloat(oResult.value) || 0;
+                fValue = (fValue * 100).toPrecision(10);
+                oResult.value = parseInt(fValue, 10);
                 break;
             default:
         }
