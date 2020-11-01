@@ -14,6 +14,7 @@ import { ScannerResultDialog } from "../dialogs/ScannerResultDialog.js";
 import { ImportFragmentDialog } from "../dialogs/ImportFragmentDialog.js";
 import { ImportFragmentSuccessDialog } from "../dialogs/ImportFragmentSuccessDialog.js";
 import { BulkDialog } from "../dialogs/BulkDialog.js";
+import { ConfirmDialog } from "../dialogs/ConfirmDialog.js";
 
 export class DetailController extends Controller {
     constructor (oDomRef) {
@@ -202,7 +203,11 @@ export class DetailController extends Controller {
     }
 
     onDelete (oEvent) {
-        DetailModel.deleteReceipt(oEvent.customData.id);
+        ConfirmDialog.show()
+            .then(() => {
+                return DetailModel.deleteReceipt(oEvent.customData.id);
+            })
+            .catch(() => {});
     }
 
     onSelectAll (oEvent) {
