@@ -41,14 +41,14 @@ export class SqlFilterOption {
             sValue = `%${sValue}%`;
         }
         if (this.inputType === Input.Text) {
-            sValue = `"${sValue}"`;
+            sValue = `'${sValue}'`;
         }
         if (this.inputType === Input.Date) {
             sValue = new Date(sValue).getTime() / 1000;
         }
-        const sNot = this.columnOption.value === "none" ? "NOT" : "";
+        const sNot = this.columnOption.value === "none" ? "NOT " : "";
 
-        return `WHERE ${sNot} ${sColumn} ${this.inputOption.sql} ${sValue} \n`;
+        return `WHERE ${sNot}${sColumn} ${this.inputOption.sql} ${sValue}\n`;
     }
 
     getHavingClause (sControlColumn) {
@@ -59,7 +59,7 @@ export class SqlFilterOption {
     }
 
     getFromClause () {
-        if (this.columnOption.value !== "") {
+        if (this.columnOption.value !== "" && this.columnOption.value !== undefined) {
             return `, json_each(${this.table}.${this.column}) as json${this.column}\n`;
         }
         return "\n";
