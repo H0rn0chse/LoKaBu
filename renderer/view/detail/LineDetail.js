@@ -51,7 +51,8 @@ export class LineDetail extends View {
         oItem
             .addEventListener("lineChange", this.onLineChange, this)
             .addEventListener("lineSelect", this.onLineSelect, this)
-            .addEventListener("lineRemove", this.onLineRemove, this);
+            .addEventListener("lineRemove", this.onLineRemove, this)
+            .addEventListener("lineEnter", this.onLineEnter, this);
     }
 
     onLineChange (oEvent) {
@@ -84,5 +85,41 @@ export class LineDetail extends View {
 
     onBulkAction (oEvent) {
         this.handleEvent("bulkAction", oEvent);
+    }
+
+    onLineEnter (oEvent) {
+        const oParentNode = this.getNode();
+
+        if (oParentNode) {
+            const bForward = oEvent.customData.forward;
+            let bLineWasSelected = false;
+            const aNodes = oParentNode.querySelectorAll(".line-detail-line");
+
+            aNodes.forEach((oNode, iIndex) => {
+                if (bLineWasSelected) {
+                    return;
+                }
+                if (oNode === oEvent.customData.node) {
+                    bLineWasSelected = true;
+                    const oNextNode = aNodes[iIndex + 1];
+                    const oPrevNode = aNodes[iIndex - 1];
+                    const oFirstNode = aNodes[0];
+                    const oLastNode = aNodes[aNodes.length - 1];
+                    if (bForward) {
+                        if (oNextNode) {
+                            oNextNode.querySelector(`[id^="value-"]`).focus();
+                        } else if (oFirstNode) {
+                            oFirstNode.querySelector(`[id^="value-"]`).focus();
+                        }
+                    } else {
+                        if (oPrevNode) {
+                            oPrevNode.querySelector(`[id^="value-"]`).focus();
+                        } else if (oLastNode) {
+                            oLastNode.querySelector(`[id^="value-"]`).focus();
+                        }
+                    }
+                }
+            });
+        }
     }
 };

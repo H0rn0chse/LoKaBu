@@ -16,6 +16,10 @@ export class View extends MultiClass(BindingManager, EventManager) {
         this.addModel(LanguageModel, "lang");
     }
 
+    getNode () {
+        return this.node;
+    }
+
     addGenericListenerToChild (oChild) {
         oChild.addGenericListener(this);
     }

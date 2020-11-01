@@ -38,6 +38,7 @@ export class LineDetailLine extends View {
                 .setType("number")
                 .setValue(this.getProperty("value"))
                 .addEventListener("change", this.onLineChange, this)
+                .addEventListener("keyup", this.onLineEnter, this)
             )
             .appendNode(new Icon("minus-circle")
                 .addClass("cursorPointer")
@@ -71,5 +72,16 @@ export class LineDetailLine extends View {
             selected: this.getNodeById("selected").checked
         };
         this.handleEvent("lineSelect", oEvent);
+    }
+
+    onLineEnter (oEvent) {
+        if (oEvent.key === "Enter") {
+            oEvent.customData = {
+                node: this.getNode(),
+                forward: !oEvent.shiftKey
+            };
+            oEvent.preventDefault();
+            this.handleEvent("lineEnter", oEvent);
+        }
     }
 };

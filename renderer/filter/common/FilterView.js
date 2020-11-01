@@ -16,6 +16,7 @@ export class FilterView extends View {
             this.addModel(oModel, oModel.getName());
         });
 
+        // filter select
         const oElement = new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
             .appendNode(new DomElement("select")
                 .insertTemplate(this._insertOptions.bind(this), oFilter.getOptionList())
@@ -23,6 +24,7 @@ export class FilterView extends View {
                 .addEventListener("change", this.onUpdateFilter, this)
             );
 
+        // all/ none at least one/ ...
         if (oFilter.getColumnOptionList().length > 0) {
             oElement.appendNode(new DomElement("select")
                 .insertTemplate(this._insertOptions.bind(this), oFilter.getColumnOptionList())
@@ -31,6 +33,7 @@ export class FilterView extends View {
             );
         }
 
+        // equal/ greater/ ...
         oElement.appendNode(new DomElement("select")
             .insertTemplate(this._insertOptions.bind(this), oFilter.getInputOptionList())
             .setValue(oFilter.getInputOption())
@@ -38,12 +41,14 @@ export class FilterView extends View {
         );
 
         if (oFilter.getValueType() !== Enums.InputOptions.List) {
+            // regular input text/ number/ ...
             oElement.appendNode(new DomElement("input")
                 .setType(oFilter.getValueType())
                 .setValue(oFilter.getValue())
                 .addEventListener("focusout", this.onUpdateValue, this)
             );
         } else {
+            // list
             oElement.appendNode(new DomElement("select")
                 .insertTemplate(this._insertOptions.bind(this), oFilter.getValueOptions())
                 .setValue(oFilter.getValue())
