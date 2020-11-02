@@ -186,7 +186,18 @@ export class DetailController extends Controller {
 
     onLineChange (oEvent) {
         const oData = oEvent.customData;
-        LineModel.updateEntry(oData.id, oData.receipt, oData.value, oData.person, oData.type);
+        const oResult = LineModel.updateEntry(oData.id, oData.receipt, oData.value, oData.person, oData.type);
+        this.focusLineValue(oResult.index + 1);
+    }
+
+    focusLineValue (iIndex) {
+        const oParentNode = this.getNode();
+        if (oParentNode) {
+            const oNode = oParentNode.querySelectorAll(".line-detail-line")[iIndex];
+            if (oNode) {
+                oNode.querySelector(`[id^="value-"]`).focus();
+            }
+        }
     }
 
     onLineSelect (oEvent) {
