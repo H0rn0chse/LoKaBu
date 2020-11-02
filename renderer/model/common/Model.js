@@ -50,10 +50,12 @@ export class Model extends EventManager {
     }
 
     set (aPath, vValue, bSuppressUpdate = false) {
-        objectSet(this._data, this._evaluatePath(aPath), vValue);
+        const aFinalPath = this._evaluatePath(aPath);
+        objectSet(this._data, aFinalPath, vValue);
         if (!bSuppressUpdate) {
             this.onUpdate({});
         }
+        return aFinalPath;
     }
 
     mergeObjectIntoData (oData, aPath = []) {

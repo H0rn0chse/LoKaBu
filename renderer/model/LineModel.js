@@ -39,7 +39,7 @@ class _LineModel extends DatabaseModel {
     }
 
     updateEntry (iId, iReceipt, fValue, sBilling, sType, bSupressUpdate = false) {
-        const aPath = ["lines", { ID: iId }];
+        let aPath = ["lines", { ID: iId }];
         const oOldEntry = this.get(aPath);
 
         const oEntry = {
@@ -50,7 +50,7 @@ class _LineModel extends DatabaseModel {
             Type: sType,
             Selected: oOldEntry.Selected
         };
-        this.set(aPath, deepClone(oEntry), true);
+        aPath = this.set(aPath, deepClone(oEntry), true);
 
         oEntry.Value = parseInt(oEntry.Value * 100, 10);
         EventBus.sendToDatabase("lines-update", oEntry);
@@ -58,6 +58,9 @@ class _LineModel extends DatabaseModel {
         if (!bSupressUpdate) {
             this.update();
         }
+        return {
+            index: aPath[aPath.length - 1]
+        };
     }
 
     updateBulk (vBilling, vType) {

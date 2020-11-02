@@ -23,6 +23,10 @@ export class Controller {
         return this.container[sName] && this.container[sName].getContent();
     }
 
+    getNode () {
+        return this.root;
+    }
+
     update () {
         this.getAllContainer().forEach(oContainer => {
             oContainer.getContent().update();
