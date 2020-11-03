@@ -22,6 +22,12 @@
 				EventBus.sendToMain("windowProcessClosed");
 			});
 			oApp.start();
+
+			window.addEventListener("keyup", oEvent => {
+				if (oEvent.key === "F12") {
+					EventBus.sendToMain("openDevTools");
+				}
+			})
 		</script>
 	</head>
 	<body>
