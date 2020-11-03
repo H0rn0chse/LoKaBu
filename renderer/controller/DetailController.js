@@ -193,9 +193,11 @@ export class DetailController extends Controller {
     focusLineValue (iIndex) {
         const oParentNode = this.getNode();
         if (oParentNode) {
-            const oNode = oParentNode.querySelectorAll(".line-detail-line")[iIndex];
+            let oNode = oParentNode.querySelectorAll(".line-detail-line")[iIndex];
             if (oNode) {
-                oNode.querySelector(`[id^="value-"]`).focus();
+                oNode = oNode.querySelector(`[id^="value-"]`);
+                oNode.focus();
+                oNode.select();
             }
         }
     }
