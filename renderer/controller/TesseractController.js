@@ -68,6 +68,7 @@ export class TesseractController extends Controller {
                     return parseInt(sText, 10) / 100;
                 });
                 EventBus.sendToCurrentWindow("tesseract-result", aResult);
-            });
+            })
+            .catch(() => {});
     }
 }
