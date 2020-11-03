@@ -79,5 +79,9 @@ export class LineDetailLine extends View {
         if (oEvent.key === "ArrowUp" || oEvent.key === "ArrowDown") {
             oEvent.preventDefault();
         }
+        if (oEvent.key === "Enter") {
+            oEvent.preventDefault();
+            this.onLineChange(oEvent);
+        }
     }
 };
