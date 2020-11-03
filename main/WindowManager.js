@@ -28,6 +28,12 @@ class _WindowManager {
             this.windowsLoaded--;
             this.close();
         });
+
+        ipcMain.on("openDevTools", () => {
+            this.getAllWindows().forEach(oWin => {
+                oWin.webContents.openDevTools();
+            });
+        });
     }
 
     updateIpcMap () {
