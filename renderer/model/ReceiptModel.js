@@ -77,6 +77,14 @@ class _ReceiptModel extends DatabaseModel {
         this.update();
     }
 
+    appendComment (sComment) {
+        const sOldComment = this.get(["Comment"]);
+        const sNewComment = `${sOldComment}\n${sComment}`;
+        this.set(["Comment"], sNewComment, true);
+        this.save();
+        this.update();
+    }
+
     setStore (iStore) {
         this.set(["Store"], iStore, true);
         this.save();
