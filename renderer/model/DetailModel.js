@@ -74,6 +74,9 @@ class _DetailModel extends Model {
     }
 
     setImageSrc (sPath) {
+        if (sPath) {
+            ReceiptModel.appendComment(sPath.split(/\\/g).pop());
+        }
         this.set(["imageSrc"], sPath);
     }
 
