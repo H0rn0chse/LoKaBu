@@ -34,7 +34,7 @@ class _LineModel extends DatabaseModel {
         };
         this.push(["lines"], deepClone(oEntry));
 
-        oEntry.Value = parseInt(oEntry.Value * 100, 10);
+        oEntry.Value = parseInt((oEntry.Value * 100).toPrecision(15), 10);
         EventBus.sendToDatabase("lines-create", oEntry);
     }
 
@@ -52,7 +52,7 @@ class _LineModel extends DatabaseModel {
         };
         aPath = this.set(aPath, deepClone(oEntry), true);
 
-        oEntry.Value = parseInt(oEntry.Value * 100, 10);
+        oEntry.Value = parseInt((oEntry.Value * 100).toPrecision(15), 10);
         EventBus.sendToDatabase("lines-update", oEntry);
 
         if (!bSupressUpdate) {
