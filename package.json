@@ -1,7 +1,7 @@
 {
   "name": "lokabu",
   "productName": "LoKaBu",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "",
   "main": "main.js",
   "scripts": {
