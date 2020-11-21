@@ -8,6 +8,7 @@ import { HistoryController } from "./controller/HistoryController.js";
 import { EventBus } from "./EventBus.js";
 import { DialogImports } from "./DialogImports.js";
 import { TesseractController } from "./controller/TesseractController.js";
+import { ToolsController } from "./controller/ToolsController.js";
 const { remote } = require("electron");
 
 export class AppController extends Controller {
@@ -20,6 +21,7 @@ export class AppController extends Controller {
         this.registerController("detail", DetailController);
         this.registerController("history", HistoryController);
         this.registerController("analysis", AnalysisController);
+        this.registerController("tools", ToolsController);
         this.registerController("settings", SettingsController);
         this.registerController("tesseract", TesseractController);
 

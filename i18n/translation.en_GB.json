@@ -3,6 +3,7 @@
     "analysis.section.title": "Analysis",
     "history.section.title": "History",
     "settings.section.title": "Settings",
+    "tools.section.title": "Tools",
     "settings.defaultValues": "Default values",
     "common.billingAccount": "Billing account",
     "common.billingType": "Billing type",
