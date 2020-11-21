@@ -16,11 +16,9 @@ export class SettingsController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oSettings = new SettingsView();
-        const oSettingsContainer = this.createContainer("settings")
-            .setContent(oSettings);
+        const oSettings = this.addView("settings", SettingsView);
 
-        oSettings.setParent(oSettingsContainer.getNode())
+        oSettings
             .addModel(SettingsModel, "viewModel")
             .addModel(AccountModel, "account")
             .addModel(StoreModel, "store")

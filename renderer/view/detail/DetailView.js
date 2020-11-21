@@ -13,14 +13,9 @@ export class DetailView extends MultiView {
         super();
         this.name = "DetailView";
 
-        this.addView("receiptDetail", new ReceiptDetail()
-            .addGenericListener(this));
-
-        this.addView("lineDetail", new LineDetail()
-            .addGenericListener(this));
-
-        this.addView("scanner", new Scanner()
-            .addGenericListener(this));
+        this.addView("receiptDetail", ReceiptDetail);
+        this.addView("lineDetail", LineDetail);
+        this.addView("scanner", Scanner);
     }
 
     render () {

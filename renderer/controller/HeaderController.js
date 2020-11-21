@@ -8,11 +8,9 @@ export class HeaderController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oHeader = new HeaderView();
-        const oHeaderContainer = this.createContainer("header")
-            .setContent(oHeader);
+        const oHeader = this.addView("header", HeaderView);
 
-        oHeader.setParent(oHeaderContainer.getNode())
+        oHeader
             .addModel(HeaderModel, "viewModel");
 
         // do the binding

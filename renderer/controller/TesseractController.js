@@ -15,11 +15,7 @@ export class TesseractController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oTesseract = new TesseractView();
-        const oTesseractContainer = this.createContainer("tesseract")
-            .setContent(oTesseract);
-
-        oTesseract.setParent(oTesseractContainer.getNode());
+        this.addView("tesseract", TesseractView);
 
         this.deferred = new Deferred();
 

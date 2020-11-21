@@ -20,11 +20,9 @@ export class DetailController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oDetail = new DetailView();
-        const oDetailContainer = this.createContainer("detail")
-            .setContent(oDetail);
+        const oDetail = this.addView("detail", DetailView);
 
-        oDetail.setParent(oDetailContainer.getNode())
+        oDetail
             .addModel(DetailModel, "viewModel")
             .addModel(ReceiptModel, "receipt")
             .addModel(LineModel, "lines")
