@@ -115,5 +115,7 @@
     "replace.apply": "Anwenden",
     "replace.text": "Dieser Listeneintrag kann aus Gründen der Konsitenz nicht einfach gelöscht werden, sondern muss mit einem anderem Eintrag ersetzt werden.",
     "replace.text2": "Wird mit folgendem Listeneintrag ersetzt:",
+    "tools.items.main": "Start",
+    "tools.items.duplicates": "Duplikate",
     "tools.main.description": "In diesem Tab werden Werkezuge zur Bearbeitung und Auswertung des Kassenbuchs zu Verfügung gestellt.\nDiese operieren zum Teil auf der gesamten Datenbank und könnten deshalb performance-technisch langsam erscheinen."
 }

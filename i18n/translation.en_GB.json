@@ -115,5 +115,7 @@
     "replace.apply": "Apply",
     "replace.text": "This list entry cannot be deleted due to consistency issues. It needs to be replaced by another entry.",
     "replace.text2": "Will be replaced with this entry:",
+    "tools.items.main": "Start",
+    "tools.items.duplicates": "Duplicates",
     "tools.main.description": "In this tab you have access to tools to work on the database and analyze it.\nThese tools make use of the entire database. This might lead to bad performance/ waiting times."
 }

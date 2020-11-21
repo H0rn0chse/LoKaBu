@@ -45,12 +45,12 @@ export const ToolsModel = new _ToolsModel({
     items: [
         {
             id: "main",
-            text: "Main",
+            i18n: ["tools.items.main"],
             selected: true
         },
         {
             id: "duplicates",
-            text: "Duplicates",
+            i18n: ["tools.items.duplicates"],
             selected: false
         }
     ],

@@ -14,7 +14,7 @@ export class ToolsListItem extends View {
             .addClass("cursorPointer")
             .addClass(this.getProperty("selected") ? "selected" : "")
             .appendNode(new DomElement("div")
-                .setText(this.getProperty("text"))
+                .setText(this.getTranslation("i18n"))
             )
             .addEventListener("click", this.onClick, this)
             .getNode();

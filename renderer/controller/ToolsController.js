@@ -20,14 +20,14 @@ export class ToolsController extends Controller {
             .bindProperty("description-i18n", "viewModel", ["description-i18n"])
             .bindAggregation("items", new Aggregation("viewModel", ["items"])
                 .bindProperty("id", "viewModel", ["id"])
-                .bindProperty("text", "viewModel", ["text"])
+                .bindProperty("i18n", "viewModel", ["i18n"])
                 .bindProperty("selected", "viewModel", ["selected"])
             );
 
         EventBus.listen("navigation", this.onNavigation, this);
 
         oTools
-            .addEventListener("nav", this.onNav, this)
+            .addEventListener("nav", this.onNav, this);
     }
 
     onNavigation (sSection) {
