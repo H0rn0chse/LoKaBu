@@ -26,7 +26,7 @@ export class SettingsListItem extends View {
         if (this.getProperty("select-value", true) !== null) {
             oDomElement.appendNode(new DomElement("select")
                 .setId("select")
-                .insertAggregation(this, "select", DropdownItem)
+                .insertAggregation(this, "select", DropdownItem, () => {})
                 .sortChildren()
                 .setValue(this.getProperty("select-value"))
                 .addEventListener("change", this.onListEntryChange, this)
