@@ -9,6 +9,8 @@ class _LineModel extends DatabaseModel {
         super(oData, "lines", true);
         this.name = "LineModel";
         window[this.name] = this;
+
+        this.backupEntry = null;
     }
 
     getReceiptId () {
@@ -25,14 +27,14 @@ class _LineModel extends DatabaseModel {
         EventBus.sendToDatabase(`${this.table}-read`, oData);
     }
 
-    addEntry (iId, fValue) {
+    addEntry (iId, fValue, iBilling, iType) {
         fValue = fValue || 0;
         const oEntry = {
             Selected: false,
             Receipt: iId,
             Value: fValue.toFixed(2),
-            Billing: SettingsModel.getDefault("Person"),
-            Type: SettingsModel.getDefault("Type")
+            Billing: iBilling || SettingsModel.getDefault("Person"),
+            Type: iType || SettingsModel.getDefault("Type")
         };
         this.push(["lines"], deepClone(oEntry));
 
@@ -107,10 +109,12 @@ class _LineModel extends DatabaseModel {
         };
         EventBus.sendToDatabase("lines-delete", oEntry);
         this.emptyList();
+        this.backupEntry = null;
     }
 
     emptyList () {
         this.set(["lines"], []);
+        this.backup();
     }
 
     selectAll () {
@@ -141,6 +145,7 @@ class _LineModel extends DatabaseModel {
         });
         super.processRead(oEvent, aData);
         console.log("LinesModel loaded");
+        this.backup();
     }
 
     processUpdate () {
@@ -149,6 +154,23 @@ class _LineModel extends DatabaseModel {
 
     processReplace () {
         this.readReceiptLines(this.getReceiptId());
+    }
+
+    backup () {
+        this.backupEntry = deepClone(this.get(["lines"]));
+    }
+
+    reset () {
+        if (this.backupEntry) {
+            const aBackup = deepClone(this.backupEntry);
+            this.deleteReceipt(this.getReceiptId());
+            aBackup.forEach(oItem => {
+                this.addEntry(oItem.Receipt, parseFloat(oItem.Value), oItem.Billing, oItem.Type);
+            });
+            this.backupEntry = deepClone(aBackup);
+            this.set(["lines"], aBackup, true);
+            this.update();
+        }
     }
 }
 

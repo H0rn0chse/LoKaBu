@@ -35,8 +35,15 @@ export class DetailController extends Controller {
         oDetail
             .bindProperty("new-i18n", "viewModel", ["new-i18n"])
             .bindProperty("delete-i18n", "viewModel", ["delete-i18n"])
+            .bindProperty("reset-i18n", "viewModel", ["reset-i18n"])
+            .bindProperty("resetMessage-i18n", "viewModel", ["resetMessage-i18n"])
             .bindProperty("no-receipt", "viewModel", ["no-receipt"])
-            .bindProperty("no-receipt-i18n", "viewModel", ["no-receipt-i18n"]);
+            .bindProperty("no-receipt-i18n", "viewModel", ["no-receipt-i18n"])
+            .bindProperty("at-trans", "lang", ["common.date.at"])
+            .bindProperty("created", "receipt", ["Created"])
+            .bindProperty("created-trans", "lang", ["common.created"])
+            .bindProperty("updated", "receipt", ["Updated"])
+            .bindProperty("updated-trans", "lang", ["common.updated"]);
 
         // ReceiptDetail
         oDetail
@@ -97,6 +104,7 @@ export class DetailController extends Controller {
             .addEventListener("storeChange", this.onStoreChange, this)
             .addEventListener("new", this.onNew, this)
             .addEventListener("delete", this.onDelete, this)
+            .addEventListener("reset", this.onReset, this)
             .addEventListener("loadImageOrFragment", this.onLoadImageOrFragment, this)
             .addEventListener("startScanner", this.onStartScanner, this)
             .addEventListener("selectAll", this.onSelectAll, this)
@@ -217,6 +225,15 @@ export class DetailController extends Controller {
         ConfirmDialog.show()
             .then(() => {
                 return DetailModel.deleteReceipt(oEvent.customData.id);
+            })
+            .catch(() => {});
+    }
+
+    onReset (oEvent) {
+        const oData = oEvent.customData;
+        ConfirmDialog.show(oData.confirm)
+            .then(() => {
+                DetailModel.reset();
             })
             .catch(() => {});
     }

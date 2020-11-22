@@ -3,6 +3,7 @@ import { Model } from "./common/Model.js";
 import { LineModel } from "./LineModel.js";
 import { ReceiptModel } from "./ReceiptModel.js";
 import { EventBus } from "../EventBus.js";
+import { deepClone } from "../common/Utils.js";
 
 class _DetailModel extends Model {
     constructor (...args) {
@@ -88,11 +89,18 @@ class _DetailModel extends Model {
     importFragments (aFiles) {
         EventBus.sendToDatabase("fragment-import", aFiles);
     }
+
+    reset () {
+        LineModel.reset();
+        ReceiptModel.reset();
+    }
 }
 
 export const DetailModel = new _DetailModel({
     "new-i18n": ["detail.newReceipt"],
     "delete-i18n": ["detail.deleteReceipt"],
+    "reset-i18n": ["common.reset"],
+    "resetMessage-i18n": ["detail.reset.confirm"],
     "title-i18n": ["detail.section.title"],
     "id-i18n": ["receipt.id"],
     "account-i18n": ["common.account"],

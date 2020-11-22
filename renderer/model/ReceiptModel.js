@@ -9,6 +9,8 @@ class _ReceiptModel extends DatabaseModel {
         super(oData, "receipts", true);
         this.name = "ReceiptModel";
         window[this.name] = this;
+
+        this.backupEntry = null;
     }
 
     getId () {
@@ -44,16 +46,19 @@ class _ReceiptModel extends DatabaseModel {
             ID: iId
         };
         EventBus.sendToDatabase("receipts-delete", oEntry);
+        this.backupEntry = null;
     }
 
     processCreate (oEvent, oData) {
         this.set(["ID"], oData.lastInsertRowid);
+        this.backup();
     }
 
     processRead (oEvent, oData) {
         oData.Date = UnixToInput(oData.Date);
         this.mergeObjectIntoData(oData);
         console.log("ReceiptModel loaded");
+        this.backup();
     }
 
     processUpdate () {
@@ -102,6 +107,17 @@ class _ReceiptModel extends DatabaseModel {
         const oEntry = deepClone(this.get([]));
         oEntry.Date = InputToUnix(oEntry.Date);
         EventBus.sendToDatabase("receipts-update", oEntry);
+    }
+
+    backup () {
+        this.backupEntry = deepClone(this.get([]));
+    }
+
+    reset () {
+        if (this.backupEntry) {
+            this.mergeObjectIntoData(this.backupEntry);
+            this.save();
+        }
     }
 }
 

@@ -7,3 +7,11 @@
 .detailColumn {
     margin-right: 1em;
 }
+
+.detail-time {
+    margin-left: 2em;
+}
+
+.detail-time > *{
+    margin: 0.1em;
+}
