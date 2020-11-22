@@ -46,10 +46,13 @@ class _ReceiptListView extends Table {
         const sSql = `
         SELECT
             view.*,
-            json_group_array(l.value) as Lines
+            json_group_array(l.value) as Lines,
+            r.DuplicateHint as DuplicateHint
         FROM view_ReceiptList view
         JOIN Lines l
             ON view.ID = l.Receipt
+        JOIN Receipts r
+            ON view.ID = r.ID
         WHERE view.ID = ${sId}
         `;
         return DatabaseManager.get()

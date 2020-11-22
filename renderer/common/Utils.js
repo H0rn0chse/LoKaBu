@@ -6,6 +6,10 @@ export function deepEqual (vA, vB) {
     return JSON.stringify(vA) === JSON.stringify(vB);
 };
 
+export function removeDuplicates (aArr) {
+    return [...new Set(aArr)];
+}
+
 export function objectGet (oObject, aPath) {
     let vValue = oObject;
     for (let i = 0; i < aPath.length; i++) {

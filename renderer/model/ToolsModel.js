@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 import { UnixToDate, DateToDateString } from "../common/DateUtils.js";
-import { deepEqual } from "../common/Utils.js";
+import { deepEqual, removeDuplicates } from "../common/Utils.js";
 import { EventBus } from "../EventBus.js";
 import { Model } from "./common/Model.js";
 
@@ -121,6 +121,35 @@ class _ToolsModel extends Model {
         }
         this.update();
     }
+
+    confirmDuplicate () {
+        const aList = this.get(["duplicateData"]).map(oItem => {
+            return oItem.ID;
+        });
+        this.get(["duplicateData"]).forEach(oItemData => {
+            let aFilteredList = aList.filter(iHintId => {
+                return iHintId !== oItemData.ID;
+            });
+            aFilteredList = removeDuplicates(JSON.parse(oItemData.DuplicateHint).concat(aFilteredList));
+
+            const oItem = {
+                ID: oItemData.ID,
+                DuplicateHint: JSON.stringify(aFilteredList)
+            };
+
+            EventBus.sendToDatabase("receipts-update", oItem);
+        });
+
+        const oSelectedItem = this.getSelectedItem(["duplicates"]);
+        const aDuplicates = this.get(["duplicates"]).filter(oItem => {
+            return oItem !== oSelectedItem;
+        });
+
+        // reset duplicateData and remove duplicateEntry
+        this.set(["duplicateData"], [], true);
+        this.set(["duplicates"], aDuplicates, true);
+        this.update();
+    }
 }
 
 export const ToolsModel = new _ToolsModel({
@@ -140,5 +169,7 @@ export const ToolsModel = new _ToolsModel({
     ],
     "description-i18n": ["tools.main.description"],
     "findDuplicates-i18n": ["tools.duplicates.find"],
-    "confirm-i18n": ["tools.duplicates.confirm"]
+    "confirm-i18n": ["tools.duplicates.confirm"],
+    "confirmMessage-i18n": ["tools.duplicates.confirmMessage"],
+    "hint-i18n": ["tools.duplicates.hint"]
 });

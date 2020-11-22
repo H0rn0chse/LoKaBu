@@ -30,8 +30,12 @@ export class DuplicateView extends View {
             .appendNode(new DomElement("div")
                 .addClass("duplicate-preview")
                 .appendNode(new DomElement("div")
+                    .setText(this.getTranslation("hint-i18n"))
+                )
+                .appendNode(new DomElement("div")
                     .addClass("button")
                     .setText(this.getTranslation("confirm-i18n"))
+                    .addEventListener("click", this.onDuplicateConfirm, this)
                     .removeIf(!this.getProperty("selectedDuplicate"))
                 )
                 .appendNode(new FlexContainer("div", { flexDirection: "row", flexWrap: "nowrap" })
@@ -46,5 +50,12 @@ export class DuplicateView extends View {
 
     onDuplicateFind (oEvent) {
         this.handleEvent("duplicateFind", oEvent);
+    }
+
+    onDuplicateConfirm (oEvent) {
+        oEvent.customData = {
+            confirm: this.getTranslation("confirmMessage-i18n")
+        };
+        this.handleEvent("duplicateConfirm", oEvent);
     }
 };

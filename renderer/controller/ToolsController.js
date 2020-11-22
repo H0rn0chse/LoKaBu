@@ -34,6 +34,8 @@ export class ToolsController extends Controller {
             .bindProperty("selectedDuplicate", "viewModel", ["selectedDuplicate"])
             .bindProperty("findDuplicates-i18n", "viewModel", ["findDuplicates-i18n"])
             .bindProperty("confirm-i18n", "viewModel", ["confirm-i18n"])
+            .bindProperty("confirmMessage-i18n", "viewModel", ["confirmMessage-i18n"])
+            .bindProperty("hint-i18n", "viewModel", ["hint-i18n"])
             .bindAggregation("duplicates", new Aggregation("viewModel", ["duplicates"])
                 .bindProperty("id", "viewModel", ["id"])
                 .bindProperty("selected", "viewModel", ["selected"])
@@ -61,7 +63,8 @@ export class ToolsController extends Controller {
             .addEventListener("nav", this.onNav, this)
             .addEventListener("duplicateNav", this.onDuplicateNav, this)
             .addEventListener("duplicateFind", this.onDuplicateFind, this)
-            .addEventListener("deleteDuplicate", this.onDeleteDuplicate, this);
+            .addEventListener("deleteDuplicate", this.onDeleteDuplicate, this)
+            .addEventListener("duplicateConfirm", this.onDuplicateConfirm, this);
     }
 
     onNavigation (sSection) {
@@ -80,6 +83,15 @@ export class ToolsController extends Controller {
 
     onDuplicateFind (oEvent) {
         ToolsModel.findDuplicates();
+    }
+
+    onDuplicateConfirm (oEvent) {
+        const oData = oEvent.customData;
+        ConfirmDialog.show(oData.confirm)
+            .then(() => {
+                ToolsModel.confirmDuplicate();
+            })
+            .catch(() => {});
     }
 
     onDeleteDuplicate (oEvent) {

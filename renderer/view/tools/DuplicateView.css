@@ -6,6 +6,7 @@
 .duplicate-preview {
     width: calc(100% - 10em);
     height: 100%;
+    padding-left: 2em;
 }
 
 .duplicate-list-item {

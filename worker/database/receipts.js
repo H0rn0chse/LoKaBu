@@ -35,21 +35,24 @@ class _ReceiptsTable extends Table {
 
     updateSqlAction (oReceipt) {
         const oOldReceipt = this.readSqlAction(oReceipt);
-        const oUpdatedReceipt = Object.assign({}, oOldReceipt, oReceipt);
-        const sSql = `
-        UPDATE Receipts
-        SET
-            Date=$Date,
-            Account=$Account,
-            Comment=$Comment,
-            Store=$Store,
-            DuplicateHint=$DuplicateHint,
-            Updated=$Updated
-        WHERE ID=$ID
-        `;
-        return DatabaseManager.get()
-            .prepare(sSql)
-            .run(oUpdatedReceipt);
+        if (oOldReceipt) {
+            const oUpdatedReceipt = Object.assign({}, oOldReceipt, oReceipt);
+            const sSql = `
+            UPDATE Receipts
+            SET
+                Date=$Date,
+                Account=$Account,
+                Comment=$Comment,
+                Store=$Store,
+                DuplicateHint=$DuplicateHint,
+                Updated=$Updated
+            WHERE ID=$ID
+            `;
+            return DatabaseManager.get()
+                .prepare(sSql)
+                .run(oUpdatedReceipt);
+        }
+        throw new Error("Receipt does not exist anymore");
     }
 
     deleteSqlAction (oReceipt) {
