@@ -40,6 +40,7 @@ You have to build (and sign) your platform-dependent build yourself or just use 
   <img src="./docu/screenshots/details.png" title="Receipt details" />
   <img src="./docu/screenshots/history.png" title="Receipt history" />
   <img src="./docu/screenshots/analysis.png" title="Analysis" />
+  <img src="./docu/screenshots/tools.png" title="Tools" />
   <img src="./docu/screenshots/settings.png" title="Settings" />
 
 [releaseBadge]: https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg

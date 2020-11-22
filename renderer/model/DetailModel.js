@@ -3,7 +3,6 @@ import { Model } from "./common/Model.js";
 import { LineModel } from "./LineModel.js";
 import { ReceiptModel } from "./ReceiptModel.js";
 import { EventBus } from "../EventBus.js";
-import { deepClone } from "../common/Utils.js";
 
 class _DetailModel extends Model {
     constructor (...args) {
