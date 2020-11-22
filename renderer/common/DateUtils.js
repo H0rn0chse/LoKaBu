@@ -5,11 +5,15 @@ export function UnixToDate (sUnixTimestamp) {
 }
 
 export function DateToInput (dDate) {
-    return dDate.getFullYear() + "-" + (dDate.getMonth() + 1).toString().padStart(2, "0") + "-" + dDate.getDate().toString().padStart(2, "0");
+    return `${dDate.getFullYear()}-${(dDate.getMonth() + 1).toString().padStart(2, "0")}-${dDate.getDate().toString().padStart(2, "0")}`;
 }
 
 export function DateToFull (dDate) {
-    return dDate.getDate().toString().padStart(2, "0") + "." + (dDate.getMonth() + 1).toString().padStart(2, "0") + "." + dDate.getFullYear() + " " + (dDate.getHours()).toString().padStart(2, "0") + ":" + (dDate.getMinutes()).toString().padStart(2, "0") + ":" + (dDate.getSeconds()).toString().padStart(2, "0");
+    return `${DateToDateString(dDate)} ${(dDate.getHours()).toString().padStart(2, "0")}:${(dDate.getMinutes()).toString().padStart(2, "0")}:${(dDate.getSeconds()).toString().padStart(2, "0")}`;
+}
+
+export function DateToDateString (dDate) {
+    return `${dDate.getDate().toString().padStart(2, "0")}.${(dDate.getMonth() + 1).toString().padStart(2, "0")}.${dDate.getFullYear()}`;
 }
 
 export function UnixToInput (sUnixTimestamp) {

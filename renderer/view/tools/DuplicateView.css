@@ -1,0 +1,50 @@
+.duplicate-list {
+    width: 10em;
+    height: 100%;
+}
+
+.duplicate-preview {
+    width: calc(100% - 10em);
+    height: 100%;
+}
+
+.duplicate-list-item {
+    padding: 1em;
+    padding-left: 1.5em;
+}
+
+.duplicate-list-item.selected {
+    color: var(--element-font);
+    background: grey;
+}
+
+.duplicate-list-scroll {
+    max-height: calc(100vh - var(--header-height) - 11.5em);
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.duplicate-receipt-scroll {
+    max-width: calc(100vw - 30em);
+    overflow: scroll;
+    overflow-y: hidden;
+}
+
+.duplicate-receipt {
+    margin: 1em;
+    width: 15em;
+}
+
+.duplicate-receipt > * {
+    margin: 0.2em;
+}
+
+.duplicate-receipt-id {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.duplicate-receipt-lines, .duplicate-receipt-sum, .duplicate-receipt-comment {
+    margin-top: 1em;
+    margin-bottom: 0;
+}
