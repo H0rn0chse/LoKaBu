@@ -126,7 +126,7 @@ class _MigrationHelper {
                     oDb.exec(sSql);
                 });
         }
-        return Promise.reject();
+        return Promise.reject("No upgrade available");
     }
 };
 

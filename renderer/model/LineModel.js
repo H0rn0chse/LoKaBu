@@ -2,6 +2,7 @@ import { EventBus } from "../EventBus.js";
 import { DatabaseModel } from "./common/DatabaseModel.js";
 import { deepClone, findAndSplice } from "../common/Utils.js";
 import { SettingsModel } from "./SettingsModel.js";
+import { ReceiptModel } from "./ReceiptModel.js";
 
 class _LineModel extends DatabaseModel {
     constructor (oData) {
@@ -37,6 +38,7 @@ class _LineModel extends DatabaseModel {
 
         oEntry.Value = parseInt((oEntry.Value * 100).toPrecision(15), 10);
         EventBus.sendToDatabase("lines-create", oEntry);
+        ReceiptModel.save();
     }
 
     updateEntry (iId, iReceipt, fValue, sBilling, sType, bSupressUpdate = false) {
@@ -58,6 +60,7 @@ class _LineModel extends DatabaseModel {
 
         if (!bSupressUpdate) {
             this.update();
+            ReceiptModel.save();
         }
         return {
             index: aPath[aPath.length - 1]
@@ -79,6 +82,7 @@ class _LineModel extends DatabaseModel {
         });
         if (aLines.length) {
             this.update();
+            ReceiptModel.save();
         }
     }
 
@@ -89,6 +93,7 @@ class _LineModel extends DatabaseModel {
         const aList = this.get(["lines"]);
         if (findAndSplice(aList, "ID", iId)) {
             EventBus.sendToDatabase("lines-delete", oEntry);
+            ReceiptModel.save();
         }
     }
 

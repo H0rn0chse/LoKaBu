@@ -25,7 +25,7 @@ export function InputToDate (sInputValue) {
 }
 
 export function DateToUnix (dDate) {
-    return dDate.getTime() / 1000;
+    return Math.floor(dDate.getTime() / 1000);
 }
 
 export function InputToUnix (sInputValue) {

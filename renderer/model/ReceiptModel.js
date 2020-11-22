@@ -23,11 +23,15 @@ class _ReceiptModel extends DatabaseModel {
     }
 
     addEntry () {
+        const iNow = DateToUnix(new Date());
         const oEntry = {
-            Date: DateToUnix(new Date()),
+            Date: iNow,
             Account: SettingsModel.getDefault("Account"),
             Comment: "",
-            Store: SettingsModel.getDefault("Store")
+            Store: SettingsModel.getDefault("Store"),
+            DuplicateHint: "[]",
+            Created: iNow,
+            Updated: iNow
         };
         EventBus.sendToDatabase("receipts-create", deepClone(oEntry));
 
@@ -93,6 +97,8 @@ class _ReceiptModel extends DatabaseModel {
     }
 
     save () {
+        this.set(["Updated"], DateToUnix(new Date()), true);
+
         const oEntry = deepClone(this.get([]));
         oEntry.Date = InputToUnix(oEntry.Date);
         EventBus.sendToDatabase("receipts-update", oEntry);
