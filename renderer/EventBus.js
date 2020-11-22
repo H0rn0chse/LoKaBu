@@ -10,6 +10,9 @@ class _EventBus extends EventManager {
         this.windows = {};
 
         this.ipcEvents = new EventWrapper();
+
+        // Set reference for debugging
+        window.EventBus = this;
     }
 
     listen (sChannel, fnHandler, oScope) {

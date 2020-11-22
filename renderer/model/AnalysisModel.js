@@ -12,6 +12,7 @@ class _AnalysisModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "receiptAnalysis");
         this.name = "AnalysisModel";
+        window[this.name] = this;
 
         SettingsModel.addEventListener("update", this.read, this);
         HistoryModel.addEventListener("update", this.read, this);

@@ -7,6 +7,7 @@ class _TypeModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "types");
         this.name = "TypeModel";
+        window[this.name] = this;
     }
 
     getEntries () {

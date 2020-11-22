@@ -14,8 +14,8 @@ class _ReceiptsTable extends Table {
     createSqlAction (oReceipt) {
         const sSql = `
         INSERT INTO Receipts
-            (Date, Account, Comment, Store)
-        Values ($Date, $Account, $Comment, $Store)
+            (Date, Account, Comment, Store, DuplicateHint, Created, Updated)
+        Values ($Date, $Account, $Comment, $Store, $DuplicateHint, $Created, $Updated)
         `;
         return DatabaseManager.get()
             .prepare(sSql)
@@ -34,14 +34,25 @@ class _ReceiptsTable extends Table {
     }
 
     updateSqlAction (oReceipt) {
-        const sSql = `
-        UPDATE Receipts
-        SET Date=$Date, Account=$Account, Comment=$Comment, Store=$Store
-        WHERE ID=$ID
-        `;
-        return DatabaseManager.get()
-            .prepare(sSql)
-            .run(oReceipt);
+        const oOldReceipt = this.readSqlAction(oReceipt);
+        if (oOldReceipt) {
+            const oUpdatedReceipt = Object.assign({}, oOldReceipt, oReceipt);
+            const sSql = `
+            UPDATE Receipts
+            SET
+                Date=$Date,
+                Account=$Account,
+                Comment=$Comment,
+                Store=$Store,
+                DuplicateHint=$DuplicateHint,
+                Updated=$Updated
+            WHERE ID=$ID
+            `;
+            return DatabaseManager.get()
+                .prepare(sSql)
+                .run(oUpdatedReceipt);
+        }
+        throw new Error("Receipt does not exist anymore");
     }
 
     deleteSqlAction (oReceipt) {

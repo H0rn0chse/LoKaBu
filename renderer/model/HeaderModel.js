@@ -4,6 +4,7 @@ class _HeaderModel extends Model {
     constructor (...args) {
         super(...args);
         this.name = "HeaderModel";
+        window[this.name] = this;
     }
 
     setSelectedSection (sSection) {
@@ -29,6 +30,11 @@ export const HeaderModel = new _HeaderModel({
         {
             section: "analysis",
             i18n: ["analysis.section.title"],
+            selected: false
+        },
+        {
+            section: "tools",
+            i18n: ["tools.section.title"],
             selected: false
         },
         {

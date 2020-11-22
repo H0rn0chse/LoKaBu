@@ -41,6 +41,9 @@
         },
         "0.5.6": {
             "min": "3.3"
+        },
+        "0.6.0": {
+            "min": "3.4"
         }
     },
     "upgrades": {
@@ -49,6 +52,7 @@
         "2.0": "./migration/upgrades/2.0_3.0.sql",
         "3.0": "./migration/upgrades/3.0_3.1.sql",
         "3.1": "./migration/upgrades/3.1_3.2.sql",
-        "3.2": "./migration/upgrades/3.2_3.3.sql"
+        "3.2": "./migration/upgrades/3.2_3.3.sql",
+        "3.3": "./migration/upgrades/3.3_3.4.sql"
     }
 }

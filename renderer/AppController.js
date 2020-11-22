@@ -8,6 +8,8 @@ import { HistoryController } from "./controller/HistoryController.js";
 import { EventBus } from "./EventBus.js";
 import { DialogImports } from "./DialogImports.js";
 import { TesseractController } from "./controller/TesseractController.js";
+import { ToolsController } from "./controller/ToolsController.js";
+import { BusyController } from "./controller/BusyController.js";
 const { remote } = require("electron");
 
 export class AppController extends Controller {
@@ -16,23 +18,14 @@ export class AppController extends Controller {
 
         this.blockApp();
 
-        const oHeader = this.createContainer("header");
-        oHeader.setContent(new HeaderController(oHeader.getNode()));
-
-        const oDetail = this.createContainer("detail");
-        oDetail.setContent(new DetailController(oDetail.getNode()));
-
-        const oHistory = this.createContainer("history");
-        oHistory.setContent(new HistoryController(oHistory.getNode()));
-
-        const oAnalysis = this.createContainer("analysis");
-        oAnalysis.setContent(new AnalysisController(oAnalysis.getNode()));
-
-        const oSettings = this.createContainer("settings");
-        oSettings.setContent(new SettingsController(oSettings.getNode()));
-
-        const oTesseract = this.createContainer("tesseract");
-        oTesseract.setContent(new TesseractController(oTesseract.getNode()));
+        this.registerController("header", HeaderController);
+        this.registerController("detail", DetailController);
+        this.registerController("history", HistoryController);
+        this.registerController("analysis", AnalysisController);
+        this.registerController("tools", ToolsController);
+        this.registerController("settings", SettingsController);
+        this.registerController("tesseract", TesseractController);
+        this.registerController("busy", BusyController);
 
         EventBus.listen("blockApp", this.blockApp, this);
         EventBus.listen("unblockApp", this.unblockApp, this);
@@ -61,5 +54,10 @@ export class AppController extends Controller {
 
     shutdown () {
         remote.getCurrentWindow().close();
+    }
+
+    registerController (sContainer, Controller) {
+        const oContainer = this.createContainer(sContainer);
+        oContainer.setContent(new Controller(oContainer.getNode()));
     }
 };

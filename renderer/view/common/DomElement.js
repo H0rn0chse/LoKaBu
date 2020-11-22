@@ -17,6 +17,24 @@ export class DomElement {
         return this;
     }
 
+    setSelectable (bValue) {
+        if (bValue) {
+            this.addClass("selectable");
+            this.removeClass("unselectable");
+        } else {
+            this.addClass("unselectable");
+            this.removeClass("selectable");
+        }
+        return this;
+    }
+
+    removeClass (sClass) {
+        if (sClass !== "" && sClass !== undefined) {
+            this.node.classList.remove(sClass);
+        }
+        return this;
+    }
+
     addEventListener (sEventName, fnHandler, oScope) {
         const fnBoundHandler = oScope ? fnHandler.bind(oScope) : fnHandler;
 
@@ -25,7 +43,9 @@ export class DomElement {
     }
 
     appendNode (oNode) {
-        this.node.appendChild(oNode.getNode());
+        if (oNode) {
+            this.node.appendChild(oNode.getNode());
+        }
         return this;
     }
 
@@ -108,6 +128,18 @@ export class DomElement {
         return this;
     }
 
+    setHTML (sText = "") {
+        if (typeof sText !== "string") {
+            sText = sText.toString();
+        }
+
+        // make spaces non-breakable
+        sText = sText.replace(/ /g, '\xa0');
+
+        this.node.innerHTML = sText;
+        return this;
+    }
+
     setType (sType) {
         this.node.setAttribute('type', sType);
         return this;
@@ -136,6 +168,13 @@ export class DomElement {
                     .forEach(child => this.node.appendChild(child));
                 break;
             default:
+        }
+        return this;
+    }
+
+    removeIf (vValue) {
+        if (vValue) {
+            return null;
         }
         return this;
     }

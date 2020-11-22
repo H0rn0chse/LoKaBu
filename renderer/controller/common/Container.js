@@ -4,8 +4,9 @@ import { loadCss } from "../../common/Utils.js";
 loadCss("/renderer/controller/common/Container.css");
 
 export class Container {
-    constructor (oRoot) {
+    constructor (oRoot, sId = "container") {
         this.node = new DomElement("div")
+            .setId(sId)
             .addClass("container")
             .appendToParent(oRoot)
             .getNode();

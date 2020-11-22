@@ -6,8 +6,16 @@ export class Controller {
         this.container = {};
     }
 
+    addView (sName, View) {
+        const oView = new View();
+        const oContainer = this.createContainer(sName)
+            .setContent(oView);
+        oView.setParent(oContainer.getNode());
+        return oView;
+    }
+
     createContainer (sName) {
-        this.container[sName] = new Container(this.root);
+        this.container[sName] = new Container(this.root, sName);
         return this.container[sName];
     }
 

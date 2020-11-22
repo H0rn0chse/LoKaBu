@@ -10,6 +10,7 @@ class _HistoryModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "receiptList");
         this.name = "HistoryModel";
+        window[this.name] = this;
 
         ReceiptModel.addEventListener("update", this.onModelUpdate, this);
         LineModel.addEventListener("update", this.onModelUpdate, this);
@@ -150,6 +151,16 @@ export const HistoryModel = new _HistoryModel({
     }, {
         "id": "ReceiptSum",
         "text-i18n": ["common.value"],
+        "selected": false,
+        "direction": ""
+    }, {
+        "id": "Created",
+        "text-i18n": ["common.created"],
+        "selected": false,
+        "direction": ""
+    }, {
+        "id": "Updated",
+        "text-i18n": ["common.updated"],
         "selected": false,
         "direction": ""
     }],

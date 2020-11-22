@@ -8,6 +8,9 @@ class _ReceiptModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "receipts", true);
         this.name = "ReceiptModel";
+        window[this.name] = this;
+
+        this.backupEntry = null;
     }
 
     getId () {
@@ -22,11 +25,15 @@ class _ReceiptModel extends DatabaseModel {
     }
 
     addEntry () {
+        const iNow = DateToUnix(new Date());
         const oEntry = {
-            Date: DateToUnix(new Date()),
+            Date: iNow,
             Account: SettingsModel.getDefault("Account"),
             Comment: "",
-            Store: SettingsModel.getDefault("Store")
+            Store: SettingsModel.getDefault("Store"),
+            DuplicateHint: "[]",
+            Created: iNow,
+            Updated: iNow
         };
         EventBus.sendToDatabase("receipts-create", deepClone(oEntry));
 
@@ -39,16 +46,19 @@ class _ReceiptModel extends DatabaseModel {
             ID: iId
         };
         EventBus.sendToDatabase("receipts-delete", oEntry);
+        this.backupEntry = null;
     }
 
     processCreate (oEvent, oData) {
         this.set(["ID"], oData.lastInsertRowid);
+        this.backup();
     }
 
     processRead (oEvent, oData) {
         oData.Date = UnixToInput(oData.Date);
         this.mergeObjectIntoData(oData);
         console.log("ReceiptModel loaded");
+        this.backup();
     }
 
     processUpdate () {
@@ -92,9 +102,22 @@ class _ReceiptModel extends DatabaseModel {
     }
 
     save () {
+        this.set(["Updated"], DateToUnix(new Date()), true);
+
         const oEntry = deepClone(this.get([]));
         oEntry.Date = InputToUnix(oEntry.Date);
         EventBus.sendToDatabase("receipts-update", oEntry);
+    }
+
+    backup () {
+        this.backupEntry = deepClone(this.get([]));
+    }
+
+    reset () {
+        if (this.backupEntry) {
+            this.mergeObjectIntoData(this.backupEntry);
+            this.save();
+        }
     }
 }
 

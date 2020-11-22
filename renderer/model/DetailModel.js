@@ -8,6 +8,7 @@ class _DetailModel extends Model {
     constructor (...args) {
         super(...args);
         this.name = "DetailModel";
+        window[this.name] = this;
 
         EventBus.listen("database-open", (oEvent) => {
             this.bOpenReceipt = true;
@@ -87,11 +88,18 @@ class _DetailModel extends Model {
     importFragments (aFiles) {
         EventBus.sendToDatabase("fragment-import", aFiles);
     }
+
+    reset () {
+        LineModel.reset();
+        ReceiptModel.reset();
+    }
 }
 
 export const DetailModel = new _DetailModel({
     "new-i18n": ["detail.newReceipt"],
     "delete-i18n": ["detail.deleteReceipt"],
+    "reset-i18n": ["common.reset"],
+    "resetMessage-i18n": ["detail.reset.confirm"],
     "title-i18n": ["detail.section.title"],
     "id-i18n": ["receipt.id"],
     "account-i18n": ["common.account"],

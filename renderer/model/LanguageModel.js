@@ -22,6 +22,7 @@ class _LanguageModel extends Model {
     constructor (...args) {
         super(...args);
         this.name = "LanguageModel";
+        window[this.name] = this;
 
         this.languages = new Deferred();
         this.translations = new Deferred();

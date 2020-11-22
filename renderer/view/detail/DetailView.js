@@ -5,6 +5,7 @@ import { Scanner } from "./Scanner.js";
 import { LineDetail } from "./LineDetail.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { loadCss } from "../../common/Utils.js";
+import { UnixToInput } from "../../common/DateUtils.js";
 
 loadCss("/renderer/view/detail/DetailView.css");
 
@@ -13,14 +14,9 @@ export class DetailView extends MultiView {
         super();
         this.name = "DetailView";
 
-        this.addView("receiptDetail", new ReceiptDetail()
-            .addGenericListener(this));
-
-        this.addView("lineDetail", new LineDetail()
-            .addGenericListener(this));
-
-        this.addView("scanner", new Scanner()
-            .addGenericListener(this));
+        this.addView("receiptDetail", ReceiptDetail);
+        this.addView("lineDetail", LineDetail);
+        this.addView("scanner", Scanner);
     }
 
     render () {
@@ -38,6 +34,20 @@ export class DetailView extends MultiView {
                     .addClass("button")
                     .setText(this.getTranslation("delete-i18n"))
                     .addEventListener("click", this.onDelete, this)
+                )
+                .appendNode(new DomElement("div")
+                    .addClass("button")
+                    .setText(this.getTranslation("reset-i18n"))
+                    .addEventListener("click", this.onReset, this)
+                )
+                .appendNode(new FlexContainer("div", { flexDirection: "column" })
+                    .addClass("detail-time")
+                    .appendNode(new DomElement()
+                        .setText(`${this.getProperty("created-trans")} ${this.getProperty("at-trans")}: ${UnixToInput(this.getProperty("created"))}`)
+                    )
+                    .appendNode(new DomElement()
+                        .setText(`${this.getProperty("updated-trans")} ${this.getProperty("at-trans")}: ${UnixToInput(this.getProperty("updated"))}`)
+                    )
                 )
             );
 
@@ -74,5 +84,13 @@ export class DetailView extends MultiView {
             id: this.getProperty("id")
         };
         this.handleEvent("delete", oEvent);
+    }
+
+    onReset (oEvent) {
+        oEvent.customData = {
+            confirm: this.getTranslation("resetMessage-i18n")
+        };
+
+        this.handleEvent("reset", oEvent);
     }
 };

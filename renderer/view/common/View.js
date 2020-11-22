@@ -156,9 +156,13 @@ export class View extends MultiClass(BindingManager, EventManager) {
         return new DomElement("div").getNode();
     }
 
-    renderAggregation (oDomRef, sAggregation, Constructor, fnAfterBinding = () => {}) {
+    renderAggregation (oDomRef, sAggregation, Constructor, fnAfterBinding) {
         const aItems = this.getAggregation(sAggregation);
         const oBinding = this.getAggregationBinding(sAggregation);
+
+        if (!fnAfterBinding) {
+            fnAfterBinding = this.addGenericListenerToChild.bind(this);
+        }
 
         aItems.forEach((oItem, iIndex) => {
             const oChild = new Constructor();

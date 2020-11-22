@@ -14,7 +14,7 @@ export class HeaderView extends View {
     render () {
         const oNode = new DomElement("nav")
             .addClass("Header")
-            .insertAggregation(this, "headerItems", HeaderItem, this.addGenericListenerToChild.bind(this))
+            .insertAggregation(this, "headerItems", HeaderItem)
             .getNode();
 
         return oNode;

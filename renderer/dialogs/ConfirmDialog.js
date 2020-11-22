@@ -9,10 +9,10 @@ class _ConfirmDialog extends Dialog {
         };
     }
 
-    _show () {
+    _show (sCustomConfirmText) {
         const oDialogPromise = dialog.showMessageBox({
             type: "warning",
-            message: this.getProperty("dialogConfirm-trans"),
+            message: sCustomConfirmText || this.getProperty("dialogConfirm-trans"),
             buttons: this._getDefaultButtons(),
             cancelId: 1
         });

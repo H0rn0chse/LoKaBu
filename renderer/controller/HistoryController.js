@@ -12,11 +12,9 @@ export class HistoryController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oHistory = new HistoryView();
-        const oHistoryContainer = this.createContainer("history")
-            .setContent(oHistory);
+        const oHistory = this.addView("history", HistoryView);
 
-        oHistory.setParent(oHistoryContainer.getNode())
+        oHistory
             .addModel(HistoryModel, "viewModel")
             .addModel(AccountModel, "account");
 
@@ -47,6 +45,8 @@ export class HistoryController extends Controller {
                 .bindProperty("account", "account", "account-ref")
                 .bindProperty("date", "viewModel", ["Date"])
                 .bindProperty("value", "viewModel", ["ReceiptSum"])
+                .bindProperty("created", "viewModel", ["Created"])
+                .bindProperty("updated", "viewModel", ["Updated"])
                 .bindProperty("edit", "lang", ["common.edit"])
             );
 

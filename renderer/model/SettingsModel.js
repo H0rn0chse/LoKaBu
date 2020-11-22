@@ -7,6 +7,7 @@ class _SettingsModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "settings");
         this.name = "SettingsModel";
+        window[this.name] = this;
 
         this.updateLanguageModel = true;
     }

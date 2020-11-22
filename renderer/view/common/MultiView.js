@@ -6,7 +6,10 @@ export class MultiView extends View {
         this.subViews = {};
     }
 
-    addView (sName, oView) {
+    addView (sName, View) {
+        const oView = new View();
+        oView.addGenericListener(this);
+
         this.subViews[sName] = oView;
         return this;
     }

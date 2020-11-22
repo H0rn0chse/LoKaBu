@@ -9,11 +9,9 @@ export class AnalysisController extends Controller {
     constructor (oDomRef) {
         super(oDomRef);
 
-        const oAnalysis = new AnalysisView();
-        const oAnalysisContainer = this.createContainer("analysis")
-            .setContent(oAnalysis);
+        const oAnalysis = this.addView("analysis", AnalysisView);
 
-        oAnalysis.setParent(oAnalysisContainer.getNode())
+        oAnalysis
             .addModel(AnalysisModel, "viewModel");
 
         // settings

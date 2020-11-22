@@ -40,6 +40,7 @@ Du musst deinen plattformabhängigen Build selber bauen (und signieren) oder nut
   <img src="./docu/screenshots/details_de.png" title="Beleg Details" />
   <img src="./docu/screenshots/history_de.png" title="Belegverlauf" />
   <img src="./docu/screenshots/analysis_de.png" title="Auswertung" />
+  <img src="./docu/screenshots/tools_de.png" title="Werkzeuge" />
   <img src="./docu/screenshots/settings_de.png" title="SettEinstellungenings" />
 
 [releaseBadge]: https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg
