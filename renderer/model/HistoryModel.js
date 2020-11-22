@@ -153,6 +153,16 @@ export const HistoryModel = new _HistoryModel({
         "text-i18n": ["common.value"],
         "selected": false,
         "direction": ""
+    }, {
+        "id": "Created",
+        "text-i18n": ["common.created"],
+        "selected": false,
+        "direction": ""
+    }, {
+        "id": "Updated",
+        "text-i18n": ["common.updated"],
+        "selected": false,
+        "direction": ""
     }],
     "entries": []
 });

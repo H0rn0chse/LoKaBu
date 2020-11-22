@@ -45,6 +45,8 @@ export class HistoryController extends Controller {
                 .bindProperty("account", "account", "account-ref")
                 .bindProperty("date", "viewModel", ["Date"])
                 .bindProperty("value", "viewModel", ["ReceiptSum"])
+                .bindProperty("created", "viewModel", ["Created"])
+                .bindProperty("updated", "viewModel", ["Updated"])
                 .bindProperty("edit", "lang", ["common.edit"])
             );
 

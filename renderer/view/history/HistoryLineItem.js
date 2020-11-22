@@ -3,6 +3,7 @@ import { DomElement } from "../common/DomElement.js";
 import { FlexContainer } from "../common/FlexContainer.js";
 import { loadCss } from "../../common/Utils.js";
 import { Icon } from "../common/Icon.js";
+import { UnixToInput } from "../../common/DateUtils.js";
 
 loadCss("/renderer/view/history/HistoryLineItem.css");
 
@@ -29,6 +30,14 @@ export class HistoryLineItem extends View {
             .appendNode(new DomElement("div")
                 .addClass("historyLineProperty")
                 .setText(this.getProperty("value"))
+            )
+            .appendNode(new DomElement("div")
+                .addClass("historyLineProperty")
+                .setText(UnixToInput(this.getProperty("created")))
+            )
+            .appendNode(new DomElement("div")
+                .addClass("historyLineProperty")
+                .setText(UnixToInput(this.getProperty("updated")))
             )
             .appendNode(new Icon("edit")
                 .addClass("cursorPointer")

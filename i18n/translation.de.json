@@ -29,6 +29,8 @@
     "common.edit": "Bearbeiten",
     "common.sum": "Summe",
     "common.lines": "Positionen",
+    "common.created": "Erstellt",
+    "common.updated": "Aktualisiert",
     "analysis.grouping": "Gruppierung",
     "analysis.xAxis": "x-Achse",
     "analysis.yAxis": "y-Achse",

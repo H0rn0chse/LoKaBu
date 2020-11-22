@@ -29,6 +29,8 @@
     "common.edit": "Edit",
     "common.sum": "Sum",
     "common.lines": "Lines",
+    "common.created": "Created",
+    "common.updated": "Updated",
     "analysis.grouping": "Grouping",
     "analysis.xAxis": "X-Axis",
     "analysis.yAxis": "Y-Axis",
