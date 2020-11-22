@@ -33,7 +33,8 @@ UPDATE Settings
 SET Version = '3.4';
 
 /*================================================================================
-    Restore Views
+    Restore and Update Views
+	 - view_ReceiptList was extended with Created and Updated
 ================================================================================*/
 CREATE VIEW view_ReceiptList AS
 	SELECT
@@ -42,6 +43,8 @@ CREATE VIEW view_ReceiptList AS
 		r.Account as Account,
 		r.Store as Store,
 		r.Comment as Comment,
+		r.Created as Created,
+		r.Updated as Updated,
 		aggLines.ReceiptSum as ReceiptSum,
 		aggLines.Types,
 		aggLines.Persons,
