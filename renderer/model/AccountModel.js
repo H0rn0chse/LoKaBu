@@ -7,6 +7,7 @@ class _AccountModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "accounts");
         this.name = "AccountModel";
+        window[this.name] = this;
     }
 
     getEntries () {

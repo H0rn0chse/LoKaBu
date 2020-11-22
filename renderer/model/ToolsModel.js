@@ -8,6 +8,7 @@ class _ToolsModel extends Model {
     constructor (oData) {
         super(oData);
         this.name = "ToolsModel";
+        window[this.name] = this;
 
         EventBus.listen("receipt-summary", this.processReceiptRead, this);
     }

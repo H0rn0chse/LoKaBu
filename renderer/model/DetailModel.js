@@ -8,6 +8,7 @@ class _DetailModel extends Model {
     constructor (...args) {
         super(...args);
         this.name = "DetailModel";
+        window[this.name] = this;
 
         EventBus.listen("database-open", (oEvent) => {
             this.bOpenReceipt = true;

@@ -7,6 +7,7 @@ class _StoreModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "stores");
         this.name = "StoreModel";
+        window[this.name] = this;
     }
 
     getEntries () {

@@ -10,6 +10,7 @@ class _HistoryModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "receiptList");
         this.name = "HistoryModel";
+        window[this.name] = this;
 
         ReceiptModel.addEventListener("update", this.onModelUpdate, this);
         LineModel.addEventListener("update", this.onModelUpdate, this);

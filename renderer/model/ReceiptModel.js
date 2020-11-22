@@ -8,6 +8,7 @@ class _ReceiptModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "receipts", true);
         this.name = "ReceiptModel";
+        window[this.name] = this;
     }
 
     getId () {

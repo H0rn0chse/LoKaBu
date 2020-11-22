@@ -7,6 +7,7 @@ class _LineModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "lines", true);
         this.name = "LineModel";
+        window[this.name] = this;
     }
 
     getReceiptId () {

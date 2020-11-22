@@ -7,6 +7,7 @@ class _PersonModel extends DatabaseModel {
     constructor (oData) {
         super(oData, "persons");
         this.name = "PersonModel";
+        window[this.name] = this;
     }
 
     getEntries () {

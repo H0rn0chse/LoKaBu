@@ -4,6 +4,7 @@ class _HeaderModel extends Model {
     constructor (...args) {
         super(...args);
         this.name = "HeaderModel";
+        window[this.name] = this;
     }
 
     setSelectedSection (sSection) {
