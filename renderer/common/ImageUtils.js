@@ -21,9 +21,10 @@ export function getCroppingBox (image, selection) {
     return [sourceX, sourceY, sourceWidth, sourceHeight, targetX, targetY, targetWidth, targetHeight].map(Math.round);
 }
 
-export function applyCroppingBoxToCanvas (canvas, sourceImage, sourceX, sourceY, sourceWidth, sourceHeight, targetX, targetY, targetWidth, targetHeight) {
+export function applyCroppingBoxToCanvasAndFilter (canvas, sourceImage, sourceX, sourceY, sourceWidth, sourceHeight, targetX, targetY, targetWidth, targetHeight) {
     canvas.width = targetWidth;
     canvas.height = targetHeight;
     const oContext = canvas.getContext('2d');
+    oContext.filter = 'saturate(0) grayscale(1) contrast(1.9)';
     oContext.drawImage(sourceImage, sourceX, sourceY, sourceWidth, sourceHeight, targetX, targetY, targetWidth, targetHeight);
 }
