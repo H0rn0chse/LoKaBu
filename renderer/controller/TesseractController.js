@@ -1,7 +1,7 @@
 import { Controller } from "./common/Controller.js";
 import { TesseractView } from "../view/tesseract/TesseractView.js";
 import { EventBus } from "../EventBus.js";
-import { getCroppingBox, applyCroppingBoxToCanvas } from "../common/ImageUtils.js";
+import { getCroppingBox, applyCroppingBoxToCanvasAndFilter } from "../common/ImageUtils.js";
 import { Deferred } from "../common/Deferred.js";
 
 const { createWorker, PSM, OEM } = require('tesseract.js');
@@ -48,7 +48,7 @@ export class TesseractController extends Controller {
     startRecognition (oImage, oSelection) {
         const aCroppingBox = getCroppingBox(oImage, oSelection);
         const oCanvas = this.getContainerContent("tesseract").getCanvas();
-        applyCroppingBoxToCanvas(oCanvas, oImage, ...aCroppingBox);
+        applyCroppingBoxToCanvasAndFilter(oCanvas, oImage, ...aCroppingBox);
         const sData = oCanvas.toDataURL();
 
         this.deferred.promise
