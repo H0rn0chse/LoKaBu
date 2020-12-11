@@ -124,7 +124,7 @@ class _ReceiptListView extends Table {
         if (iSum1 === iSum2) {
             iCount++;
 
-            const iDays = 2;
+            const iDays = 4;
             const iSeconds = 60 * 60 * 24 * iDays;
             if (iDate1 - iSeconds < iDate2 && iDate1 + iSeconds > iDate2) {
                 iCount++;
