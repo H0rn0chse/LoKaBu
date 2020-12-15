@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
-import { DatabaseModel } from "./common/DatabaseModel.js";
-import { UnixToInput } from "../common/DateUtils.js";
+import { DatabaseModel } from "../../core/model/DatabaseModel.js";
+import { UnixToInput } from "../../core/common/DateUtils.js";
 import { ReceiptModel } from "./ReceiptModel.js";
 import { EventBus } from "../EventBus.js";
 import { LineModel } from "./LineModel.js";

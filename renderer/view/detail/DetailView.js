@@ -1,11 +1,11 @@
-import { DomElement } from "../common/DomElement.js";
+import { DomElement } from "../../../core/view/DomElement.js";
 import { ReceiptDetail } from "./ReceiptDetail.js";
-import { MultiView } from "../common/MultiView.js";
+import { MultiView } from "../../../core/view/MultiView.js";
 import { Scanner } from "./Scanner.js";
 import { LineDetail } from "./LineDetail.js";
-import { FlexContainer } from "../common/FlexContainer.js";
-import { loadCss } from "../../common/Utils.js";
-import { UnixToInput } from "../../common/DateUtils.js";
+import { FlexContainer } from "../../../core/view/FlexContainer.js";
+import { loadCss } from "../../../core/common/Utils.js";
+import { UnixToInput } from "../../../core/common/DateUtils.js";
 
 loadCss("/renderer/view/detail/DetailView.css");
 

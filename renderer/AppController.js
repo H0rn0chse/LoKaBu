@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { HeaderController } from "./controller/HeaderController.js";
-import { Controller } from "./controller/common/Controller.js";
+import { Controller } from "../core/controller/Controller.js";
 import { DetailController } from "./controller/DetailController.js";
 import { SettingsController } from "./controller/SettingsController.js";
 import { AnalysisController } from "./controller/AnalysisController.js";

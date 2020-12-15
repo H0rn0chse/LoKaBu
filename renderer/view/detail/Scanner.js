@@ -1,8 +1,8 @@
-import { View } from "../common/View.js";
-import { DomElement } from "../common/DomElement.js";
-import { loadCss } from "../../common/Utils.js";
-import { ImageSelection } from "../common/ImageSelection.js";
-import { BusyIndicator } from "../common/BusyIndicator.js";
+import { View } from "../../../core/view/View.js";
+import { DomElement } from "../../../core/view/DomElement.js";
+import { loadCss } from "../../../core/common/Utils.js";
+import { ImageSelection } from "../../../core/view/ImageSelection.js";
+import { BusyIndicator } from "../../../core/view/BusyIndicator.js";
 
 loadCss("/renderer/view/detail/Scanner.css");
 

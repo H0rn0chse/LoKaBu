@@ -1,9 +1,9 @@
-import { Controller } from "./common/Controller.js";
+import { Controller } from "../../core/controller/Controller.js";
 import { AnalysisView } from "../view/analysis/AnalysisView.js";
 import { EventBus } from "../EventBus.js";
 import { AnalysisModel } from "../model/AnalysisModel.js";
-import { Aggregation } from "../common/Aggregation.js";
-import { objectGet } from "../common/Utils.js";
+import { Aggregation } from "../../core/common/Aggregation.js";
+import { objectGet } from "../../core/common/Utils.js";
 
 export class AnalysisController extends Controller {
     constructor (oDomRef) {

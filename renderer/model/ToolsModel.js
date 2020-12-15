@@ -1,8 +1,8 @@
 /* eslint-disable quote-props */
-import { UnixToDate, DateToDateString } from "../common/DateUtils.js";
-import { deepEqual, removeDuplicates } from "../common/Utils.js";
+import { UnixToDate, DateToDateString } from "../../core/common/DateUtils.js";
+import { deepEqual, removeDuplicates } from "../../core/common/Utils.js";
 import { EventBus } from "../EventBus.js";
-import { Model } from "./common/Model.js";
+import { Model } from "../../core/model/Model.js";
 
 class _ToolsModel extends Model {
     constructor (oData) {

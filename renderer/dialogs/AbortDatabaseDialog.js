@@ -1,5 +1,5 @@
 import { EventBus } from "../EventBus.js";
-import { Dialog } from "../common/Dialog.js";
+import { Dialog } from "./common/Dialog.js";
 
 const { dialog } = require('electron').remote;
 

@@ -1,11 +1,11 @@
-import { Controller } from "./common/Controller.js";
+import { Controller } from "../../core/controller/Controller.js";
 import { HistoryView } from "../view/history/HistoryView.js";
 import { EventBus } from "../EventBus.js";
 import { HistoryModel } from "../model/HistoryModel.js";
-import { Aggregation } from "../common/Aggregation.js";
+import { Aggregation } from "../../core/common/Aggregation.js";
 import { AccountModel } from "../model/AccountModel.js";
 import { DetailModel } from "../model/DetailModel.js";
-import { objectGet } from "../common/Utils.js";
+import { objectGet } from "../../core/common/Utils.js";
 import { ConfirmDialog } from "../dialogs/ConfirmDialog.js";
 
 export class HistoryController extends Controller {

@@ -1,5 +1,5 @@
-import { deepClone, objectGet, objectSet } from "../../common/Utils.js";
-import { EventManager } from "../../common/EventManager.js";
+import { deepClone, objectGet, objectSet } from "../common/Utils.js";
+import { EventManager } from "../common/EventManager.js";
 
 export class Model extends EventManager {
     constructor (oData) {

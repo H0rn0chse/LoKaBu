@@ -1,4 +1,4 @@
-import { Model } from "./common/Model.js";
+import { Model } from "../../core/model/Model.js";
 
 class _HeaderModel extends Model {
     constructor (...args) {

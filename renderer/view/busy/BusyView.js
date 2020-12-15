@@ -1,7 +1,7 @@
-import { View } from "../common/View.js";
-import { DomElement } from "../common/DomElement.js";
-import { loadCss } from "../../common/Utils.js";
-import { BusyIndicator } from "../common/BusyIndicator.js";
+import { View } from "../../../core/view/View.js";
+import { DomElement } from "../../../core/view/DomElement.js";
+import { loadCss } from "../../../core/common/Utils.js";
+import { BusyIndicator } from "../../../core/view/BusyIndicator.js";
 
 loadCss("/renderer/view/busy/BusyView.css");
 

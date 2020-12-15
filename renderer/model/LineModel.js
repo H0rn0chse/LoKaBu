@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus.js";
-import { DatabaseModel } from "./common/DatabaseModel.js";
-import { deepClone, findAndSplice } from "../common/Utils.js";
+import { DatabaseModel } from "../../core/model/DatabaseModel.js";
+import { deepClone, findAndSplice } from "../../core/common/Utils.js";
 import { SettingsModel } from "./SettingsModel.js";
 import { ReceiptModel } from "./ReceiptModel.js";
 

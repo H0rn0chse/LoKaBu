@@ -1,6 +1,6 @@
 import { Helper } from "../database/helper.js";
 import { EventBus } from "../../renderer/EventBus.js";
-import { Deferred } from "../../renderer/common/Deferred.js";
+import { Deferred } from "../../core/common/Deferred.js";
 import { Version } from "../common/Version.js";
 
 const path = require('path');

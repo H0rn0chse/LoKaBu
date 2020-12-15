@@ -1,6 +1,6 @@
-import { Binding } from "./Binding.js";
-import { LanguageModel } from "../model/LanguageModel.js";
-import { EventBus } from "../EventBus.js";
+import { Binding } from "../../../core/common/Binding.js";
+import { LanguageModel } from "../../model/LanguageModel.js";
+import { EventBus } from "../../EventBus.js";
 
 export class Dialog {
     constructor () {

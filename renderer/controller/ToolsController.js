@@ -1,8 +1,8 @@
-import { Controller } from "./common/Controller.js";
+import { Controller } from "../../core/controller/Controller.js";
 import { EventBus } from "../EventBus.js";
 import { ToolsView } from "../view/tools/ToolsView.js";
 import { ToolsModel } from "../model/ToolsModel.js";
-import { Aggregation } from "../common/Aggregation.js";
+import { Aggregation } from "../../core/common/Aggregation.js";
 import { ConfirmDialog } from "../dialogs/ConfirmDialog.js";
 
 export class ToolsController extends Controller {

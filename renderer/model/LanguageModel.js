@@ -1,9 +1,9 @@
 /* eslint-disable quote-props */
-import { Model } from "./common/Model.js";
+import { Model } from "../../core/model/Model.js";
 import { EventBus } from "../EventBus.js";
-import { deepClone } from "../common/Utils.js";
+import { deepClone } from "../../core/common/Utils.js";
 import { SettingsModel } from "./SettingsModel.js";
-import { Deferred } from "../common/Deferred.js";
+import { Deferred } from "../../core/common/Deferred.js";
 
 const aReservedPaths = [
     "languages",

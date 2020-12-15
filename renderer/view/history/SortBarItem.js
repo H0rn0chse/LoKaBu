@@ -1,5 +1,5 @@
-import { View } from "../common/View.js";
-import { DomElement } from "../common/DomElement.js";
+import { View } from "../../../core/view/View.js";
+import { DomElement } from "../../../core/view/DomElement.js";
 
 export class SortBarItem extends View {
     constructor () {

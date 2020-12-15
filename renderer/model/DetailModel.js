@@ -1,5 +1,5 @@
 /* eslint-disable quote-props */
-import { Model } from "./common/Model.js";
+import { Model } from "../../core/model/Model.js";
 import { LineModel } from "./LineModel.js";
 import { ReceiptModel } from "./ReceiptModel.js";
 import { EventBus } from "../EventBus.js";

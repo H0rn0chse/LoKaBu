@@ -1,10 +1,10 @@
-import { View } from "../common/View.js";
-import { DomElement } from "../common/DomElement.js";
-import { FlexContainer } from "../common/FlexContainer.js";
-import { DropdownItem } from "../common/DropdownItem.js";
+import { View } from "../../../core/view/View.js";
+import { DomElement } from "../../../core/view/DomElement.js";
+import { FlexContainer } from "../../../core/view/FlexContainer.js";
+import { DropdownItem } from "../../../core/view/DropdownItem.js";
 import { SettingsListItem } from "./SettingsListItem.js";
-import { loadCss } from "../../common/Utils.js";
-import { Icon } from "../common/Icon.js";
+import { loadCss } from "../../../core/common/Utils.js";
+import { Icon } from "../../../core/view/Icon.js";
 
 loadCss("/renderer/view/settings/SettingsView.css");
 export class SettingsView extends View {

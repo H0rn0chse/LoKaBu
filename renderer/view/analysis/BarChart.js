@@ -1,7 +1,7 @@
-import { getColor } from "../../common/ColorUtils.js";
-import { deepClone } from "../../common/Utils.js";
-import { translateMonth } from "../../common/DateUtils.js";
-import { DomElement } from "../common/DomElement.js";
+import { getColor } from "../../../core/common/ColorUtils.js";
+import { deepClone } from "../../../core/common/Utils.js";
+import { translateMonth } from "../../../core/common/DateUtils.js";
+import { DomElement } from "../../../core/view/DomElement.js";
 
 const Chart = require("chart.js");
 

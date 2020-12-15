@@ -1,4 +1,4 @@
-import { Deferred } from "../common/Deferred.js";
+import { Deferred } from "../../core/common/Deferred.js";
 import { EventBus } from "../EventBus.js";
 import { LanguageModel } from "../model/LanguageModel.js";
 import { PersonModel } from "../model/PersonModel.js";

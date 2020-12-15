@@ -1,8 +1,8 @@
-import { DomElement } from "../common/DomElement.js";
-import { loadCss } from "../../common/Utils.js";
-import { FlexContainer } from "../common/FlexContainer.js";
+import { DomElement } from "../../../core/view/DomElement.js";
+import { loadCss } from "../../../core/common/Utils.js";
+import { FlexContainer } from "../../../core/view/FlexContainer.js";
 import { ToolsListItem } from "./ToolsListItem.js";
-import { MultiView } from "../common/MultiView.js";
+import { MultiView } from "../../../core/view/MultiView.js";
 import { DuplicateView } from "./DuplicateView.js";
 import { ToolsMainView } from "./ToolsMainView.js";
 

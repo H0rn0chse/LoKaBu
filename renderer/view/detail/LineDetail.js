@@ -1,9 +1,9 @@
-import { View } from "../common/View.js";
-import { DomElement } from "../common/DomElement.js";
+import { View } from "../../../core/view/View.js";
+import { DomElement } from "../../../core/view/DomElement.js";
 import { LineDetailLine } from "./LineDetailLine.js";
-import { loadCss } from "../../common/Utils.js";
-import { Icon } from "../common/Icon.js";
-import { FlexContainer } from "../common/FlexContainer.js";
+import { loadCss } from "../../../core/common/Utils.js";
+import { Icon } from "../../../core/view/Icon.js";
+import { FlexContainer } from "../../../core/view/FlexContainer.js";
 
 loadCss("/renderer/view/detail/LineDetail.css");
 export class LineDetail extends View {

@@ -1,7 +1,7 @@
 import { DomElement } from "./DomElement.js";
-import { loadCss } from "../../common/Utils.js";
+import { loadCss } from "../common/Utils.js";
 
-loadCss("/renderer/view/common/BusyIndicator.css");
+loadCss("/core/view/BusyIndicator.css");
 
 export class BusyIndicator extends DomElement {
     constructor () {

@@ -1,8 +1,8 @@
-import { Controller } from "./common/Controller.js";
+import { Controller } from "../../core/controller/Controller.js";
 import { TesseractView } from "../view/tesseract/TesseractView.js";
 import { EventBus } from "../EventBus.js";
-import { getCroppingBox, applyCroppingBoxToCanvasAndFilter } from "../common/ImageUtils.js";
-import { Deferred } from "../common/Deferred.js";
+import { getCroppingBox, applyCroppingBoxToCanvasAndFilter } from "../../core/common/ImageUtils.js";
+import { Deferred } from "../../core/common/Deferred.js";
 
 const { createWorker, PSM, OEM } = require('tesseract.js');
 const path = require("path");

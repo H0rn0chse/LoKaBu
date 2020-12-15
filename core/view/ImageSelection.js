@@ -1,7 +1,7 @@
 import { DomElement } from "./DomElement.js";
-import { loadCss } from "../../common/Utils.js";
+import { loadCss } from "../common/Utils.js";
 
-loadCss("/renderer/view/common/ImageSelection.css");
+loadCss("/core/view/ImageSelection.css");
 
 export class ImageSelection extends DomElement {
     constructor () {

@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus.js";
-import { Dialog } from "../common/Dialog.js";
-import { DateToFull } from "../common/DateUtils.js";
+import { Dialog } from "./common/Dialog.js";
+import { DateToFull } from "../../core/common/DateUtils.js";
 
 const { dialog } = require('electron').remote;
 

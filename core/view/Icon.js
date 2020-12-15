@@ -1,5 +1,5 @@
-import { getColor } from "../../common/ColorUtils.js";
-import { textToHtml } from "../../common/Utils.js";
+import { getColor } from "../common/ColorUtils.js";
+import { textToHtml } from "../common/Utils.js";
 import { DomElement } from "./DomElement.js";
 
 const feather = require('feather-icons');

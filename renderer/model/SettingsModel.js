@@ -1,7 +1,7 @@
 /* eslint-disable quote-props */
 import { LanguageModel } from "./LanguageModel.js";
 import { EventBus } from "../EventBus.js";
-import { DatabaseModel } from "./common/DatabaseModel.js";
+import { DatabaseModel } from "../../core/model/DatabaseModel.js";
 
 class _SettingsModel extends DatabaseModel {
     constructor (oData) {

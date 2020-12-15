@@ -1,6 +1,6 @@
-import { View } from "../common/View.js";
-import { DomElement } from "../common/DomElement.js";
-import { FlexContainer } from "../common/FlexContainer.js";
+import { View } from "../../../core/view/View.js";
+import { DomElement } from "../../../core/view/DomElement.js";
+import { FlexContainer } from "../../../core/view/FlexContainer.js";
 import { AccountModel } from "../../model/AccountModel.js";
 import { StoreModel } from "../../model/StoreModel.js";
 

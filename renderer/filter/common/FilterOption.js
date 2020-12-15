@@ -1,5 +1,5 @@
 import { Enums } from "../../Enums.js";
-import { objectGet } from "../../common/Utils.js";
+import { objectGet } from "../../../core/common/Utils.js";
 
 export class FilterOption {
     constructor (sColumn, sI18n, sColumnType, sInputType, oBinding) {

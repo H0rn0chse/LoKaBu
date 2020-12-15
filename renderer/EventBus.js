@@ -1,6 +1,6 @@
-import { EventManager } from "./common/EventManager.js";
-import { Deferred } from "./common/Deferred.js";
-import { EventWrapper } from "./common/EventWrapper.js";
+import { EventManager } from "../core/common/EventManager.js";
+import { Deferred } from "../core/common/Deferred.js";
+import { EventWrapper } from "../core/common/EventWrapper.js";
 
 class _EventBus extends EventManager {
     constructor () {

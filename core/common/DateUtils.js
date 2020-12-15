@@ -1,4 +1,4 @@
-import { LanguageModel } from "../model/LanguageModel.js";
+import { LanguageModel } from "../../renderer/model/LanguageModel.js";
 
 export function UnixToDate (sUnixTimestamp) {
     return new Date(parseInt(sUnixTimestamp, 10) * 1000);

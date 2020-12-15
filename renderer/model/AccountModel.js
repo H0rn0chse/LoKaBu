@@ -1,6 +1,6 @@
-import { findAndSplice } from "../common/Utils.js";
+import { findAndSplice } from "../../core/common/Utils.js";
 import { EventBus } from "../EventBus.js";
-import { DatabaseModel } from "./common/DatabaseModel.js";
+import { DatabaseModel } from "../../core/model/DatabaseModel.js";
 import { SettingsModel } from "./SettingsModel.js";
 
 class _AccountModel extends DatabaseModel {

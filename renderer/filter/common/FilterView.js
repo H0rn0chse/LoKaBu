@@ -1,8 +1,8 @@
-import { View } from "../../view/common/View.js";
-import { FlexContainer } from "../../view/common/FlexContainer.js";
-import { DomElement } from "../../view/common/DomElement.js";
+import { View } from "../../../core/view/View.js";
+import { FlexContainer } from "../../../core/view/FlexContainer.js";
+import { DomElement } from "../../../core/view/DomElement.js";
 import { Enums } from "../../Enums.js";
-import { Icon } from "../../view/common/Icon.js";
+import { Icon } from "../../../core/view/Icon.js";
 
 export class FilterView extends View {
     constructor (...args) {

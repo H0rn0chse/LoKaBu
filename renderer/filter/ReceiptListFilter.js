@@ -4,7 +4,7 @@ import { AccountModel } from "../model/AccountModel.js";
 import { StoreModel } from "../model/StoreModel.js";
 import { TypeModel } from "../model/TypeModel.js";
 import { PersonModel } from "../model/PersonModel.js";
-import { Binding } from "../common/Binding.js";
+import { Binding } from "../../core/common/Binding.js";
 
 export class ReceiptListFilter extends Filter {
     constructor () {

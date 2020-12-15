@@ -1,4 +1,4 @@
-import { Controller } from "./common/Controller.js";
+import { Controller } from "../../core/controller/Controller.js";
 import { BusyView } from "../view/busy/BusyView.js";
 import { EventBus } from "../EventBus.js";
 

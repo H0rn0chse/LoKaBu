@@ -1,5 +1,5 @@
 import { EventBus } from "../EventBus.js";
-import { DatabaseModel } from "./common/DatabaseModel.js";
+import { DatabaseModel } from "../../core/model/DatabaseModel.js";
 import { ReceiptAnalysisFilter } from "../filter/ReceiptAnalysisFilter.js";
 import { AccountModel } from "./AccountModel.js";
 import { StoreModel } from "./StoreModel.js";

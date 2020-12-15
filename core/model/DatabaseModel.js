@@ -1,5 +1,5 @@
 import { Model } from "./Model.js";
-import { EventBus } from "../../EventBus.js";
+import { EventBus } from "../../renderer/EventBus.js";
 
 export class DatabaseModel extends Model {
     constructor (oData, sTable, bSkipInitialRead = false) {
