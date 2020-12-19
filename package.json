@@ -63,6 +63,9 @@
     },
     "nsis": {
       "perMachine": true
+    },
+    "linux": {
+      "target": "deb"
     }
   },
   "dependencies": {
