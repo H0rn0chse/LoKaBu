@@ -24,7 +24,50 @@ jobs:
         if: github.ref == 'refs/heads/master'
         env:
           GH_TOKEN: ${{ secrets.github_token }}
-        run: npm run release
+        run: npm run release --win
       - name: Build app without release
         if: github.ref != 'refs/heads/master'
-        run: npm run buildLocal
+        run: npm run build --win
+  build_on_mac:
+    runs-on: macos-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+      - name: Release app
+        if: github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ secrets.github_token }}
+        run: npm run release --mac
+      - name: Build app without release
+        if: github.ref != 'refs/heads/master'
+        run: npm run build --mac
+
+  build_on_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+      - name: Release app
+        if: github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ secrets.github_token }}
+        run: npm run release --linux
+      - name: Build app without release
+        if: github.ref != 'refs/heads/master'
+        run: npm run build --linux
