@@ -127,5 +127,6 @@
     "tools.duplicates.find": "Duplikate finden",
     "tools.duplicates.confirm": "Bestätigung...",
     "tools.duplicates.confirmMessage": "Hiermit bestätigst du, dass die aufgeführten Belege keine Duplikate sind. Damit wird ein Hinweis abgespeichert, sodass diese Kombination in zukünftigen Duplikatsuchen nicht mehr auftaucht.",
-    "tools.duplicates.hint": "Bitte beachte, dass sich diese Liste und Ansicht NICHT nach Änderungen in anderen Tabs aktualisieren!"
+    "tools.duplicates.hint": "Bitte beachte, dass sich diese Liste und Ansicht NICHT nach Änderungen in anderen Tabs aktualisieren!",
+    "test.section.title": "Test"
 }

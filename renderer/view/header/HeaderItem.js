@@ -3,7 +3,7 @@ import { DomElement } from "../../../core/view/DomElement.js";
 import { loadCss } from "../../../core/common/Utils.js";
 
 loadCss("/renderer/view/header/HeaderItem.css");
-loadCss("/renderer/view/common/Text.css");
+loadCss("/core/view/Text.css");
 
 export class HeaderItem extends View {
     constructor () {

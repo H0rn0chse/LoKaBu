@@ -41,6 +41,11 @@ export const HeaderModel = new _HeaderModel({
             section: "settings",
             i18n: ["settings.section.title"],
             selected: false
+        },
+        {
+            section: "test",
+            i18n: ["test.section.title"],
+            selected: false
         }
     ]
 });

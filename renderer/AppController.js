@@ -10,6 +10,7 @@ import { DialogImports } from "./DialogImports.js";
 import { TesseractController } from "./controller/TesseractController.js";
 import { ToolsController } from "./controller/ToolsController.js";
 import { BusyController } from "./controller/BusyController.js";
+import { TestController } from "./controller/TestController.js";
 const { remote } = require("electron");
 
 export class AppController extends Controller {
@@ -26,6 +27,7 @@ export class AppController extends Controller {
         this.registerController("settings", SettingsController);
         this.registerController("tesseract", TesseractController);
         this.registerController("busy", BusyController);
+        this.registerController("test", TestController);
 
         EventBus.listen("blockApp", this.blockApp, this);
         EventBus.listen("unblockApp", this.unblockApp, this);

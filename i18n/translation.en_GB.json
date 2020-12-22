@@ -127,5 +127,6 @@
     "tools.duplicates.find": "Find Duplicates",
     "tools.duplicates.confirm": "Confirm...",
     "tools.duplicates.confirmMessage": "With this you confirm that these receipts are no duplicates. This saves a hint with that they will not appear anymore as duplicates in future searches.",
-    "tools.duplicates.hint": "Please be aware, that this list and view does NOT update itself after changes in other tabs!"
+    "tools.duplicates.hint": "Please be aware, that this list and view does NOT update itself after changes in other tabs!",
+    "test.section.title": "Test"
 }

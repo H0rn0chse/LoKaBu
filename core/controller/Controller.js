@@ -37,7 +37,10 @@ export class Controller {
 
     update () {
         this.getAllContainer().forEach(oContainer => {
-            oContainer.getContent().update();
+            const oContent = oContainer.getContent();
+            if (oContent && oContent.update) {
+                oContent.update();
+            }
         });
         return this;
     }
