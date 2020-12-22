@@ -1,0 +1,21 @@
+<core:Component
+    xmlns:core="core/view">
+    <core:Node type="section" class="analysis">
+        <core:FlexContainer2 style="{ flexDirection: 'row', flexWrap: 'nowrap', alignItems: 'top' }">
+            <core:Node type="div" class="analysis-settings">
+                <core:FlexContainer2 style="{ flexDirection: 'row', flexWrap: 'nowrap', alignItems: 'center' }">
+                    <core:Node type="p" text="$i18n:>group-i18n"/>
+                    <core:Node
+                        type="select"
+                        childNodes="$:>groupItems"
+                        childTemplate="option"
+                        value="$:>selectedGroup"
+                        change="onGroupChange">
+                            <core:Node templateId="option" type="option" text="$:>/text" value="$:>/value"/>
+                    </core:Node>
+                </core:FlexContainer2>
+            </core:Node>
+        </core:FlexContainer2>
+        <core:Node text="$:extModel>property"/>
+    </core:Node>
+</core:Component>
