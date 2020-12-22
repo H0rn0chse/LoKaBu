@@ -69,6 +69,7 @@
     "chart.js": "^2.9.3",
     "electron-updater": "^4.3.5",
     "feather-icons": "^4.28.0",
+    "on-change": "^2.2.0",
     "tesseract.js": "^2.1.1"
   },
   "devDependencies": {
