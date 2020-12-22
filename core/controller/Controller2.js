@@ -45,4 +45,8 @@ export class Controller2 {
     getModel (sName) {
         return this.model.get(sName);
     }
+
+    setModel (sName = "", oModel) {
+        this.model.set(sName, oModel);
+    }
 };

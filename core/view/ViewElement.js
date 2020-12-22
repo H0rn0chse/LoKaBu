@@ -12,10 +12,10 @@ export class ViewElement {
     }
 
     getModel (sModel) {
-        this.parentView.getModel(sModel);
+        return this.parentView.getModel(sModel);
     }
 
     getHandler (sKey) {
-        this.parentView.getHandler(sKey);
+        return this.parentView.getHandler(sKey);
     }
 }

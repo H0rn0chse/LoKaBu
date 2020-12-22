@@ -1,6 +1,6 @@
 <core:Component
     xmlns:core="core/view">
     <core:Node type="section" class="analysis">
-        <core:Node type="div" text="someValue" />
+        <core:Node type="div" text="$:>someValue" />
     </core:Node>
 </core:Component>

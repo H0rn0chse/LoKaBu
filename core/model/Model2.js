@@ -22,6 +22,7 @@ export class Model2 {
     }
 
     getData (path) {
-        return objectGet(this.data, path);
+        const pathArray = path.split("/");
+        return objectGet(this.data, pathArray);
     }
 }

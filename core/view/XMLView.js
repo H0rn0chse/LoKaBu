@@ -15,6 +15,6 @@ export class XMLView extends View2 {
 
     async initTree () {
         console.error("view init");
-        this.iterateChildren("init");
+        this.iterateChildren("init", [this]);
     }
 };

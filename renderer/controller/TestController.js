@@ -10,8 +10,8 @@ export class TestController extends Controller2 {
         EventBus.listen("navigation", this.onNavigation, this);
     }
 
-    initModel () {
-        this.model.set(undefined, TestModel);
+    initModels () {
+        this.setModel(undefined, TestModel);
     }
 
     initViews () {

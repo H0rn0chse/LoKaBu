@@ -17,7 +17,8 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
         // To be implemented by the Component
     }
 
-    init () {
+    init (oView) {
+        this.setView(oView);
         console.error("component init");
         this.render();
         this.bindAttributes();
@@ -28,9 +29,8 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
         for (const [key, value] of Object.entries(this.attributes)) {
             if (this.properties.includes(key)) {
                 const oBindingInfo = this.parseBindingPath(value);
-                if (oBindingInfo.model) {
-                    oBindingInfo.model = this.getModel();
-                }
+                oBindingInfo.model = this.getModel(oBindingInfo.model);
+
                 const oHandler = this.getSetter(key);
                 var oBinding = this.createBinding(oBindingInfo, oHandler);
 
