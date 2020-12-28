@@ -13,12 +13,22 @@ class _XMLHelper {
         this.parser = new DOMParser();
     }
 
+    async loadView (sPath) {
+        const sViewPath = `${sPath}.view.xml`;
+        const xmlDoc = await this.loadFile(sViewPath);
+        return xmlDoc.children[0];
+    }
+
     async loadFragment (sPath) {
-        const sFragmentPath = path.join(sBasePath, `${sPath}.fragment.xml`);
-        const sXml = await readFile(sFragmentPath, "utf-8");
-        const xmlDoc = this.parser.parseFromString(sXml, "text/xml");
-        const oView = xmlDoc.children[0];
-        return oView;
+        const sFragmentPath = `${sPath}.fragment.xml`;
+        const xmlDoc = await this.loadFile(sFragmentPath);
+        return xmlDoc.children[0];
+    }
+
+    async loadFile (sPath) {
+        const sFilePath = path.join(sBasePath, sPath);
+        const sXml = await readFile(sFilePath, "utf-8");
+        return this.parser.parseFromString(sXml, "text/xml");
     }
 
     parse (oView, root) {

@@ -9,7 +9,7 @@ export class XMLView extends View2 {
     }
 
     async buildTree () {
-        const oView = await XMLHelper.loadFragment(this.XMLPath);
+        const oView = await XMLHelper.loadView(this.XMLPath);
         this.XMLTree = await XMLHelper.parse(oView, this);
     }
 
