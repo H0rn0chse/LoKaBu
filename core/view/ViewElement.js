@@ -19,8 +19,8 @@ export class ViewElement {
         return this.parentView.getModel(sModel);
     }
 
-    getHandler (sKey) {
-        return this.parentView.getHandler(sKey);
+    getEventHandler (sName) {
+        return this.parentView.getEventHandler(sName);
     }
 
     destroyViewElement () {

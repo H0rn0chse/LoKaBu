@@ -42,6 +42,13 @@ export class DomElement {
         return this;
     }
 
+    removeEventListener (sEventName, fnHandler, oScope) {
+        const fnBoundHandler = oScope ? fnHandler.bind(oScope) : fnHandler;
+
+        this.node.removeEventListener(sEventName, fnBoundHandler);
+        return this;
+    }
+
     appendNode (oNode) {
         if (oNode) {
             this.node.appendChild(oNode.getNode());

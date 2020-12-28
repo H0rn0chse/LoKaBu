@@ -12,7 +12,7 @@ const tempTranslations = [
         de: ""
     } */
     {
-        scriptCode: "test.languageModel",
+        scriptCode: "some.i18n.value",
         en_GB: "en_Test",
         de: "de_Test"
     }

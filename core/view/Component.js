@@ -11,6 +11,7 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
         super();
         this.properties = ["childNodes"];
         this.events = [];
+        this.eventHandler = new Map();
         this.attributes = oAttributes || {};
     }
 
@@ -32,7 +33,7 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
                 const oBindingInfo = this.parseBindingPath(value);
                 oBindingInfo.model = this.getModel(oBindingInfo.model);
 
-                const oHandler = this.getSetter(key);
+                const oHandler = this.getHandler(key);
                 var oBinding = this.createBinding(oBindingInfo, oHandler);
 
                 console.error(`binding ${key} / ${value} created`);
@@ -40,22 +41,49 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
                 // set Binding and update
                 this.setBinding(key, oBinding);
                 oBinding.triggerUpdate();
+            } else if (this.events.includes(key)) {
+                const oEventHandler = this.getEventHandler(value);
+                const fnComponentHandler = this.getHandler(key);
+                if (oEventHandler && fnComponentHandler) {
+                    fnComponentHandler(oEventHandler);
+                }
             } else {
                 console.error(`property ${key} is not supported in this component`);
             }
         }
     }
 
-    getSetter (sKey) {
-        const sHandler = `set${sKey.charAt(0).toUpperCase()}${sKey.slice(1)}`;
-        const fnHandler = this[sHandler] || this.getDefaultSetter(sKey);
-        return new Handler(fnHandler, this);
+    getHandler (sKey) {
+        if (this.properties.includes(sKey)) {
+            const sHandler = `set${sKey.charAt(0).toUpperCase()}${sKey.slice(1)}`;
+            const fnHandler = this[sHandler] || this.getDefaultPropertyHandler(sKey);
+            return new Handler(fnHandler, this);
+        }
+        if (this.events.includes(sKey)) {
+            const sHandler = `attach${sKey.charAt(0).toUpperCase()}${sKey.slice(1)}`;
+            const fnHandler = this[sHandler] || this.getDefaultEventHandler(sKey);
+            return fnHandler.bind(this);
+        }
     }
 
-    getDefaultSetter (sKey) {
+    getDefaultPropertyHandler (sKey) {
         return vValue => {
             this[sKey] = vValue;
         };
+    }
+
+    getDefaultEventHandler (sKey) {
+        return (oHandler) => {
+            const oDomRef = this.getDomRef();
+            const oOldHandler = this.eventHandler.get(sKey);
+            if (oOldHandler) {
+                oDomRef.removeEventListener(sKey, oOldHandler.get().boundHandler);
+                oOldHandler.destroy();
+            }
+            oHandler.bindProperties(this);
+            this.eventHandler.set(sKey, oHandler);
+            oDomRef.addEventListener(sKey, oHandler.get().boundHandler);
+        }
     }
 
     defaultItemFactory (aItems, sPropertyName, sTemplateId) {
@@ -108,6 +136,9 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
 
     destroy () {
         this.iterateChildren("destroy");
+        this.eventHandler.forEach(oHandler => {
+            oHandler.destroy();
+        });
         this.destroyViewElement();
         this.destroyBindingManager();
         this.destroyTemplateManager();

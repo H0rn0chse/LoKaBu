@@ -23,7 +23,7 @@ export class View2 extends MultiClass(ContainerElement, TreeElement) {
         // To be implemented by View
     }
 
-    getHandler (sName) {
+    getEventHandler (sName) {
         return new Handler(this.controller[sName], this.controller);
     }
 

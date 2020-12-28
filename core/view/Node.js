@@ -6,7 +6,7 @@ export class Node extends Component {
         super(oAttributes);
 
         this.properties = ["childNodes", "childTemplate", "type", "class", "value", "text"];
-        this.events = ["change"];
+        this.events = ["click"];
         this.element = null;
     }
 
