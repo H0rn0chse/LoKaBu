@@ -14,17 +14,17 @@ export class Container {
         this.visibility = true;
     }
 
+    setContent (oContent) {
+        this.content = oContent;
+        return this;
+    }
+
     getContent () {
         return this.content;
     }
 
     getNode () {
         return this.node;
-    }
-
-    setContent (oContent) {
-        this.content = oContent;
-        return this;
     }
 
     setVisibilty (bVisible) {

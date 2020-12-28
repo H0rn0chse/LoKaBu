@@ -23,23 +23,15 @@ export class Controller2 {
         return this.container[sName];
     }
 
-    setContainerItem (sName, oItem) {
-        var oContainer = this.createContainer(sName);
-        oContainer.setContent(oItem);
-        oItem.setRootNode(oContainer.getNode());
-        return this.container[sName];
-    }
-
     getContainer (sName) {
         return this.container[sName];
     }
 
-    getContainerContent (sName) {
-        return this.container[sName] && this.container[sName].getContent();
-    }
-
-    getNode () {
-        return this.root;
+    setContainerElement (sName, oItem) {
+        var oContainer = this.createContainer(sName);
+        oContainer.setContent(oItem);
+        oItem.setRootNode(oContainer.getNode());
+        return this.container[sName];
     }
 
     getModel (sName) {

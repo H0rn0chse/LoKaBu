@@ -1,16 +1,16 @@
 import { View2 } from "./View2.js";
-import { XMLHelper } from "./XMLHelper.js";
+import { XmlHelper } from "./XmlHelper.js";
 
-export class XMLView extends View2 {
+export class XmlView extends View2 {
     constructor (controller, path) {
         super(controller);
-        this.XMLPath = path;
-        this.XMLTree = null;
+        this.xmlPath = path;
+        this.xmlTree = null;
     }
 
     async buildTree () {
-        const oView = await XMLHelper.loadView(this.XMLPath);
-        this.XMLTree = await XMLHelper.parse(oView, this);
+        const oView = await XmlHelper.loadView(this.xmlPath);
+        this.xmlTree = await XmlHelper.parse(oView, this);
     }
 
     async initTree () {

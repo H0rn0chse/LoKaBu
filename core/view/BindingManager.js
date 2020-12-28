@@ -37,7 +37,7 @@ export class BindingManager {
     }
 
     setBindingContext (oModel, sBasePath, sItem = "") {
-        const sContextPath = `${sBasePath}.${sItem}`
+        const sContextPath = `${sBasePath}.${sItem}`;
         this.bindingContext.set(oModel, sContextPath);
     }
 

@@ -80,7 +80,7 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
             oHandler.bindProperties(this);
             this.eventHandler.set(sKey, oHandler);
             oDomRef.addEventListener(sKey, oHandler.get().boundHandler);
-        }
+        };
     }
 
     defaultItemFactory (aItems, sPropertyName, sTemplateId) {
@@ -93,7 +93,7 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
                 const oItem = this.createItem(sTemplateId);
 
                 // add item for removing it later
-                this.addItem(sPropertyName, iIndex, oItem);
+                this.setItem(sPropertyName, iIndex, oItem);
 
                 // add item as childNode into the tree
                 this.addChildComponent(oItem);
@@ -106,7 +106,7 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
             }
         });
         // Remove all items, which were deleted
-        const aItemKeys = this.getItems(sPropertyName);
+        const aItemKeys = this.getItemKeys(sPropertyName);
         aItemKeys.forEach(sKey => {
             const iIndex = sKey.split("-")[1];
             if (!aItems[iIndex]) {
@@ -132,6 +132,7 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
     }
 
     destroy () {
+        // To be extended by the Component
         this.iterateChildren("destroy");
         this.eventHandler.forEach(oHandler => {
             oHandler.destroy();

@@ -7,25 +7,25 @@ export class TemplateManager {
         this.items = new Map();
     }
 
-    getTemplate (sId) {
-        return this.templates.get(sId);
+    getTemplate (sTemplateId) {
+        return this.templates.get(sTemplateId);
     }
 
-    addTemplate (sId, oModule, oAttributes) {
+    addTemplate (sTemplateId, oModule, oAttributes) {
         const oTemplate = {
             Module: oModule,
             attributes: oAttributes
         };
-        return this.templates.set(sId, oTemplate);
+        return this.templates.set(sTemplateId, oTemplate);
     }
 
-    createItem (sId, oContext) {
-        const oTemplate = this.getTemplate(sId);
+    createItem (sTemplateId) {
+        const oTemplate = this.getTemplate(sTemplateId);
         return new oTemplate.Module(oTemplate.attributes);
     }
 
-    addItem (sTemplateId, sItemId, oNewItem) {
-        const sId = `${sTemplateId}-${sItemId}`;
+    setItem (sTemplateId, sItemIndex, oNewItem) {
+        const sId = `${sTemplateId}-${sItemIndex}`;
         const oOldItem = this.items.get(sId);
         if (oOldItem && oOldItem.destroy) {
             oOldItem.destroy();
@@ -33,8 +33,8 @@ export class TemplateManager {
         this.items.set(sId, oNewItem);
     }
 
-    getItem (sTemplateId, sItemId) {
-        const sId = `${sTemplateId}-${sItemId}`;
+    getItem (sTemplateId, sItemIndex) {
+        const sId = `${sTemplateId}-${sItemIndex}`;
         return this.items.get(sId);
     }
 
@@ -42,8 +42,8 @@ export class TemplateManager {
         return this.items.get(sId);
     }
 
-    removeItem (sTemplateId, sItemId) {
-        const sId = `${sTemplateId}-${sItemId}`;
+    removeItem (sTemplateId, sItemIndex) {
+        const sId = `${sTemplateId}-${sItemIndex}`;
         const oItem = this.items.get(sId);
         if (oItem && oItem.destroy) {
             oItem.destroy();
@@ -53,7 +53,7 @@ export class TemplateManager {
         }
     }
 
-    getItems (sTemplateId) {
+    getItemKeys (sTemplateId) {
         return filterMapByKey(this.items, sTemplateId).sort(this.sortItemKeys);
     }
 

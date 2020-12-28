@@ -8,7 +8,7 @@ const path = require("path");
 
 const sBasePath = "D:\\Aaron\\Dokumente\\#InformatikProjekte\\LoKaBu\\repo";
 
-class _XMLHelper {
+class _XmlHelper {
     constructor () {
         this.parser = new DOMParser();
     }
@@ -31,8 +31,8 @@ class _XMLHelper {
         return this.parser.parseFromString(sXml, "text/xml");
     }
 
-    parse (oView, root) {
-        return this.parseNode(oView, root);
+    parse (xmlDoc, root) {
+        return this.parseNode(xmlDoc, root);
     }
 
     /**
@@ -42,7 +42,7 @@ class _XMLHelper {
      */
     async parseNode (xmlNode, parentComponent) {
         let node;
-        const oAttributes = this._propertiesToObject(xmlNode);
+        const oAttributes = this.propertiesToObject(xmlNode);
         const sModulePath = `../../${xmlNode.namespaceURI}/${xmlNode.localName}.js`;
         const oModule = await import(sModulePath);
 
@@ -65,7 +65,7 @@ class _XMLHelper {
      * Converts the Node properties to an object
      * @param {*} xmlNode
      */
-    _propertiesToObject (xmlNode) {
+    propertiesToObject (xmlNode) {
         const attributes = {};
         Array.from(xmlNode.attributes).forEach(attribute => {
             attributes[attribute.name] = attribute.value;
@@ -74,4 +74,4 @@ class _XMLHelper {
     }
 };
 
-export const XMLHelper = new _XMLHelper();
+export const XmlHelper = new _XmlHelper();
