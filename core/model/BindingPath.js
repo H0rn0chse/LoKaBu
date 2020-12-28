@@ -42,4 +42,8 @@ export class BindingPath extends Cloneable {
     clone () {
         return new BindingPath(this.path);
     }
+
+    destroy () {
+        this.path = null;
+    }
 }

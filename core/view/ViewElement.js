@@ -18,4 +18,8 @@ export class ViewElement {
     getHandler (sKey) {
         return this.parentView.getHandler(sKey);
     }
+
+    destroyViewElement () {
+        this.parentView = null;
+    }
 }

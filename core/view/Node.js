@@ -42,4 +42,9 @@ export class Node extends Component {
     getDomRef () {
         return this.element.getNode();
     }
+
+    destroy () {
+        this.element.destroy();
+        super.destroy();
+    }
 }

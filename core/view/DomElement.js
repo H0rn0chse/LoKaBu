@@ -178,4 +178,8 @@ export class DomElement {
         }
         return this;
     }
+
+    destroy () {
+        this.node.remove();
+    }
 };

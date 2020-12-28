@@ -59,4 +59,8 @@ export class TreeElement {
     getParentDomRef () {
         return this.parent && this.parent.getDomRef && this.parent.getDomRef();
     }
+
+    destroyTreeElement () {
+        this.parent = null;
+    }
 }

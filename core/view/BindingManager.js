@@ -6,6 +6,7 @@ import { StaticBinding } from "../model/StaticBinding.js";
 export class BindingManager {
     constructor () {
         this.bindings = new Map();
+        this.bindingContext = new Map();
     }
 
     parseBindingPath (sBindingPath) {
@@ -43,5 +44,13 @@ export class BindingManager {
             return new StaticBinding(oHandler, oBindingInfo.value);
         }
         return new PropertyBinding(oHandler, oBindingInfo.model, new BindingPath(oBindingInfo.path));
+    }
+
+    destroyBindingManager () {
+        this.bindings.forEach(oBinding => {
+            oBinding.destroy();
+        });
+        this.bindings = null;
+        this.bindingContext = null;
     }
 }

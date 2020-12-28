@@ -1,5 +1,6 @@
 import { Handler } from "../common/Handler.js";
 import { MultiClass } from "../common/MultiClass.js";
+import { clearObject } from "../common/Utils.js";
 import { BindingManager } from "./BindingManager.js";
 import { TemplateManager } from "./TemplateManager.js";
 import { TreeElement } from "./TreeElement.js";
@@ -48,5 +49,14 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
     getSetter (sKey) {
         const sHandler = `set${sKey.charAt(0).toUpperCase()}${sKey.slice(1)}`;
         return new Handler(this[sHandler], this);
+    }
+
+    destroy () {
+        this.iterateChildren("destroy");
+        this.destroyViewElement();
+        this.destroyBindingManager();
+        this.destroyTemplateManager();
+        this.destroyTreeElement();
+        clearObject(this);
     }
 }

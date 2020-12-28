@@ -2,6 +2,7 @@ export class TemplateManager {
     constructor () {
         this.templateId = null;
         this.templates = new Map();
+        this.items = new Map();
     }
 
     getTemplate (sId) {
@@ -19,5 +20,10 @@ export class TemplateManager {
     createItem (sId, oContext) {
         const oTemplate = this.getTemplate(sId);
         return new oTemplate.Module(oTemplate.attributes);
+    }
+    destroyTemplateManager () {
+        this.templateId = null;
+        this.templates = null;
+        this.items = null;
     }
 }

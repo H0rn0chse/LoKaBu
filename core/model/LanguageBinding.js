@@ -6,12 +6,18 @@ export class LanguageBinding extends Binding {
         super(oHandler);
         oPath.setBindingContext("translations");
         this.path = oPath;
-        window.bi = this
 
         LanguageModel2.subscribe(oPath, oHandler);
     }
 
     getData () {
         return LanguageModel2.getData(this.path);
+    }
+
+    destroy () {
+        LanguageModel2.unsubscribe(this.path, this.handler);
+        super.destroy();
+        this.path.destroy();
+        this.path = null;
     }
 }

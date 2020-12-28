@@ -8,8 +8,10 @@ export class Binding {
     }
 
     triggerUpdate () {
-        console.error("update triggered");
-        window.binding = this;
         this.handler.call(this.getData());
+    }
+
+    destroy () {
+        this.handler = null;
     }
 }

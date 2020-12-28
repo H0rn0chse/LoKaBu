@@ -104,3 +104,9 @@ export function findAndSplice (aList, sIdentifier, vValue) {
         return aList.splice(iIndex, 1);
     }
 }
+
+export function clearObject (oObject) {
+    Object.keys(oObject).forEach(sKey => {
+        oObject[sKey] = null;
+    });
+}

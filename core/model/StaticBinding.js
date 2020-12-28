@@ -9,4 +9,9 @@ export class StaticBinding extends Binding {
     getData () {
         return this.value;
     }
+
+    destroy () {
+        super.destroy();
+        this.value = null;
+    }
 }
