@@ -9,5 +9,10 @@ export const TestModel = new _TestModel({
         inner: {
             value: "someInnerValue"
         }
-    }
+    },
+    someItems: [{
+        text: "item1"
+    }, {
+        text: "item2"
+    }]
 });

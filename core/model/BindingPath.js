@@ -15,6 +15,15 @@ export class BindingPath extends Cloneable {
         return [sPath];
     }
 
+    isItemPath () {
+        const vLastPart = parseInt(this.path[this.path.length - 1], 10);
+        return Number.isInteger(vLastPart);
+    }
+
+    pop () {
+        return this.path.pop();
+    }
+
     getDot () {
         return this.path.join(".");
     }
@@ -27,8 +36,8 @@ export class BindingPath extends Cloneable {
         return this.path.join("/");
     }
 
-    setBindingContext (sContext) {
-        const aContextPath = this.parsePath(sContext);
+    setBindingContext (sContextPath) {
+        const aContextPath = this.parsePath(sContextPath);
         if (aContextPath[aContextPath.length - 1] === "") {
             aContextPath.splice(aContextPath.length - 1, 1);
         }

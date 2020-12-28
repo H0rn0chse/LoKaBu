@@ -82,6 +82,17 @@ export function findKeysInMap (mMap, fnCheck) {
     return aKeys;
 }
 
+/**
+ * Filters a Map by keys starting with an identifier
+ * Returns an array of all keys which pass the filter
+ */
+export function filterMapByKey (mMap, sStartsWith) {
+    const fnCheck = sKey => {
+        return sKey.startsWith(sStartsWith);
+    };
+    return findKeysInMap(mMap, fnCheck);
+}
+
 const aCssFiles = [];
 export function loadCss (sPath) {
     if (!aCssFiles.includes(sPath)) {

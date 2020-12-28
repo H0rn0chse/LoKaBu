@@ -5,5 +5,8 @@
         <core:Node type="div" text="$:>someValue" />
         <core:Node type="div" text="$:>some/inner/value" />
         <core:Node type="div" text="$i18n:>test/languageModel" />
+        <core:Node type="div" childTemplate="childTemplate" childNodes="$:>someItems">
+            <core:Node templateId="childTemplate" type="div" text="$:>/text"/>
+        </core:Node>
     </core:Node>
 </core:Component>

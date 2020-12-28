@@ -11,6 +11,10 @@ export class ViewElement {
         this.parentView = oView;
     }
 
+    getView () {
+        return this.parentView;
+    }
+
     getModel (sModel) {
         return this.parentView.getModel(sModel);
     }

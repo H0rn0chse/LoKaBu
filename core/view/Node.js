@@ -5,7 +5,7 @@ export class Node extends Component {
     constructor (oAttributes) {
         super(oAttributes);
 
-        this.properties = ["childNodes", "type", "class", "value", "text"];
+        this.properties = ["childNodes", "childTemplate", "type", "class", "value", "text"];
         this.events = ["change"];
         this.element = null;
     }
@@ -15,12 +15,13 @@ export class Node extends Component {
             this.element = new DomElement("div");
         }
         this.element.appendToParent(this.getParentDomRef());
-        //this.node.remove();
-        // TODO how to handle rerendering
     }
 
-    setChildNodes (value) {
-
+    setChildNodes (aItems, iIndex) {
+        if (iIndex !== undefined) {
+            this.removeItem("childNodes", iIndex);
+        }
+        this.defaultItemFactory(aItems, "childNodes", this.childTemplate);
     }
 
     setType (value) {

@@ -1,5 +1,6 @@
 import { EventWrapper } from "../../core/common/EventWrapper.js";
 import { objectGet, objectSet } from "../common/Utils.js";
+import { BindingPath } from "./BindingPath.js";
 
 const onChange = require("on-change");
 
@@ -15,7 +16,12 @@ export class Model2 {
     }
 
     notify (path, value, previousValue, name) {
-        this.listener.handleEvent(path, value);
+        const oPath = new BindingPath(path);
+        let sIndex;
+        if (oPath.isItemPath()) {
+            sIndex = parseInt(oPath.pop(), 10);
+        }
+        this.listener.handleEvent(oPath.getDot(), this.getData(oPath), sIndex);
     }
 
     subscribe (oPath, oHandler) {

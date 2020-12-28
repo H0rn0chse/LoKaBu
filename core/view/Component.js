@@ -48,7 +48,62 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
 
     getSetter (sKey) {
         const sHandler = `set${sKey.charAt(0).toUpperCase()}${sKey.slice(1)}`;
-        return new Handler(this[sHandler], this);
+        const fnHandler = this[sHandler] || this.getDefaultSetter(sKey);
+        return new Handler(fnHandler, this);
+    }
+
+    getDefaultSetter (sKey) {
+        return vValue => {
+            this[sKey] = vValue;
+        };
+    }
+
+    defaultItemFactory (aItems, sPropertyName, sTemplateId) {
+        const oContext = this.getBindingContext(sPropertyName);
+        const oView = this.getView();
+
+        aItems.forEach((item, iIndex) => {
+            // Add all items, which are missing
+            if (!this.getItem(sPropertyName, iIndex)) {
+                const oItem = this.createItem(sTemplateId);
+
+                // add item for removing it later
+                this.addItem(sPropertyName, iIndex, oItem);
+
+                // add item as childNode into the tree
+                this.addChildComponent(oItem);
+
+                // set bindingContext for relative bindings
+                oItem.setBindingContext(oContext.model, oContext.path, iIndex);
+
+                // init child for initial rendering
+                oItem.init(oView);
+            }
+        });
+        // Remove all items, which were deleted
+        const aItemKeys = this.getItems(sPropertyName);
+        aItemKeys.forEach(sKey => {
+            const iIndex = sKey.split("-")[1];
+            if (!aItems[iIndex]) {
+                this.removeItem(sTemplateId, iIndex);
+            }
+        });
+        this.orderItemsByDomRef(aItemKeys);
+    }
+
+    orderItemsByDomRef (aItemKeys) {
+        const oParentDomRef = this.getDomRef();
+        const aChildDomRefs = [];
+        aItemKeys.forEach(sKey => {
+            const oChild = this.getItemById(sKey);
+            if (oChild) {
+                const oChildDomRef = oChild.getDomRef();
+                aChildDomRefs.push(oParentDomRef.removeChild(oChildDomRef));
+            }
+        });
+        aChildDomRefs.forEach(oChildDomRef => {
+            oParentDomRef.appendChild(oChildDomRef);
+        });
     }
 
     destroy () {

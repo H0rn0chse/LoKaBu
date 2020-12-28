@@ -13,6 +13,14 @@ export class PropertyBinding extends Binding {
         return this.model.getData(this.path);
     }
 
+    getModel () {
+        return this.model;
+    }
+
+    getPath () {
+        return this.path.getDot();
+    }
+
     destroy () {
         this.model.unsubscribe(this.path, this.handler);
         super.destroy();

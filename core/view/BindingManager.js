@@ -28,12 +28,28 @@ export class BindingManager {
 
         oBindingInfo.model = sBindingPath.split(">")[0];
         oBindingInfo.path = sBindingPath = sBindingPath.split(">")[1].replace(/\//g, ".");
-        oBindingInfo.isRelative = sBindingPath.charAt(0) === "/";
+        oBindingInfo.isRelative = sBindingPath.charAt(0) === ".";
         return oBindingInfo;
     }
 
     setBinding (sName, oBinding) {
         this.bindings.set(sName, oBinding);
+    }
+
+    setBindingContext (oModel, sBasePath, sItem = "") {
+        const sContextPath = `${sBasePath}.${sItem}`
+        this.bindingContext.set(oModel, sContextPath);
+    }
+
+    getBindingContext (sName) {
+        const oBinding = this.bindings.get(sName);
+        if (oBinding) {
+            return {
+                path: oBinding.getPath(),
+                model: oBinding.model
+            };
+        }
+        return {};
     }
 
     createBinding (oBindingInfo, oHandler) {
@@ -43,7 +59,12 @@ export class BindingManager {
         if (oBindingInfo.isStatic) {
             return new StaticBinding(oHandler, oBindingInfo.value);
         }
-        return new PropertyBinding(oHandler, oBindingInfo.model, new BindingPath(oBindingInfo.path));
+        const oBindingPath = new BindingPath(oBindingInfo.path);
+        if (oBindingInfo.isRelative) {
+            const sContext = this.bindingContext.get(oBindingInfo.model) || "";
+            oBindingPath.setBindingContext(sContext);
+        }
+        return new PropertyBinding(oHandler, oBindingInfo.model, oBindingPath);
     }
 
     destroyBindingManager () {

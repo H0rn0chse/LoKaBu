@@ -39,18 +39,6 @@ export class TreeElement {
         });
     }
 
-    _iterateChildren (vHandler, args) {
-        this.children.forEach(oChild => {
-            if (typeof vHandler === "string" && typeof oChild[vHandler] === "function") {
-                oChild[vHandler].apply(oChild, args);
-            }
-            if (typeof vHandler === "function") {
-                vHandler(oChild, ...args);
-            }
-            oChild._iterateChildren(vHandler, ...args);
-        });
-    }
-
     getDomRef () {
         // Can be implemented by the Component
         return this.getParentDomRef();

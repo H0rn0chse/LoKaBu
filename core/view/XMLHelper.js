@@ -47,7 +47,7 @@ class _XMLHelper {
         const oModule = await import(sModulePath);
 
         if (oAttributes.templateId) {
-            parentComponent.addTemplate(oAttributes.templateId, oModule, oAttributes);
+            parentComponent.addTemplate(oAttributes.templateId, oModule[xmlNode.localName], oAttributes);
         } else {
             node = new oModule[xmlNode.localName](oAttributes);
             node.setParentComponent(parentComponent);
