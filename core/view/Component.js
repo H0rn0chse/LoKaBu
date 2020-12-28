@@ -9,6 +9,7 @@ import { ViewElement } from "./ViewElement.js";
 export class Component extends MultiClass(ViewElement, BindingManager, TemplateManager, TreeElement) {
     constructor (oAttributes) {
         super();
+        this.name = "Component";
         this.properties = ["childNodes"];
         this.events = [];
         this.eventHandler = new Map();
@@ -21,13 +22,11 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
 
     init (oView) {
         this.setView(oView);
-        console.error("component init");
         this.render();
         this.bindAttributes();
     }
 
     bindAttributes () {
-        console.error(`binding attributes: ${JSON.stringify(Object.keys(this.attributes))}`);
         for (const [key, value] of Object.entries(this.attributes)) {
             if (this.properties.includes(key)) {
                 const oBindingInfo = this.parseBindingPath(value);
@@ -35,8 +34,6 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
 
                 const oHandler = this.getHandler(key);
                 var oBinding = this.createBinding(oBindingInfo, oHandler);
-
-                console.error(`binding ${key} / ${value} created`);
 
                 // set Binding and update
                 this.setBinding(key, oBinding);
@@ -48,7 +45,7 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
                     fnComponentHandler(oEventHandler);
                 }
             } else {
-                console.error(`property ${key} is not supported in this component`);
+                console.error(`property ${key} is not supported in this component: ${this.name}`);
             }
         }
     }

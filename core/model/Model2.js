@@ -8,7 +8,6 @@ export class Model2 {
     constructor (oData = {}) {
         this.data = onChange(oData, this.notify.bind(this));
         this.listener = new EventWrapper();
-        window.model = this;
     }
 
     setData (oPath, vValue) {

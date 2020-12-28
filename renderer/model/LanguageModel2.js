@@ -36,7 +36,6 @@ class _LanguageModel2 extends Model2 {
             }, {});
             const oPath = new BindingPath("translations");
             this.setData(oPath, oData);
-            console.error("Translation were set")
         });
 
         EventBus.listenOnce("i18n-languages", (oEvent, aData) => {
@@ -50,7 +49,6 @@ class _LanguageModel2 extends Model2 {
         });
 
         this.language = "en_GB";
-        window.lm = this
     }
 
     notify (path, value, previousValue, name) {

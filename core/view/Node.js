@@ -4,6 +4,7 @@ import { DomElement } from "./DomElement.js";
 export class Node extends Component {
     constructor (oAttributes) {
         super(oAttributes);
+        this.name = "Node";
 
         this.properties = ["childNodes", "childTemplate", "type", "class", "value", "text"];
         this.events = ["click"];

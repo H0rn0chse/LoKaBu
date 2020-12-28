@@ -16,7 +16,6 @@ export class TestController extends Controller2 {
 
     initViews () {
         const oView = new XMLView(this, "renderer/view/test/TestView");
-        window.view = oView
         this.setContainerItem("testView", oView);
         oView.init();
     }
