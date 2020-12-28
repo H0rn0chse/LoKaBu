@@ -1,4 +1,5 @@
 import { BindingPath } from "../model/BindingPath.js";
+import { LanguageBinding } from "../model/LanguageBinding.js";
 import { PropertyBinding } from "../model/PropertyBinding.js";
 import { StaticBinding } from "../model/StaticBinding.js";
 
@@ -35,6 +36,9 @@ export class BindingManager {
     }
 
     createBinding (oBindingInfo, oHandler) {
+        if (oBindingInfo.operation === "i18n") {
+            return new LanguageBinding(oHandler, new BindingPath(oBindingInfo.path));
+        }
         if (oBindingInfo.isStatic) {
             return new StaticBinding(oHandler, oBindingInfo.value);
         }

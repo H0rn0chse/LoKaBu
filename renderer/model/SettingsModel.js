@@ -2,6 +2,7 @@
 import { LanguageModel } from "./LanguageModel.js";
 import { EventBus } from "../EventBus.js";
 import { DatabaseModel } from "../../core/model/DatabaseModel.js";
+import { LanguageModel2 } from "./LanguageModel2.js";
 
 class _SettingsModel extends DatabaseModel {
     constructor (oData) {
@@ -43,6 +44,7 @@ class _SettingsModel extends DatabaseModel {
 
         if (bLanguageChanged) {
             LanguageModel.update();
+            LanguageModel2.updateLanguage();
         }
         console.log("SettingsModel loaded");
     }
@@ -53,6 +55,7 @@ class _SettingsModel extends DatabaseModel {
         if (this.updateLanguageModel) {
             this.updateLanguageModel = false;
             LanguageModel.update();
+            LanguageModel2.updateLanguage();
         }
         console.log("SettingsModel updated");
     }

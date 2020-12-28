@@ -16,6 +16,11 @@ const tempTranslations = [
         en_GB: "",
         de: ""
     } */
+    {
+        scriptCode: "test.languageModel",
+        en_GB: "en_Test",
+        de: "de_Test"
+    }
 ];
 
 class _LanguageModel extends Model {
@@ -30,7 +35,7 @@ class _LanguageModel extends Model {
         EventBus.sendToDatabase("i18n-languages");
         EventBus.sendToDatabase("i18n-translations");
 
-        EventBus.listen("i18n-translations", (oEvent, aData) => {
+        EventBus.listenOnce("i18n-translations", (oEvent, aData) => {
             aData = aData.concat(tempTranslations);
             this.set(["translations"], aData);
 
@@ -38,7 +43,7 @@ class _LanguageModel extends Model {
             this.translations.resolve();
         });
 
-        EventBus.listen("i18n-languages", (oEvent, aData) => {
+        EventBus.listenOnce("i18n-languages", (oEvent, aData) => {
             aData = aData.map(sLang => {
                 return {
                     value: sLang

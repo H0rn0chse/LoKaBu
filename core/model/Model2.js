@@ -1,5 +1,5 @@
 import { EventWrapper } from "../../core/common/EventWrapper.js";
-import { objectGet } from "../common/Utils.js";
+import { objectGet, objectSet } from "../common/Utils.js";
 
 const onChange = require("on-change");
 
@@ -8,6 +8,10 @@ export class Model2 {
         this.data = onChange(oData, this.notify.bind(this));
         this.listener = new EventWrapper();
         window.model = this;
+    }
+
+    setData (oPath, vValue) {
+        objectSet(this.data, oPath.getArray(), vValue);
     }
 
     notify (path, value, previousValue, name) {
