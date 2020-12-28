@@ -5,24 +5,26 @@ const onChange = require("on-change");
 
 export class Model2 {
     constructor (oData = {}) {
-        this.data = onChange(oData, this.notify);
+        this.data = onChange(oData, this.notify.bind(this));
         this.listener = new EventWrapper();
+        window.model = this;
     }
 
     notify (path, value, previousValue, name) {
         this.listener.handleEvent(path, value);
     }
 
-    subscribe (sPath, fnHandler, oScope) {
-        this.listener.on(sPath, fnHandler, oScope);
+    subscribe (oPath, oHandler) {
+        const oHelper = oHandler.get();
+        this.listener.on(oPath.getDot(), oHelper.handler, oHelper.scope);
     }
 
-    unsubscribe (sPath, fnHandler, oScope) {
-        this.listener.removeListener(sPath, fnHandler, oScope);
+    unsubscribe (oPath, oHandler) {
+        const oHelper = oHandler.get();
+        this.listener.removeListener(oPath.getDot(), oHelper.handler, oHelper.scope);
     }
 
-    getData (path) {
-        const pathArray = path.split("/");
-        return objectGet(this.data, pathArray);
+    getData (oPath) {
+        return objectGet(this.data, oPath.getArray());
     }
 }

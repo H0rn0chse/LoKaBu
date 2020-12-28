@@ -1,3 +1,4 @@
+import { BindingPath } from "../model/BindingPath.js";
 import { PropertyBinding } from "../model/PropertyBinding.js";
 import { StaticBinding } from "../model/StaticBinding.js";
 
@@ -37,6 +38,6 @@ export class BindingManager {
         if (oBindingInfo.isStatic) {
             return new StaticBinding(oHandler, oBindingInfo.value);
         }
-        return new PropertyBinding(oHandler, oBindingInfo.model, oBindingInfo.path);
+        return new PropertyBinding(oHandler, oBindingInfo.model, new BindingPath(oBindingInfo.path));
     }
 }

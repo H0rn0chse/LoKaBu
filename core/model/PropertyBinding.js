@@ -1,12 +1,12 @@
 import { Binding } from "./Binding.js";
 
 export class PropertyBinding extends Binding {
-    constructor (oHandler, oModel, sPath) {
+    constructor (oHandler, oModel, oPath) {
         super(oHandler);
         this.model = oModel;
-        this.path = sPath;
+        this.path = oPath;
 
-        oModel.subscribe(sPath, oHandler);
+        oModel.subscribe(oPath, oHandler);
     }
 
     getData () {
