@@ -24,13 +24,11 @@ export class Model2 {
     }
 
     subscribe (oPath, oHandler) {
-        const oHelper = oHandler.get();
-        this.listener.on(oPath.getDot(), oHelper.handler, oHelper.scope);
+        this.listener.on(oPath.getDot(), oHandler.getHandler(), oHandler.getScope());
     }
 
     unsubscribe (oPath, oHandler) {
-        const oHelper = oHandler.get();
-        this.listener.removeListener(oPath.getDot(), oHelper.handler, oHelper.scope);
+        this.listener.removeListener(oPath.getDot(), oHandler.getHandler(), oHandler.getScope());
     }
 
     getData (oPath) {

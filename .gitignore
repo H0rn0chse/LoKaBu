@@ -6,3 +6,4 @@ node_modules/
 *.traineddata
 test/chromedriverlog.txt
 test/webdriverlog/
+*.~vsdx

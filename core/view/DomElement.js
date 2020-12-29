@@ -1,6 +1,9 @@
+import { EventTarget } from "./EventTarget.js";
+
 let guid = 1;
-export class DomElement {
+export class DomElement extends EventTarget {
     constructor (sTag, oInlineStyles = {}) {
+        super();
         this.node = document.createElement(sTag);
 
         Object.keys(oInlineStyles).forEach(sKey => {
@@ -35,15 +38,25 @@ export class DomElement {
         return this;
     }
 
-    addEventListener (sEventName, fnHandler, oScope) {
-        const fnBoundHandler = oScope ? fnHandler.bind(oScope) : fnHandler;
+    addEventListener (sEventName, vHandler, oScope) {
+        let fnBoundHandler;
+        if (typeof vHandler === "function") {
+            fnBoundHandler = oScope ? vHandler.bind(oScope) : vHandler;
+        } else {
+            fnBoundHandler = vHandler.getBoundHandler();
+        }
 
         this.node.addEventListener(sEventName, fnBoundHandler);
         return this;
     }
 
-    removeEventListener (sEventName, fnHandler, oScope) {
-        const fnBoundHandler = oScope ? fnHandler.bind(oScope) : fnHandler;
+    removeEventListener (sEventName, vHandler, oScope) {
+        let fnBoundHandler;
+        if (typeof vHandler === "function") {
+            fnBoundHandler = oScope ? vHandler.bind(oScope) : vHandler;
+        } else {
+            fnBoundHandler = vHandler.getBoundHandler();
+        }
 
         this.node.removeEventListener(sEventName, fnBoundHandler);
         return this;

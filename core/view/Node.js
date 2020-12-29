@@ -18,6 +18,10 @@ export class Node extends Component {
         this.element.appendToParent(this.getParentDomRef());
     }
 
+    attachClick (oHandler) {
+        this.attachEventHandler("click", oHandler, this.element);
+    }
+
     setChildNodes (aItems, iIndex) {
         if (iIndex !== undefined) {
             this.removeItem("childNodes", iIndex);

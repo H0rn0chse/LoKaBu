@@ -9,12 +9,16 @@ export class Handler {
         this.boundHandler = this.handler.bind(this.scope, ...args);
     }
 
-    get () {
-        return {
-            handler: this.handler,
-            boundHandler: this.boundHandler,
-            scope: this.scope
-        };
+    getScope () {
+        return this.scope;
+    }
+
+    getHandler () {
+        return this.handler;
+    }
+
+    getBoundHandler () {
+        return this.boundHandler;
     }
 
     call (...args) {

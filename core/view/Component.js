@@ -2,17 +2,17 @@ import { Handler } from "../common/Handler.js";
 import { MultiClass } from "../common/MultiClass.js";
 import { clearObject } from "../common/Utils.js";
 import { BindingManager } from "./BindingManager.js";
+import { EventManager2 } from "./EventManager2.js";
 import { TemplateManager } from "./TemplateManager.js";
 import { TreeElement } from "./TreeElement.js";
 import { ViewElement } from "./ViewElement.js";
 
-export class Component extends MultiClass(ViewElement, BindingManager, TemplateManager, TreeElement) {
+export class Component extends MultiClass(ViewElement, BindingManager, TemplateManager, TreeElement, EventManager2) {
     constructor (oAttributes) {
         super();
         this.name = "Component";
         this.properties = ["childNodes"];
         this.events = [];
-        this.eventHandler = new Map();
         this.attributes = oAttributes || {};
     }
 
@@ -58,7 +58,7 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
         }
         if (this.events.includes(sKey)) {
             const sHandler = `attach${sKey.charAt(0).toUpperCase()}${sKey.slice(1)}`;
-            const fnHandler = this[sHandler] || this.getDefaultEventHandler(sKey);
+            const fnHandler = this[sHandler] || function () {};
             return fnHandler.bind(this);
         }
     }
@@ -66,20 +66,6 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
     getDefaultPropertyHandler (sKey) {
         return vValue => {
             this[sKey] = vValue;
-        };
-    }
-
-    getDefaultEventHandler (sKey) {
-        return (oHandler) => {
-            const oDomRef = this.getDomRef();
-            const oOldHandler = this.eventHandler.get(sKey);
-            if (oOldHandler) {
-                oDomRef.removeEventListener(sKey, oOldHandler.get().boundHandler);
-                oOldHandler.destroy();
-            }
-            oHandler.bindProperties(this);
-            this.eventHandler.set(sKey, oHandler);
-            oDomRef.addEventListener(sKey, oHandler.get().boundHandler);
         };
     }
 
@@ -134,13 +120,11 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
     destroy () {
         // To be extended by the Component
         this.iterateChildren("destroy");
-        this.eventHandler.forEach(oHandler => {
-            oHandler.destroy();
-        });
         this.destroyViewElement();
         this.destroyBindingManager();
         this.destroyTemplateManager();
         this.destroyTreeElement();
+        this.destroyEventManager();
         clearObject(this);
     }
 }
