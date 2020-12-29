@@ -1,5 +1,5 @@
 export class Cloneable {
     clone () {
-        // To be implemented by the inheriting class
+        console.error("Cloneable.clone should be implemented by the derived class");
     }
 }

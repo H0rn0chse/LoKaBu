@@ -49,7 +49,7 @@ export class Dialog {
     }
 
     _show () {
-        // needs to be implemented by the dialog
+        console.error("Dialog._show should be implemented by the derived class");
     }
 
     /**

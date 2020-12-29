@@ -4,7 +4,7 @@ export class ViewElement {
     }
 
     init () {
-        // To be implemented by the Element
+        console.error("ViewElement.init should be implemented by the derived class");
     }
 
     setView (oView) {

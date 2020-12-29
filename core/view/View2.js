@@ -16,11 +16,11 @@ export class View2 extends MultiClass(ContainerElement, TreeElement) {
     }
 
     async buildTree () {
-        // To be implemented by View
+        console.error("View.buildTree should be implemented by the derived class");
     }
 
     async initTree () {
-        // To be implemented by View
+        console.error("View.initTree should be implemented by the derived class");
     }
 
     getEventHandler (sName) {

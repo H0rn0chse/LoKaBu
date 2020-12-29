@@ -4,17 +4,17 @@ export class Binding {
     }
 
     getData () {
-        // To be implemented by the Binding
+        console.error("Binding.getData should be implemented by the derived class");
     }
 
     getPath () {
         // used for template binding
-        // To be implemented by the Binding
+        console.error("Binding.getPath should be implemented by the derived class");
     }
 
     getModel () {
         // used for template binding
-        // To be implemented by the Binding
+        console.error("Binding.getModel should be implemented by the derived class");
     }
 
     triggerUpdate () {

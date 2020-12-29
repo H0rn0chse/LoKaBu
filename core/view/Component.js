@@ -17,7 +17,7 @@ export class Component extends MultiClass(ViewElement, BindingManager, TemplateM
     }
 
     render () {
-        // To be implemented by the Component
+        console.warning("Component.render should be implemented by the derived class");
     }
 
     init (oView) {

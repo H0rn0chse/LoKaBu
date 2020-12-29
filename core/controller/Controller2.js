@@ -11,11 +11,11 @@ export class Controller2 {
     }
 
     initModels () {
-        // To be implemented by the controller
+        console.error("Controller.initModels should be implemented by the derived class");
     }
 
     initViews () {
-        // To be implemented by the controller
+        console.error("Controller.initViews should be implemented by the derived class");
     }
 
     createContainer (sName) {
