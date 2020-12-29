@@ -1,12 +1,9 @@
-<core:Component
-    xmlns:core="core/view">
-    <core:Node type="section" class="analysis">
-        <core:Node type="div" text="someStaticValue" />
-        <core:Node type="div" text="$:>someValue" />
-        <core:Node type="div" text="$:>some/inner/value" />
-        <core:Node type="div" text="$i18n:>some/i18n/value" />
-        <core:Node type="div" childTemplate="childTemplate" childNodes="$:>someItems">
-            <core:Node templateId="childTemplate" type="div" text="$:>/text" click="onTestClick"/>
-        </core:Node>
-    </core:Node>
-</core:Component>
+<Section class="analysis" xmlns="core/view">
+    <Node text="someStaticValue" />
+    <Node text="$:>someValue" />
+    <Node text="$:>some/inner/value" />
+    <Node text="$i18n:>some/i18n/value" />
+    <Node childTemplate="childTemplate" childNodes="$:>someItems">
+        <Node templateId="childTemplate" text="$:>/text" click="onTestClick"/>
+    </Node>
+</Section>

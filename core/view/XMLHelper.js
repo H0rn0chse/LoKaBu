@@ -47,7 +47,9 @@ class _XmlHelper {
         const oModule = await import(sModulePath);
 
         if (oAttributes.templateId) {
-            parentComponent.addTemplate(oAttributes.templateId, oModule[xmlNode.localName], oAttributes);
+            const sTemplateId = oAttributes.templateId;
+            delete oAttributes.templateId;
+            parentComponent.addTemplate(sTemplateId, oModule[xmlNode.localName], oAttributes);
         } else {
             node = new oModule[xmlNode.localName](oAttributes);
             node.setParentComponent(parentComponent);
@@ -68,6 +70,9 @@ class _XmlHelper {
     propertiesToObject (xmlNode) {
         const attributes = {};
         Array.from(xmlNode.attributes).forEach(attribute => {
+            if (attribute.name.startsWith("xmlns")) {
+                return;
+            }
             attributes[attribute.name] = attribute.value;
         });
         return attributes;

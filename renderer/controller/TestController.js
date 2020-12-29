@@ -24,7 +24,7 @@ export class TestController extends Controller2 {
         this.getContainer("testView").setVisibilty(sSection === "test");
     }
 
-    onTestClick (oComponent) {
-        console.error("click worked", oComponent);
+    onTestClick (oComponent, oEvent) {
+        console.error("click worked", oComponent, oEvent);
     }
 }
