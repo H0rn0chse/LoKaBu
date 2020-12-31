@@ -14,6 +14,10 @@ export class XmlView extends View2 {
     }
 
     async initTree () {
-        this.iterateChildren("init", [this]);
+        await this.iterateChildren("init", [this]);
+        await this.iterateChildren("render");
+        await this.iterateChildren("bindProperties");
+        await this.iterateChildren("attachEvents");
+        await this.iterateChildren("updateBindings");
     }
 };

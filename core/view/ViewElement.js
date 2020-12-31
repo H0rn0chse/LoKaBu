@@ -3,7 +3,7 @@ export class ViewElement {
         this.parentView = null;
     }
 
-    init () {
+    async init () {
         console.error("ViewElement.init should be implemented by the derived class");
     }
 

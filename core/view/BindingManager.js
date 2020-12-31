@@ -12,6 +12,16 @@ export class BindingManager {
     parseBindingPath (sBindingPath) {
         const oBindingInfo = {};
 
+        if (sBindingPath.charAt(0) === "?") {
+            // "?lookupBinding>/pathExtension"
+            sBindingPath = sBindingPath.slice(1);
+
+            oBindingInfo.isForwarded = true;
+            oBindingInfo.contextPath = sBindingPath.split(">")[0];
+            oBindingInfo.path = sBindingPath.split(">")[1].replace(/\//g, ".");
+            return oBindingInfo;
+        }
+
         if (sBindingPath.charAt(0) !== "$") {
             oBindingInfo.isStatic = true;
             oBindingInfo.value = sBindingPath;
@@ -35,10 +45,13 @@ export class BindingManager {
     setBinding (sPropertyName, oBinding) {
         this.bindings.set(sPropertyName, oBinding);
     }
+
+    getBinding (sPropertyName) {
+        return this.bindings.get(sPropertyName);
     }
 
-    setBindingContext (oModel, sBasePath, sItem = "") {
-        const sContextPath = `${sBasePath}.${sItem}`;
+    setBindingContext (oModel, oPath, sItem = "") {
+        const sContextPath = `${oPath.getDot()}.${sItem}`;
         this.bindingContext.set(oModel, sContextPath);
     }
 
@@ -47,7 +60,7 @@ export class BindingManager {
         if (oBinding) {
             return {
                 path: oBinding.getPath(),
-                model: oBinding.model
+                model: oBinding.getModel()
             };
         }
         return {};
@@ -66,6 +79,12 @@ export class BindingManager {
             oBindingPath.setBindingContext(sContext);
         }
         return new PropertyBinding(oHandler, oBindingInfo.model, oBindingPath);
+    }
+
+    async updateBindings () {
+        this.bindings.forEach(oBinding => {
+            oBinding.triggerUpdate();
+        });
     }
 
     destroyBindingManager () {
