@@ -14,6 +14,19 @@ export class LanguageBinding extends Binding {
         return LanguageModel2.getData(this.path);
     }
 
+    getPath () { }
+
+    updatePath () { }
+
+    getModel () { }
+
+    getBindingInfo () {
+        return {
+            operation: "i18n",
+            path: this.path.getDot()
+        };
+    }
+
     destroy () {
         LanguageModel2.unsubscribe(this.path, this.handler);
         super.destroy();

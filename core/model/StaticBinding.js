@@ -10,6 +10,19 @@ export class StaticBinding extends Binding {
         return this.value;
     }
 
+    getPath () { }
+
+    updatePath () { }
+
+    getModel () { }
+
+    getBindingInfo () {
+        return {
+            isStatic: true,
+            value: this.value
+        };
+    }
+
     destroy () {
         super.destroy();
         this.value = null;
