@@ -9,7 +9,6 @@ export class EventManager2 {
             oEventTarget.removeEventListener(sName, oOldHandler.getBoundHandler());
             oOldHandler.destroy();
         }
-        oHandler.bindProperties(this);
         this.eventHandler.set(sName, oHandler);
         oEventTarget.addEventListener(sName, oHandler.getBoundHandler());
     }
