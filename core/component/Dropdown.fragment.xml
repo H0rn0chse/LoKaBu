@@ -1,0 +1,3 @@
+<Node xmlns="core/component" type="select" childTemplate="option" childNodes="?items>" value="?value>">
+    <Node type="option" templateId="option" text="$:>/text" value="$:>/value" />
+</Node>
