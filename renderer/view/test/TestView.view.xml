@@ -1,4 +1,4 @@
-<Section class="analysis" xmlns="core/view">
+<Node xmlns="core/component" type="section" class="analysis">
     <Node text="someStaticValue" />
     <Node text="$:>someValue" />
     <Node text="$:>some/inner/value" />
@@ -6,4 +6,5 @@
     <Node childTemplate="childTemplate" childNodes="$:>someItems">
         <Node templateId="childTemplate" text="$:>/text" click="onTestClick"/>
     </Node>
-</Section>
+    <Dropdown items="$:>someOptions" value="$:>someValue" change="onValueChange"/>
+</Node>

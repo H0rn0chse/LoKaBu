@@ -4,7 +4,6 @@ class _TestModel extends Model2 {
 }
 
 export const TestModel = new _TestModel({
-    someValue: "someModelValue",
     some: {
         inner: {
             value: "someInnerValue"
@@ -14,5 +13,13 @@ export const TestModel = new _TestModel({
         text: "item1"
     }, {
         text: "item2"
-    }]
+    }],
+    someOptions: [{
+        text: "item1",
+        value: "1"
+    }, {
+        text: "item2",
+        value: "2"
+    }],
+    someValue: "2"
 });

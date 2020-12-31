@@ -27,4 +27,10 @@ export class TestController extends Controller2 {
     onTestClick (oComponent, oEvent) {
         console.error("click worked", oComponent, oEvent);
     }
+
+    onValueChange (oComponent, oEvent) {
+        const oContext = oComponent.getBindingContext("value");
+        const sValue = oComponent.getValue();
+        oContext.model.setData(oContext.path, sValue);
+    }
 }
