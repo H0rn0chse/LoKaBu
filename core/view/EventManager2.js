@@ -3,14 +3,14 @@ export class EventManager2 {
         this.eventHandler = new Map();
     }
 
-    attachEventHandler (sName, oHandler, oEventTarget) {
-        const oOldHandler = this.eventHandler.get(sName);
+    attachEventHandler (sEventName, oHandler, oEventTarget) {
+        const oOldHandler = this.eventHandler.get(sEventName);
         if (oOldHandler) {
-            oEventTarget.removeEventListener(sName, oOldHandler.getBoundHandler());
+            oEventTarget.removeEventListener(sEventName, oOldHandler.getBoundHandler());
             oOldHandler.destroy();
         }
-        this.eventHandler.set(sName, oHandler);
-        oEventTarget.addEventListener(sName, oHandler.getBoundHandler());
+        this.eventHandler.set(sEventName, oHandler);
+        oEventTarget.addEventListener(sEventName, oHandler.getBoundHandler());
     }
 
     destroyEventManager () {

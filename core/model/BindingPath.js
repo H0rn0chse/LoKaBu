@@ -36,8 +36,14 @@ export class BindingPath extends Cloneable {
         return this.path.join("/");
     }
 
-    setBindingContext (sContextPath) {
-        const aContextPath = this.parsePath(sContextPath);
+    setBindingContext (vContextPath) {
+        let aContextPath = [];
+        if (vContextPath.getArray) {
+            aContextPath = vContextPath.getArray();
+        } else {
+            aContextPath = this.parsePath(vContextPath);
+        }
+
         if (aContextPath[aContextPath.length - 1] === "") {
             aContextPath.splice(aContextPath.length - 1, 1);
         }

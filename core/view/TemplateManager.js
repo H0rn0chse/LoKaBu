@@ -2,7 +2,6 @@ import { filterMapByKey } from "../common/Utils.js";
 
 export class TemplateManager {
     constructor () {
-        this.templateId = null;
         this.templates = new Map();
         this.items = new Map();
     }

@@ -32,8 +32,9 @@ export class BindingManager {
         return oBindingInfo;
     }
 
-    setBinding (sName, oBinding) {
-        this.bindings.set(sName, oBinding);
+    setBinding (sPropertyName, oBinding) {
+        this.bindings.set(sPropertyName, oBinding);
+    }
     }
 
     setBindingContext (oModel, sBasePath, sItem = "") {
@@ -41,8 +42,8 @@ export class BindingManager {
         this.bindingContext.set(oModel, sContextPath);
     }
 
-    getBindingContext (sName) {
-        const oBinding = this.bindings.get(sName);
+    getBindingContext (sPropertyName) {
+        const oBinding = this.bindings.get(sPropertyName);
         if (oBinding) {
             return {
                 path: oBinding.getPath(),
