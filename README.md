@@ -45,7 +45,7 @@ You have to build (and sign) your platform-dependent build yourself or just use 
 
 [releaseBadge]: https://img.shields.io/github/v/release/H0rn0chse/LoKaBu.svg
 [releaseLink]: https://github.com/H0rn0chse/LoKaBu/releases/latest
-[buildBadge]: https://github.com/H0rn0chse/LoKaBu/workflows/Release/badge.svg?branch=feature%2FelectronTransformation
-[buildLink]: https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ARelease
-[testBadge]: https://github.com/H0rn0chse/LoKaBu/workflows/Test/badge.svg?branch=feature%2FelectronTransformation
-[testLink]: https://github.com/H0rn0chse/LoKaBu/actions?query=workflow%3ATest
+[buildBadge]: https://github.com/H0rn0chse/LoKaBu/actions/workflows/build.yml/badge.svg
+[buildLink]: https://github.com/H0rn0chse/LoKaBu/actions/workflows/build.yml
+[testBadge]: https://github.com/H0rn0chse/LoKaBu/actions/workflows/test.yml/badge.svg
+[testLink]: https://github.com/H0rn0chse/LoKaBu/actions/workflows/test.yml
