@@ -70,7 +70,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^7.1.0",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "electron-updater": "^4.3.5",
     "feather-icons": "^4.28.0",
     "tesseract.js": "^2.1.1"
