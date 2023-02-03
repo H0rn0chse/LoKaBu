@@ -69,7 +69,7 @@
     }
   },
   "dependencies": {
-    "better-sqlite3": "^7.1.0",
+    "better-sqlite3": "^7.6.2",
     "chart.js": "^2.9.4",
     "electron-updater": "^4.3.5",
     "feather-icons": "^4.28.0",
